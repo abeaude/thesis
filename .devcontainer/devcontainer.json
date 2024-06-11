@@ -1,0 +1,79 @@
+{
+    "name": "Overleaf",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "remoteUser": "root",
+    "features": {},
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "editor.minimap.enabled": false,
+                "editor.renderWhitespace": "selection",
+                "explorer.openEditors.visible": 0,
+                "workbench.editor.showIcons": false,
+                "workbench.statusBar.visible": true,
+                "workbench.colorCustomizations": {
+                    "tab.activeBorder": "#0000"
+                },
+                "files.autoSave": "onFocusChange",
+                "editor.fontSize": 18,
+                "editor.fontFamily": "'Monaspace Neon'",
+                "editor.fontLigatures": "'calt', 'liga', 'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08', 'ss09'",
+                "editor.fontVariations": true,
+                "editor.cursorBlinking": "phase",
+                "editor.cursorSmoothCaretAnimation": "on",
+                "editor.lineHeight": 26,
+                "editor.lineNumbers": "on",
+                "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+                "editor.guides.bracketPairs": false,
+                "breadcrumbs.enabled": false,
+                "window.menuBarVisibility": "hidden",
+                "workbench.layoutControl.enabled": false,
+                "window.title": "${dirty}${activeEditorShort}",
+                "workbench.iconTheme": "material-icon-theme",
+                "workbench.productIconTheme": "bootstrap-product-icons",
+                "editor.smoothScrolling": true,
+                "workbench.editor.tabCloseButton": "off",
+                "workbench.activityBar.visible": false,
+                "workbench.activityBar.location": "top",
+                "workbench.colorTheme": "Flexoki Dark",
+                "workbench.preferredLightColorTheme": "Flexoki Light",
+                "explorer.openEditors.visible": 0,
+                "latex-workshop.latex.outDir": "./PDF",
+                "latex-workshop.latex.autoClean.run": "onBuilt",
+                "latex-workshop.latex.build.forceRecipeUsage": false,
+                "latex-workshop.synctex.afterBuild.enabled": true,
+                "latex-workshop.view.pdf.viewer": "tab",
+                "latex-workshop.latex.clean.subfolder.enabled": true,
+                "latex-workshop.latex.magic.args": [
+                    "-output-directory=PDF", // to change the output directory
+                    "%DOC%"
+                ],
+                "editor.formatOnSave": true,
+                "latex-workshop.latex.pdfWatch.delay": 500,
+                "latex-workshop.codespaces.portforwarding.openDelay": 20000,
+                "grammarly.files.include": [
+                    "**/*.tex"
+                ],
+                "grammarly.selectors": [
+                    {
+                        "language": "latex",
+                        "scheme": "file"
+                    }
+                ]
+            },
+            "extensions": [
+                "James-Yu.latex-workshop",
+                "znck.grammarly",
+                "naumovs.color-highlight",
+                "hediet.vscode-drawio",
+                "file-icons.file-icons",
+                "PKief.material-icon-theme",
+                "christian-kohler.path-intellisense",
+                "valentjn.vscode-ltex",
+                "RaillyHugo.one-hunter"
+            ]
+        }
+    }
+}
