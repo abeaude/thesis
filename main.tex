@@ -1,0 +1,173 @@
+\documentclass[web, english]{thesissaclay}
+
+\usepackage{subfiles}
+
+%%%%%%%%%%%%%%%%%%%
+%% CONFIGURATION %%
+%%%%%%%%%%%%%%%%%%%
+\title{Titre de la thèse (sur plusieurs lignes si nécessaire)}
+\subtitle{Traduction du titre de la thèse (sur plusieurs lignes si nécessaire)}
+\author{Aurélien \textsc{Beaude}}
+
+\date{XX month YYYY}
+\location{Paris-Saclay}
+
+\subject{Informatique}
+\keywordsfr{Mots clés 1, 2, 3}
+\keywordsen{Mots clés 1, 2, 3}
+
+\nnt{2024UPASA001}
+
+\doctoralschool{STIC}
+\graduateschool{Informatique et sciences du numérique}
+\referee{Université d’Évry Val d’Essonne}
+\unit{IBISC (Université Paris-Saclay, Univ Évry)}
+
+%%%%%%%%%%%%%%%%%
+%% SUPERVISORS %%
+%%%%%%%%%%%%%%%%%
+% order is important
+\thesisdirector{\textbf{Blaise \textsc{Hanczar}}, Professeur}
+%\thesiscodirector{}
+\thesissupervisor{\textbf{Farida \textsc{Zehraoui}}, Maîtresse de conférence}
+\thesisindustrysupervisor{\textbf{Franck \textsc{Augé}}, Docteur}
+
+%%%%%%%%%%
+%% JURY %%
+%%%%%%%%%%
+% Order is important, the jury table is filling according to the entry order
+\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Président}
+\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Rapporteur \& Éxaminateur}
+\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Rapporteur \& Éxaminateur}
+\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Éxaminateur}
+\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Éxaminateur}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% BIBLIOGRAPHY SOURCES %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addbibresource{references.bib}
+\addbibresource{my_publications.bib}
+\addsectionbib[label=mypubli]{my_publications.bib}
+
+%%%%%%%%%%%%%%%%%%
+%% ABREVIATIONS %%
+%%%%%%%%%%%%%%%%%%
+\input{preamble/abreviations}
+%%%%%%%%%%%%%
+%% SYMBOLS %%
+%%%%%%%%%%%%%
+\input{preamble/symbols}
+%%%%%%%%%%%%%%
+%% GLOSSARY %%
+%%%%%%%%%%%%%%
+\input{preamble/glossary}
+%%%%%%%%%%%
+%% Maths %%
+%%%%%%%%%%%
+\input{preamble/math}
+%%%%%%%%%%%%%%%%%
+%% Hyphenation %%
+%%%%%%%%%%%%%%%%%
+\input{preamble/hyphenation}
+
+%\tikzexternalize[prefix=tikz/, system call/.append = {; pdfcrop --margins 1 "\image.pdf" "\image.pdf"}] % must create this path manually, with a file in it
+
+\begin{document}
+%%%%%%%%%%%%%%%%
+%% TITLE PAGE %%
+%%%%%%%%%%%%%%%%
+\maketitle
+
+\frontmatter
+
+%%%%%%%%%%%%%%%%
+%% ED SUMMARY %%
+%%%%%%%%%%%%%%%%
+\makesummary{./frontmatter/shortsummaryFR}{./frontmatter/shortsummaryEN}
+%%%%%%%%%%%%%%%%
+%% EXTRA INFO %%
+%%%%%%%%%%%%%%%%
+\input{preamble/extra_info}
+%%%%%%%%%%%%%%%%%%%%
+%% FRENCH SUMMARY %%
+%%%%%%%%%%%%%%%%%%%%
+% Required by the university to write a summary of 4000 symbols when the main language is not the french.
+\ifdefstring{\mainlanguagename}{french}{}{%
+	\begin{french}
+		\addchap{Résumé de la thèse --- French summary}
+		\input{frontmatter/longsummaryFR}
+	\end{french}
+}
+
+%%%%%%%%%%%%%%%%%%%%%
+%% ACKNOLEDGEMENTS %%
+%%%%%%%%%%%%%%%%%%%%%
+%\makeacknolegments{./frontmatter/acknolegments}
+
+%%%%%%%%%%%%%%
+%% LIST OFs %%
+%%%%%%%%%%%%%%
+\tableofcontents
+\listoftables
+\listoffigures
+\printabbreviations{}
+\printsymbols{}
+\mainmatter{}
+%%%%%%%%%%%%%%
+%% CONTENTS %%
+%%%%%%%%%%%%%%
+
+%% Each chapter file must contain the following
+%% \chapter{}
+%% \graphicspath{{path/of/chapters_figures/}} % relative to main.tex
+%% \dictum[author][citation] % to include a small quote at the begining of each chapter
+%% \minitocpage % or \minitoc to display the content of the chapter
+\subfileinclude{chapters/1-Introduction}
+\subfileinclude{chapters/2-Background}
+\subfileinclude{chapters/3-SOTA}
+\subfileinclude{chapters/4-AttOmics}
+\subfileinclude{chapters/5-CrossAttOmics}
+\subfileinclude{chapters/6-Interpretability}
+\subfileinclude{chapters/7-Conclusions}
+
+\gls{svm}
+
+\glsxtrfull{svm}
+
+\gls{svm}
+\gls{duck}
+
+% Plan/idea
+% la médecine personnalisé, motivation et utilisation du deep learning
+% le cancer, ses origines, ...
+% les données omiques, caractérisitques, obtention
+% le deep learning, uni modal et multimodal
+
+% état de l'art
+% single omics
+% multi omics
+% interprétabilité ?
+
+\KOMAoption{parskip}{false}
+\begin{singlespace}
+	%%%%%%%%%%%%%%%%%%
+	%% PUBLICATIONS %%
+	%%%%%%%%%%%%%%%%%%
+	\mypublications{}
+
+	%%%%%%%%%%%%%%%%%
+	%% BIBLIOGRAPY %%
+	%%%%%%%%%%%%%%%%%
+	\printbibheading{}
+	\bibbysection[heading=subbibliography]
+	\printglossary[title=Glossary]
+\end{singlespace}
+\KOMAoption{parskip}{half}
+%%%%%%%%%%%%%%
+%% APPENDIX %%
+%%%%%%%%%%%%%%
+\appendix
+\pagestyle{appendix}
+\include{chapters/8-Appendix}
+\backmatter{}
+\end{document}
