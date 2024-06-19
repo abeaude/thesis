@@ -1,5 +1,9 @@
 {
     "name": "Overleaf",
+    "runArgs": [
+        "--env-file",
+        ".devcontainer/devcontainer.env"
+    ],
     "build": {
         "dockerfile": "Dockerfile"
     },
@@ -13,9 +17,6 @@
                 "explorer.openEditors.visible": 0,
                 "workbench.editor.showIcons": false,
                 "workbench.statusBar.visible": true,
-                "workbench.colorCustomizations": {
-                    "tab.activeBorder": "#0000"
-                },
                 "files.autoSave": "onFocusChange",
                 "editor.fontSize": 18,
                 "editor.fontFamily": "'Monaspace Neon'",
@@ -39,13 +40,15 @@
                 "workbench.activityBar.location": "top",
                 "workbench.colorTheme": "Flexoki Dark",
                 "workbench.preferredLightColorTheme": "Flexoki Light",
-                "explorer.openEditors.visible": 0,
                 "latex-workshop.latex.outDir": "./PDF",
+                "latex-workshop.latex.rootFile.useSubFile": true,
+                "latex-workshop.latex.rootFile.doNotPrompt": true,
                 "latex-workshop.latex.autoClean.run": "onBuilt",
                 "latex-workshop.latex.build.forceRecipeUsage": false,
                 "latex-workshop.synctex.afterBuild.enabled": true,
                 "latex-workshop.view.pdf.viewer": "tab",
                 "latex-workshop.latex.clean.subfolder.enabled": true,
+                "latex-workshop.latex.autoBuild.run": "onSave",
                 "latex-workshop.latex.magic.args": [
                     "-output-directory=PDF", // to change the output directory
                     "%DOC%"
@@ -53,19 +56,15 @@
                 "editor.formatOnSave": true,
                 "latex-workshop.latex.pdfWatch.delay": 500,
                 "latex-workshop.codespaces.portforwarding.openDelay": 20000,
-                "grammarly.files.include": [
-                    "**/*.tex"
-                ],
-                "grammarly.selectors": [
-                    {
-                        "language": "latex",
-                        "scheme": "file"
-                    }
+                "latex-workshop.latexindent.args": [
+                    "-w",
+                    "-c",
+                    "%DIR%/PDF/",
+                    "%TMPFILE%"
                 ]
             },
             "extensions": [
                 "James-Yu.latex-workshop",
-                "znck.grammarly",
                 "naumovs.color-highlight",
                 "hediet.vscode-drawio",
                 "file-icons.file-icons",
