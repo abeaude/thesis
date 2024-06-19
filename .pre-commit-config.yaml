@@ -23,19 +23,19 @@ repos:
             ]
       - id: csquotes
       - id: no-space-in-cite
-  - repo: https://github.com/FlamingTempura/bibtex-tidy
-    rev: 9658d907d990fd80d25ab37d9aee120451bf5d19
-    hooks:
-      - id: bibtex-tidy
-        args:
-          - --v2
-          - --modify
-          - --curly
-          - --space=4
-          - --align=14
-          - --duplicates
-          - --escape
-          - --remove-empty-fields
+  # - repo: https://github.com/FlamingTempura/bibtex-tidy
+  #   rev: 9658d907d990fd80d25ab37d9aee120451bf5d19
+  #   hooks:
+  #     - id: bibtex-tidy
+  #       args:
+  #         - --v2
+  #         - --modify
+  #         - --curly
+  #         - --space=4
+  #         - --align=14
+  #         - --duplicates
+  #         - --escape
+  #         - --remove-empty-fields
   - repo: local
     hooks:
       - id: chktex
