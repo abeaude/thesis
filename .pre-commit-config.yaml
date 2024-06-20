@@ -45,6 +45,7 @@ repos:
         types: [file, tex]
         args:
           - -v1
+          - -d4
       - id: lacheck
         name: Checking Tex document with lacheck
         entry: lacheck
