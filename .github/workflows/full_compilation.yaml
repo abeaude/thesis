@@ -1,5 +1,7 @@
 name: Compile Thesis manuscript
 on: [push]
+permissions:
+  contents: write
 jobs:
   build_latex:
     runs-on: ubuntu-latest
@@ -28,12 +30,12 @@ jobs:
         with:
           files: |
             ${{ github.workspace }}/PDF/main.pdf
-            ${{ github.workspace }}/chapters/PDF/1-Introduction.pdf
-            ${{ github.workspace }}/chapters/PDF/2-Background.pdf
-            ${{ github.workspace }}/chapters/PDF/3-SOTA.pdf
-            ${{ github.workspace }}/chapters/PDF/4-AttOmics.pdf
-            ${{ github.workspace }}/chapters/PDF/5-CrossAttOmics.pdf
-            ${{ github.workspace }}/chapters/PDF/6-Interpretability.pdf
-            ${{ github.workspace }}/chapters/PDF/7-Conclusions.pdf
+            ${{ github.workspace }}/PDF/1-Introduction.pdf
+            ${{ github.workspace }}/PDF/2-Background.pdf
+            ${{ github.workspace }}/PDF/3-SOTA.pdf
+            ${{ github.workspace }}/PDF/4-AttOmics.pdf
+            ${{ github.workspace }}/PDF/5-CrossAttOmics.pdf
+            ${{ github.workspace }}/PDF/6-Interpretability.pdf
+            ${{ github.workspace }}/PDF/7-Conclusions.pdf
           draft: true
           name: Compiled PDFs
