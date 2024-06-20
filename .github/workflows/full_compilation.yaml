@@ -16,14 +16,14 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: |
-            ${{ github.workspace }}/main.tex
-            ${{ github.workspace }}/chapters/1-Introduction.tex
-            ${{ github.workspace }}/chapters/2-Background.tex
-            ${{ github.workspace }}/chapters/3-SOTA.tex
-            ${{ github.workspace }}/chapters/4-AttOmics.tex
-            ${{ github.workspace }}/chapters/5-CrossAttOmics.tex
-            ${{ github.workspace }}/chapters/6-Interpretability.tex
-            ${{ github.workspace }}/chapters/7-Conclusions.tex
+            ./main.tex
+            ./chapters/1-Introduction.tex
+            ./chapters/2-Background.tex
+            ./chapters/3-SOTA.tex
+            ./chapters/4-AttOmics.tex
+            ./chapters/5-CrossAttOmics.tex
+            ./chapters/6-Interpretability.tex
+            ./chapters/7-Conclusions.tex
           latexmk_use_xelatex: true
           work_in_root_file_dir: false
           args: -outdir=${{ github.workspace }}/PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
@@ -31,13 +31,13 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            ${{ github.workspace }}//PDF/main.pdf
-            ${{ github.workspace }}//chapters/PDF/1-Introduction.pdf
-            ${{ github.workspace }}//chapters/PDF/2-Background.pdf
-            ${{ github.workspace }}//chapters/PDF/3-SOTA.pdf
-            ${{ github.workspace }}//chapters/PDF/4-AttOmics.pdf
-            ${{ github.workspace }}//chapters/PDF/5-CrossAttOmics.pdf
-            ${{ github.workspace }}//chapters/PDF/6-Interpretability.pdf
-            ${{ github.workspace }}//chapters/PDF/7-Conclusions.pdf
+            ${{ github.workspace }}/PDF/main.pdf
+            ${{ github.workspace }}/chapters/PDF/1-Introduction.pdf
+            ${{ github.workspace }}/chapters/PDF/2-Background.pdf
+            ${{ github.workspace }}/chapters/PDF/3-SOTA.pdf
+            ${{ github.workspace }}/chapters/PDF/4-AttOmics.pdf
+            ${{ github.workspace }}/chapters/PDF/5-CrossAttOmics.pdf
+            ${{ github.workspace }}/chapters/PDF/6-Interpretability.pdf
+            ${{ github.workspace }}/chapters/PDF/7-Conclusions.pdf
           draft: true
           name: Compiled PDFs
