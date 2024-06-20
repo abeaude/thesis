@@ -1,0 +1,43 @@
+name: Compile Thesis manuscript
+on: [push]
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v4
+      - name: Compile full document
+      # "-synctex=1",
+      #           "-interaction=nonstopmode",
+      #           "-file-line-error",
+      #           "-xelatex",
+      #           "-outdir=%OUTDIR%",
+      #           "%DOC%"
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: |
+            main.tex
+            chapters/1-Introduction.tex
+            chapters/2-Background.tex
+            chapters/3-SOTA.tex
+            chapters/4-AttOmics.tex
+            chapters/5-CrossAttOmics.tex
+            chapters/6-Interpretability.tex
+            chapters/7-Conclusions.tex
+          latexmk_use_xelatex: true
+          work_in_root_file_dir: false
+          args: -outdir=./PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
+      - name: Release PDF files
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ./PDF/main.pdf
+            ./chapters/PDF/1-Introduction.pdf
+            ./chapters/PDF/2-Background.pdf
+            ./chapters/PDF/3-SOTA.pdf
+            ./chapters/PDF/4-AttOmics.pdf
+            ./chapters/PDF/5-CrossAttOmics.pdf
+            ./chapters/PDF/6-Interpretability.pdf
+            ./chapters/PDF/7-Conclusions.pdf
+          draft: true
+          name: Compiled PDFs
