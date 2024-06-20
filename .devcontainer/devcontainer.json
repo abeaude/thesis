@@ -105,7 +105,8 @@
                     "-c",
                     "%DIR%/.latexindent.bak/",
                     "%TMPFILE%"
-                ]
+                ],
+                "editor.wordWrap": "on"
             },
             "extensions": [
                 "James-Yu.latex-workshop",

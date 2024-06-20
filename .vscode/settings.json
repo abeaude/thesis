@@ -92,5 +92,6 @@
         "-c",
         "%DIR%/.latexindent.bak/",
         "%TMPFILE%"
-    ]
+    ],
+    "editor.wordWrap": "on"
 }
