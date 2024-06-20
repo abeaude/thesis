@@ -16,7 +16,7 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: |
-            ./main.tex
+            ${{ github.workspace }}/main.tex
             ./chapters/1-Introduction.tex
             ./chapters/2-Background.tex
             ./chapters/3-SOTA.tex
@@ -27,6 +27,7 @@ jobs:
           latexmk_use_xelatex: true
           work_in_root_file_dir: false
           args: -outdir=${{ github.workspace }}/PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
+          docker_image: ghcr.io/xu-cheng/texlive-full:20240605
       - name: Release PDF files
         uses: softprops/action-gh-release@v2
         with:
