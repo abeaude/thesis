@@ -59,3 +59,4 @@ repos:
         args:
           - -wd
           - -s
+          - -c ./.latexindent.bak/

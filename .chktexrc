@@ -1,0 +1,12 @@
+CmdLine
+{
+    -v2
+    -m3
+}
+Silent
+{
+    \mypublications \printbibheading
+    \mainmatter \backmatter
+    \printabbreviations \printsymbols \printglossaries
+    \minitocpage
+}
