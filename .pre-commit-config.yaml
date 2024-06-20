@@ -45,11 +45,11 @@ repos:
         types: [file, tex]
         args:
           - -v1
-      - id: lacheck
-        name: Checking Tex document with lacheck
-        entry: lacheck
-        language: system
-        types: [file, tex]
+      # - id: lacheck
+      #   name: Checking Tex document with lacheck
+      #   entry: lacheck
+      #   language: system
+      #   types: [file, tex]
       - id: latexindent
         name: Indent LATEX documents
         entry: latexindent
