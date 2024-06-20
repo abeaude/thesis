@@ -1,0 +1,82 @@
+\documentclass[../main.tex]{subfiles}
+\usepackage{silence}
+\WarningFilter{glossaries}{No \printglossary or \printglossaries found}
+
+\begin{document}
+\ifSubfilesClassLoaded{%
+	\graphicspath{{figures/2-Background/}}%
+}{
+	\graphicspath{{../figures/2-Background/}}%
+}
+\chapter{Background}\label{chap:background}
+\minitocpage
+
+\section{Deep-Learning}
+present the different architecture that are available and how to train them.
+supervised, self supervised
+MLP
+AE/VAE
+CNN1D/CNN2D
+GNN
+Attention (Transformers), self and cross (causal? not used in this thesis)
+fig with the correct dim
+dynamic mlp
+some characteristics, memory footprint, visualization
+
+how to train a model, loss definition
+regularization
+optimization, gradient descent
+
+hyperparameters, search, cost of search
+\section{Cancer biology}
+%https://www.cell.com/fulltext/S0092-8674(11)00127-9
+%https://en.wikipedia.org/wiki/The_Hallmarks_of_Cancer#Emerging_Hallmarks
+%file:///nhome/siniac/abeaude/T%C3%A9l%C3%A9chargements/nrc2827.pdf
+%https://en.wikipedia.org/wiki/Cancer
+%https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10618731/pdf/1142.pdf
+%https://www.cancer.gov/about-cancer/understanding/what-is-cancer
+%https://www.who.int/en/health-topics/cancer#tab=tab_1
+%file:///nhome/siniac/abeaude/T%C3%A9l%C3%A9chargements/Molecular%20Biology%20of%20Human%20Cancers_%20Second%20Edition%20--%20Wolfgang%20A_%20Schulz%20--%202,%202023%20--%20Springer,%20Springer%20Nature%20Switzerland%20AG%20--%209783031162855%20--%20c4af4ff1d84151f27d34687b2ca398f9%20--%20Anna%E2%80%99s%20Archive.pdf
+This section does not presume to be a complete presentation of cancer biology, but aims to provide the necessary keys to understand cancer origins and the different molecular components involved.
+present normal function of a cell with various components, DNA to protein in a cell. Protein = structure = function.
+How this process is regulated: present central dogma, cell regulation
+cancer = dysregulation of the functionning of a cell.
+origin: multiscale, can happens at diferent place of the process.
+talk about cancer hallmarks
+
+cancer origin, promotion, growth metastasis = dvt of cancer
+\subsection{Signaling in healthy cells}
+\subsection{cancer}
+
+
+\section{Omics data}
+\subsection{Genomics}
+\subsection{Transcriptomics}
+\subsection{Epigenomics}
+\subsection{Proteomics}
+\subsection{Other omics}
+different components, access with different technologies
+present the different technologies
+particularity of omics data, low samples highly dimensionnal
+various distribution
+
+\section{Available datasets}
+\subsection{GEO}
+archs4, batch effect, no multiomics, various conditions, various worflow of analyses.
+could have unpaired data, but challenges are then different
+\subsection{TCGA}
+talk about cancer stage, and why not use it as a predicitve endpoint
+possible tasks: healthy or cancerous samples, cancer type, subtype [limits], survival [death, relapse: tumour recurrence] metastasis,
+% https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8368987/
+primary origin of a metastasis % https://www.nature.com/articles/s41467-019-13825-8
+predict primary or metastasis % https://www.frontiersin.org/articles/10.3389/fmolb.2022.913602/full
+% https://www.nature.com/articles/s41598-023-35842-w
+
+give some stats of the different category present
+
+icgc, european initiative? less data, not as strong.
+\subsection{CCLE}
+
+stat + labels = possible task
+
+\end{document}

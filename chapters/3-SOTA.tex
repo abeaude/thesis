@@ -1,0 +1,41 @@
+\documentclass[../main.tex]{subfiles}
+\usepackage{silence}
+\WarningFilter{glossaries}{No \printglossary or \printglossaries found}
+
+\begin{document}
+\ifSubfilesClassLoaded{%
+	\graphicspath{{figures/3-SOTA/}}%
+}{
+	\graphicspath{{../figures/3-SOTA/}}%
+}
+\chapter{Deep-learning for omics data analysis}\label{chap:sota}
+\minitocpage
+
+\section{Unimodal}
+architectures tested on omics data, what are the tasks, what are they able to achieve
+
+\section{Multimodal}
+what is multimodal, how to do it, common vocab
+is there an advantage
+are there any challenges, specific to omics
+
+show some example on omics data
+
+\section{Model interpretability}
+general about interpretability/explanability
+fix the vocabulary that is used
+present different methods, advantage drawbacks
+
+way to introduce counterfactuals
+
+remind what are counterfactuals in plain english: what if
+show equation
+desired property of CFs + construct the optimization problem
+how to solve it: gradient descent show algo
+discuss lambda
+show some methods
+
+need to talk about adversarial examples, details in annex?
+how to have a model robust to adv attacks, defenses, adv training
+
+\end{document}
