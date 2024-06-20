@@ -1,12 +1,31 @@
 CmdLine
 {
-    -v2
-    -m3
+-m3
 }
 Silent
+	{
+		\mypublications \printbibheading
+		\mainmatter \backmatter
+		\printabbreviations \printsymbols \printglossaries \printglossary
+		\minitocpage
+	}
+UserWarnRegex =
 {
-    \mypublications \printbibheading
-    \mainmatter \backmatter
-    \printabbreviations \printsymbols \printglossaries
-    \minitocpage
+(?!#Always! use! \nmid)\\not! *(\||\\mid)
+
+# Capitalize section when saying Section 6.
+(?!#-1:Capitalize! before! references)PCRE:\b(chapter|(sub)?section|theorem|lemma|proposition|corollary|appendix)~\\ref
+(?!#1:Capitalize! before! references)POSIX:([^[:alnum:]]|^)(chapter|(sub)?section|theorem|lemma|proposition|corollary|appendix)~\\ref
+
+# Spell it introduction
+# PCRE:(?i)\bintro\b(?!#Spell! it! out.! This! comment! is! not! used.)
+# POSIX:([^[:alnum:]]|^)intro([^[:alnum:]]|$)
+
+# This relies on it being on a single line, and not having anything
+# else on that line.  With PCRE we could match balanced [] and {},
+# but I wonder if it's worth the complexity...
+(?!#-2:Vertical! rules! in! tables! are! ugly)\\begin\{(array|tabularx?\*?)\}(\[.*\])?\{.*\|.*\}
+
+(?!#-3:Optional! arguments! []! inside! optional! arguments! []! must! be! enclosed! in! {})PCRE:\[(?!![^\]\[{}]*{(?!![^\]\[{}]*}))[^\]]*\[
+
 }
