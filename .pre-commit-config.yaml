@@ -44,8 +44,7 @@ repos:
         language: system
         types: [file, tex]
         args:
-          - -v2
-          - -m3
+          - -v1
       - id: lacheck
         name: Checking Tex document with lacheck
         entry: lacheck
