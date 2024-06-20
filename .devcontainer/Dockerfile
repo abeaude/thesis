@@ -1,15 +1,9 @@
-FROM texlive/texlive:latest-full
-ENV LATEXINDENT_CONFIG="/root/"
-RUN apt-get update && apt-get install -y \
+FROM texlive/texlive@sha256:fdf2fbe837577ccf354a5605701ccc1853f895366cfcdf9c7859a872f10f6822
+RUN apt-get update && apt-get install -y --no-install-recommends \
     git perl unzip wget ssh inkscape libnotify4 libxss1 xdg-utils libsecret-1-0 libxml2 pre-commit\
     && wget -q https://github.com/jgraph/drawio-desktop/releases/download/v24.5.3/drawio-amd64-24.5.3.deb \
     && dpkg -i drawio-amd64-24.5.3.deb \
     && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean \
-    && apt-get autoremove -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /tmp/* \
-    && rm -rf drawio-amd64-24.5.3.deb \
     && wget -q https://github.com/githubnext/monaspace/releases/download/v1.101/monaspace-v1.101.zip \
     && unzip monaspace-v1.101.zip \
     && cd monaspace-v1.101 \
@@ -22,4 +16,10 @@ RUN apt-get update && apt-get install -y \
     && cp ./fonts/variable/* ~/.local/share/fonts/Monaspace/ \
     # Build font information caches
     && fc-cache -f \
+    && apt-get clean \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/cache/apt/ \
+    && rm -rf /tmp/* \
+    && rm -rf drawio-amd64-24.5.3.deb \
     && rm -rf monaspace-v1.101 monaspace-v1.101.zip
