@@ -7,12 +7,6 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v4
       - name: Compile full document
-      # "-synctex=1",
-      #           "-interaction=nonstopmode",
-      #           "-file-line-error",
-      #           "-xelatex",
-      #           "-outdir=%OUTDIR%",
-      #           "%DOC%"
         uses: xu-cheng/latex-action@v3
         with:
           root_file: |
@@ -28,6 +22,7 @@ jobs:
           work_in_root_file_dir: false
           args: -outdir=${{ github.workspace }}/PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
           docker_image: ghcr.io/xu-cheng/texlive-full:20240605
+          pre_compile: mkdir -p PDF/chapters PDF/appendix PDF/frontmatter PDF/preamble
       - name: Release PDF files
         uses: softprops/action-gh-release@v2
         with:
