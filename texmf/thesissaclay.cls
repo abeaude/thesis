@@ -39,6 +39,7 @@
 \RequirePackage{scrhack}
 \RequirePackage[pagewise]{lineno}
 \RequirePackage{ragged2e}
+\RequirePackage{xspace}
 %%%%%%%%%%%%%%
 %% PACKAGES %%
 %%%%%%%%%%%%%%
