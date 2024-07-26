@@ -1,0 +1,24 @@
+\begin{longtable}{ccccccrrrrrr}
+\caption{Classification metrics for MLP with different omics combination on TCGA dataset} \label{tab:perf_comb_MLP} \\
+\toprule
+mRNA & nc mRNA & miRNA & CNV & DNAm & Protein & AUROC & Accuracy & F1 & Precision & Recall & Specificity \\
+\midrule
+\endfirsthead
+\caption[]{Classification metrics for MLP with different omics combination} \\
+\toprule
+mRNA & nc mRNA & miRNA & CNV & DNAm & Protein & AUROC & Accuracy & F1 & Precision & Recall & Specificity \\
+\midrule
+\endhead
+\midrule
+\multicolumn{12}{r}{Continued on next page} \\
+\midrule
+\endfoot
+\bottomrule
+\endlastfoot
+ &  &  &  &  & \textbullet & 1.000 ± 0.000 & 0.990 ± 0.002 & 0.985 ± 0.002 & 0.981 ± 0.002 & 0.990 ± 0.002 & 0.999 ± 0.000 \\
+ &  &  &  & \textbullet &  & 0.999 ± 0.000 & 0.965 ± 0.001 & 0.965 ± 0.001 & 0.967 ± 0.001 & 0.965 ± 0.001 & 0.998 ± 0.000 \\
+ &  &  & \textbullet &  &  & 0.969 ± 0.001 & 0.733 ± 0.009 & 0.734 ± 0.010 & 0.749 ± 0.011 & 0.733 ± 0.009 & 0.985 ± 0.001 \\
+ &  & \textbullet &  &  &  & 0.997 ± 0.000 & 0.926 ± 0.004 & 0.926 ± 0.004 & 0.928 ± 0.004 & 0.926 ± 0.004 & 0.996 ± 0.000 \\
+ & \textbullet &  &  &  &  & 0.998 ± 0.001 & 0.953 ± 0.002 & 0.951 ± 0.002 & 0.951 ± 0.002 & 0.953 ± 0.002 & 0.998 ± 0.000 \\
+\textbullet &  &  &  &  &  & 0.998 ± 0.000 & 0.967 ± 0.002 & 0.967 ± 0.002 & 0.967 ± 0.002 & 0.967 ± 0.002 & 0.998 ± 0.000 \\
+\end{longtable}

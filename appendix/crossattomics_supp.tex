@@ -1,0 +1,172 @@
+\chapter{CrossAttOmics supplementary}
+
+\section{Experiments}
+
+ \subsection{Architecture and training details}
+     For a comprehensive and comparative evaluation, we chose various deep learning architectures with different integration strategies: \gls{mlp} early fusion (MLP EF), \gls{mlp} intermediate fusion (MLP IF), AttOmics early fusion (AttOmics EF), AttOmics intermediate fusion (AttOmics IF), \gls{gnn} early fusion (GNN EF), P-NET and MOGONET.
+     We also considered single-omics architecture for comparison: attention-based model~(AttOmics), \gls{mlp} and \gls{gnn}.
+
+     The \gls{mlp} is based on a \gls{fcn} with \gls{relu} activations.
+     For the \gls{mlp} EF architecture, input modalities are concatenanted before being passed to a \gls{mlp}.
+     For the \gls{mlp} IF architecture, the modalities encoders were constructed similarly to the unimodal \gls{mlp} architecture described previously.
+     Unimodal latent representations are concatenated and passed to a 2-layers \gls{fcn} with \gls{relu} activations.
+
+     AttOmics is an attention-based architecture.
+     Input is randomly split in groups, then each group in embed in a latent space with a group-specific \gls{fcn}.
+     Groups are enriched with information from other groups with \gls{mhsa}.
+     For the AttOmics IF architecture, the modalities encoders were constructed similarly to the unimodal AttOmics architecture described previously.
+     Unimodal latent representations are concatenated and passed to a 3-layers \gls{fcn} with \gls{relu} activations.
+
+     For the \gls{gnn} architecture the \gls{ppi} graph is based on data available in the STRING database and was constructed by retaining only high-confidence links: edges with a score higher than 700.
+     We used graph convolutions described in Kipf et al., with a single input and output channel for unimodal training.
+     All the nodes are concatenated and passed to a 2-layers \gls{fcn} with a \gls{relu} activation.
+     For the \gls{gnn} EF, the number of channels was set to the number of modalities used for the training.
+
+     In all the architectures the output layer has a \(\operatorname{softmax}\) activation.
+
+     CrossAttOmics is trained using the SGD optimizer with a learning rate of 0.001, a momentum of 0.9, and a batch size of 512.
+     Our 2-phase training allows us to train each encoder with more training examples.
+     An ablation study showed that the \gls{mhsa} after concatenating the cross-attention outputs was not necessary.
+     When creating the different splits, we paid attention to not including examples used in the pre-training phase in our final test set.
+     The maximum number of epochs is set to 200.
+     An early stopping strategy is deployed to avoid over-fitting with a patience of 10 and a delta of 0.001 on the validation loss between two epochs.
+     Models were evaluated with the accuracy metric; other classification metrics are available in the supplementary file.
+     All models were trained on an Nvidia GeForce RTX 3090.
+
+     ~\\
+     Thomas N. Kipf, and Max Welling. Semi-Supervised Classification with Graph Convolutional Networks. In \textit{5th International Conference on Learning Representations, ICLR} 2017.
+
+     \newpage
+\section{Supplementary figures}
+
+ \begin{table}[htbp]
+     \centering
+     \caption{Distribution of the samples across cancer and splits for (\subref{tab:tcga}) TCGA and (\subref{tab:ccle}) CCLE.}
+     \begin{subtable}[t]{0.45\textwidth}
+         \subcaption{}
+         \begin{tabular}{lrrrr}
+             \toprule
+             Cancer & Train & Validation & Test & Total \\
+             \midrule
+             BLCA   & 222   & 48         & 48   & 318   \\
+             BRCA   & 574   & 123        & 124  & 821   \\
+             CESC   & 113   & 24         & 25   & 162   \\
+             COAD   & 230   & 50         & 50   & 330   \\
+             HNSC   & 228   & 49         & 49   & 326   \\
+             KIRC   & 171   & 37         & 37   & 245   \\
+             KIRP   & 145   & 31         & 32   & 208   \\
+             LGG    & 296   & 64         & 64   & 424   \\
+             LIHC   & 118   & 25         & 26   & 169   \\
+             LUAD   & 238   & 51         & 52   & 341   \\
+             LUSC   & 205   & 44         & 44   & 293   \\
+             OV     & 182   & 39         & 39   & 260   \\
+             PRAD   & 234   & 50         & 51   & 335   \\
+             SARC   & 143   & 31         & 31   & 205   \\
+             SKCM   & 227   & 49         & 49   & 325   \\
+             STAD   & 226   & 49         & 49   & 324   \\
+             THCA   & 254   & 55         & 55   & 364   \\
+             UCEC   & 288   & 62         & 62   & 412   \\
+             \midrule
+             Total  & 4094  & 881        & 887  & 5862  \\
+             \bottomrule
+         \end{tabular}
+         \label{tab:tcga}
+     \end{subtable}
+     \begin{subtable}[t]{0.45\textwidth}
+         \subcaption{}
+         \begin{tabular}{lrrrr}
+             \toprule
+             Cancer    & Train & Validation & Test & Total \\
+             \midrule
+             ALL       & 16    & 4          & 4    & 24    \\
+             BRCA      & 29    & 6          & 7    & 42    \\
+             COAD-READ & 32    & 7          & 7    & 46    \\
+             DLBC      & 23    & 5          & 6    & 34    \\
+             GBM       & 19    & 4          & 5    & 28    \\
+             HNSC      & 20    & 4          & 5    & 29    \\
+             KIRC      & 12    & 3          & 3    & 18    \\
+             LAML      & 19    & 4          & 5    & 28    \\
+             LUAD      & 39    & 8          & 9    & 56    \\
+             MM        & 11    & 2          & 3    & 16    \\
+             OV        & 25    & 6          & 6    & 37    \\
+             PAAD      & 23    & 5          & 5    & 33    \\
+             SARC      & 16    & 4          & 4    & 24    \\
+             SCLC      & 30    & 6          & 7    & 43    \\
+             SKCM      & 32    & 7          & 7    & 46    \\
+             STAD      & 22    & 5          & 5    & 32    \\
+             \midrule
+             Total     & 368   & 80         & 88   & 536   \\
+             \bottomrule
+         \end{tabular}
+         \label{tab:ccle}
+     \end{subtable}
+ \end{table}
+
+ \begin{figure}
+     \centering
+     \includegraphics[width=\linewidth]{multi_omics_latency.pdf}
+     \caption{Comparison of the latency, or time in milliseconds to get a prediction for one sample with various number of input omics. Error-bars represent latency variation across the various possible omics combinations.}
+     \label{fig:latency}
+ \end{figure}
+
+ \begin{figure}[htbp]
+     \centering
+     \includegraphics{perf_gain_prot.pdf}
+     \caption{Impact of proteins on the test accuracy when training CrossAttOmics with a fixed number of omics on the TCGA dataset.}
+     \label{fig:perf_gain_prot}
+ \end{figure}
+
+ \begin{figure}[htbp]
+     \centering
+     \includegraphics{limited_training_3_omics.pdf}
+     \caption{Accuracy on the TCGA test set according to the size of the training set for various multi-omics deep learning models when trained on the best combination of 3 omics. When trained with the minimum samples possible, CrossAttOmics outperformed MLP IF. When the number of training samples was increased, MLP IF became the better architecture. The performance of CrossAttOmics depends on the number of modalities used, which impacts the number of cross-attentions. With the selected omics, miRNA, nc mRNA, and DNAm~(Figure~\ref{fig:tcga_perf_comb}), there is only two cross-attention to compute. The model cannot benefit from the cross-attention mechanism compared to situations with more modalities~(Figure~\ref{fig:lim_train_6_omics}).}
+     \label{fig:lim_train_3_omics}
+ \end{figure}
+
+
+
+ \begin{figure}[htbp]
+     \centering
+     \includegraphics{ccle_limited_training_3_omics.pdf}
+     \caption{Accuracy on the CCLE test set according to the size of the training set for various multi-omics deep learning models when trained on the best combination of 3 omics.}
+     \label{fig:ccle_limited_train}
+ \end{figure}
+
+ \begin{figure}[htbp]
+     \centering
+     \includegraphics{LRP_crossattomics.pdf}
+     \caption{Comparison of the LRP relevance score for the different modelled modality interactions across various cancer.}
+     \label{fig:LRP_CrossAttOmics}
+ \end{figure}
+
+ \begin{figure}[htbp]
+     \centering
+     \includegraphics[width=1\textwidth]{ccle_omics_com.pdf}
+     \caption{Comparison of the test accuracy of different multi-omics deep learning integration models across different omics combination on the CCLE dataset. Each dot represents the mean accuracy obtained by a model on the test set after 5 different training. The error-bars represents the standard-error. For each combination a \cmark means that the omics is included in the combination and a \xmark means that the omics is excluded from the combination.}
+     \label{fig:ccle_perf_comb}
+ \end{figure}
+
+ \begin{landscape}
+     \section{Supplementary tables}
+      \subsection{Models performances on various combinations of omics on TCGA dataset}
+          \input{tables/table_AttOmics_omics_comb}
+          \input{tables/table_AttOmicsEarlyFusion_omics_comb}
+          \input{tables/table_AttOmicsIntermediateFusion_omics_comb}
+          \input{tables/table_CrossAttOmics_omics_comb}
+          \input{tables/table_GraphClassifier_omics_comb}
+          \input{tables/table_GraphClassifierEarlyFusion_omics_comb}
+          \input{tables/table_MLP_omics_comb}
+          \input{tables/table_MLPEarlyFusion_omics_comb}
+          \input{tables/table_MLPIntermediateFusion_omics_comb}
+          \input{tables/table_MOGONET_omics_comb}
+          \input{tables/table_PNet_omics_comb}
+      \subsection{Models performances on various combinations of omics on CCLE dataset}
+          \input{tables/table_AttOmics_omics_comb_ccle}
+          \input{tables/table_AttOmics EF_omics_comb_ccle}
+          \input{tables/table_AttOmics IF_omics_comb_ccle}
+          \input{tables/table_CrossAttOmics_omics_comb_ccle}
+          \input{tables/table_MLP_omics_comb_ccle}
+          \input{tables/table_MLP EF_omics_comb_ccle}
+          \input{tables/table_MLP IF_omics_comb_ccle}
+          \input{tables/table_MOGONET_omics_comb_ccle}
+ \end{landscape}

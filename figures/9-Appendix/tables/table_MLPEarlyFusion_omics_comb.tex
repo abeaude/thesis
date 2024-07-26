@@ -1,0 +1,75 @@
+\begin{longtable}{ccccccrrrrrr}
+\caption{Classification metrics for MLP EF with different omics combination on TCGA dataset} \label{tab:perf_comb_MLPEarlyFusion} \\
+\toprule
+mRNA & nc mRNA & miRNA & CNV & DNAm & Protein & AUROC & Accuracy & F1 & Precision & Recall & Specificity \\
+\midrule
+\endfirsthead
+\caption[]{Classification metrics for MLP EF with different omics combination} \\
+\toprule
+mRNA & nc mRNA & miRNA & CNV & DNAm & Protein & AUROC & Accuracy & F1 & Precision & Recall & Specificity \\
+\midrule
+\endhead
+\midrule
+\multicolumn{12}{r}{Continued on next page} \\
+\midrule
+\endfoot
+\bottomrule
+\endlastfoot
+ &  &  &  & \textbullet & \textbullet & 1.000 ± 0.000 & 0.983 ± 0.002 & 0.981 ± 0.001 & 0.982 ± 0.001 & 0.983 ± 0.002 & 0.999 ± 0.000 \\
+ &  &  & \textbullet &  & \textbullet & 0.999 ± 0.000 & 0.965 ± 0.004 & 0.962 ± 0.003 & 0.961 ± 0.003 & 0.965 ± 0.004 & 0.998 ± 0.000 \\
+ &  &  & \textbullet & \textbullet &  & 0.999 ± 0.000 & 0.959 ± 0.002 & 0.958 ± 0.002 & 0.957 ± 0.001 & 0.959 ± 0.002 & 0.998 ± 0.000 \\
+ &  &  & \textbullet & \textbullet & \textbullet & 0.999 ± 0.000 & 0.971 ± 0.004 & 0.969 ± 0.005 & 0.968 ± 0.005 & 0.971 ± 0.004 & 0.998 ± 0.000 \\
+ &  & \textbullet &  &  & \textbullet & 1.000 ± 0.000 & 0.990 ± 0.002 & 0.990 ± 0.002 & 0.990 ± 0.003 & 0.990 ± 0.002 & 0.999 ± 0.000 \\
+ &  & \textbullet &  & \textbullet &  & 0.999 ± 0.000 & 0.975 ± 0.002 & 0.974 ± 0.002 & 0.974 ± 0.002 & 0.975 ± 0.002 & 0.999 ± 0.000 \\
+ &  & \textbullet &  & \textbullet & \textbullet & 1.000 ± 0.000 & 0.983 ± 0.003 & 0.982 ± 0.003 & 0.982 ± 0.003 & 0.983 ± 0.003 & 0.999 ± 0.000 \\
+ &  & \textbullet & \textbullet &  &  & 0.993 ± 0.001 & 0.877 ± 0.013 & 0.877 ± 0.013 & 0.881 ± 0.011 & 0.877 ± 0.013 & 0.993 ± 0.001 \\
+ &  & \textbullet & \textbullet &  & \textbullet & 1.000 ± 0.000 & 0.968 ± 0.002 & 0.967 ± 0.003 & 0.966 ± 0.004 & 0.968 ± 0.002 & 0.998 ± 0.000 \\
+ &  & \textbullet & \textbullet & \textbullet &  & 0.998 ± 0.001 & 0.963 ± 0.003 & 0.962 ± 0.004 & 0.962 ± 0.005 & 0.963 ± 0.003 & 0.998 ± 0.000 \\
+ &  & \textbullet & \textbullet & \textbullet & \textbullet & 0.999 ± 0.000 & 0.975 ± 0.002 & 0.974 ± 0.003 & 0.973 ± 0.003 & 0.975 ± 0.002 & 0.999 ± 0.000 \\
+ & \textbullet &  &  &  & \textbullet & 0.998 ± 0.001 & 0.979 ± 0.004 & 0.979 ± 0.003 & 0.980 ± 0.003 & 0.979 ± 0.004 & 0.999 ± 0.000 \\
+ & \textbullet &  &  & \textbullet &  & 0.999 ± 0.001 & 0.973 ± 0.002 & 0.971 ± 0.002 & 0.972 ± 0.001 & 0.973 ± 0.002 & 0.999 ± 0.000 \\
+ & \textbullet &  &  & \textbullet & \textbullet & 0.999 ± 0.000 & 0.977 ± 0.003 & 0.975 ± 0.003 & 0.975 ± 0.004 & 0.977 ± 0.003 & 0.999 ± 0.000 \\
+ & \textbullet &  & \textbullet &  &  & 0.996 ± 0.001 & 0.942 ± 0.006 & 0.938 ± 0.006 & 0.936 ± 0.007 & 0.942 ± 0.006 & 0.997 ± 0.000 \\
+ & \textbullet &  & \textbullet &  & \textbullet & 0.998 ± 0.000 & 0.967 ± 0.003 & 0.965 ± 0.004 & 0.964 ± 0.005 & 0.967 ± 0.003 & 0.998 ± 0.000 \\
+ & \textbullet &  & \textbullet & \textbullet &  & 0.998 ± 0.000 & 0.968 ± 0.004 & 0.965 ± 0.004 & 0.964 ± 0.005 & 0.968 ± 0.004 & 0.998 ± 0.000 \\
+ & \textbullet &  & \textbullet & \textbullet & \textbullet & 0.999 ± 0.000 & 0.975 ± 0.004 & 0.972 ± 0.004 & 0.971 ± 0.003 & 0.975 ± 0.004 & 0.999 ± 0.000 \\
+ & \textbullet & \textbullet &  &  &  & 0.996 ± 0.001 & 0.961 ± 0.001 & 0.960 ± 0.002 & 0.961 ± 0.003 & 0.961 ± 0.001 & 0.998 ± 0.000 \\
+ & \textbullet & \textbullet &  &  & \textbullet & 0.998 ± 0.001 & 0.979 ± 0.002 & 0.979 ± 0.002 & 0.980 ± 0.002 & 0.979 ± 0.002 & 0.999 ± 0.000 \\
+ & \textbullet & \textbullet &  & \textbullet &  & 0.999 ± 0.001 & 0.972 ± 0.001 & 0.971 ± 0.001 & 0.972 ± 0.001 & 0.972 ± 0.001 & 0.998 ± 0.000 \\
+ & \textbullet & \textbullet &  & \textbullet & \textbullet & 0.999 ± 0.000 & 0.979 ± 0.002 & 0.977 ± 0.002 & 0.977 ± 0.002 & 0.979 ± 0.002 & 0.999 ± 0.000 \\
+ & \textbullet & \textbullet & \textbullet &  &  & 0.996 ± 0.001 & 0.943 ± 0.002 & 0.942 ± 0.003 & 0.941 ± 0.003 & 0.943 ± 0.002 & 0.997 ± 0.000 \\
+ & \textbullet & \textbullet & \textbullet &  & \textbullet & 0.998 ± 0.000 & 0.968 ± 0.004 & 0.966 ± 0.005 & 0.967 ± 0.006 & 0.968 ± 0.004 & 0.998 ± 0.000 \\
+ & \textbullet & \textbullet & \textbullet & \textbullet &  & 0.998 ± 0.001 & 0.968 ± 0.003 & 0.965 ± 0.002 & 0.965 ± 0.002 & 0.968 ± 0.003 & 0.998 ± 0.000 \\
+ & \textbullet & \textbullet & \textbullet & \textbullet & \textbullet & 0.999 ± 0.000 & 0.974 ± 0.002 & 0.972 ± 0.002 & 0.971 ± 0.002 & 0.974 ± 0.002 & 0.999 ± 0.000 \\
+\textbullet &  &  &  &  & \textbullet & 1.000 ± 0.000 & 0.984 ± 0.003 & 0.983 ± 0.003 & 0.982 ± 0.003 & 0.984 ± 0.003 & 0.999 ± 0.000 \\
+\textbullet &  &  &  & \textbullet &  & 0.999 ± 0.000 & 0.980 ± 0.002 & 0.978 ± 0.002 & 0.977 ± 0.002 & 0.980 ± 0.002 & 0.999 ± 0.000 \\
+\textbullet &  &  &  & \textbullet & \textbullet & 1.000 ± 0.000 & 0.982 ± 0.002 & 0.981 ± 0.002 & 0.981 ± 0.002 & 0.982 ± 0.002 & 0.999 ± 0.000 \\
+\textbullet &  &  & \textbullet &  &  & 0.998 ± 0.000 & 0.955 ± 0.001 & 0.952 ± 0.002 & 0.951 ± 0.002 & 0.955 ± 0.001 & 0.998 ± 0.000 \\
+\textbullet &  &  & \textbullet &  & \textbullet & 0.999 ± 0.000 & 0.973 ± 0.001 & 0.971 ± 0.001 & 0.970 ± 0.002 & 0.973 ± 0.001 & 0.999 ± 0.000 \\
+\textbullet &  &  & \textbullet & \textbullet &  & 0.999 ± 0.000 & 0.971 ± 0.005 & 0.969 ± 0.005 & 0.968 ± 0.005 & 0.971 ± 0.005 & 0.998 ± 0.000 \\
+\textbullet &  &  & \textbullet & \textbullet & \textbullet & 0.999 ± 0.000 & 0.980 ± 0.002 & 0.978 ± 0.003 & 0.977 ± 0.003 & 0.980 ± 0.002 & 0.999 ± 0.000 \\
+\textbullet &  & \textbullet &  &  &  & 0.999 ± 0.000 & 0.969 ± 0.003 & 0.967 ± 0.003 & 0.967 ± 0.003 & 0.969 ± 0.003 & 0.998 ± 0.000 \\
+\textbullet &  & \textbullet &  &  & \textbullet & 1.000 ± 0.000 & 0.985 ± 0.002 & 0.984 ± 0.002 & 0.984 ± 0.002 & 0.985 ± 0.002 & 0.999 ± 0.000 \\
+\textbullet &  & \textbullet &  & \textbullet &  & 0.999 ± 0.000 & 0.979 ± 0.002 & 0.978 ± 0.002 & 0.977 ± 0.003 & 0.979 ± 0.002 & 0.999 ± 0.000 \\
+\textbullet &  & \textbullet &  & \textbullet & \textbullet & 1.000 ± 0.000 & 0.983 ± 0.002 & 0.982 ± 0.002 & 0.982 ± 0.002 & 0.983 ± 0.002 & 0.999 ± 0.000 \\
+\textbullet &  & \textbullet & \textbullet &  &  & 0.998 ± 0.000 & 0.955 ± 0.004 & 0.951 ± 0.005 & 0.950 ± 0.005 & 0.955 ± 0.004 & 0.998 ± 0.000 \\
+\textbullet &  & \textbullet & \textbullet &  & \textbullet & 0.999 ± 0.000 & 0.969 ± 0.002 & 0.967 ± 0.004 & 0.966 ± 0.005 & 0.969 ± 0.002 & 0.998 ± 0.000 \\
+\textbullet &  & \textbullet & \textbullet & \textbullet &  & 0.999 ± 0.000 & 0.969 ± 0.004 & 0.967 ± 0.004 & 0.967 ± 0.004 & 0.969 ± 0.004 & 0.998 ± 0.000 \\
+\textbullet &  & \textbullet & \textbullet & \textbullet & \textbullet & 0.999 ± 0.000 & 0.978 ± 0.002 & 0.976 ± 0.003 & 0.975 ± 0.003 & 0.978 ± 0.002 & 0.999 ± 0.000 \\
+\textbullet & \textbullet &  &  &  &  & 0.998 ± 0.001 & 0.963 ± 0.004 & 0.961 ± 0.004 & 0.962 ± 0.004 & 0.963 ± 0.004 & 0.998 ± 0.000 \\
+\textbullet & \textbullet &  &  &  & \textbullet & 0.999 ± 0.000 & 0.978 ± 0.004 & 0.977 ± 0.004 & 0.978 ± 0.004 & 0.978 ± 0.004 & 0.999 ± 0.000 \\
+\textbullet & \textbullet &  &  & \textbullet &  & 0.999 ± 0.000 & 0.974 ± 0.003 & 0.971 ± 0.003 & 0.971 ± 0.003 & 0.974 ± 0.003 & 0.999 ± 0.000 \\
+\textbullet & \textbullet &  &  & \textbullet & \textbullet & 0.999 ± 0.000 & 0.976 ± 0.002 & 0.974 ± 0.003 & 0.973 ± 0.004 & 0.976 ± 0.002 & 0.999 ± 0.000 \\
+\textbullet & \textbullet &  & \textbullet &  &  & 0.998 ± 0.000 & 0.955 ± 0.002 & 0.952 ± 0.002 & 0.952 ± 0.002 & 0.955 ± 0.002 & 0.998 ± 0.000 \\
+\textbullet & \textbullet &  & \textbullet &  & \textbullet & 0.999 ± 0.001 & 0.966 ± 0.002 & 0.964 ± 0.003 & 0.964 ± 0.003 & 0.966 ± 0.002 & 0.998 ± 0.000 \\
+\textbullet & \textbullet &  & \textbullet & \textbullet &  & 0.999 ± 0.000 & 0.972 ± 0.002 & 0.969 ± 0.002 & 0.969 ± 0.002 & 0.972 ± 0.002 & 0.998 ± 0.000 \\
+\textbullet & \textbullet &  & \textbullet & \textbullet & \textbullet & 0.999 ± 0.000 & 0.974 ± 0.003 & 0.971 ± 0.003 & 0.971 ± 0.003 & 0.974 ± 0.003 & 0.999 ± 0.000 \\
+\textbullet & \textbullet & \textbullet &  &  &  & 0.998 ± 0.000 & 0.964 ± 0.002 & 0.962 ± 0.001 & 0.963 ± 0.002 & 0.964 ± 0.002 & 0.998 ± 0.000 \\
+\textbullet & \textbullet & \textbullet &  &  & \textbullet & 0.999 ± 0.001 & 0.979 ± 0.002 & 0.978 ± 0.003 & 0.978 ± 0.003 & 0.979 ± 0.002 & 0.999 ± 0.000 \\
+\textbullet & \textbullet & \textbullet &  & \textbullet &  & 0.999 ± 0.000 & 0.974 ± 0.004 & 0.972 ± 0.003 & 0.972 ± 0.003 & 0.974 ± 0.004 & 0.999 ± 0.000 \\
+\textbullet & \textbullet & \textbullet &  & \textbullet & \textbullet & 0.999 ± 0.000 & 0.976 ± 0.002 & 0.975 ± 0.002 & 0.975 ± 0.002 & 0.976 ± 0.002 & 0.999 ± 0.000 \\
+\textbullet & \textbullet & \textbullet & \textbullet &  &  & 0.998 ± 0.000 & 0.955 ± 0.006 & 0.952 ± 0.007 & 0.951 ± 0.007 & 0.955 ± 0.006 & 0.998 ± 0.000 \\
+\textbullet & \textbullet & \textbullet & \textbullet &  & \textbullet & 0.999 ± 0.000 & 0.965 ± 0.003 & 0.964 ± 0.003 & 0.964 ± 0.003 & 0.965 ± 0.003 & 0.998 ± 0.000 \\
+\textbullet & \textbullet & \textbullet & \textbullet & \textbullet &  & 0.999 ± 0.000 & 0.974 ± 0.003 & 0.971 ± 0.003 & 0.970 ± 0.002 & 0.974 ± 0.003 & 0.999 ± 0.000 \\
+\textbullet & \textbullet & \textbullet & \textbullet & \textbullet & \textbullet & 0.999 ± 0.000 & 0.975 ± 0.003 & 0.972 ± 0.003 & 0.971 ± 0.003 & 0.975 ± 0.003 & 0.999 ± 0.000 \\
+\end{longtable}

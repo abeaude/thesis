@@ -111,7 +111,7 @@
 %% GRAPHICS %%
 \RequirePackage{graphicx} % Required for inserting images
 \RequirePackage{tikz}
-\usetikzlibrary{shadings, positioning, shapes.multipart, shapes.geometric, fit, shadows, backgrounds, shapes, shapes.misc, calc, intersections, arrows.meta}
+\usetikzlibrary{shadings, positioning, shapes.multipart, shapes.geometric, fit, shadows, backgrounds, shapes, shapes.misc, calc, intersections, arrows.meta, graphs, fadings, quotes}
 \RequirePackage{subcaption}
 \renewcommand{\thesubfigure}{\Alph{subfigure}}
 \DeclareCaptionLabelFormat{bf-parens}{(\textbf{#2})}

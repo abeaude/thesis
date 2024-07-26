@@ -1,6 +1,13 @@
 \documentclass[web, english]{thesissaclay}
 
 \usepackage{subfiles}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}\xspace}%
+\newcommand{\xmark}{\ding{55}\xspace}%
+
+\tikzset{
+  square/.style={regular polygon,regular polygon sides=4}
+}
 
 %%%%%%%%%%%%%%%%%%%
 %% CONFIGURATION %%
@@ -127,8 +134,9 @@
 \subfileinclude{chapters/3-SOTA}
 \subfileinclude{chapters/4-AttOmics}
 \subfileinclude{chapters/5-CrossAttOmics}
-\subfileinclude{chapters/6-Interpretability}
-\subfileinclude{chapters/7-Conclusions}
+\subfileinclude{chapters/6-CrossAttOmicsGate.tex}
+\subfileinclude{chapters/7-Interpretability}
+\subfileinclude{chapters/8-Conclusions}
 
 \gls{svm}
 
@@ -168,6 +176,6 @@
 %%%%%%%%%%%%%%
 \appendix
 \pagestyle{appendix}
-\include{chapters/8-Appendix}
+\include{chapters/9-Appendix}
 \backmatter
 \end{document}
