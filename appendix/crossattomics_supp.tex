@@ -118,7 +118,7 @@
 
  \begin{figure}[htbp]
      \centering
-     \includegraphics{limited_training_3_omics.pdf}
+     \includegraphics[width=\textwidth]{limited_training_3_omics.pdf}
      \caption{Accuracy on the TCGA test set according to the size of the training set for various multi-omics deep learning models when trained on the best combination of 3 omics. When trained with the minimum samples possible, CrossAttOmics outperformed MLP IF. When the number of training samples was increased, MLP IF became the better architecture. The performance of CrossAttOmics depends on the number of modalities used, which impacts the number of cross-attentions. With the selected omics, miRNA, nc mRNA, and DNAm~(Figure~\ref{fig:tcga_perf_comb}), there is only two cross-attention to compute. The model cannot benefit from the cross-attention mechanism compared to situations with more modalities~(Figure~\ref{fig:lim_train_6_omics}).}
      \label{fig:lim_train_3_omics}
  \end{figure}
@@ -127,21 +127,21 @@
 
  \begin{figure}[htbp]
      \centering
-     \includegraphics{ccle_limited_training_3_omics.pdf}
+     \includegraphics[width=\textwidth]{ccle_limited_training_3_omics.pdf}
      \caption{Accuracy on the CCLE test set according to the size of the training set for various multi-omics deep learning models when trained on the best combination of 3 omics.}
      \label{fig:ccle_limited_train}
  \end{figure}
 
  \begin{figure}[htbp]
      \centering
-     \includegraphics{LRP_crossattomics.pdf}
+     \includegraphics[width=\textwidth]{LRP_crossattomics.pdf}
      \caption{Comparison of the LRP relevance score for the different modelled modality interactions across various cancer.}
      \label{fig:LRP_CrossAttOmics}
  \end{figure}
 
  \begin{figure}[htbp]
      \centering
-     \includegraphics[width=1\textwidth]{ccle_omics_com.pdf}
+     \includegraphics[width=\textwidth]{ccle_omics_com.pdf}
      \caption{Comparison of the test accuracy of different multi-omics deep learning integration models across different omics combination on the CCLE dataset. Each dot represents the mean accuracy obtained by a model on the test set after 5 different training. The error-bars represents the standard-error. For each combination a \cmark means that the omics is included in the combination and a \xmark means that the omics is excluded from the combination.}
      \label{fig:ccle_perf_comb}
  \end{figure}

@@ -93,7 +93,7 @@
 \RequirePackage{amsfonts}
 \RequirePackage[all,warning]{onlyamsmath}
 \RequirePackage[math-style=TeX, bold-style=TeX]{unicode-math}
-\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
+\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/] %FractionNumeratorShiftUp=20, FractionDenominatorShiftDown=20, FractionDenominatorGapMin=20
 \setmathrm{lmroman12-regular.otf}[Scale=MatchLowercase, Path = fonts/]
 \setoperatorfont\mathsf
 \newtheorem{definition}{Definition} %TODO: language support
@@ -109,6 +109,8 @@
 \RequirePackage{nameref} % Access name of a reference
 \RequirePackage{etoc} % Multiple and cusomize table of contents
 \RequirePackage[inline]{showlabels} % Show label keys when writing the document, do not work with subcaption
+\AtBeginEnvironment{table}{\small}
+\AtBeginEnvironment{longtable}{\scriptsize}
 %% GRAPHICS %%
 \RequirePackage{graphicx} % Required for inserting images
 \RequirePackage{tikz}
@@ -126,6 +128,8 @@
 \RequirePackage[]{mindflow}
 \RequirePackage[all]{nowidow}
 \RequirePackage[hyphenation, parindent]{impnattypo}
+\RequirePackage{enumitem}
+%\RequirePackage{minted}
 %\RequirePackage[french, backgroundcolor=B5, textcolor=white, linecolor=B5, bordercolor=A5]{todonotes}
 \RequirePackage{multicol}
 %% BIBLIOGRAPHY %%
