@@ -1,0 +1,12 @@
+{"rule":"A_INFINITIVE","sentence":"^\\QDifferent type of relationship between two nodes can exist, this is called a multigraph.\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QIn an homogeneous graph, each vertex represent the same type of entities, whereas in an heterogeneous graph each node can represent different type of entities.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qsupport vector machine multi-head self-attention fully connected network convolutional neural network graph neural network recurrent neural network graph convolutional network multi-layer perceptron auto-encoder denoising auto-encoder variational auto-encoder generative adversarial network protein-protein interaction biological process cellular component molecular function gene expression micro-RNA expression methylation gene ontology grouped fully connected network fully connected layer Kyoto encyclopedia of genes and genomes rectified linear unit co-expression random forest extreme gradient boosting layer-wise relevance propagation VCDN SNF long non-coding RNA the cancer genome atlas program cancer cell-line encyclopedia next generation sequencing\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QDifferent mechanism can produce such changes: dnam, histone modification, miRNA, lncrna.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qtcga.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QFor all patients we collected, when available, dnam, mrna, mirna, cnv, and proteomics.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QFor all selected patients we collected, when available, dnam, mrna, mirna, cnv, and proteomics.\\E$"}
+{"rule":"CD_NN","sentence":"^\\QThe methylation 450 platform contains more CpG sites but contains 94% of the CpG sites detected by the methylation 27 method.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qccle.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QThis second dataset, available on the DepMap portal, is composed of dnam, mrna, mirna, cnv, metabolomics, and proteomics for 536 cells of 16 different cancers.\\E$"}
+{"rule":"POSSESSIVE_APOSTROPHE","sentence":"^\\QSimilarly, each row of the edge embeddings matrix is the \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q-legnth vector embedding of an edge.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\Q\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q,agg \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q The aggregated information is then used to update the node embedding.\\E$"}

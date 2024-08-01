@@ -18,8 +18,9 @@ jobs:
             ./chapters/3-SOTA.tex
             ./chapters/4-AttOmics.tex
             ./chapters/5-CrossAttOmics.tex
-            ./chapters/6-Interpretability.tex
-            ./chapters/7-Conclusions.tex
+            ./chapters/6-CrossAttOmicsGate.tex
+            ./chapters/7-Interpretability.tex
+            ./chapters/8-Conclusions.tex
           latexmk_use_xelatex: true
           work_in_root_file_dir: false
           args: -outdir=${{ github.workspace }}/PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
@@ -35,7 +36,8 @@ jobs:
             ${{ github.workspace }}/PDF/3-SOTA.pdf
             ${{ github.workspace }}/PDF/4-AttOmics.pdf
             ${{ github.workspace }}/PDF/5-CrossAttOmics.pdf
-            ${{ github.workspace }}/PDF/6-Interpretability.pdf
-            ${{ github.workspace }}/PDF/7-Conclusions.pdf
+            ${{ github.workspace }}/PDF/6-CrossAttOmicsGate.pdf
+            ${{ github.workspace }}/PDF/7-Interpretability.pdf
+            ${{ github.workspace }}/PDF/8-Conclusions.pdf
           draft: true
           name: Compiled PDFs

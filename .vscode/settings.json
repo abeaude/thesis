@@ -26,6 +26,7 @@
     "workbench.activityBar.location": "top",
     "workbench.colorTheme": "Flexoki Dark",
     "workbench.preferredLightColorTheme": "Flexoki Light",
+    "latex-workshop.latex.recipe.default": "latexmk (xelatex)",
     "latex-workshop.latex.outDir": "%DIR%/PDF",
     "latex-workshop.latex.rootFile.useSubFile": true,
     "latex-workshop.latex.rootFile.doNotPrompt": true,
@@ -89,9 +90,14 @@
     "workbench.editor.tabActionCloseVisibility": false,
     "latex-workshop.latexindent.args": [
         "-wd",
+        "-s",
         "-c",
         "%DIR%/.latexindent.bak/",
         "%TMPFILE%"
     ],
-    "editor.wordWrap": "on"
+    "editor.wordWrap": "on",
+    "ltex.enabled": [
+        "latex"
+    ],
+    "ltex.language": "en-US"
 }
