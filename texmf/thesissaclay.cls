@@ -139,7 +139,7 @@
 \RequirePackage[pass]{geometry}
 \RequirePackage[headsepline]{scrlayer-scrpage}
 %% HYPERLINKS %%
-\RequirePackage[hyperindex=true, bookmarks=true]{hyperref}
+\RequirePackage[hyperindex=true, bookmarks=true, breaklinks=true]{hyperref}
 \RequirePackage[ocgcolorlinks]{ocgx2}
 %% GLOSSARIES %%
 \RequirePackage[symbols, abbreviations, automake, indexcrossrefs=true]{glossaries-extra}

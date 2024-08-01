@@ -5,6 +5,7 @@
 \begin{document}
 \ifSubfilesClassLoaded{%
 	\graphicspath{{figures/2-Background/}}%
+	\setcounter{chapter}{1}%
 }{
 	\graphicspath{{../figures/2-Background/}}%
 }
@@ -119,7 +120,7 @@
 		 h^{l}_{v,\text{agg}} & = \sum_{u \in \symcal{N}\left(v\right)} \frac{h^{l}_{u}}{\sqrt{\left|\symcal{N}\left(v\right) \right|\left|\symcal{N}\left(u\right) \right|}}
 	 \end{align}
 	 \(W^{l} \in \symbb{R}^{d_{l}\times d_{l+1}}\) is the learnable weight matrix applied to the node embeddings and \(f\) is a non-linear activation function, such as \(\operatorname{ReLU}\).
-	 Node embeddings \(h_{u}^{l}\) are normalized by the size of their neighborhood, \ie their degree: \(\left|\symcal{N}\left(u\right) \right|\) to prevent explosion of the embeddings.
+	 Node embeddings \(h_{u}^{l}\) are normalized by the size of their neighborhood, \ie{}their degree: \(\left|\symcal{N}\left(u\right) \right|\) to prevent explosion of the embeddings.
 	 The updates of all nodes can be written in the following matrix form:
 	 \begin{equation}
 		 H_{l+1} = \tilde{D}^{-\tfrac12}\tilde{A}\tilde{D}^{-\tfrac12}H_{l}W^{l}
@@ -179,12 +180,12 @@
 	 Usually the input is first projected in a higher dimension, \(4d\) and projected back to its original dimension \(d\).
 	 In addition to these two elements, the encoder blocks include a layer normalization, known to speed up the training, and skip-connections to prevent vanishing gradients.
 
-	 While the transform and in particular the self-attention was primarily designed to study text sequences, it can be applied to various data types that can be represented in a format compatible with the attention mechanism such as images, videos, time series, \dots.
+	 While the transform and in particular the self-attention was primarily designed to study text sequences, it can be applied to various data types that can be represented in a format compatible with the attention mechanism such as images, videos, time series, etc.
 	 In this section we mainly describe the self-attention, where the query, key and value are generated from the same input.
 	 The query can be obtained from one input, and the key, value from another input.
 	 In this case, we talk about cross-attention.
 
-	 One of the major limitations to the scaled-dot product attention is its quadratic complexity both in time and space.
+	 One limitations of the scaled-dot product attention is its quadratic complexity both in time and space.
 	 This quadratic complexity limits the number of elements \(L\) in the inputs to a few thousands.
 	 To circumvent this limitation new approaches have been proposed to have more efficient transformers architectures.
 	 Among those methods, some proposed a sparsification of the attention matrix by limiting the attention window to fixed or learnable patterns.
@@ -267,7 +268,7 @@
 
 	 There is no closed form to the optimization problem describe in \cref{eq:dl_opt} to find the optimal parameters \(\theta^{*}\).
 	 The minimization of the loss function is achieved with gradient descent.
-	 The parameters \(\theta\) are randomly initialized, then the parameters are updated in gradient steps by back-propagating a fraction of the error, \ie the gradient of the loss with respect to the parameters: \(\theta_{n+1} = \theta_{n} - \eta \nabla \symcal{L}_{|\theta_n}\left(\theta_{n}\right)\).
+	 The parameters \(\theta\) are randomly initialized, then the parameters are updated in gradient steps by back-propagating a fraction of the error, \ie{}the gradient of the loss with respect to the parameters: \(\theta_{n+1} = \theta_{n} - \eta \nabla \symcal{L}_{|\theta_n}\left(\theta_{n}\right)\).
 	 The hyperparameters \(\eta\) is called the learning rate, it controls the convergence speed to the optimal solution.
 	 Instead of considering all the training data \(N\), data is split in mini-batches of size \(N_b\), and the gradient descent is done on this mini-batches.
 	 This is called \gls{sgd}.
@@ -324,36 +325,50 @@
  Despite all cells sharing the same genetic information, proteins content may vary among cells as genes are differentially expressed in response to various environmental and developmental signals.
 
  \subsection{Regulation of the gene expression}
-	 The regulation of gene expression correspond to the control of the expression of gene products through various mechanisms,	 
-	 where any step of the gene expression process can be controlled. 
+	 The regulation of gene expression corresponds to the control of the expression of gene products through various mechanisms,
+	 where any step of the gene expression process can be controlled.
+	 The promoter region of a gene mediates the start of the transcription.
+	 Many promoters contain a CpG island, a region of DNA with a high frequency of CpG sites.
+	 The cytosine in these CpG islands can be methylated, \glsxtrlong{dnam} in the gene promoter usually corresponds to a repression of the gene expression.
+	 The transcription of the DNA is regulated by its accessibility.
+	 Indeed, the DNA molecule is wrapped around histone proteins.
+	 Acetylation or methylation of the histones can make the DNA more or less accessible to transcription factors, hence regulating the gene expression.
+	 \Gls{ncrna} regulates the expression of thousands of genes.
+	 For instance, \gls{mirna} can silence the expression of genes by binding to its mRNA and inducing its cleavage.
+	 The mRNA degradation leads to the absence of translation into a protein.
+	 The mechanisms previously described are also known as epigenetic regulation.
+	 Alternative splicing is another way of regulating gene expression; it creates a wide range of proteins by varying the exon composition of an mRNA\@.
+	 A stable mRNA will produce more proteins, acting directly on the mRNA stability through its poly-A tail, which is another mechanism to control gene expression.
+	 Proteins obtained after the translation can undergo modifications, known as post-translational modifications.
+	 Those modifications are involved in the regulation of protein function.
 
-	 epigenetic change: DNAm, histone modification DNA accessibility ncMRNA such as miRNA
-	 transcription regulation : polyA, mRNA stability (half life), alternative splicing
-	 post translational modification molecular regulatory mechanisms to regulate diverse cellular processes.
-	 regulate protein function and serve as a mechanism to increase the complexity and functionality of the proteome. 
-
-	 Mutations are not a mechanism of gene regulation but can impact the expression of a gene. 
-	 Mutations correspond to an alteration of the DNA sequence by uncorrected errors during the DNA replication, or induced by environmental factors causing DNA damage.  
-	 The mutation can occur in a coding or non-coding sequence. 
-	 In coding sequences, the mutation can be a synonymous mutation: the mutation does not change the amino-acid in the protein sequence due to the redundancy of the genetic code. 
-	 On the contrary, a non-synonymous mutations could lead to a change of the amino-acid in the protein sequence. 
-	 The replacement by a premature stop codon, a nonsense mutation, would result in a truncated non-functional protein. 
+	 Mutations are not a mechanism of gene regulation but can impact the expression of a gene.
+	 Mutations correspond to an alteration of the DNA sequence by uncorrected errors during the DNA replication, or induced by environmental factors causing DNA damage.
+	 The mutation can occur in a coding or non-coding sequence.
+	 In coding sequences, the mutation can be a synonymous mutation: the mutation does not change the amino-acid in the protein sequence due to the redundancy of the genetic code.
+	 On the contrary, a non-synonymous mutations could lead to a change of the amino-acid in the protein sequence.
+	 The replacement by a premature stop codon, a nonsense mutation, would result in a truncated non-functional protein.
 	 The change of amino-acid could change the structure of the protein or impact its catalytic site, leading to a malfunctioning protein.
-	 A mutation in non-coding regions can have various impacts. 
+	 A mutation in non-coding regions can have various impacts.
 
  \subsection{Cancer}
-	 causes mutations, environment
-	 present normal function of a cell with various components, DNA to protein in a cell. Protein = structure = function.
-	 How this process is regulated: present central dogma, cell regulation
-	 cancer = dysregulation of the functionning of a cell.
-	 origin: multiscale, can happens at diferent place of the process.
-	 talk about cancer hallmarks
-	 cancer origin, promotion, growth metastasis = dvt of cancer
+	 Cancer is not a single disease but rather a group of diseases characterized by abnormal cell growth that can invade tissue and spread to other organs (metastasis).
+	 The transformation of a normal cell into a cancer cell is a multistep process.
+	 The acquisition of the abnormal growth phenotype is done by the dysregulation of pathways controlling cell growth.
+	 This dysregulation occurs by altering the expression of oncogenes, genes promoting cell growth, and tumor suppressor genes, genes inhibiting cell division and cell survival.
+	 Mutations in a promoter region can alter these genes expression, the protein function can be altered by the acquisition of mutations in the coding sequence of those genes.
+	 Mutations in non-coding part of the genome can alter gene expression regulators and thus indirectly impact oncogenes or tumor suppressor genes expression.
+	 Epigenetic alteration are known to occur in cancer development.
+	 These alterations can be hereditary transmitted or acquired by environmental exposure to carcinogens substances.
+	 To better characterize cancer, it is important to consider all the cell's molecular constituent as cancers is the results of multiscale alterations.
 
+	 Despite being a group of more than a hundred different diseases, cancers share similar characteristics.
+	 These shared properties are known as the hallmarks of cancer.
+	 Hallmarks define eight capabilities and two enabling capabilities, they present an organizing principle to approach the complexity of cancers.
 
 \section{Omics data}
  The omics field correspond to the characterization and the quantification of pools of biological molecules.
- The different omics fields studies an \textit{ome}.
+ Each omics field studies an \textit{ome}.
  The \textit{ome} suffix is used to refer to all constituents.
  For instance the genome refers to all the genetic information of an organism, and the genomics correspond to the study of the genome.
 
@@ -367,25 +382,25 @@
  In the following, I will describe the main omics that are used in precision medicine, and how they are obtained.
 
  \subsection{Genomics}\label{subsec:genomics}
-	 The genomics correspond to the study of the genome of an organism, \ie all its genetic information.
-	 The genetic information corresponds to the DNA sequence, which includes protein-coding genes, non-coding genes and other regulatory elements.
+	 Genomics corresponds to the study of an organism's genome, \ie{}all its genetic information.
+	 The genetic information corresponds to the DNA sequence, which includes protein-coding genes, non-coding genes, and other regulatory elements.
 	 The DNA sequence is obtained with \gls{ngs} techniques.
-	 In the following I will only describe the Illumina sequencing, a sequencing by synthesis approach.
-	 After extracting and purifying the DNA of a sample, it is cut in small fragments of hundreds of base-pairs to form the DNA library.
+	 In the following, I will only describe Illumina sequencing, a sequencing-by-synthesis approach.
+	 After extracting and purifying the DNA of a sample, it is cut into small fragments of hundreds of base pairs to form the DNA library.
 	 Then, adapters are added to the fragments; the adapters contain a barcode to identify the sample, the binding site for the sequencing primer, and the complementary sequence to the oligonucleotides on the flow cell.
 	 The complementary sequence allows the fragment to attach to the flow cell during the sequencing.
 	 Each fragment is then amplified into distinct clonal clusters by bridge amplification.
 	 Sequencing is then performed using a cyclic process that adds fluorescently labeled nucleotides one at a time.
 	 A camera that captures the emitted fluorescence identifies the incorporated base at each position.
 	 The cycle is repeated numerous times to obtain completed DNA sequences: reads.
-	 After the sequencing a set of reads is obtained, those reads are aligned to a reference genome with an aligner.
+	 After the sequencing, a set of reads is obtained, and those reads are aligned to a reference genome with an aligner.
 	 A variant calling step is then performed to identify single nucleotide variants.
-	 The variant calling step will quantify the different \gls{snp} in a DNA sequence, in other words it will show the mutations that occur compared to the reference sequence.
+	 The variant calling step will quantify the different \gls{snp} in a DNA sequence; in other words, it will show the mutations that occur compared to the reference sequence.
 
-	 Quantification of \gls{cnv} is done with microarray approaches or sequencing-based approaches.
+	 Quantification of \gls{cnv} is done with microarray or sequencing-based approaches.
 
  \subsection{Transcriptomics}\label{subsec:transcriptomics}
-	 Transcriptomics studies all the RNAs transcript of an organism, \ie its transcriptome.
+	 Transcriptomics studies all the RNAs transcript of an organism, \ie{}its transcriptome.
 	 The RNA is extracted from the sample, messenger RNA are enriched with a poly-A selection process.
 	 After fragmentation of the RNA molecule, a reverse transcriptase is used to convert the transcript into its \gls{cdna} sequence.
 	 The \gls{cdna} fragment is then sequenced as described in the \cref{subsec:genomics}.
@@ -399,10 +414,10 @@
 	 \begin{itemize}[nosep]
 		 \item \glsxtrfull{dnam},
 		 \item histone modification,
-		 \item miRNA,
+		 \item \glsxtrfull{mirna},
 		 \item \glsxtrfull{lncrna}.
 	 \end{itemize}
-	 miRNA and \gls{lncrna} quantification is obtained similarly to mRNAs quantification~(\cref{subsec:transcriptomics}).
+	 \Gls{mirna} and \gls{lncrna} quantification is obtained similarly to mRNAs quantification~(\cref{subsec:transcriptomics}).
 	 Histone modifications are quantified with a mass-spectrometry-based approach, see \cref{subsec:proteomics}.
 	 \Gls{dnam} is quantified with bead-chip based methylation assay or bisulfite sequencing.
 	 The bisulfite treatment converts unmethylated cytosine into uracil.
@@ -436,7 +451,7 @@
  \subsection{\Glsfmtfull{tcga}}
 	 Among the 33 cancer type available in the \gls{tcga} project, we selected the 19 cancers with more than a hundred patients.
 	 We collected a total of 8777 samples, 8416 were cancerous samples and 361 normal samples from the GDC Data Portal\footnote{\url{https://portal.gdc.cancer.gov/}} with the \textsf{TCGABiolinks} R package.
-	 For all selected patients we collected, when available, \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna}, \glsxtrfull{cnv}, and proteomics.
+	 For all selected patients we collected, when available, \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna} expression, \glsxtrfull{cnv}, and proteomics.
 	 Clinical annotations are also available for each patient.
 	 In \gls{tcga} cancerous samples encompass primary solid tumor, recurrent solid tumor and metastasis.
 	 The normal samples correspond to solid tissue normal, a portion of tissue is samples at a certain distance of the tumor, or are blood derived.
@@ -472,13 +487,14 @@
 	 Patients with incorrect survival information were removed.
 
 	 For the multi-omics study, we restricted the dataset to patients having all modalities present, which lead us to select 5862 patients of 18 different cancers.
+	 This selection process ensures that the dataset only contains paired data.
 	 We also considered coding and \gls{ncrna} as two different modalities, as \gls{ncrna} can affect cancer cell fate through various mechanisms~\cite{Grillone2020} and are involved in the oncogenesis~\cite{Toden2021}.
 	 In this manuscript, we focused on two tasked: cancer type prediction and risk-based survival prediction.
 	 70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
 	 The training set is used to train the different models, the validation set to select the best model hyperparameters and the test set is used to assess the model performances.
 
  \subsection{\Glsfmtfull{ccle}}
-	 This second dataset, available on the DepMap portal\footnote{\url{https://depmap.org/portal/data_page/?tab=allData}}, is composed of \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna}, \glsxtrfull{cnv}, metabolomics, and proteomics for 536 cells of 16 different cancers.
+	 This second dataset, available on the DepMap portal\footnote{\url{https://depmap.org/portal/data_page/?tab=allData}}, is composed of \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna} expression, \glsxtrfull{cnv}, metabolomics, and proteomics for 536 cells of 16 different cancers.
 	 No feature selection was applied, and data were standardized to a zero mean and unit variance.
 	 70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
 
