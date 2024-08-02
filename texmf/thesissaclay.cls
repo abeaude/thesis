@@ -64,7 +64,7 @@
 %\addfontfeature{LetterSpace = 15em plus.1em minus.1em}
 \RequirePackage{xunicode}
 \RequirePackage{microtype}
-\RequirePackage{csquotes}
+\RequirePackage[strict, autostyle=true]{csquotes}
 %% LANG %%
 \RequirePackage{polyglossia}
 \ifdefstring{\@lang}{english}{
@@ -133,7 +133,7 @@
 %\RequirePackage[french, backgroundcolor=B5, textcolor=white, linecolor=B5, bordercolor=A5]{todonotes}
 \RequirePackage{multicol}
 %% BIBLIOGRAPHY %%
-\RequirePackage[backend=biber, bibstyle=alphabetic, citestyle=alphabetic, sorting=nty,backref=true, refsection=chapter, arxiv=abs, url=false, isbn=false, date=year, eprint=false, maxbibnames=5]{biblatex}
+\RequirePackage[backend=biber, bibstyle=alphabetic, citestyle=alphabetic, sorting=nty,backref=true, refsection=chapter, arxiv=abs, url=false, isbn=false, date=year, eprint=false, maxbibnames=5, maxcitenames=1]{biblatex}
 \renewcommand{\bibfont}{\small}
 %% LAYOUT %%
 \RequirePackage[pass]{geometry}
@@ -511,6 +511,10 @@
      \etocsettocstyle{\addsec*{Chapter contents\\\vspace{-15pt}\rule{\textwidth}{0.4pt}\vspace{-10pt}}\KOMAoption{parskip}{false}}{\vspace{-5pt}\noindent\rule{\textwidth}{0.4pt}\clearpage\KOMAoption{parskip}{half}}%
      \localtableofcontents
  }
+  \newcommand{\minitoc}{
+     \etocsettocstyle{\addsec*{Chapter contents\\\vspace{-15pt}\rule{\textwidth}{0.4pt}\vspace{-10pt}}\KOMAoption{parskip}{false}}{\vspace{-5pt}\noindent\rule{\textwidth}{0.4pt}\\\KOMAoption{parskip}{half}\vspace{-30pt}}%
+     \localtableofcontents
+ }
 
  \newcommand{\minitoctwocols}{
      \begin{multicols}{2}
@@ -519,7 +523,7 @@
      \end{multicols}
  }
 
- \newcommand{\minitoc}{
+ \newcommand{\minitocpagecentered}{
      \etocsettocstyle{\vfill\addsec*{Chapter contents\\\vspace{-15pt}\rule{\textwidth}{0.4pt}\vspace{-10pt}}\KOMAoption{parskip}{false}}{\vspace{-5pt}\noindent\rule{\textwidth}{0.4pt}\vfill\clearpage\KOMAoption{parskip}{half}}%
      \localtableofcontents
  }

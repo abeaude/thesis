@@ -3,11 +3,13 @@
 \usepackage{subfiles}
 \usepackage{pdflscape}
 \usepackage{pifont}
+\usepackage{eqparbox}
 % TO REMOVE ?
 \usepackage{wrapfig}
 \newcommand{\cmark}{\ding{51}\xspace}%
 \newcommand{\xmark}{\ding{55}\xspace}%
 \newcommand{\ie}{\textit{i}.\textit{e}.\ }%
+\newcommand\mylabelformat[2][l]{\eqmakebox[listlabel@\EnumitemId][#1]{#2}}
 \setoperatorfont\mathrm%
 
 \tikzset{
@@ -105,10 +107,10 @@
 %%%%%%%%%%%%%%%%%%%%
 % Required by the university to write a summary of 4000 symbols when the main language is not the french.
 \ifdefstring{\mainlanguagename}{french}{}{%
-    \begin{french}
-        \addchap{Résumé de la thèse --- French summary}
-        \input{frontmatter/longsummaryFR}
-    \end{french}
+	\begin{french}
+		\addchap{Résumé de la thèse --- French summary}
+		\input{frontmatter/longsummaryFR}
+	\end{french}
 }
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -143,37 +145,19 @@
 \subfileinclude{chapters/7-Interpretability}
 \subfileinclude{chapters/8-Conclusions}
 
-\gls{svm}
-
-\glsxtrfull{svm}
-
-\gls{svm}
-\gls{duck}
-
-% Plan/idea
-% la médecine personnalisé, motivation et utilisation du deep learning
-% le cancer, ses origines, ...
-% les données omiques, caractérisitques, obtention
-% le deep learning, uni modal et multimodal
-
-% état de l'art
-% single omics
-% multi omics
-% interprétabilité ?
-
 \KOMAoption{parskip}{false}
 \begin{singlespace}
-    %%%%%%%%%%%%%%%%%%
-    %% PUBLICATIONS %%
-    %%%%%%%%%%%%%%%%%%
-    \mypublications
+	%%%%%%%%%%%%%%%%%%
+	%% PUBLICATIONS %%
+	%%%%%%%%%%%%%%%%%%
+	\mypublications
 
-    %%%%%%%%%%%%%%%%%
-    %% BIBLIOGRAPY %%
-    %%%%%%%%%%%%%%%%%
-    \printbibheading
-    \bibbysection[heading=subbibliography]
-    \printglossary[title=Glossary]
+	%%%%%%%%%%%%%%%%%
+	%% BIBLIOGRAPY %%
+	%%%%%%%%%%%%%%%%%
+	\printbibheading
+	\bibbysection[heading=subbibliography]
+	\printglossary[title=Glossary]
 \end{singlespace}
 \KOMAoption{parskip}{half}
 %%%%%%%%%%%%%%
