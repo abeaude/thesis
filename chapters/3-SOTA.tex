@@ -12,31 +12,169 @@
 \chapter{Deep-learning for omics data analysis}\label{chap:sota}
 \minitocpage
 
-\section{Unimodal}
-architectures tested on omics data, what are the tasks, what are they able to achieve
+\section{Prediction from single omics data}
+ With the application of deep-learning to omics data multiple tasks are possible: predict gene expression from the DNA sequence~\cite{Avsec2021}, predict the impact of a sequence variation on \glsxtrlong{dnam}~\cite{Zeng2017}, annotate genome variants~\cite{Quang2014}, etc\@.
+ In this document, we will focus on tasks predicting a phenotype: does a patient have a cancer or not, what type of cancer a patient has, or survival-related tasks.
 
-\section{Multimodal}
-what is multimodal, how  to do it, common vocab
-is there an advantage
-are there any challenges, specific to omics
+ Omics data suffers from a curse of dimensionality: they are high-dimensional but the number of available examples remains limited.
+ To overcome the limitation of training examples, various strategies have been used: self-supervised training, feature engineering, transfer learning.
+ \Glspl{ae} or \glspl{vae} are used to learn a compact representation of the input; the latent representation should contain relevant biological features.
+ The latent representation can be fed to a downstream classifier such as \gls{svm}~\cite{Zhang2020}, \gls{xgboost} or k-NN classifier~\cite{Arafa2023} logistic regression~\cite{Wang2018} or used to train a neural network classifier~\cite{Karim2019}.
+ The encoder part of the \gls{ae} can be fine-tuned on a predictive task through transfer learning~\cite{Levy2020,Kaczmarek2022}.
+ \citeauthor{Hanczar2018} pretrain each layer of an \gls{mlp} with a denoising \gls{ae}~\cite{Hanczar2018}.
+ Feature engineering involves the creation, selection, and transformation of features to enhance the model's ability to capture essential patterns or signals hidden within the omics data.
+ Many works use feature selection to reduce the input dimension of neural networks.
+ The selections process can be based on features with the highest median absolute deviation, based on a student t-test selection~\cite{Liu2019}, based on knowledge on important features~\cite{Kaczmarek2022} or based on another models such as \glspl{rf}~\cite{Wojewodzic2021,Liu2019} or LASSO~\cite{Liu2019} or PCA~\cite{Yu2019}.
+ Other approaches use the available knowledge to transform raw features to annotated biologically relevant features.
+ DeepCC~\cite{gaoDeepCCNovelDeep2019} applies an \gls{mlp} on biologically informed features by transforming gene expression data into a functional spectrum, \ie{}a list of enrichment scores calculated by gene set enrichment analysis.
+ DeepTRIAGE~\cite{beykikhoshkDeepTRIAGEInterpretableIndividualised2020a} transforms gene counts to pathways counts by summing all gene counts belonging to a gene ontology biological process pathway or a KEGG pathway.
+ \citeauthor{Zhang2020} use a gated \gls{mlp} to identify a set of important features, those features are then used to train an \gls{ae}~\cite{Zhang2020}.
 
-show some example on omics data
+ Using multiple models to select features and perform predictive tasks results in increased complexity, and the process of selecting features before constructing the predictive models limits the capacity to consider all feature interactions. 
+ On the contrary, deep learning architectures can adapt to any number of features and select the most relevant features through their architectures. 
+ They allow modeling complex, non-linear relationships and have been shown to outperform classical machine learning approaches with training sets of a few thousand examples~\cite{Hanczar2022}.
+
+ \Gls{mlp} are well studied for predicting outcomes from omics data.
+ \citeauthor{yuArchitecturesAccuracyArtificial2019b}, explored different \gls{mlp} architectures by varying the number of neurons in each layer and the number of layers~\cite{yuArchitecturesAccuracyArtificial2019b}.
+ They showed that wider networks perform better than deeper ones.
+ Cancer types are accurately predicted from gene expression data with an \gls{mlp}~\cite{Divate2022}.
+ Adding inductive bias can help the model better generalize when training data is limited.
+ Inductive bias corresponds to the assumptions and prior knowledge incorporated into the model to better generalize. 
+ Introducing biological knowledge into the architecture is a robust inductive bias that should help the model better generalize. 
+ Biological system and their knowledge representation are hierarchical, making this kind of inductive bias suitable for hierarchical architecture such as \gls{mlp}~\cite{bourgeaisDeepGONetSelfexplainable2021,haoPASNetPathwayassociatedSparse2018}.
+ In DeepGONet~\cite{bourgeaisDeepGONetSelfexplainable2021}, authors constrain the \gls{mlp} architecture with the GO biological processes hierarchy. 
+ In PASNet~\cite{haoPASNetPathwayassociatedSparse2018,Hao2018}, authors use the REACTOME hierarchy to constrain their \gls{mlp} architecture. 
+ With such architectures, each neuron represents a known pathway, and only neurons with known relations are connected. 
+ For the input layer, neurons represent genes, and they are connected to neurons of the first hidden layers if they are involved in the corresponding pathway. 
+ In practice, this is achieved by masking the unknown relationships in a fully connected layer:
+ \begin{equation}
+	 \symbf{a}^{l} = f\left( \symbf{a}^{l-1} \cdot \left( W^l \odot M^l\right) + \symbf{b}^{l} \right) \label{eq:mlp_sparse_matrix}
+ \end{equation}
+ where \(M^l\) is a binary mask restricting connections between neurons to known biological relations and \(\odot\) is the Hadamard product or element-wise product: \({\left(A\odot B\right)}_{ij} = {\left(A\right)}_{ij}{\left(B\right)}_{ij}\).
+
+  Earlier, we presented approaches that trained an \gls{ae} and used the latent representation as input to another classification model. 
+  However, deep learning is a flexible approach and a supervision of the latent space from a classifier can be added during the \gls{ae} training. 
+  Such approach allow for an end-to-end training of the model and constrains the latent space to learn relevant features for the classification~\cite{goreCancerNetUnifiedDeep2022}. 
+  For such models, the training loss correspond to the sum of the unsupervised loss and the supervised loss: \(\symcal{L}_{AE} + \symcal{L}_{CE}\).
+
+   Promising results of \gls{cnn} in computer vision inspired its application in precision medicine.
+   However, expression profile are not 2D like images but 1D. 
+   To apply 2D convolutions onto expression profile a transformation step to go from a 1D representation to a 2D representation: \(\symcal{T}: \symbb{R}^{d} \mapsto \symbb{R}^{h\times w}\).
+   For such transformation, a zero-padding of the 1D vector is required for the transformation to be applied. 
+   The simplest transformation often corresponds to a naive reshaping~\cite{Wang2021,deGuia2019,Elbashir2019,Chatterjee2018}. \citeauthor{deGuia2019}, transform the gene expression vector to a \(102\times 102\) image after a feature selection process~\cite{deGuia2019}. 
+   Similarly, \citeauthor{Elbashir2019} reshape the gene expression vector to a \(127 \times 114\) image~\cite{Elbashir2019}.
+   Some approaches hypothetize that chromosical adjacent genes are more likely to interact. 
+   Based on that assumptions, features are reordered based on their poistion in the genome before reshaping the expression to a 2D image~\cite{Mostavi2020,Lyu2018,Yin2022}.  
+   Instead of naive reshaping, knowledge-based transformation have been depicted. 
+   Hierarchical tree structure such KEGG BRITE are used to transform features, then the tree structure is represented as treemap with a tiling algorithm~\cite{LpezGarca2020,maOmicsMapNetTransformingOmics2019}. 
+   The chosen algorithm ensures that all samples share the same spatial arrangements by ordering genes based on their mean level of expression across the dataset. 
+   The treemap image are then colorized based on the gene expression abundances. 
+   Instead of forcing a 2D representation of expression profile, 1D convolution can be directly used. 
+   Similarly to 2D \gls{cnn}, features were reordered based on their genomic position~\cite{Mostavi2020,Zhao2020,Yin2022} or expression profile were leave untouched~\cite{Mohammed2021}. 
+   While many approaches around convolutions were developped they are not suited for omics data as they introduce wrong inductive biases.
+   Convolutions are more suited for structured data, and even the incorporation of a structure in the data based on the chromosomal location or some knowledge is a constraint that limits the range of possible interactions. 
+   For instance such architectures do not consider interactions between genes that are far away from each other in the genome.
+
+   % GNN 
+ An Interpretable Multi-Level Enhanced Graph Attention Network for Disease Diagnosis with Gene Expression Data (GNN with feature engineering)
+ A Self-attention Graph Convolutional Network for Precision Multi-tumour Early Diagnostics with 1 DNA Methylation Data
+ Classification of Cancer Types Using Graph Convolutional Neural Networks Ricardo Ramirez 1, Yu-Chiao Chiu 2, Al (GCN PPI)
+ omicsGAT: Graph Attention Network for Cancer Subtype Analyses (GAT patient similarity)
+ Prediction and Interpretation of Cancer Survival Using Graph Convolution Neural Networks (GCN various graph are used)
+
+ %fix caption 
+	 \begin{longtblr}[
+		caption = {examples single omics},
+		entry = {short caption}
+		]{
+		 colspec = {Q[c,m]Q[l,m]Q[c,m]Q[c,m, wd=2.5cm]Q[c,m]Q[l,m, wd=4cm]},
+		 hline{1,Z} = {2pt},
+		 hline{2} = {1pt},
+		 row{2-Z} = {font=\small},
+		 rowhead= 1, rowfoot=0
+			 }
+		 Reference                                                    & omics & task    & Architecture                          & Graph  & Feature engineering           \\
+		 \cite{Arafa2023}                                             & mRNA  & sample  & \glsxtrshort{ae}                      & \xmark & Feature selection             \\
+		 \cite{Wang2018}                                              & DNAm  & subtype & \glsxtrshort{vae}                     & \xmark & Feature selection (MAD)       \\
+		 \cite{Karim2019}                                             & CNV   & subtype & \glsxtrshort{ae} + \glsxtrshort{cnn}  & \xmark & Feature selection (oncogenes) \\
+		 \cite{Levy2020}                                              & DNAm  & cancer  & \glsxtrshort{vae} + \glsxtrshort{mlp} & \xmark & Feature selection (MAD)       \\
+		 \cite{Kaczmarek2022}                                         & miRNA & sample  & \glsxtrshort{ae} + \glsxtrshort{mlp}  & \xmark & \xmark                        \\
+		 \cite{Hanczar2018}                                           & mRNA  & binary  & \glsxtrshort{ae} + \glsxtrshort{mlp}  & \xmark & \xmark                        \\
+		 \cite{Wojewodzic2021}                                        & DNAm  & sample  & \glsxtrshort{mlp}                     & \xmark & Feature selection             \\
+		 \cite{Liu2019}                                               & DNAm  & sample  & \glsxtrshort{mlp}                     & \xmark & Feature selection             \\
+		 \cite{gaoDeepCCNovelDeep2019}                                & mRNA  & subtype & \glsxtrshort{mlp}                     & \xmark & Feature selection (Knowledge)                              \\
+		 \cite{beykikhoshkDeepTRIAGEInterpretableIndividualised2020a} & mRNA  & subtype & attention-based                     & \xmark & Feature selection (Knowledge)                              \\
+		 \cite{Zhang2020} & DNAm & sample & attention-based + \gls{ae} & \xmark & model-based selection \\
+		 \cite{yuArchitecturesAccuracyArtificial2019b} &  &  &  & \xmark &  \\
+		 \cite{Divate2022} & mRNA & cancer & \gls{mlp} & \xmark & \xmark \\
+		 \cite{Elbashir2019} & mRNA & cancer & \gls{cnn} & \xmark & Coding genes + Feature selection \\
+		 \cite{deGuia2019} & mRNA & cancer & \gls{cnn} & \xmark & Feature selection (threshold) \\
+		 \cite{Wang2021} & mRNA & cancer & \gls{cnn} & \xmark & Feature selection (Mutual information) \\
+		 \cite{Mostavi2020} & mRNA & cancer & \gls{cnn} & \xmark & Feature selection (threshold) \\
+		 \cite{Lyu2018} & mRNA & cancer & \gls{cnn} & \xmark & Feature selection (threshold) \\
+		 \cite{LpezGarca2020} & mRNA & survival & \gls{cnn} & \xmark & Feature selection (MAD) \\
+		 \cite{maOmicsMapNetTransformingOmics2019} & mRNA & grade & \gls{cnn} & \xmark & Feature selection (threshold) \\
+		 \cite{Hao2018} & mRNA & survival & \gls{mlp} & \xmark & \xmark \\
+		 \cite{Chatterjee2018} & DNAm & cancer & \gls{cnn} & \xmark & \xmark \\
+		 \cite{Zhao2020} & mRNA & cancer & \gls{cnn} & \xmark & Feature selection (DE) \\
+		 \cite{Mohammed2021} & mRNA & cancer & \gls{cnn} & \xmark & Feature selection (threshold + DE + LASSO) \\
+		 \cite{Yin2022} & mRNA & survival & \gls{cnn} & \xmark & Feature selection (threshold + CWx) \\
+		 \cite{Yu2019} & mRNA & cancer & {\gls{mlp} \\ \gls{cnn}} & \xmark & PCA \\
+	 \end{longtblr}
+
+ Precision medicine is not only interested in correctly diagnosing a patient but also estimating its prognosis. 
+ Prognosis is estimated with survival analysis. 
+ Survival analysis focuses on analyzing and modeling the time it takes for an event of interest to occur. 
+ The event of interest can be death, relapse or recovery, among others. 
+ A standard survival model is the Cox proportional hazards model.
+ This standard model has been extended to consider non-linear survival data with deep learning models~\cite{katzmanDeepSurvPersonalizedTreatment2018,Ching2018}. 
+ Cox-nnet~\cite{Ching2018} uses a log-likelihood loss (\cref{eq:cox_loss}) to predict prognosis from gene expression data. 
+ Deep-surv~\cite{katzmanDeepSurvPersonalizedTreatment2018} uses the same principles to recommend the best treatment option to a patient by computing the risk ratio. 
+ \citeauthor{Lee2022} model the survival task as a regression on the survival days, this approach does not consider the particular structure of survival data and completely ignore censoring data. 
+ 
+ 
+
+
+
+% Other 
+MethylSPWNet = Capsule networks
+ 
+% Attention based
+ For the application of omics data, deep learning architectures using attention mechanisms have been little explored.
+ DeepGene transfomer
+ An Ensemble Deep Learning Model with a Gene Attention Mechanism for Estimating the Prognosis of Low-Grade Glioma (rnna seq, survival as a regression task of the survival days, do not account for censuring, mlp with attention implemented as a sigmoid)
+ DeepTRIAGE~\cite{beykikhoshkDeepTRIAGEInterpretableIndividualised2020a}
+ 
+ 
+ Architectures and accuracy of artificial neural network for disease classification from omics data (MLP/CNN feature selection or PCA reduction)
+
+\section{Prediction from multi-omics data}
+ \subsection{Multimodal deep learning}
+	 what is multimodal, how  to do it, common vocab
+	 is there an advantage
+	 are there any challenges, specific to omics
+ \subsection{Multi-omics data integration}
+	 show some example on omics data
+ \subsection{Deep learning models for multi-omics data}
+
+
+
 
 \section{Model interpretability}
-general about interpretability/explanability
-fix the vocabulary that is used
-present different methods, advantage drawbacks
+ % general about interpretability/explanability
+ % fix the vocabulary that is used
+ % present different methods, advantage drawbacks
 
-way to introduce counterfactuals
+ % way to introduce counterfactuals
 
-remind what are counterfactuals in plain english: what if
-show equation
-desired property of CFs + construct the optimization problem
-how to solve it: gradient descent show algo
-discuss lambda
-show some methods
+ % remind what are counterfactuals in plain english: what if
+ % show equation
+ % desired property of CFs + construct the optimization problem
+ % how to solve it: gradient descent show algo
+ % discuss lambda
+ % show some methods
 
-need to talk about adversarial examples, details in annex?
-how to have a model robust to adv attacks, defenses, adv training
+ % need to talk about adversarial examples, details in annex?
+ % how to have a model robust to adv attacks, defenses, adv training
 
 \end{document}

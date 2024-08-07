@@ -128,7 +128,7 @@
 \RequirePackage[]{mindflow}
 \RequirePackage[all]{nowidow}
 \RequirePackage[hyphenation, parindent]{impnattypo}
-\RequirePackage{enumitem}
+\RequirePackage[inline]{enumitem}
 %\RequirePackage{minted}
 %\RequirePackage[french, backgroundcolor=B5, textcolor=white, linecolor=B5, bordercolor=A5]{todonotes}
 \RequirePackage{multicol}
