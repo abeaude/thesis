@@ -12,6 +12,9 @@
 \newcommand\mylabelformat[2][l]{\eqmakebox[listlabel@\EnumitemId][#1]{#2}}
 \setoperatorfont\mathrm%
 
+\newtcolorbox[auto counter, number within=chapter]{mybox}[2][]{%
+    title=Box~\thetcbcounter: #2, #1}
+
 \tikzset{
   square/.style={regular polygon,regular polygon sides=4}
 }

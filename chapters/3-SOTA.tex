@@ -30,8 +30,8 @@
  DeepTRIAGE~\cite{beykikhoshkDeepTRIAGEInterpretableIndividualised2020a} transforms gene counts to pathways counts by summing all gene counts belonging to a gene ontology biological process pathway or a KEGG pathway.
  \citeauthor{Zhang2020} use a gated \gls{mlp} to identify a set of important features, those features are then used to train an \gls{ae}~\cite{Zhang2020}.
 
- Using multiple models to select features and perform predictive tasks results in increased complexity, and the process of selecting features before constructing the predictive models limits the capacity to consider all feature interactions. 
- On the contrary, deep learning architectures can adapt to any number of features and select the most relevant features through their architectures. 
+ Using multiple models to select features and perform predictive tasks results in increased complexity, and the process of selecting features before constructing the predictive models limits the capacity to consider all feature interactions.
+ On the contrary, deep learning architectures can adapt to any number of features and select the most relevant features through their architectures.
  They allow modeling complex, non-linear relationships and have been shown to outperform classical machine learning approaches with training sets of a few thousand examples~\cite{Hanczar2022}.
 
  \Gls{mlp} are well studied for predicting outcomes from omics data.
@@ -39,114 +39,132 @@
  They showed that wider networks perform better than deeper ones.
  Cancer types are accurately predicted from gene expression data with an \gls{mlp}~\cite{Divate2022}.
  Adding inductive bias can help the model better generalize when training data is limited.
- Inductive bias corresponds to the assumptions and prior knowledge incorporated into the model to better generalize. 
- Introducing biological knowledge into the architecture is a robust inductive bias that should help the model better generalize. 
+ Inductive bias corresponds to the assumptions and prior knowledge incorporated into the model to better generalize.
+ Introducing biological knowledge into the architecture is a robust inductive bias that should help the model better generalize.
  Biological system and their knowledge representation are hierarchical, making this kind of inductive bias suitable for hierarchical architecture such as \gls{mlp}~\cite{bourgeaisDeepGONetSelfexplainable2021,haoPASNetPathwayassociatedSparse2018}.
- In DeepGONet~\cite{bourgeaisDeepGONetSelfexplainable2021}, authors constrain the \gls{mlp} architecture with the GO biological processes hierarchy. 
- In PASNet~\cite{haoPASNetPathwayassociatedSparse2018,Hao2018}, authors use the REACTOME hierarchy to constrain their \gls{mlp} architecture. 
- With such architectures, each neuron represents a known pathway, and only neurons with known relations are connected. 
- For the input layer, neurons represent genes, and they are connected to neurons of the first hidden layers if they are involved in the corresponding pathway. 
+ In DeepGONet~\cite{bourgeaisDeepGONetSelfexplainable2021}, authors constrain the \gls{mlp} architecture with the GO biological processes hierarchy.
+ In PASNet~\cite{haoPASNetPathwayassociatedSparse2018,Hao2018}, authors use the REACTOME hierarchy to constrain their \gls{mlp} architecture.
+ With such architectures, each neuron represents a known pathway, and only neurons with known relations are connected.
+ For the input layer, neurons represent genes, and they are connected to neurons of the first hidden layers if they are involved in the corresponding pathway.
  In practice, this is achieved by masking the unknown relationships in a fully connected layer:
  \begin{equation}
 	 \symbf{a}^{l} = f\left( \symbf{a}^{l-1} \cdot \left( W^l \odot M^l\right) + \symbf{b}^{l} \right) \label{eq:mlp_sparse_matrix}
  \end{equation}
  where \(M^l\) is a binary mask restricting connections between neurons to known biological relations and \(\odot\) is the Hadamard product or element-wise product: \({\left(A\odot B\right)}_{ij} = {\left(A\right)}_{ij}{\left(B\right)}_{ij}\).
 
-  Earlier, we presented approaches that trained an \gls{ae} and used the latent representation as input to another classification model. 
-  However, deep learning is a flexible approach and a supervision of the latent space from a classifier can be added during the \gls{ae} training. 
-  Such approach allow for an end-to-end training of the model and constrains the latent space to learn relevant features for the classification~\cite{goreCancerNetUnifiedDeep2022}. 
-  For such models, the training loss correspond to the sum of the unsupervised loss and the supervised loss: \(\symcal{L}_{AE} + \symcal{L}_{CE}\).
+ Earlier, we presented approaches that trained an \gls{ae} and used the latent representation as input to another classification model.
+ However, deep learning is a flexible approach and a supervision of the latent space from a classifier can be added during the \gls{ae} training.
+ Such approach allow for an end-to-end training of the model and constrains the latent space to learn relevant features for the classification~\cite{goreCancerNetUnifiedDeep2022}.
+ For such models, the training loss correspond to the sum of the unsupervised loss and the supervised loss: \(\symcal{L}_{AE} + \symcal{L}_{CE}\).
 
-   Promising results of \gls{cnn} in computer vision inspired its application in precision medicine.
-   However, expression profile are not 2D like images but 1D. 
-   To apply 2D convolutions onto expression profile a transformation step to go from a 1D representation to a 2D representation: \(\symcal{T}: \symbb{R}^{d} \mapsto \symbb{R}^{h\times w}\).
-   For such transformation, a zero-padding of the 1D vector is required for the transformation to be applied. 
-   The simplest transformation often corresponds to a naive reshaping~\cite{Wang2021,deGuia2019,Elbashir2019,Chatterjee2018}. \citeauthor{deGuia2019}, transform the gene expression vector to a \(102\times 102\) image after a feature selection process~\cite{deGuia2019}. 
-   Similarly, \citeauthor{Elbashir2019} reshape the gene expression vector to a \(127 \times 114\) image~\cite{Elbashir2019}.
-   Some approaches hypothetize that chromosical adjacent genes are more likely to interact. 
-   Based on that assumptions, features are reordered based on their poistion in the genome before reshaping the expression to a 2D image~\cite{Mostavi2020,Lyu2018,Yin2022}.  
-   Instead of naive reshaping, knowledge-based transformation have been depicted. 
-   Hierarchical tree structure such KEGG BRITE are used to transform features, then the tree structure is represented as treemap with a tiling algorithm~\cite{LpezGarca2020,maOmicsMapNetTransformingOmics2019}. 
-   The chosen algorithm ensures that all samples share the same spatial arrangements by ordering genes based on their mean level of expression across the dataset. 
-   The treemap image are then colorized based on the gene expression abundances. 
-   Instead of forcing a 2D representation of expression profile, 1D convolution can be directly used. 
-   Similarly to 2D \gls{cnn}, features were reordered based on their genomic position~\cite{Mostavi2020,Zhao2020,Yin2022} or expression profile were leave untouched~\cite{Mohammed2021}. 
-   While many approaches around convolutions were developped they are not suited for omics data as they introduce wrong inductive biases.
-   Convolutions are more suited for structured data, and even the incorporation of a structure in the data based on the chromosomal location or some knowledge is a constraint that limits the range of possible interactions. 
-   For instance such architectures do not consider interactions between genes that are far away from each other in the genome.
+ Promising results of \gls{cnn} in computer vision inspired its application in precision medicine.
+ However, expression profile are not 2D like images but 1D.
+ To apply 2D convolutions onto expression profile a transformation step to go from a 1D representation to a 2D representation: \(\symcal{T}: \symbb{R}^{d} \mapsto \symbb{R}^{h\times w}\).
+ For such transformation, a zero-padding of the 1D vector is required for the transformation to be applied.
+ The simplest transformation often corresponds to a naive reshaping~\cite{Wang2021,deGuia2019,Elbashir2019,Chatterjee2018}\@. \citeauthor{deGuia2019}, transform the gene expression vector to a \(102\times 102\) image after a feature selection process~\cite{deGuia2019}.
+ Similarly, \citeauthor{Elbashir2019} reshape the gene expression vector to a \(127 \times 114\) image~\cite{Elbashir2019}.
+ Some approaches hypothetize that chromosical adjacent genes are more likely to interact.
+ Based on that assumptions, features are reordered based on their poistion in the genome before reshaping the expression to a 2D image~\cite{Mostavi2020,Lyu2018,Yin2022}.
+ Instead of naive reshaping, knowledge-based transformation have been depicted.
+ Hierarchical tree structure such KEGG BRITE are used to transform features, then the tree structure is represented as treemap with a tiling algorithm~\cite{LpezGarca2020,maOmicsMapNetTransformingOmics2019}.
+ The chosen algorithm ensures that all samples share the same spatial arrangements by ordering genes based on their mean level of expression across the dataset.
+ The treemap image are then colorized based on the gene expression abundances.
+ Instead of forcing a 2D representation of expression profile, 1D convolution can be directly used.
+ Similarly to 2D \gls{cnn}, features were reordered based on their genomic position~\cite{Mostavi2020,Zhao2020,Yin2022} or expression profile were leave untouched~\cite{Mohammed2021}.
+ While many approaches around convolutions were developped they are not suited for omics data as they introduce wrong inductive biases.
+ Convolutions are more suited for structured data, and even the incorporation of a structure in the data based on the chromosomal location or some knowledge is a constraint that limits the range of possible interactions.
+ For instance such architectures do not consider interactions between genes that are far away from each other in the genome.
 
-   % GNN 
- An Interpretable Multi-Level Enhanced Graph Attention Network for Disease Diagnosis with Gene Expression Data (GNN with feature engineering)
- A Self-attention Graph Convolutional Network for Precision Multi-tumour Early Diagnostics with 1 DNA Methylation Data
- Classification of Cancer Types Using Graph Convolutional Neural Networks Ricardo Ramirez 1, Yu-Chiao Chiu 2, Al (GCN PPI)
- omicsGAT: Graph Attention Network for Cancer Subtype Analyses (GAT patient similarity)
- Prediction and Interpretation of Cancer Survival Using Graph Convolution Neural Networks (GCN various graph are used)
+ % GNN 
+ \Gls{gnn} are architecture used to process graphs structures, that impose constraints on relationships between node entities during the learning process.
+ In biology, many interactions between molecular entities are known and are represented as graphs.
+ \Gls{gnn} are well suited to study omics data by introducing relationships inductive bias in the learning process.
+ \citeauthor{Ramirez2020} used a \gls{gcn} based on a \gls{ppi} graph or a co-expression graph to predict cancer types from gene expression data~\cite{Ramirez2020}.
+ The co-expression graph is obtained by computing a correlation matrix between genes, then a threshold is applied on the correlation values to construct the adjacency matrix.
+ All patients share the same graphs, predictions are done at the graph level, and nodes represents genes.
+ The expression profile of each patient is mapped onto the corresponding nodes.
+ Information from neighboring nodes is propagated with \gls{chebconv}~\cite{ChebConv}.
+ The thresholding of the correlation matrix, or the use of knowledge based graphs might introduce singletons nodes, \ie{}nodes that are not connected to any nodes.
+ The authors tested the impact of the singleton nodes on the accuracy.
+ The presence of singleton nodes only increase the accurcy with the \gls{ppi} graph.
+ Authors extended their work to survival prediction~\cite{Ramirez2021} with a \gls{gcn} based on a co-expression graph, a gene interaction graph from GeneMania~\cite{WardeFarley2010} or a graph combining the two previous graphs.
+ The inclusion of clinical information in the last layer improved the performances of their model.
+ \Glspl{gat} have also been used to propagate information from neighboring nodes~\cite{Xing2021}.
+ \Gls{sag} have been used in combination of \glspl{gcn} to extract differentially expressed methylation sites when predicting cancer types~\cite{Jiang2023}.
+ Node level predictions have also been tested with patient similarity graphs~\cite{Baul2022}.
+ Each node, \ie{}patient, is represented by its gene expression profile and nodes are connected based on their similarity.
+
 
  %fix caption 
-	 \begin{longtblr}[
-		caption = {examples single omics},
-		entry = {short caption}
-		]{
-		 colspec = {Q[c,m]Q[l,m]Q[c,m]Q[c,m, wd=2.5cm]Q[c,m]Q[l,m, wd=4cm]},
-		 hline{1,Z} = {2pt},
-		 hline{2} = {1pt},
-		 row{2-Z} = {font=\small},
-		 rowhead= 1, rowfoot=0
-			 }
-		 Reference                                                    & omics & task    & Architecture                          & Graph  & Feature engineering           \\
-		 \cite{Arafa2023}                                             & mRNA  & sample  & \glsxtrshort{ae}                      & \xmark & Feature selection             \\
-		 \cite{Wang2018}                                              & DNAm  & subtype & \glsxtrshort{vae}                     & \xmark & Feature selection (MAD)       \\
-		 \cite{Karim2019}                                             & CNV   & subtype & \glsxtrshort{ae} + \glsxtrshort{cnn}  & \xmark & Feature selection (oncogenes) \\
-		 \cite{Levy2020}                                              & DNAm  & cancer  & \glsxtrshort{vae} + \glsxtrshort{mlp} & \xmark & Feature selection (MAD)       \\
-		 \cite{Kaczmarek2022}                                         & miRNA & sample  & \glsxtrshort{ae} + \glsxtrshort{mlp}  & \xmark & \xmark                        \\
-		 \cite{Hanczar2018}                                           & mRNA  & binary  & \glsxtrshort{ae} + \glsxtrshort{mlp}  & \xmark & \xmark                        \\
-		 \cite{Wojewodzic2021}                                        & DNAm  & sample  & \glsxtrshort{mlp}                     & \xmark & Feature selection             \\
-		 \cite{Liu2019}                                               & DNAm  & sample  & \glsxtrshort{mlp}                     & \xmark & Feature selection             \\
-		 \cite{gaoDeepCCNovelDeep2019}                                & mRNA  & subtype & \glsxtrshort{mlp}                     & \xmark & Feature selection (Knowledge)                              \\
-		 \cite{beykikhoshkDeepTRIAGEInterpretableIndividualised2020a} & mRNA  & subtype & attention-based                     & \xmark & Feature selection (Knowledge)                              \\
-		 \cite{Zhang2020} & DNAm & sample & attention-based + \gls{ae} & \xmark & model-based selection \\
-		 \cite{yuArchitecturesAccuracyArtificial2019b} &  &  &  & \xmark &  \\
-		 \cite{Divate2022} & mRNA & cancer & \gls{mlp} & \xmark & \xmark \\
-		 \cite{Elbashir2019} & mRNA & cancer & \gls{cnn} & \xmark & Coding genes + Feature selection \\
-		 \cite{deGuia2019} & mRNA & cancer & \gls{cnn} & \xmark & Feature selection (threshold) \\
-		 \cite{Wang2021} & mRNA & cancer & \gls{cnn} & \xmark & Feature selection (Mutual information) \\
-		 \cite{Mostavi2020} & mRNA & cancer & \gls{cnn} & \xmark & Feature selection (threshold) \\
-		 \cite{Lyu2018} & mRNA & cancer & \gls{cnn} & \xmark & Feature selection (threshold) \\
-		 \cite{LpezGarca2020} & mRNA & survival & \gls{cnn} & \xmark & Feature selection (MAD) \\
-		 \cite{maOmicsMapNetTransformingOmics2019} & mRNA & grade & \gls{cnn} & \xmark & Feature selection (threshold) \\
-		 \cite{Hao2018} & mRNA & survival & \gls{mlp} & \xmark & \xmark \\
-		 \cite{Chatterjee2018} & DNAm & cancer & \gls{cnn} & \xmark & \xmark \\
-		 \cite{Zhao2020} & mRNA & cancer & \gls{cnn} & \xmark & Feature selection (DE) \\
-		 \cite{Mohammed2021} & mRNA & cancer & \gls{cnn} & \xmark & Feature selection (threshold + DE + LASSO) \\
-		 \cite{Yin2022} & mRNA & survival & \gls{cnn} & \xmark & Feature selection (threshold + CWx) \\
-		 \cite{Yu2019} & mRNA & cancer & {\gls{mlp} \\ \gls{cnn}} & \xmark & PCA \\
-	 \end{longtblr}
+ \begin{longtblr}[
+	 caption = {examples single omics},
+	 entry = {short caption}
+	 ]{
+	 colspec = {Q[c,m]Q[l,m]Q[c,m]Q[c,m, wd=2.5cm]Q[c,m,wd=2.2cm]Q[l,m, wd=3.2cm]},
+	 hline{1,Z} = {2pt},
+			 hline{2} = {1pt},
+			 row{2-Z} = {font=\small},
+			 rowhead= 1, rowfoot=0
+		 }
+	 Reference                                                    & Omics & Task     & Architecture                          & Graph      & Feature engineering                        \\ % chktex 2
+	 \cite{Arafa2023}                                             & mRNA  & sample   & \glsxtrshort{ae}                      & \xmark     & Feature selection                          \\ % chktex 2
+	 \cite{Wang2018}                                              & DNAm  & subtype  & \glsxtrshort{vae}                     & \xmark     & Feature selection (MAD)                    \\ % chktex 2
+	 \cite{Karim2019}                                             & CNV   & subtype  & \glsxtrshort{ae} + \glsxtrshort{cnn}  & \xmark     & Feature selection (oncogenes)              \\ % chktex 2
+	 \cite{Levy2020}                                              & DNAm  & cancer   & \glsxtrshort{vae} + \glsxtrshort{mlp} & \xmark     & Feature selection (MAD)                    \\ % chktex 2
+	 \cite{Kaczmarek2022}                                         & miRNA & sample   & \glsxtrshort{ae} + \glsxtrshort{mlp}  & \xmark     & \xmark                                     \\ % chktex 2
+	 \cite{Hanczar2018}                                           & mRNA  & binary   & \glsxtrshort{ae} + \glsxtrshort{mlp}  & \xmark     & \xmark                                     \\ % chktex 2
+	 \cite{Wojewodzic2021}                                        & DNAm  & sample   & \glsxtrshort{mlp}                     & \xmark     & Feature selection                          \\ % chktex 2
+	 \cite{Liu2019}                                               & DNAm  & sample   & \glsxtrshort{mlp}                     & \xmark     & Feature selection                          \\ % chktex 2
+	 \cite{gaoDeepCCNovelDeep2019}                                & mRNA  & subtype  & \glsxtrshort{mlp}                     & \xmark     & Feature selection (Knowledge)              \\ % chktex 2
+	 \cite{beykikhoshkDeepTRIAGEInterpretableIndividualised2020a} & mRNA  & subtype  & attention-based                       & \xmark     & Feature selection (Knowledge)              \\ % chktex 2
+	 \cite{Zhang2020}                                             & DNAm  & sample   & attention-based + \gls{ae}            & \xmark     & model-based selection                      \\ % chktex 2
+	 \cite{yuArchitecturesAccuracyArtificial2019b}                &       &          &                                       & \xmark     &                                            \\ % chktex 2
+	 \cite{Divate2022}                                            & mRNA  & cancer   & \gls{mlp}                             & \xmark     & \xmark                                     \\ % chktex 2
+	 \cite{Elbashir2019}                                          & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Coding genes + Feature selection           \\ % chktex 2
+	 \cite{deGuia2019}                                            & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (threshold)              \\ % chktex 2
+	 \cite{Wang2021}                                              & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (Mutual information)     \\ % chktex 2
+	 \cite{Mostavi2020}                                           & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (threshold)              \\ % chktex 2
+	 \cite{Lyu2018}                                               & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (threshold)              \\ % chktex 2
+	 \cite{LpezGarca2020}                                         & mRNA  & survival & \gls{cnn}                             & \xmark     & Feature selection (MAD)                    \\ % chktex 2
+	 \cite{maOmicsMapNetTransformingOmics2019}                    & mRNA  & grade    & \gls{cnn}                             & \xmark     & Feature selection (threshold)              \\ % chktex 2
+	 \cite{Hao2018}                                               & mRNA  & survival & \gls{mlp}                             & \xmark     & \xmark                                     \\ % chktex 2
+	 \cite{Chatterjee2018}                                        & DNAm  & cancer   & \gls{cnn}                             & \xmark     & \xmark                                     \\ % chktex 2
+	 \cite{Zhao2020}                                              & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (DE)                     \\ % chktex 2
+	 \cite{Mohammed2021}                                          & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (threshold + DE + LASSO) \\ % chktex 2
+	 \cite{Yin2022}                                               & mRNA  & survival & \gls{cnn}                             & \xmark     & Feature selection (threshold + CWx)        \\ % chktex 2
+	 \cite{Yu2019}                                                & mRNA  & cancer   & {\gls{mlp}                                                                                      \\ \gls{cnn}} & \xmark & PCA \\  % chktex 2
+	 \cite{Ramirez2020}                                           & mRNA  & cancer   & \gls{gcn}                             & {PPI                                                    \\ co-exp} & Feature selection (threshold) \\  % chktex 2
+	 \cite{Ramirez2021}                                           & mRNA  & survival & \gls{gcn}                             & {GeneMania                                              \\ co-exp} & Feature selection (threshold) \\ % chktex 2
+	 \cite{Xing2021}                                              & mRNA  & grade    & \gls{gcn}                             & co-exp     & Feature selection (DE)                     \\ % chktex 2
+	 \cite{Jiang2023}                                             & DNAm  & cancer   & \gls{gcn}                             & co-exp     & Feature selection (threshold)              \\ % chktex 2
+	 \cite{Baul2022}                                              & mRNA  & subtype  & \gls{gat}                             & Patient    & Feature selection (threshold)              \\ % chktex 2
+	 \cite{levyMethylSPWNetMethylCapsNetBiologically2021a}        & DNAm  & subtype  & \glsxtrshort{capsnet}                 & \xmark     & Feature selection                          \\ % chktex 2
+	 \cite{Khan2023}                                              & mRNA  & subtype  & Transformer                           & \xmark     & \xmark                                     \\ % chktex 2
+	 \cite{Lee2022}                                               & mRNA  & survival & \gls{mlp} + attention                 & \xmark     & ?                                          \\ % chktex 2 chktex 26
+ \end{longtblr}
 
- Precision medicine is not only interested in correctly diagnosing a patient but also estimating its prognosis. 
- Prognosis is estimated with survival analysis. 
- Survival analysis focuses on analyzing and modeling the time it takes for an event of interest to occur. 
- The event of interest can be death, relapse or recovery, among others. 
+ With MethylSPWNet, \citeauthor{levyMethylSPWNetMethylCapsNetBiologically2021a} propose an architecture based on \gls{capsnet}, another architecture borrowed from the computer vision domain~\cite{levyMethylSPWNetMethylCapsNetBiologically2021a}.
+ \Glspl{capsnet} are a type of architecture used to model hierarchical relationships, and a capsule correspond to a set of neurons whose activation vector represents a property of an object~\cite{CapsNet}.
+ In the context of its application to \gls{dnam}, a capsules represents the set of CpGs that are link to a set of manually curated genes.
+ Each context capsules is dynamically routed to one output capsule.
+
+ For the application to omics data, deep learning architectures using attention mechanisms have been little explored.
+ Attention mechanisms are a simple weighting of the data, various way of obtaining this weight have been proposed.
+ \Glspl{fcn} can be used to score each feature~\cite{Lee2022,beykikhoshkDeepTRIAGEInterpretableIndividualised2020a}, the attention mechanism works more like a soft gate where only a part of the signal is transmitted to subsequent layers.
+ This type of attention is different from the scaled-dot product attention that enrich the input vector with information from other features.
+ The Gene transformer~\cite{Khan2023} was the first architecture to apply self-attention to \gls{mrna} data.
+ The authors proposed to use 1D convolution layers combined with maximum pooling to reduce the dimension of the gene expression vector.
+ Using a pooling layer is equivalent to a dimension reduction that does not consider all possible feature interactions.
+
+ Precision medicine is not only interested in correctly diagnosing a patient but also in estimating its prognosis.
+ The prognosis is estimated with survival analysis.
+ Survival analysis focuses on analyzing and modeling the time it takes for an event of interest to occur.
+ The event of interest can be death, relapse, or recovery, among others.
  A standard survival model is the Cox proportional hazards model.
- This standard model has been extended to consider non-linear survival data with deep learning models~\cite{katzmanDeepSurvPersonalizedTreatment2018,Ching2018}. 
- Cox-nnet~\cite{Ching2018} uses a log-likelihood loss (\cref{eq:cox_loss}) to predict prognosis from gene expression data. 
- Deep-surv~\cite{katzmanDeepSurvPersonalizedTreatment2018} uses the same principles to recommend the best treatment option to a patient by computing the risk ratio. 
- \citeauthor{Lee2022} model the survival task as a regression on the survival days, this approach does not consider the particular structure of survival data and completely ignore censoring data. 
- 
- 
-
-
-
-% Other 
-MethylSPWNet = Capsule networks
- 
-% Attention based
- For the application of omics data, deep learning architectures using attention mechanisms have been little explored.
- DeepGene transfomer
- An Ensemble Deep Learning Model with a Gene Attention Mechanism for Estimating the Prognosis of Low-Grade Glioma (rnna seq, survival as a regression task of the survival days, do not account for censuring, mlp with attention implemented as a sigmoid)
- DeepTRIAGE~\cite{beykikhoshkDeepTRIAGEInterpretableIndividualised2020a}
- 
- 
- Architectures and accuracy of artificial neural network for disease classification from omics data (MLP/CNN feature selection or PCA reduction)
+ This standard model has been extended to consider non-linear survival data with deep learning models~\cite{katzmanDeepSurvPersonalizedTreatment2018,Ching2018}.
+ Cox-nnet~\cite{Ching2018} uses a log-likelihood loss (\cref{eq:cox_loss}) to predict prognosis from gene expression data.
+ Deep-surv~\cite{katzmanDeepSurvPersonalizedTreatment2018} uses the same principles to recommend the best treatment option for a patient by computing the risk ratio.
+ \citeauthor{Lee2022} model the survival task as a regression on the survival days; this approach does not consider the particular structure of survival data and completely ignores censoring data.
 
 \section{Prediction from multi-omics data}
  \subsection{Multimodal deep learning}
