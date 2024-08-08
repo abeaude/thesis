@@ -1,59 +1,59 @@
 \chapter{Attention is equivariant to permutation}
 
 \begin{definition}
-    \(\pi\) is a permutation of \(n\)-elements.
-    A transformation \(\mathcal{T}_{\pi} : \mathbb{R}^{n * d} \rightarrow \mathbb{R}^{n \times d}\) is a spatial permutation if \(\Tperm\left(X\right) = P_{\pi}X\) where \(P_{\pi} \in \mathbb{R}^{n\times n}\) is the permutation matrix associated with \(\pi\)
+	\(\pi \) is a permutation of \(n\)-elements.
+	A transformation \(\mathcal{T}_{\pi} : \mathbb{R}^{n * d} \rightarrow \mathbb{R}^{n \times d}\) is a spatial permutation if \(\Tperm\left(X\right) = P_{\pi}X\) where \(P_{\pi} \in \mathbb{R}^{n\times n}\) is the permutation matrix associated with \(\pi \)
 \end{definition}
 rearrange rows of X
 \( {\left[P_{\pi} \right]}_{ij} = e_{i, \pi(j)} = \begin{cases}
-    1 & \text{if \(i = \pi(j)\)} \\
-    0 & \text{else}
+	1 & \text{if \(i = \pi(j)\)} \\
+	0 & \text{else}
 \end{cases}\)
 
 \begin{property} %equivariance
-    An operator \(A : \mathbb{R}^{n * d} \rightarrow \mathbb{R}^{n \times d}\) is equivariant to permutation if \(\forall X, \mathcal{T}_{\pi}\)
-    \[ \Tperm\left(A\left(X\right)\right) = A\left(\Tperm\left(X\right)\right) \]
+	An operator \(A : \mathbb{R}^{n * d} \rightarrow \mathbb{R}^{n \times d}\) is equivariant to permutation if \(\forall X, \mathcal{T}_{\pi}\)
+	\[ \Tperm\left(A\left(X\right)\right) = A\left(\Tperm\left(X\right)\right) \]
 \end{property}
 
 \begin{property} %invariance
-    An operator \(A : \mathbb{R}^{n * d} \rightarrow \mathbb{R}^{n \times d}\) is invariant to permutation if \(\forall X, \mathcal{T}_{\pi}\)
-    \[ \Tperm\left(A\left(X\right)\right) = \Tperm\left(X\right) \]
+	An operator \(A : \mathbb{R}^{n * d} \rightarrow \mathbb{R}^{n \times d}\) is invariant to permutation if \(\forall X, \mathcal{T}_{\pi}\)
+	\[ \Tperm\left(A\left(X\right)\right) = \Tperm\left(X\right) \]
 \end{property}
 
 \begin{property}
-    \[ \softmax\left(P_{\pi}XP_{\pi}^T\right) = P_{\pi}\softmax\left(X\right)P_{\pi}^T\]
+	\[ \softmax\left(P_{\pi}XP_{\pi}^T\right) = P_{\pi}\softmax\left(X\right)P_{\pi}^T\]
 \end{property}
 
 % Permutation details
 \begin{proof}
-    \begin{align*}
-        {\left[A\right]}_{ij} & = {\left[PA\right]}_{\pi(i)j}         \\
-                              & = {\left[AP^T\right]}_{i\pi(j)}       \\
-                              & = {\left[PAP^T\right]}_{\pi(i)\pi(j)}
-    \end{align*}
+	\begin{align*}
+		{\left[A\right]}_{ij} & = {\left[PA\right]}_{\pi(i)j}         \\
+		                      & = {\left[AP^T\right]}_{i\pi(j)}       \\
+		                      & = {\left[PAP^T\right]}_{\pi(i)\pi(j)}
+	\end{align*}
 \end{proof}
 
 \begin{proof}
-    \begin{align*}
-        {\left[P_{\pi}\softmax\left(X\right)P_{\pi}^T\right]}_{\pi(i)\pi(j)} & = {\left[\softmax\left(X\right)\right]}_{ij}                                                                           \\
-                                                                             & = \frac{e^{{\left[X\right]}_{ij}}}{\sum e^{{\left[X\right]}_{ij}}}                                                     \\
-                                                                             & = \frac{e^{{\left[P_{\pi}XP_{\pi}^T\right]}_{\pi(i)\pi(j)}}}{\sum e^{{\left[P_{\pi}XP_{\pi}^T\right]}_{\pi(i)\pi(j)}}} \\
-                                                                             & = {\left[\softmax\left(P_{\pi}XP_{\pi}^T\right)\right]}_{\pi(i)\pi(j)}
-    \end{align*}
+	\begin{align*}
+		{\left[P_{\pi}\softmax\left(X\right)P_{\pi}^T\right]}_{\pi(i)\pi(j)} & = {\left[\softmax\left(X\right)\right]}_{ij}                                                                           \\
+		                                                                     & = \frac{e^{{\left[X\right]}_{ij}}}{\sum e^{{\left[X\right]}_{ij}}}                                                     \\
+		                                                                     & = \frac{e^{{\left[P_{\pi}XP_{\pi}^T\right]}_{\pi(i)\pi(j)}}}{\sum e^{{\left[P_{\pi}XP_{\pi}^T\right]}_{\pi(i)\pi(j)}}} \\
+		                                                                     & = {\left[\softmax\left(P_{\pi}XP_{\pi}^T\right)\right]}_{\pi(i)\pi(j)}
+	\end{align*}
 \end{proof}
 
 \begin{theorem}
-    Self-attention operator \(A_s = \softmax\left[\left(XW^Q\right)\cdot{\left(XW^K\right)}^T \right]XW^V\) is permutation equivariant
-    \[\Tperm\left(A_s\left(X\right)\right) = A_s\left(\Tperm\left(X\right)\right)\]
+	Self-attention operator \(A_s = \softmax\left[\left(XW^Q\right)\cdot{\left(XW^K\right)}^T \right]XW^V\) is permutation equivariant
+	\[\Tperm\left(A_s\left(X\right)\right) = A_s\left(\Tperm\left(X\right)\right)\]
 \end{theorem}
 
 \begin{proof}
-    \begin{align*}
-        A_s\left(\Tperm\left(X\right)\right) & = \softmax\left[ \left( \Tperm\left(X\right)W^Q\right) \cdot {\left(\Tperm\left(X\right)W^K\right)}^T \right] \Tperm\left(X\right)W^V \\
-                                             & = \softmax\left[ \left(P_{\pi}XW^Q\right)\cdot{\left(P_{\pi}XW^K\right)}^T  \right]P_{\pi}XW^V                                        \\
-                                             & = \softmax\left[ P_{\pi}\left(XW^Q\right)\cdot{\left(XW^K\right)}^T P_{\pi}^T  \right]P_{\pi}XW^V                                     \\
-                                             & = P_{\pi}\softmax\left[ \left(XW^Q\right)\cdot{\left(XW^K\right)}^T\right]P_{\pi}^{-1}P_{\pi}XW^V                                     \\
-                                             & = P_{\pi}A_S                                                                                                                          \\
-                                             & = \Tperm\left(A_s\left(X\right)\right)
-    \end{align*}
+	\begin{align*}
+		A_s\left(\Tperm\left(X\right)\right) & = \softmax\left[ \left( \Tperm\left(X\right)W^Q\right) \cdot {\left(\Tperm\left(X\right)W^K\right)}^T \right] \Tperm\left(X\right)W^V \\
+		                                     & = \softmax\left[ \left(P_{\pi}XW^Q\right)\cdot{\left(P_{\pi}XW^K\right)}^T  \right]P_{\pi}XW^V                                        \\
+		                                     & = \softmax\left[ P_{\pi}\left(XW^Q\right)\cdot{\left(XW^K\right)}^T P_{\pi}^T  \right]P_{\pi}XW^V                                     \\
+		                                     & = P_{\pi}\softmax\left[ \left(XW^Q\right)\cdot{\left(XW^K\right)}^T\right]P_{\pi}^{-1}P_{\pi}XW^V                                     \\
+		                                     & = P_{\pi}A_S                                                                                                                          \\
+		                                     & = \Tperm\left(A_s\left(X\right)\right)
+	\end{align*}
 \end{proof}

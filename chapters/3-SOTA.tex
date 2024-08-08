@@ -94,17 +94,17 @@
  Node level predictions have also been tested with patient similarity graphs~\cite{Baul2022}.
  Each node, \ie{}patient, is represented by its gene expression profile and nodes are connected based on their similarity.
 
-
- %fix caption 
  \begin{longtblr}[
 	 caption = {examples single omics},
-	 entry = {short caption}
+	 entry = {short caption},
+	 note{a} = {Used for treatment recommendation},
 	 ]{
-	 colspec = {Q[c,m]Q[l,m]Q[c,m]Q[c,m, wd=2.5cm]Q[c,m,wd=2.2cm]Q[l,m, wd=3.2cm]},
-	 hline{1,Z} = {2pt},
-			 hline{2} = {1pt},
-			 row{2-Z} = {font=\small},
-			 rowhead= 1, rowfoot=0
+	 colspec = {Q[c,m]Q[l,m]Q[c,m]Q[c,m, wd=2.5cm]Q[c,m,wd=2.2cm]Q[l,m, wd=3.2cm]},%
+	 hline{1,Z} = {2pt},%
+	 hline{2} = {1pt},%
+	 row{2-Z} = {font=\small},%
+	 rowhead = 1, %
+	 rowfoot = 0%
 		 }
 	 Reference                                                    & Omics & Task     & Architecture                          & Graph      & Feature engineering                        \\ % chktex 2
 	 \cite{Arafa2023}                                             & mRNA  & sample   & \glsxtrshort{ae}                      & \xmark     & Feature selection                          \\ % chktex 2
@@ -118,7 +118,7 @@
 	 \cite{gaoDeepCCNovelDeep2019}                                & mRNA  & subtype  & \glsxtrshort{mlp}                     & \xmark     & Feature selection (Knowledge)              \\ % chktex 2
 	 \cite{beykikhoshkDeepTRIAGEInterpretableIndividualised2020a} & mRNA  & subtype  & attention-based                       & \xmark     & Feature selection (Knowledge)              \\ % chktex 2
 	 \cite{Zhang2020}                                             & DNAm  & sample   & attention-based + \gls{ae}            & \xmark     & model-based selection                      \\ % chktex 2
-	 \cite{yuArchitecturesAccuracyArtificial2019b}                &       &          &                                       & \xmark     &                                            \\ % chktex 2
+	 \cite{yuArchitecturesAccuracyArtificial2019b}                & mRNA      &  {sample \\ grade}        &   {\gls{mlp} \\ \gls{cnn}}                                    & \xmark     &  {LASSO \\ PCA}                                          \\ % chktex 2
 	 \cite{Divate2022}                                            & mRNA  & cancer   & \gls{mlp}                             & \xmark     & \xmark                                     \\ % chktex 2
 	 \cite{Elbashir2019}                                          & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Coding genes + Feature selection           \\ % chktex 2
 	 \cite{deGuia2019}                                            & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (threshold)              \\ % chktex 2
@@ -141,6 +141,11 @@
 	 \cite{levyMethylSPWNetMethylCapsNetBiologically2021a}        & DNAm  & subtype  & \glsxtrshort{capsnet}                 & \xmark     & Feature selection                          \\ % chktex 2
 	 \cite{Khan2023}                                              & mRNA  & subtype  & Transformer                           & \xmark     & \xmark                                     \\ % chktex 2
 	 \cite{Lee2022}                                               & mRNA  & survival & \gls{mlp} + attention                 & \xmark     & ?                                          \\ % chktex 2 chktex 26
+	 \cite{bourgeaisDeepGONetSelfexplainable2021} & mRNA & cancer & \gls{mlp} & \xmark & Feature selection (GO) \\ % chktex 2
+	 \cite{haoPASNetPathwayassociatedSparse2018} & mRNA & {LTS \\ non LTS} & \gls{mlp} & \xmark & Feature selection (REACTOME) \\ %chktex 2
+	 \cite{goreCancerNetUnifiedDeep2022} & DNAm & cancer & \gls{vae} & \xmark & Average \(\beta\)-value in a 100 bp window \\ % chktex 2
+	 \cite{Ching2018} & mRNA & survival & \gls{mlp} & \xmark & \xmark \\ %chktex 2
+	 \cite{katzmanDeepSurvPersonalizedTreatment2018} & mRNA &survival\TblrNote{a} & \gls{mlp} & \xmark & \xmark \\ %chktex 2
  \end{longtblr}
 
  With MethylSPWNet, \citeauthor{levyMethylSPWNetMethylCapsNetBiologically2021a} propose an architecture based on \gls{capsnet}, another architecture borrowed from the computer vision domain~\cite{levyMethylSPWNetMethylCapsNetBiologically2021a}.
@@ -167,14 +172,51 @@
  \citeauthor{Lee2022} model the survival task as a regression on the survival days; this approach does not consider the particular structure of survival data and completely ignores censoring data.
 
 \section{Prediction from multi-omics data}
+why we need multimodal, think of sphere vertical cylinder 
+view from the top they look like a circle, we need more information to correctly deduce the 3D shape
+each view carry different information, exploit the information contains in each view, redundant or complementary
+this is exactly what is multimodal machine learning about using multiple modalities. 
+extend to our 5 senses used to sense the world, interactions interpret reason on the multimodal representation 
+or talk about multi-omics briefly, without any prior knowledge how to know if a mutation will have an impact, need other modalities.
+think about gene regulation, can happen at multiple level. 
+might provide some redundant info, but this can be exploited to have more robust predictions. 
+in the next subsection will define various terms what is a modality for instance and the challenges associated with multimodality
+how to fuse the different modalities
+based on the work of lpmorency 
+
  \subsection{Multimodal deep learning}
 	 what is multimodal, how  to do it, common vocab
-	 is there an advantage
+	 is there an advantage, challenges
+	 what is a multimodal deep learning model (modality translation)
 	 are there any challenges, specific to omics
- \subsection{Multi-omics data integration}
-	 show some example on omics data
- \subsection{Deep learning models for multi-omics data}
 
+	 multimodal transformers various possibility to integrate multiple modalities
+ 
+
+ \subsection{Multi-omics data integration}
+ different type of integration N vs P
+ An N−integration type of question
+(several data sets, supervised or unsupervised)
+A P−integration type of question (several studies of the same omic type, supervised or unsupervised)
+
+Canonical Correlation Analysis (CCA) for 2 omics only 
+DIABLO more omics ? 
+unsupervised vs supervised integration ? 
+ different methods NMF, bayesian, network step 
+
+ omics challenges
+ Different omics rely on different laboratory techniques and data extraction platforms, resulting in data sets of different formats, complexity, dimensionalities, information content, and scale, and may be processed using different bioinformatics tools. Therefore, data heterogeneity arises from biological and technical reasons and is the main analytical challenge to overcome.
+
+ Matrix factorisation techniques, where large data sets are decomposed into smaller sub-matrices to summarise information. These techniques use algebra and analysis to optimise specific statistical criteria and integrate different levels of information. Methods in mixOmics fit into this category and will be detailed in Chapter 3 and subsequent chapters, • Bayesian methods, which use assumptions of prior distributions for each omics type to find correlations between data layers and infer posterior distributions, • Network-based approaches, which use visual and symbolic representations of biological systems, with nodes representing molecules and edges as correlations between molecules, if they exist. Network-based methods are mostly applied for detecting significant genes within pathways, discovering sub-clusters, or finding co-expression network modules, • Multiple-step approaches that first analyse each single omics data set individually before combining the results based on their overlap (e.g. at the gene level of a molecular signature) or correlation. This type of approach technically deviates from data integration but is commonly used.
+  % https://www.nature.com/articles/s41467-020-20430-7
+	 show some example on omics data
+
+	 motivate use of deep learning methods
+ \subsection{Deep learning models for multi-omics data}
+ organise by type of integration 
+ start with early fusion, simplest
+ go to late fusion
+ finish with intermediate fusion 
 
 
 
