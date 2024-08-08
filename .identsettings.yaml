@@ -1,4 +1,4 @@
-defaultIndent: "    "
+defaultIndent: "\t"
 backupExtension: .bak
 onlyOneBackUp: 1
 indentPreamble: 0
