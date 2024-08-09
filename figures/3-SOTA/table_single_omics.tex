@@ -1,0 +1,53 @@
+\begin{longtblr}[
+    caption = {examples single omics},
+    entry = {short caption},
+    note{a} = {Used for treatment recommendation},
+    ]{
+    colspec = {Q[c,m]Q[l,m]Q[c,m]Q[c,m, wd=2.5cm]Q[c,m,wd=2.2cm]Q[l,m, wd=3.2cm]},%
+    hline{1,Z} = {2pt},%
+    hline{2} = {1pt},%
+    row{2-Z} = {font=\small},%
+    rowhead = 1, %
+    rowfoot = 0%
+        }
+    Reference                                                    & Omics & Task     & Architecture                          & Graph      & Feature engineering                        \\ % chktex 2
+    \cite{Arafa2023}                                             & mRNA  & sample   & \glsxtrshort{ae}                      & \xmark     & Feature selection                          \\ % chktex 2
+    \cite{Wang2018}                                              & DNAm  & subtype  & \glsxtrshort{vae}                     & \xmark     & Feature selection (MAD)                    \\ % chktex 2
+    \cite{Karim2019}                                             & CNV   & subtype  & \glsxtrshort{ae} + \glsxtrshort{cnn}  & \xmark     & Feature selection (oncogenes)              \\ % chktex 2
+    \cite{Levy2020}                                              & DNAm  & cancer   & \glsxtrshort{vae} + \glsxtrshort{mlp} & \xmark     & Feature selection (MAD)                    \\ % chktex 2
+    \cite{Kaczmarek2022}                                         & miRNA & sample   & \glsxtrshort{ae} + \glsxtrshort{mlp}  & \xmark     & \xmark                                     \\ % chktex 2
+    \cite{Hanczar2018}                                           & mRNA  & binary   & \glsxtrshort{ae} + \glsxtrshort{mlp}  & \xmark     & \xmark                                     \\ % chktex 2
+    \cite{Wojewodzic2021}                                        & DNAm  & sample   & \glsxtrshort{mlp}                     & \xmark     & Feature selection                          \\ % chktex 2
+    \cite{Liu2019}                                               & DNAm  & sample   & \glsxtrshort{mlp}                     & \xmark     & Feature selection                          \\ % chktex 2
+    \cite{gaoDeepCCNovelDeep2019}                                & mRNA  & subtype  & \glsxtrshort{mlp}                     & \xmark     & Feature selection (Knowledge)              \\ % chktex 2
+    \cite{beykikhoshkDeepTRIAGEInterpretableIndividualised2020a} & mRNA  & subtype  & attention-based                       & \xmark     & Feature selection (Knowledge)              \\ % chktex 2
+    \cite{Zhang2020}                                             & DNAm  & sample   & attention-based + \gls{ae}            & \xmark     & model-based selection                      \\ % chktex 2
+    \cite{yuArchitecturesAccuracyArtificial2019b}                & mRNA      &  {sample \\ grade}        &   {\gls{mlp} \\ \gls{cnn}}                                    & \xmark     &  {LASSO \\ PCA}                                          \\ % chktex 2
+    \cite{Divate2022}                                            & mRNA  & cancer   & \gls{mlp}                             & \xmark     & \xmark                                     \\ % chktex 2
+    \cite{Elbashir2019}                                          & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Coding genes + Feature selection           \\ % chktex 2
+    \cite{deGuia2019}                                            & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (threshold)              \\ % chktex 2
+    \cite{Wang2021}                                              & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (Mutual information)     \\ % chktex 2
+    \cite{Mostavi2020}                                           & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (threshold)              \\ % chktex 2
+    \cite{Lyu2018}                                               & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (threshold)              \\ % chktex 2
+    \cite{LpezGarca2020}                                         & mRNA  & survival & \gls{cnn}                             & \xmark     & Feature selection (MAD)                    \\ % chktex 2
+    \cite{maOmicsMapNetTransformingOmics2019}                    & mRNA  & grade    & \gls{cnn}                             & \xmark     & Feature selection (threshold)              \\ % chktex 2
+    \cite{Hao2018}                                               & mRNA  & survival & \gls{mlp}                             & \xmark     & \xmark                                     \\ % chktex 2
+    \cite{Chatterjee2018}                                        & DNAm  & cancer   & \gls{cnn}                             & \xmark     & \xmark                                     \\ % chktex 2
+    \cite{Zhao2020}                                              & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (DE)                     \\ % chktex 2
+    \cite{Mohammed2021}                                          & mRNA  & cancer   & \gls{cnn}                             & \xmark     & Feature selection (threshold + DE + LASSO) \\ % chktex 2
+    \cite{Yin2022}                                               & mRNA  & survival & \gls{cnn}                             & \xmark     & Feature selection (threshold + CWx)        \\ % chktex 2
+    \cite{Yu2019}                                                & mRNA  & cancer   & {\gls{mlp}                                                                                      \\ \gls{cnn}} & \xmark & PCA \\  % chktex 2
+    \cite{Ramirez2020}                                           & mRNA  & cancer   & \gls{gcn}                             & {PPI                                                    \\ co-exp} & Feature selection (threshold) \\  % chktex 2
+    \cite{Ramirez2021}                                           & mRNA  & survival & \gls{gcn}                             & {GeneMania                                              \\ co-exp} & Feature selection (threshold) \\ % chktex 2
+    \cite{Xing2021}                                              & mRNA  & grade    & \gls{gcn}                             & co-exp     & Feature selection (DE)                     \\ % chktex 2
+    \cite{Jiang2023}                                             & DNAm  & cancer   & \gls{gcn}                             & co-exp     & Feature selection (threshold)              \\ % chktex 2
+    \cite{Baul2022}                                              & mRNA  & subtype  & \gls{gat}                             & Patient    & Feature selection (threshold)              \\ % chktex 2
+    \cite{levyMethylSPWNetMethylCapsNetBiologically2021a}        & DNAm  & subtype  & \glsxtrshort{capsnet}                 & \xmark     & Feature selection                          \\ % chktex 2
+    \cite{Khan2023}                                              & mRNA  & subtype  & Transformer                           & \xmark     & \xmark                                     \\ % chktex 2
+    \cite{Lee2022}                                               & mRNA  & survival & \gls{mlp} + attention                 & \xmark     & ?                                          \\ % chktex 2 chktex 26
+    \cite{bourgeaisDeepGONetSelfexplainable2021} & mRNA & cancer & \gls{mlp} & \xmark & Feature selection (GO) \\ % chktex 2
+    \cite{haoPASNetPathwayassociatedSparse2018} & mRNA & {LTS \\ non LTS} & \gls{mlp} & \xmark & Feature selection (REACTOME) \\ %chktex 2
+    \cite{goreCancerNetUnifiedDeep2022} & DNAm & cancer & \gls{vae} & \xmark & Average \(\beta\)-value in a 100 bp window \\ % chktex 2
+    \cite{Ching2018} & mRNA & survival & \gls{mlp} & \xmark & \xmark \\ %chktex 2
+    \cite{katzmanDeepSurvPersonalizedTreatment2018} & mRNA &survival\TblrNote{a} & \gls{mlp} & \xmark & \xmark \\ %chktex 2
+\end{longtblr}

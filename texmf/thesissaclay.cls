@@ -149,8 +149,9 @@
 %\RequirePackage{glossaries-french}
 \setabbreviationstyle[acronym]{long-short}
 \makeglossaries
+% conditional set based on main language
 \renewcommand{\printsymbols}{\printunsrtglossary[type=symbols,title=Notations]}
-\renewcommand{\abbreviationsname}{Liste des abréviations et sigles}
+%\renewcommand{\abbreviationsname}{Liste des abréviations et sigles}
 %% HYPERREF SETUP %%
 \AtEndPreamble{%
 	\hypersetup{linktoc=all, colorlinks=true, anchorcolor=black, citecolor=A2, filecolor=black, menucolor=black, runcolor=black, urlcolor=B3, pdftitle=\@title, pdfauthor=\@author, pdfsubject=\@subject, pdfcreator=XeLaTeX, pdfkeywords=\@keywordsfr, pdfdisplaydoctitle=true}
