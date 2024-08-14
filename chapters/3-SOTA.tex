@@ -139,7 +139,13 @@
 
 	\subsection{Multimodal machine learning}
 		Multimodal machine learning corresponds to machine learning methods developed to learn from multiple modalities.
+		Theoretical justification established that multimodal deep learning is better than unimodal~\cite{NEURIPS2021_5aa3405a}.
+		A multimodal model can correspond to a model where the input is from one modality and the output from another modality (translation) or models that jointly learn from multiple modalities, the joint representation can later be used to predict an entire modality.
 		A modality represents the way a phenomenon is expressed~\cite{MML_morency}.
+		If an instance in one modality is explicitly linked to a corresponding instance in another modality, the modalities are paired.
+		On the contrary, unpaired modalities correspond to situations without one-to-one correspondence between instances across modalities.
+		Multi-omics data obtained by analyzing a sample from one patient are paired, but methods jointly measuring multiple modalities from the same cell are rare.
+		Multi-omics single-cell data are often unpaired; this data type is obtained by measuring different cells from the same condition.
 		In the context of this manuscript, a modality corresponds to an omics data type.
 		Each modality has its own specific characteristics and distributions.
 		Indeed, each omics is obtained using different techniques and processed with different bioinformatics tools, leading to data with different dimensionalities and distributions.
@@ -174,43 +180,120 @@
 		Instead of fusing the latent representations of each modality, it is also possible to coordinate them.
 		Coordination aims to ensure that the representations learned from each modality are compatible by constraining latent representations with representations of other modalities.
 		The constraints are obtained by imposing similarity constraints, finding linear combinations of variables in each set that are maximally correlated with each other, or through contrastive learning.
-		Contrastive learning forces the model to encode similar items closer together in the representation space while pushing dissimilar items further apart. 
+		Contrastive learning forces the model to encode similar items closer together in the representation space while pushing dissimilar items further apart.
 
-		The constructed multimodal representation must account for the interactions between modalities, \ie{}how to correctly align different modalities.
+		The constructed multimodal representation must account for the interactions between modalities, \ie{}how to correctly align the different modalities.
 		The alignment of modalities corresponds to knowing what features from one modality have an impact or are connected to another feature from a different modality.
-		There are multiple ways of modeling this with multimodal machine learning models. 
-		
-		% https://arxiv.org/pdf/2209.03430
-		% https://doi.org/10.1093/bib/bbab569
-		use knowledge to define how combine multiple modalities
-		high level: we know how the modalities are interconnected, zoom in we also know some of the links at the inidivual features ex miRNA. but one of the problem is that for many features we don't know anything, how to use them, still might be relevant create new knowledge ? use data driven approach to identify connections
+		There are multiple ways of modeling this with multimodal machine learning models.
+		Contrastive learning is a good way to find an alignment between multiple modalities by forcing similar concepts expressed in different modalities to match.
+		Optimal transport is another way to align multiple modalities in a shared latent space by solving a divergence minimization problem, \ie{}minimizing the cost of transporting one distribution to another.
+		Learning better multimodal representation can be achieved by contextualizing a modality's representation with the representation of another.
+		The contextualization aims to capture the context in which the data appears by modeling all interactions between different modalities.
+		For instance, a multimodal model dealing with gene expression data and \gls{dnam} data would capture how features relate to each other, \ie{}how a methylation site affect the expression of a gene.
+		Such approach allows to capture more nuanced and complex interactions.
+		Aligment layers based on the scaled-dot product attention are used to capture the alignment.
+		The attention can be used in various ways to align a modality pair:
+		\begin{description}[%
+				style=multiline,
+				leftmargin=!,
+				labelwidth=3cm,
+				%format=\labelsinglespace
+			]
+			\item[Early concatenation]
+				The representation of two modalities \(X_A \in \symbb{R}^{L_A \times d}\) and \(X_B \in \symbb{R}^{L_B \times d}\) are concatenated and passed to a self-attention layer: \(\operatorname{Attention}\left(\symbfup{C}\left(X_A,X_B\right)\right)\), where \(\symbfup{C}\) is the concatenation operation.
+				This early fusion technique learns undirected connections between modalities: all modality elements are connected to all other modality elements.
+				This fusion approach considers both intra-modality and inter-modality interactions.
+				While this fusion method can be adapted to any number of modalities, increasing the number of modalities increases the input dimension \(L'=\sum_i L_i\) of the attention layer, therefore increasing the computational complexity.
+			\item[Hierarchical attention]
+				Each modality is individually encoded with an attention based encoder, the resulting representation are concatenated and passed to another attention layer:
+				\begingroup
+				\setlength{\abovedisplayskip}{2pt}
+				\setlength{\belowdisplayskip}{2pt}
+				\setlength{\abovedisplayshortskip}{0pt}
+				\setlength{\belowdisplayshortskip}{0pt}
+				\begin{align*}
+					Z_A & = \operatorname{Attention}\left(X_A\right)                              \\
+					Z_B & = \operatorname{Attention}\left(X_B\right)                              \\
+					Z   & = \operatorname{Attention}\left(\symbfup{C}\left(Z_A,Z_B\right)\right)
+				\end{align*}
+				Decoupling the learning of the intra-modality interactions from the inter-modality ones can help construct better individual representation, and modality encoders could be pre-trained.
+				This approach can also be adapted to any number of modalities but faces the same limitations as early concatenation.
+				\endgroup
+			\item[Cross attention]
+				This fusion approach is used to compute asymmetric interactions, a target modality is reinforced in a directed manner by a source modality.
+				Usually, this methods is done in a bidirectional manner resulting in two contextualized representation accounting for the assymetric interactions: 
+				\begingroup
+				\setlength{\abovedisplayskip}{2pt}
+				\setlength{\belowdisplayskip}{2pt}
+				\setlength{\abovedisplayshortskip}{0pt}
+				\setlength{\belowdisplayshortskip}{0pt}
+				\begin{align*}
+					Z_{A \rightarrow B} & = \operatorname{CA}\left(X_A, X_B \right) \\
+					Z_{B \rightarrow A} & = \operatorname{CA}\left(X_B, X_A \right)
+				\end{align*} % add a ref to equation
+				\endgroup
+				This fusion techniques can be adapted to any number \(m\) of modalities, but it requires to compute \(m\left(m-1\right)\) different cross-attentions.
+				While this approach can capture cross-modal interactions between pairs of modality, it is not able to capture the whole multimodal context. 
+				It has been proposed to concatenate the outputs of the different cross-attention and process the resulting embedding by another attention layer to capture the global context. % vilbert
+		\end{description}
+		The different approaches can be combined in a single architecture. 
+		For instance, in the TriBERT architecture, three cross-attention are used to integrate three modalities. 
+		For each cross-attention the query is obtained from one modality, and the key and value results from the concatenation of the two others modalities. 
+		% https://www.biorxiv.org/content/10.1101/2024.02.26.582051v1.full.pdf
+		% https://openaccess.thecvf.com/content/CVPR2023/papers/Wang_Multi-Modal_Learning_With_Missing_Modality_via_Shared-Specific_Feature_Modelling_CVPR_2023_paper.pdf
+		% https://people.csail.mit.edu/khosla/papers/icml2011_ngiam.pdf
 
-		Generation: go from one modality to the other, from the multimodal representation generate any modality
-		co-learning, multi-omics remains limited, and in clinical settings not likely that all modalities will be generated
-		train on multi-omics but infer with only one omics
+		In biology, connections between modalities are already known: an mRNA transcribed from a coding gene will likely be translated into a protein, and the impact of promoter methylation on the mRNA expression level is known.
+		Moreover, the connections between individual features from different modalities are also known.
+		For instance, connections from a coding gene and the corresponding protein are known, or CpGs methylation can be mapped to a gene based on their position in the genome.
+		Adding this knowledge into the integration process could help construct better multimodal representation.
+		Restricting the integration to features with known regulatory links would leave out many features, as a large part of \gls{ncrna} roles still need to be discovered.
+		Even though their role is unknown, they can still play an essential role in gene expression regulation, particularly in cancer development.
+		Using data-driven approaches, such as contextualized representations based on the attention mechanism, can help identify new connections and generate new knowledge.
 
-		An important challenge, not specific to multimodal machine learnig, is the interpretability aspects of the model predictions.
+		Access to paired multimodal data can be difficult during inference.
+		Only some modalities will be generated to reduce costs, or a patient may refuse some analysis.
+		A solution would be to use methods that exploit paired multi-omics datasets during training, and inference is done using only one omics. 
+		With co-learning, all available modalities are used to construct a joint or coordinated multimodal representation. 
+		Adding more modalities during the training allows for the transfer of information and enriches the multimodal representation.
+		While paired multimodal datasets are the ideal scenario, the availability of such datasets remains limited.
+		Many multi-omics datasets contain samples where one or more modalities are missing, and with single-cell, many of the available multi-omics datasets are unpaired. 
+		New methods that can adapt to missing modalities, or perform diagonal integration of unpaired datasets are required to exploit the currently available datasets. 
+
+		An important challenge not specific to multimodal machine learning is the interpretability aspects of the model predictions.
 		A better understanding of multimodal models is critical to gain insights into multimodal learning and help improve the model design.
-		At the modality level, it is of interest to know how modalities are used to make a prediction and what their individual contribution to the prediction is.
-		Indeed, in multimodal training, modalities compete with each other as they learn at different rates, and only a subset of modalities is explored by the network~\cite{pmlr-v162-huang22e}.
-		%Theoretical justification established that multimodal deep learning is better than unimodal~\cite{NEURIPS2021_5aa3405a}.
-		Multimodal interpretability at the modality level can help detect underutilized modality.
-		With multiple modalities, one important interest consists in knowing the type of interaction between modalities. introduce concept of additive multiplicative interactions
-		additive or multiplicative ? etc
-		Learning such a model end-to-end will introduce competition between modalities.
-		Modalities leading to the best performances at the beginning of the training will be reinforced, and only a subset of the modalities will be considered by the model.
-		The model will perform sub-optimally.
+		In a multimodal setting, modality and multimodal-level interpretability are essential, in addition to feature-level interpretability. 
+		At the modality level, it is interesting to know how modalities are used to make a prediction and their individual contribution to the prediction.
+		Indeed, in multimodal training, modalities compete with each other as they learn at different rates, only a subset of modalities is explored by the network~\cite{pmlr-v162-huang22e}. 
+		Detecting modalities that hinder model performances is essential as adding more modalities does not necessarily mean adding more information; sometimes, it adds noise and reduces performance.
+		With multiple modalities, one important interest consists in knowing the type of interaction between modalities: additive, \( w_A\cdot g_A\left(X_A\right) + w_B\cdot g_B\left(X_B\right)\),  or multiplicative, \(w\cdot  g\left( X_A \times X_B\right)\), where \(g\) is a model function or the identity function.
+		Models using additive interactions do not use cross-modal information but only the unimodal information. 
+		While complex models are able to learn complex multiplicative interactions, it is essential to ensure that a complex models is not learning simpler additive interactions. 
+		To detect models not using multiplicative fusion, \citeauthor{EMAP} proposed to approximate a multimodal model \(g\left(X_A,X_B\right)\) by a multimodal additive model: \(\hat{g}\left(X_A,X_B\right) = \hat{g}_A\left(X_A\right) + \hat{g}_B\left(X_B\right) - \hat{\mu}\).
+		Perfomance degradation from the additive model \(\hat{g}\) indicates that the model \(g\) did learn cross-modal interactions. 
+		Approaches to understanding multimodal deep learning models can be categorized into approaches producing post-hoc explanations or interpretable models by design.
+		Post-hoc explainability of multimodal models uses attribution methods, such as Grad-CAM~\cite{Chandrasekaran2018DoEM} or LRP~\cite{Ellis2021}, to understand modality importance. % todo add examples of usage
+		Model weights can be directly used to detect feature interactions~\cite{tsang2017detecting}.
+		In DIME~\cite{DIME}, authors propose to estimate the different contributions with LIME, a widely used interpretation approach~\cite{lime}.
+		They decompose a model \(g\) into a sum of two terms: unimodal contributions \(\operatorname{UC}\) and multimodal interactions \(\operatorname{MI}\). 
+		Then, LIME is applied on this two newly defined models perturbing only one modality at a time to obtain the different explanation: the unimodal contribution, \(\operatorname{UC}_A\) and \(\operatorname{UC}_B\), and the contribution of modality \(A\) to the multimodal interactions, \(\operatorname{MI}_A\) and reciprocally the contribution of modality \(B\) to the multimodal interactions \(\operatorname{MI}_A\).
+		Perceptual scores~\cite{PerceptualScores} have been proposed as a way to detect on which modality a model relies on for the predicitons.  
+		The perceptual score towards a modality \(A\), \(\symcal{P}_A\), is the normalized expectation of sample perceptual scores: \(\symcal{P}_A = \frac{1}{nz}\sum_{i=1}^{N}\symcal{P}_{x_i}\), where the sample perceptual score \(\symcal{P}_{x_i}\) correspond to the difference of accuracy between the model using all modalities and the model the model that do not use the modality \(A\) and \(z\) is the normalization factor.
+		In~\cite{SHAPE}, authors propose to use game theory and Shapley values, \(\phi_i\), to estimate the marginal contribution and the cooperation of individual modalities.
+		In the Shapley framework, individuals modalities are considered as players. 
+		The marignal contirbution of a modality \(m\) corresponds to its scaled Shapley value, \(\symbfcal{S}_m = \frac{1}{z}\phi_m\) and the modality cooperation of a set of modalities \(\symbfcal{A}\),  corresponds to the Shapley value of the set of modalities where the individual modality contributions are substracted, \(\symbfcal{C}_{\symbfcal{A}} = \phi_{\symbfcal{A}} - \sum_{m \in \symbfcal{A}}\phi_m\).
+		A new approach based on information decomposition quantifies the degree of redundancy, uniqueness, and synergy between input modalities and a specific task~\cite{liang2023multimodal,liang2023quantifying}. 
+		Post-hoc approaches, while model-agnostic, are computationally expensive as they estimate the different contributions by substituting part of the input.
+		The cost to run those methods increases with the number of modalities.
+		Models interpretable by design exploit new blocks, such as attention, to quantify modality importance or cross-modal interactions.
+		The PJ-X architecture~\cite{8579013} uses a block to produce an attention map that highlights the important parts of an image in a visual-question-answering model.
+		Graph-based fusion explicitly models modality fusion as a directed graph where each node represents a modality or a fusion of modalities. 
+		A learnable weight is associated with each edge representing the modality importance in the fused representation~\cite{bagher-zadeh-etal-2018-multimodal}.
 
-		not specific to multimodal field, quantification, explain
-		modality importances, interactions
-		learning process, bias towards easy modality, modality learn at different rates
-		what is multimodal, how  to do it, common vocab
-		is there an advantage, challenges
-		what is a multimodal deep learning model (modality translation)
-		are there any challenges, specific to omics
-
-		motivate the use of transfomers architecture for integration, based on attention mechanism, flexible while it is possible to represent the data in a format compatible with the scale dot product attention.
-		multimodal transformers various possibility to integrate multiple modalities use the survey, write the equation ?
+		%file:///home/aurel/T%C3%A9l%C3%A9chargements/s41467-022-31104-x.pdf
+		%file:///home/aurel/T%C3%A9l%C3%A9chargements/s41592-024-02391-7.pdf
+		%https://www.nature.com/articles/s41467-023-43019-2
+		%https://cdn.aaai.org/ojs/16330/16330-13-19824-1-2-20210518.pdf
 
 
 	\subsection{Multi-omics data integration}
@@ -232,11 +315,15 @@
 		show some example on omics data
 
 		motivate use of deep learning methods
+		multimodal DL is able to model nonlinear withinand cross-modality relationships
 	\subsection{Deep learning models for multi-omics data}
-		organise by type of integration
-		start with early fusion, simplest
-		go to late fusion
-		finish with intermediate fusion
+		\subsubsection{Early fusion} This kind of architectures
+		\subsubsection{Late fusion}
+		\subsubsection{Intermediate fusion}
+			organise by type of integration
+			start with early fusion, simplest
+			go to late fusion
+			finish with intermediate fusion
 
 
 

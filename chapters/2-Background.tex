@@ -184,7 +184,10 @@
 	 While the transformer and, in particular, the self-attention was primarily designed to study text sequences, it can be applied to various data types that can be represented in a format compatible with the attention mechanism, such as images, videos, time series, etc.
 	 This section mainly describes self-attention, where the query, key, and value are generated from the same input.
 	 The query can be obtained from one input, and the key and value can be obtained from another.
-	 In this case, we talk about cross-attention.
+	 In this case, we talk about cross-attention:
+	 \begin{equation}
+		\operatorname{CA}\left(X_1, X_2 \right) = \operatorname{Attention} \left(X_1W^Q, X_2W^K, X_2W^V\right) \label{eq:cross_attention}
+	 \end{equation}
 
 	 One limitation of the scaled-dot product attention is its quadratic complexity in time and space.
 	 This quadratic complexity limits the number of elements \(L\) in the inputs to a few thousand.
