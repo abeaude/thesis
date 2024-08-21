@@ -1,15 +1,26 @@
 \documentclass[web, english]{thesissaclay}
+%https://tex.stackexchange.com/questions/719543/how-do-i-add-icons-in-front-of-bibliography-entries
+% https://tex.stackexchange.com/questions/563696/add-icons-to-bibliography-style-in-scrbook
 
 \usepackage{subfiles}
 \usepackage{lscape}
 \usepackage{pifont}
 \usepackage{eqparbox}
+\usepackage{rotating}
+\usepackage{makecell}
+\renewcommand\theadfont{}
 % TO REMOVE ?
 \usepackage{wrapfig}
 \newcommand{\cmark}{\ding{51}\xspace}%
 \newcommand{\xmark}{\ding{55}\xspace}%
 \newcommand{\ie}{\textit{i}.\textit{e}.\ }%
 \newcommand\mylabelformat[2][l]{\eqmakebox[listlabel@\EnumitemId][#1]{#2}}
+\renewcommand*{\mkbibcompletename}[1]{%
+  \ifitemannotation{highlight}
+    {\textbf{#1}}
+    {#1}%
+}
+% try length=* in env instead
 % \newcommand\temptextitemdescription{}
 % \newcommand{\labelsinglespace}[1]{\def\temptextitemdescription{#1}\begin{singlespace}\temptextitemdescription\end{singlespace}}
 \setoperatorfont\mathrm%

@@ -538,11 +538,21 @@
 	 \restoregeometry
  }
 
+ \defbibenvironment{bibnonum}
+  {\list
+     {}
+     {\setlength{\leftmargin}{\bibhang}%
+      \setlength{\itemindent}{-\leftmargin}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}}}
+  {\endlist}
+  {\item}
+
  \newcommand{\mypublications}{
 	 \addchap{Publications}
 	 \newrefsection[mypubli]
 	 \nocite{*}
-	 \printbibliography[heading=none]
+	 \printbibliography[heading=none, env=bibnonum]
 	 \endrefsection
  }
 

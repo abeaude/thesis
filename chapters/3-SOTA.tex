@@ -141,7 +141,7 @@
 		Multimodal machine learning corresponds to machine learning methods developed to learn from multiple modalities.
 		Theoretical justification established that multimodal deep learning is better than unimodal~\cite{NEURIPS2021_5aa3405a}.
 		A multimodal model can correspond to a model where the input is from one modality and the output from another modality (translation) or models that jointly learn from multiple modalities, the joint representation can later be used to predict an entire modality.
-		A modality represents the way a phenomenon is expressed~\cite{MML_morency}.
+		A modality represents the expression of a phenomenon~\cite{MML_morency}.
 		If an instance in one modality is explicitly linked to a corresponding instance in another modality, the modalities are paired.
 		On the contrary, unpaired modalities correspond to situations without one-to-one correspondence between instances across modalities.
 		Multi-omics data obtained by analyzing a sample from one patient are paired, but methods jointly measuring multiple modalities from the same cell are rare.
@@ -297,26 +297,81 @@
 
 
 	\subsection{Multi-omics data integration}
-		different type of integration N vs P
-		An N−integration type of question
-		(several data sets, supervised or unsupervised)
-		A P−integration type of question (several studies of the same omic type, supervised or unsupervised)
+		In the field of multi-omics there are two main integration types: N or horizontal integration and P or vertical integration. 
+		Horizontal integration corresponds to the integration of omics measurment for the same samples, whereas vertical integration integrate multiple studies of the same omic type. 
+		This manuscript focuses on horizontal integration methods. 
+		Various machine learning methods have been proposed to horizontally integrate multi-omics data. 
+		Methods can be supervised, where label information is incorporated in the learning of the multimodal representation, or unsupervised. 
+		Many unsupervised integration methods are based on matrix factorization, also known as matrix decomposition methods, the factorization of a matrix into the product of two matrices:
+		\begin{equation}
+			X \approx WH
+		\end{equation}
+		where \(X \in \symbb{R}^{N\times d}\) is a data matrix,\(W \in \symbb{R}^{N\times k}\) a factor matrix and \(H \symbb{R}^{k\times d}\) a loading matrix, \(k < d\) reprsents the number of dimensions used to construct the low dimensional space. 
+		As there are more than one data matrix in multi-omics studies, \(X_i\quad i \in \left\{1, \cdots, m\right\}\), different strategies have been depicted to perform the integration:
+		\begin{itemize}[nosep]
+			\item Each data matrix is decomposed individually, \(X_i \approx W_iH_i\) and one of the factor matrix \(W_i\) is used for downstream analyses. The cost function used to find the optimal factor and loading matrix should be designed to allow multi-omics information to be shared across factor matrices. 
+			\item A common factor matrix is used across the different modalities, \(X_i \approx WH_i\) and the shared factor matrix is used for downstream analyses. 
+		\end{itemize}
+		Finding the optimal factor and loadings matrix is achieved by solving the following optimization problem: 
+		\begin{equation}
+			\min_{W,H} {\left\| X - WH \right\|}_{F} \label{eq:matrix_fact_opt}
+		\end{equation}
+		To find the matrices \(W\) and \(H\), \gls{nmf} is a common approach to solve the \cref{eq:matrix_fact_opt} by adding a non negativity constraint: \(W \geq 0\) and \(H \geq 0\). 
+		An extension have been proposed to handle mulitple omics, \gls{intnmf}, that adds a parameter \(\phi_{i}\) controlling the weight of each modality:
+		\begin{equation}
+			\min_{W,H_i} \sum_{i=1}^{m} \phi_{i}{\left\| X_i - WH_i \right\|}_{F} \quad \text{s.t} \quad W \geq 0 \;\text{and}\; H_i \geq 0
+		\end{equation}
+		\Gls{jive} adds an omics specific term to the decomposition:
+		\begin{equation}
+			X_i \approx W_iZ + W_i^sZ_i^s
+		\end{equation}
+		Parameters are estimated by minimimizing \({\left\|E\right\|}^2 = {\left\|\left[E_1, \cdots, E_m \right]^T\right\|}^2\), where \(E_i = X_i - W_iZ + W_i^sZ_i^s\) and adding an orthogonality constraints between the joint, \(W_iZ\), and individual terms, \( W_i^sZ_i^s\). 
+		iCluster is another approach to integrate multi-omics data where the factor matrix, \(H\) is shared across all modalities.
+		By assuming that the factor matrix and the residuals, \(E_i = X_i - W_iH\) are norammly distributed, a multivariate normal log-likelihood can be derived before applying the expectation-maximization algorithm to solve this problem.
+		The variational Bayesian framework can also be used for the estimation of the matrix \(W\) and \(H\) by adding prior assumptions on their distributions~\cite{MOFA}.
+		Bayesian consensus clustering is another bayesian approach used to perform multi-omics data integration. 
+		Each omics has its own clustering loosely adhering to a consensus clustering, making the individual clustering connected and sharing information.
 
-		Canonical Correlation Analysis (CCA) for 2 omics only
-		DIABLO more omics ?
-		unsupervised vs supervised integration ?
-		different methods NMF, bayesian, network step
+		Previsouly, we showed that the coordination of multiple representation is a way to perform data integration. 
+		\Gls{cca} is a method whose objective is to finding linear combinations of variables in each set that are maximally correlated with each other. 
+		The idea is to construct \(W=X_1u_1\) and \(Z=X_2u_2\) such that the correlation between \(W\) and \(Z\) is maximal. 
+		This methods only works for the integration of two modalities but has been generalized to work with any number of modalities: 
+		\begin{equation}
+			\max_{u_k} \sum_{\substack{i=1 \\ j=1 \\ i\neq k}}^{m} c_{ij}\operatorname{Cov}\left(X_iu_i,X_ju_j\right)
+		\end{equation}
+		the term \(c_{ij}\) indicates if the modality \(i\) and \(j\) are connected.  
+		Solving this minimization problem implies the inversion of the covariance matrix, which in the case of omics data is often not invertible therefore regularization terms are added.  
+		This methods has been extended to adress variable selection by adding a sparsity constraints, known as \gls{sgcca}: \({\left\|u_k \right\|}_2 = 1\) and \({\left\|u_k \right\|}_1 \leq s_k\), where \(s_k\) is an hyperparmeters controlling the level of sparsity. 
+		The DIABLO methods~\cite{DIABLO} is an extension of \gls{sgcca} to supervised tasks. 
+		It replaces one the data matrix \(X_k\) by an indicator matrix \(Y\)which indicates the class of each samples. 
+		Network-based methods are another way of integrating multi-omics data.
+		For instance, \gls{snf} infer relationships based on similarity between patients or features in the different omics, and the combine the various similarity matrices into one. 
+%https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8829812/pdf/main.pdf
+%http://eprints-phd.biblio.unitn.it/2981/1/thesis.pdf
+%https://compgenomr.github.io/book/matrix-factorization-methods-for-unsupervised-multi-omics-data-integration.html
+%https://academic.oup.com/bioinformatics/article/35/17/3055/5292387#409338217
+%https://www.embopress.org/doi/full/10.15252/msb.20178124
 
-		omics challenges
-		Different omics rely on different laboratory techniques and data extraction platforms, resulting in data sets of different formats, complexity, dimensionalities, information content, and scale, and may be processed using different bioinformatics tools. Therefore, data heterogeneity arises from biological and technical reasons and is the main analytical challenge to overcome.
+%https://academic.oup.com/bib/article/21/6/2011/5645549
+%https://academic.oup.com/bib/article/21/2/541/5316049?login=false (bayesian methods)
+% https://link.springer.com/article/10.1186/s12859-015-0857-9
+%https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2017.00084/full
+% https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2017.00084/full
+	
 
-		Matrix factorisation techniques, where large data sets are decomposed into smaller sub-matrices to summarise information. These techniques use algebra and analysis to optimise specific statistical criteria and integrate different levels of information. Methods in mixOmics fit into this category and will be detailed in Chapter 3 and subsequent chapters, • Bayesian methods, which use assumptions of prior distributions for each omics type to find correlations between data layers and infer posterior distributions, • Network-based approaches, which use visual and symbolic representations of biological systems, with nodes representing molecules and edges as correlations between molecules, if they exist. Network-based methods are mostly applied for detecting significant genes within pathways, discovering sub-clusters, or finding co-expression network modules, • Multiple-step approaches that first analyse each single omics data set individually before combining the results based on their overlap (e.g. at the gene level of a molecular signature) or correlation. This type of approach technically deviates from data integration but is commonly used.
+% more unsupervised methods: https://academic.oup.com/nar/article/46/20/10546/5123392
+% https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8981526/
+% https://www.sciencedirect.com/science/article/pii/S200103702200544X
+% https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8829812/
+% https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2022.854752/full
+% https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2023.1098308/full
 		% https://www.nature.com/articles/s41467-020-20430-7
-		show some example on omics data
+		 rise of deep learning approaches 
 
 		motivate use of deep learning methods
 		multimodal DL is able to model nonlinear withinand cross-modality relationships
 	\subsection{Deep learning models for multi-omics data}
+	%DeepKEGG: a multi-omics data integration framework with biological insights for cancer recurrence prediction and biomarker discovery
 		\subsubsection{Early fusion} This kind of architectures
 		\subsubsection{Late fusion}
 		\subsubsection{Intermediate fusion}
@@ -324,7 +379,28 @@
 			start with early fusion, simplest
 			go to late fusion
 			finish with intermediate fusion
+			\setlength\rotheadsize{1.45cm}
 
+			\begin{longtblr}[
+				caption = {examples multi omics},
+				entry = {short caption},
+				%note{a} = {Used for treatment recommendation},
+				]{
+				colspec = {Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m,, wd=3.2cm]},%
+				cell{1}{2-7} = {halign=c,cmd=\rothead},
+				cell{2-Z}{2-7} = {font=\scriptsize},
+				row{1} = {valign=m},
+				column{2-7} = {colsep=1pt},
+				hline{1,Z} = {2pt},%
+				hline{2} = {1pt},%
+				row{2-Z} = {font=\small},%
+				rowhead = 1, %
+				rowfoot = 0%
+					}
+					Ref. & mRNA & miRNA & DNAm & Protein & CNV & SNV & Task & Architecture & Graph & Feature engineering    \\
+					a & \faCircle & \faCircle & \faCircle& \faCircle&\faCircle&\faCircle & b & c & d & e \\
+
+			\end{longtblr} % & Task & Architecture & Graph & Feature engineering
 
 
 \section{Model interpretability}
