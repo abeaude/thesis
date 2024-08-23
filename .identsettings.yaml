@@ -61,3 +61,8 @@ noAdditionalIndent:
    comment: 1
    document: 1
    frame: 0
+indentRules:
+    section: 
+        mandatoryArguments: " "
+        afterHeading: "\t"
+    item: "\t"

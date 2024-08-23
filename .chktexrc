@@ -7,7 +7,7 @@ Silent
 		\mypublications \printbibheading
 		\mainmatter \backmatter
 		\printabbreviations \printsymbols \printglossaries \printglossary
-		\minitocpage \minitoc
+		\minitocpage \minitoc \minitocpagecentered
 		\xmark \cmark
 		\endfirsthead \endhead \endfoot \endlastfoot
 		\textbullet

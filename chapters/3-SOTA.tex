@@ -346,6 +346,8 @@
 		It replaces one the data matrix \(X_k\) by an indicator matrix \(Y\)which indicates the class of each samples. 
 		Network-based methods are another way of integrating multi-omics data.
 		For instance, \gls{snf} infer relationships based on similarity between patients or features in the different omics, and the combine the various similarity matrices into one. 
+
+		supervised task, early fusion or late fusion (ensemble) easy to use 
 %https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8829812/pdf/main.pdf
 %http://eprints-phd.biblio.unitn.it/2981/1/thesis.pdf
 %https://compgenomr.github.io/book/matrix-factorization-methods-for-unsupervised-multi-omics-data-integration.html
@@ -372,7 +374,228 @@
 		multimodal DL is able to model nonlinear withinand cross-modality relationships
 	\subsection{Deep learning models for multi-omics data}
 	%DeepKEGG: a multi-omics data integration framework with biological insights for cancer recurrence prediction and biomarker discovery
-		\subsubsection{Early fusion} This kind of architectures
+
+	DeepMOCCA~\cite{Althubaiti_2021}: GCN on PPI graph, concat features and map them to the corresponding nodes 
+	use a self attention based pooling to identify prognostic markers genes  
+	omics: mRNA, DNAm, CNV, SNV, clinical 
+	use of absolute and differential data
+	survival cox 
+
+	\cite{Wissel2021} hierarchical autoencoders 
+	modality specific autoencoders supervised with a cox loss 
+	an integration methods to combine the different latent spaces
+	intermediate fusion, comparison of different approaches
+	concatenation, pooling (mean or max), another level of AE (hierarchical)
+	hierarchical methods is the best 
+	survival tasks (Cox)
+	omics CNV, SNV, miRNA, mRNA, DNA, proteins
+
+	Deepathology~\cite{Azarkhalili2019}: multitask model, includes modality translation
+	AE and VAE: encode mRNA profile.
+	multi task from the latent representation 
+	coding genes only 
+	using of cosine similarity for classification tasks ??
+	4 tasks: mRNA and miRNA profile prediction, tissue and caner type predicition, jointly trained on all losses 
+
+	omiVAE~\cite{Zhang2019}: VAE intermediate fusion 
+	use of CpG features, high numbers, 
+	These methylation
+features are separated into different fully connected blocks
+according to their targeting chromosomes in order to reduce
+the number of parameters in fully connected layers that encode
+methylation data
+	each modality process individually before conatenting a latent representation, decoder mirrored architecture
+	multimodal latent space supervision cancer type 
+	mRNA and DNAm 
+
+	omiEMbedded~\cite{Zhang2021} VAE similar to omiVAE but FC or CNN based 
+	multitask cancer, survival, demographic gender/age predicition
+	miRNA, mRNA, DNAm
+
+	\cite{Hira2021}: similar to omiVAE but on survival task
+	use 3 omics: mRNA, CNV, DNAm and combination of only 2
+	focus on ovarian cancer 
+	different tasks after unsupervised training: subtype (SVM), survival (CoxPH)
+	intermediate fusion 
+	multi omics no improvement over single omics equivalent for classification tasks 
+
+	MiNet~\cite{Hao2019} Cox-PasNet extension 
+	adds a layer that generate multiomics features 
+	mRNa, DNAm, CNV
+	Early fusion define a new input vector concatentation of the 3 omics and paired interactions 
+	\begin{equation}
+		X = \left[X_{mRNA}, X_{CNV}, X_{DNAm}, X_{mRNA}\odot X_{CNV}, X_{DNAm}, X_{mRNA}\odot X_{DNAm} \right]
+	\end{equation}
+	this new input is then transformed by projection and an activation function: \(\tilde{X} = g\left(XW\right)\).
+	used to project onto the gene layer of pasnet
+	this transformed input is passed to an architecture based on PASNet
+
+	\cite{Tong2021} autoencoders intermediate fusion 
+	concatenate latent spaces, or pooling 
+	for pooling add contraints by macimizing cosine similarity of the latent spaces  
+	mRNa, MiRNA, DNAm, CNV 
+	PCA transformation of each modality or threshold on variance 
+	cancer type or survival
+
+	MultiSurv~\cite{MultiSurv} indiividual encoders for each modality (CNN for WSI), mlp for others, 
+	intermediate fusion by pooling the various latent representatino 
+	WSI encoder pretrained on imagenet 
+	tested various combination of modalities but always  included clinical information and obtained similar performances to model trained only on clinical data only +mRNA obtain better perf on this specific taks, suggest that survival prediciotn is driven by clinical information (gender, disease treatment, ...)
+	survival prediciotn 
+	WSI, clinical, mRNA, miRNA, DNAm, CNV
+
+	AIME~\cite{Yu2022} miRNA and mRNA early fusion AE
+	clustering BRCA subtypes 
+	
+	MultiGATAE~\cite{MultiGATAE} GAT + AE
+	patient similarity graph for each omics, then apply SNF 
+	mRNA, DNAm, miRNA 
+	GAT with the SNF graph for each omics, combine the latent representation with an attention based mechanism
+	attention weight is determinded by a linear combination of the graph representation and structure
+	latent representation passed to decoder to reconstruct the similairity graph 
+	early and intermediate fusion 
+	K-means clustering (cancer subtyping) on the latent representation after training
+
+	Variation of MultiGATAE~\cite{Zhang2022}, instead of representing each patient with its full profile, use autoencoders to embedded each expression profile. 
+	pass to a GCN where all layers are densely connected, ie a layer is connected to all downstream layers 
+	compared combination show that the multiomics was the best 
+	task: predict subtype 
+	mRNA, DNAm, CNV
+
+	MOMA~\cite{MOMA}
+	project the different features into a set of modules of same dimensions, each module is represented by a vector 
+	attention mechanism (cosine similarity) used to focus on modules with high similarity between 2 different modalities 
+	mRNA, DNAm, cancer type classification
+	DNAm CpG mapped to genes 
+	explainable model, detect important modules related to the predicited phenotype then select the most important features of each modules, pathway enrichment analysis applied afterwards to identify the most important pathways 
+	intermediate fusion 
+
+	SALMON~\cite{SALMON} mRNA, miRNA, CNV 
+	variance threshold on features 
+	SALMON is a model combining an intermediate fusion strategy with a \gls{mlp}~\cite{SALMON}. 
+	Omics features are transformed to an eigengene matrix, a weighted average of gene expression of genes in a given set of genes, before being fed to an \gls{mlp}.
+	survival task 
+
+	\cite{Yin2022} mRNA, CNV, SNV, 
+	threshold filtering 
+	supervised feature slecteion based on LASSO
+	patient graph from mRNA data 
+	non linear transformation of the omics data then concatenation, IF 
+	maps the new representation to each nodes 
+	GCN , subtype prediction 
+
+	MoGCN~\cite{MoGCN} GCN on SNF patient similarity fused graphs 
+	CNV, mRNA, Prot
+	Early fusion, concat the omics, AE, use latent space as features for the GCN subtype classification
+
+	Stacked AEs~\cite{Wu2022StackedAB}
+	mRNA, CNV, clinical 
+	log rank test to selecte features 
+	intermediate fusion
+	1 AEs per omics, concat latent spaces, new AE, ...
+	survival prediction 
+	multistep predicition
+
+	\Glspl{gan} have been explored as a way of integrating two omics.
+The generative process is used to construct an enriched feature set combining the information of the other omics and their interaction network~\cite{omicsGAN}. 
+miRNA and mRNA, exploit miRNA-mRNA network 
+applied on a bipartite graph intermediate Fusion 
+survival task 
+
+\glspl{ae} were primarily used with an early fusion strategy; the features of each modality are stacked before being encoded in a latent space with unsupervised training.
+To prevent overfitting, an elastic net regularization is added~\cite{Chaudhary2018}.
+mRNA, miRNA, DNAm
+AE used as a dimension reduction methods 
+from latent space, survival related feature selection then clustering to identify groups, used to construct a SVM classifier.
+survival group
+
+\cite{Cheerla2019}
+miRNA, mRNA, WSI 
+intermediate fusion transform each modality in a latent representation 
+force similarity of the latent representation, for each pairs of modality that is present similairity based loss 
+survival task 
+multimodal dropout improve the network’s ability to deal with missing data. In this method, instead of dropping neurons, we drop entire feature vectors corresponding to each modality
+
+PNet~\cite{PNet} MLP + knowledge, early fusion
+SNV, CNV , REACTOME pathway survival 
+
+AGMI~\cite{AGMI} GNN based on a multi-edge graph: multi types of edges between two nodes. node = genes , edges a known relation between 2 genes PPI, gene pathway, correlation 
+Early fusion concat features, map to nodes 
+aggregation from neighbouring nodes in three step, one for each edge type with a GRU as an attention guidance 
+CNV, mRNA, SNV drug adequation 
+
+%TODO
+\cite{Ma2019} AEs one per omics intermediate fusion 
+
+\cite{PathCNN}
+mRNA, CNV, DNAm survival classification LTS/STS
+construct an image based on knowledge, use KEGG pathways (146)
+for all samples features from a pathway were extracted to form a pathways matrix. PCA is applied to extract top k PCs (new matrix) done for the 146 pathways. concat to form a new matrix. 
+each row, ie a sample is rearranged into a matrix 146 x 3n PCs = pathway image. row (pathways) are reodered to have correlated pathways close to each other 
+used as the input of a CNN
+data matrix X -- Xpathways -- XPCA
+grad cam used to identify important pixel ie pathway of the pathway image
+Early fusion with features engineering
+
+\cite{DeepProg} mRNA, miRNA, DNAm, intermediate fusion 
+clustering to idneitfy subtypes, labels used to construct a SVM classifier 
+In DeepProg, \citeauthor{DeepProg} proposed an ensemble of \gls{ae}; for each omics, an \gls{ae} is used to create a lower dimensional representation~\cite{DeepProg}.
+Survival-associated features are then selected in each latent representation to construct the multimodal representation.
+
+ConcatAE and CrossAE~\cite{CrossAE} mRNA, miRNA, DNAm, CNV / IF
+task = survival or BRCA subtype 
+features selection: variance threshold or PCA dim reduction
+ConcatAE jointly trained
+CrossAE multiple step training: 1 reconstruct the encoded omics, 2 reconstruct the other omics (translation) 3 elementwise average of latent spaces, passed to a classifier
+actually applied only on pairs of modality
+\glspl{ae} are also used with intermediate fusion strategies. 
+An \gls{ae} is trained for each modality, and latent spaces are concatenated and fed to a multimodal \gls{ae} or a prediction network~\cite{CrossAE, HierachicalAE}.
+New training strategies like cross-modality translation have been devised with the encoder-decoder architecture. 
+After encoding a modality, the decoder reconstructs not only the input modality but also other modalities~\cite{CrossAE}.
+
+\cite{MOGONET} DNAm, miRNA, mRNA subtype GCN 
+after each GCN obtains each patient a vector of probability \(\hat{y}_{i}\)
+construct a cross omics discovery tensor, generalization of outer product to n views, construct a 3D tensor (as there are 3 modality) reshaped to 1D vector passed to a fully connected network 
+prject to a higher dim 
+two step training, first each GCN is pretrained, then train the VCDN netwrok and GCN are trained alternatively
+On the contrary, \citeauthor{MOGONET} developed a late fusion strategy.
+A \gls{gcn} is used on a patient similarity graph for each modality, and then predictions are combined through the cross-discovery tensor and the \gls{vcdn} module~\cite{MOGONET}.
+
+DeepOmix~\cite{DeepOmix}, similar to P-NET but use another source of knowledge: pathway gene set
+Early fusion, mRNA, DNAm, CNV, SNV, survival task
+restrict to features available in the source of knowledge
+
+SubtypeFormer
+CustOmics
+SelfOmics
+Multi-Omic Graph Transformers for Cancer Classification and Interpretation
+SUPREME
+A Variational Information Bottleneck Approach to Multi-Omics Data Integration
+Lung Cancer Subtype Diagnosis using Weakly-paired Multi-omics Data
+SubTypeGAN
+SADLN 
+Attention- based GCN Integrates Multi-omics Data for Breast Cancer Subtype Classification and Patient-specific Gene Marker Identification
+COmic
+MOLI
+Classifying Breast Cancer Subtypes Using Deep Neural Networks Based on Multi-Omics Data
+An integrative deep learning framework for classifying molecular subtypes of breast cancer
+Incorporating deep learning and multi-omics autoencoding for analysis of lung adenocarcinoma prognostication
+Estimating gene expression from DNA methylation and copy number variation: A deep learning regression model for multi-omics integration
+Deep Learning data integration for better risk stratification models of bladder cancer
+Deep learning-based ovarian cancer subtypes identification using multi-omics data
+Multi-omics integration method based on attention deep learning network for biomedical data classification
+MODILM
+moBRCA
+DeepGAMI
+Self-supervised learning of multi-omics embeddings in the low-label, high-data regime
+A multimodal graph neural network framework for cancer molecular subtype classification
+TransVCOX: Bridging Transformer Encoder and Pre-trained VAE for Robust Cancer Multi-Omics Survival Analysis
+Multimodal attention-based variational autoencoder for clinical risk prediction
+MOCAT
+Classifying breast cancer using multi-view graph neural network based on multi-omics data
+
+A benchmark study of deep learning‑based multi‑omics data fusion methods for cancer
+		\subsubsection{Early fusion}
 		\subsubsection{Late fusion}
 		\subsubsection{Intermediate fusion}
 			organise by type of integration
@@ -384,21 +607,23 @@
 			\begin{longtblr}[
 				caption = {examples multi omics},
 				entry = {short caption},
-				%note{a} = {Used for treatment recommendation},
+				note{a} = {EF = Early Fusion, LF = Late Fusion, IF = Intermediate Fusion},
 				]{
-				colspec = {Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m,, wd=3.2cm]},%
+				colspec = {Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[l,m,, wd=2.8cm]},%
 				cell{1}{2-7} = {halign=c,cmd=\rothead},
 				row{2-Z} = {font=\small},%
 				cell{2-Z}{2-7} = {font=\scriptsize},
 				row{1} = {valign=m},
 				column{2-7} = {colsep=1pt},
+				column{1} = {colsep=3pt},
+				column{8-12} = {colsep=5pt},
 				hline{1,Z} = {2pt},%
 				hline{2} = {1pt},%
 				rowhead = 1, %
 				rowfoot = 0%
 					}
-					Ref. & mRNA & miRNA & DNAm & Protein & CNV & SNV & Task & Architecture & Graph & Feature engineering    \\
-					a & \faCircle & \faCircle & \faCircle& \faCircle&\faCircle&\faCircle & b & c & d & e \\
+					Ref. & mRNA & miRNA & DNAm & Protein & CNV & SNV & Fusion\TblrNote{a} & Task & Arch. & Graph & Feature engineering    \\
+					\cite{Althubaiti_2021} & \faCircle &  & \faCircle & & \faCircle & \faCircle & EF & surv & \gls{gat} & PPI & Differential expression  \\
 
 			\end{longtblr} % & Task & Architecture & Graph & Feature engineering
 

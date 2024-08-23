@@ -1,0 +1,13 @@
+https://mirror.las.iastate.edu/tex-archive/macros/latex/contrib/gitinfo/gitinfo.pdf
+https://pypi.org/project/CheckMyTex/
+https://github.com/sylvainhalle/textidote
+https://github.com/torik42/YaLafi
+https://gitlab.com/LaTeXBuddy/LaTeXBuddy
+https://github.com/a-nau/pdf-link-checker
+https://www.yegor256.com/2023/09/05/style-checker-for-bibtex-files.html
+https://github.com/pezmc/biblatex-check
+https://github.com/FlamingTempura/bibtex-tidy
+
+   \begin{mybox}[label=box:wgcna]{WGCNA}
+	This is a numbered box.
+   \end{mybox}
