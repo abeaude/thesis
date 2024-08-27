@@ -565,36 +565,166 @@ DeepOmix~\cite{DeepOmix}, similar to P-NET but use another source of knowledge: 
 Early fusion, mRNA, DNAm, CNV, SNV, survival task
 restrict to features available in the source of knowledge
 
-SubtypeFormer
-CustOmics
-SelfOmics
-Multi-Omic Graph Transformers for Cancer Classification and Interpretation
-SUPREME
-A Variational Information Bottleneck Approach to Multi-Omics Data Integration
-Lung Cancer Subtype Diagnosis using Weakly-paired Multi-omics Data
-SubTypeGAN
-SADLN 
-Attention- based GCN Integrates Multi-omics Data for Breast Cancer Subtype Classification and Patient-specific Gene Marker Identification
-COmic
-MOLI
-Classifying Breast Cancer Subtypes Using Deep Neural Networks Based on Multi-Omics Data
-An integrative deep learning framework for classifying molecular subtypes of breast cancer
-Incorporating deep learning and multi-omics autoencoding for analysis of lung adenocarcinoma prognostication
-Estimating gene expression from DNA methylation and copy number variation: A deep learning regression model for multi-omics integration
-Deep Learning data integration for better risk stratification models of bladder cancer
-Deep learning-based ovarian cancer subtypes identification using multi-omics data
-Multi-omics integration method based on attention deep learning network for biomedical data classification
-MODILM
-moBRCA
-DeepGAMI
-Self-supervised learning of multi-omics embeddings in the low-label, high-data regime
-A multimodal graph neural network framework for cancer molecular subtype classification
-TransVCOX: Bridging Transformer Encoder and Pre-trained VAE for Robust Cancer Multi-Omics Survival Analysis
-Multimodal attention-based variational autoencoder for clinical risk prediction
-MOCAT
-Classifying breast cancer using multi-view graph neural network based on multi-omics data
+SubtypeFormer~\cite{SubtypeFormer} 
+CNV, mRNA, miRNA, DNAm, feature selection but not specified
+attention based (transformer), encoder-decoder architecture 
+unsupervised, clustering to find subtypes 
+preprint do not contains many information on the method, based on the code, seems to be an early fusion approach. 
+they do not precise how they apply the self attention is applied on 1D inputs 
 
-A benchmark study of deep learning‑based multi‑omics data fusion methods for cancer
+In custOmics, \citeauthor{customics} combine \gls{ae} and \gls{vae}; each modality is encoded with an \gls{ae}, and the multimodal representation is obtained by passing all the latent spaces in a \gls{vae}~\cite{customics}.
+Those reconstruction methods are suitable for unsupervised training when no labels are available, but reconstruction of large dimensional vectors such as omics profiles is challenging. 
+hierarchical mixed integration, 2 training phases: 1 each ae individually then a joint integration and fine tuning the AEs
+task: survival or classification (cancer or subtype)
+CNV, DNAm, mRNA, IF 
+
+SelfOmics~\cite{selfOmics}
+cancer type classification 
+mRNA, DNAm, miRNA
+focus on self supervised training, and pretrining of modality AEs
+obtain 3 latent representation one for each omics 
+mRNA and DNAm features are grouped by chromosomes, Fullyconnected only if on the same chr 
+losses: 
+1. reconstruction loss, from one latent representation reconstruct all the omics 
+2. reconstruct the input omics but some features associated to a chr where masked 
+3. alignment loss of the 3 latent representation based on CLIP 
+
+cat all latent repre and mlp to predict cancer type = IF 
+showed that pretraining encoders help boos perf however the impact of the different self supervised loss is limited on the classification perf 
+while they state that their methods is able to handle missing omics data during pretraining by only training the AEs of the available omics they do not evaluate the impact of omics data
+
+
+Multi-Omic Graph Transformers for Cancer Classification and Interpretation~\cite{Kaczmarek2021}
+mRNA and miRNA 
+GAT on a bipartite graph, miRNA-mRNA [TargetScan]
+positional encoding of the nodes 
+feature selection: knowledge and variance threshold 
+IF  cancer classification 
+
+SUPREME~\cite{Kesimoglu2022} GCN subtype or survival patient similairity graph 1 per omics 
+apply GCN to generate a patient embedding by concat all the patient embedings combination obtain from the different graphs 
+feature selection step to create the raw feature embedings
+mRNA, miRNA, DNAm, CNV, SNV
+kept differentially expressed genes 
+
+A Variational Information Bottleneck Approach to Multi-Omics Data Integration
+\cite{Lee2021AVI}
+mRNA, DNAm, miRNA, Protein
+learning from incomplete multi-view observations
+omics = views handle missingness patterns
+IF, view specific encoders = obtain a latent representation 
+product of experts get a joint representation
+predictor from the joint repr and one predictor for each encoder
+
+SADLN~\cite{SADLN} Encoder decoder architecture VAEs + GAN with self attention
+CNV, DNAm, miRNA, mRNA
+Feature selection threshold
+subtype clustering (Gaussian mixture model)
+IF concat latent representation
+compute self attention between samples of the same batch
+add a discriminator  
+
+Attention- based GCN Integrates Multi-omics Data for Breast Cancer Subtype Classification and Patient-specific Gene Marker Identification~\cite{Guo2023}
+CNV, mRNA, DNAm 
+MAD to select top features + knowledge selection based on DisGenet
+Graph PPI + GCN + attention layers 
+EF concat feature
+attention used before Graph convolution
+subtype prediction 
+
+MOLI~\cite{MOLI}
+mRNA, SNV, CNV
+task = drug response, IF
+1 encoder per omics , concat features, passed to a classifier network 
+MLP
+
+Classifying Breast Cancer Subtypes Using Deep Neural Networks Based on Multi-Omics Data~\cite{Lin2020} = DeepMO
+mRNA, DNAm, CNV 
+subtype classification ?
+chi2 test to select top features done separately on each omics
+each omics is encoded individually MLP
+IF concat latent representation 
+passed to another network for prediction
+
+
+
+An integrative deep learning framework for classifying molecular subtypes of breast cancer~\cite{MohaiminulIslam2020}
+CNV + mRNA 
+CNN IF, subtype classification
+explore sharing weight between the 2 branch (ie each omics) but reduced perf 
+
+
+
+Incorporating deep learning and multi-omics autoencoding for analysis of lung adenocarcinoma prognostication~\cite{Lee2020}
+AE, EF 
+mRNA, miRNA, DNAm, CNV 
+survival group classification, cox model and kmeans clustering to obtain survival groups on the latent space of the AE
+
+Deep learning-based ovarian cancer subtypes identification using multi-omics data~\cite{Guo2020}
+mRNA, miRNA, CNV
+AE, EF 
+K-means clustering on the latent space to obtain labels to construct a logistic classifier based only on mRNA data (subtype)
+
+Multi-omics integration method based on attention deep learning network for biomedical data classification
+
+MODILM~\cite{MODILM}
+miRNA, mRNA, DNAm
+feature selection, variance threshold
+variation of MOGONET, use of GAT on the patient similairity graph
+mlp to get labels 
+late fusion, VCDN module
+subtype prediction 
+
+moBRCA~\cite{moBRCA}
+DNAm, mRNA, miRNA, cancer subtype
+Feature selection based on gene differential expression 
+selected features linke to the selected genes in the other omics 
+targeted by a miRNAs or methylation of the corresponding promoter
+embedding of the expression profile to high dim. Each scalar feature randomly mapped to a Kdim vector
+compute attention score with tanh activation gate
+IF = concat new representation 
+subtype prediction with FC network
+
+Self-supervised learning of multi-omics embeddings in the low-label, high-data regime
+
+A multimodal graph neural network framework for cancer molecular subtype classification~\cite{Li2024}
+mRNA, miRNA, CNV, subtype
+feature selection variance threshold 
+heterogeneous graph gene-gene interaction from biogrid and miRNA-mRNA from miRDB + metapath connect miRNA if they are connected to the same genes
+3 type of edges 
+two types of nodes: genes 2D features (mRNA+CNV), miRNA (1d features)
+nodes features are passed through a FCN to increase their dimension to F 
+GCN or GAT 
+mixed integration: EF and IF 
+
+TransVCOX: Bridging Transformer Encoder and Pre-trained VAE for Robust Cancer Multi-Omics Survival Analysis~\cite{10385668}
+survival, pretrain a VAE for each omics, used the latent space in a second step for the integration 
+IF, use of self-attention on each omics after embedding them embedding to get the correct shape for attention 
+survival pred
+mRNA, CNV, microbiome data 
+
+Multimodal attention-based variational autoencoder for clinical risk prediction~\cite{Li2023}
+same as previous but no VAE pretraining
+
+MOCAT~\cite{Yao_2024}
+mRNA, DNAm, miRNA
+subtype or grade 
+pretrain AEs to have a latent repr for each omics
+supervised latent space 
+IF, cross omics fusion 
+concat latent repr, passed to a multimodal AEs 
+latent space passed to a attention layer, self attention but applied between samples !!  
+
+
+Classifying breast cancer using multi-view graph neural network based on multi-omics data~\cite{Ren2024}
+mRNA, DNAm, CNV
+feature selection top based on chi2 + minimum Redundancy Maximum Relevance
+GNN patient similarity 
+1 graph and 1 GCN per omics IF 
+Fuse the omics based on attention: GAT ? 
+
+%A benchmark study of deep learning‑based multi‑omics data fusion methods for cancer
+precise the CCL of this study 
 		\subsubsection{Early fusion}
 		\subsubsection{Late fusion}
 		\subsubsection{Intermediate fusion}
@@ -625,7 +755,7 @@ A benchmark study of deep learning‑based multi‑omics data fusion methods fo
 					Ref. & mRNA & miRNA & DNAm & Protein & CNV & SNV & Fusion\TblrNote{a} & Task & Arch. & Graph & Feature engineering    \\
 					\cite{Althubaiti_2021} & \faCircle &  & \faCircle & & \faCircle & \faCircle & EF & surv & \gls{gat} & PPI & Differential expression  \\
 
-			\end{longtblr} % & Task & Architecture & Graph & Feature engineering
+			\end{longtblr} 
 
 
 \section{Model interpretability}

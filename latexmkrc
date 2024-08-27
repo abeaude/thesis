@@ -3,6 +3,7 @@ $ENV{'TEXINPUTS'}='./texmf//:';
 $pdf_mode = 5;
 $max_repeat=10;
 $bibtex_use = 2;
+set_tex_cmds( '--shell-escape %O %S' );
 push @generated_exts, 'loe', 'lol', 'lor', 'run.xml', 'glg', 'glstex', 'aux', 'glo', 'bcf', 'fls', 'glg-abr', 'glo-abr', 'ist', 'lof', 'slg', 'slo', 'sls', 'toc', 'fdb_latexmk', 'gls', 'gls-abr', 'xdv';
 
 ##############

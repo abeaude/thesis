@@ -14,4 +14,19 @@
 
 https://www.science.org/doi/10.1126/science.abc4552
 
+Lung Cancer Subtype Diagnosis using Weakly-paired Multi-omics Data~\cite{Wang2022}
+subtype; miRNA, SNV, DNAm, WSI 
+IF
+encode each omics individually with an attention based encoder
+how are obtained the attention weight ??
+from latent representation, predict the subtype (first loss component)
+how they handle missing omics: GAN based on the combination of the available modalities
+
+\ifSubfilesClassLoaded{%
+    \inputminted[breaklines, autogobble, linenos, numberblanklines=false]{python}{figures/8-Conclusions/ScalarAttention.py}%
+}{
+    \inputminted[breaklines]{python}{../figures/8-Conclusions/ScalarAttention.py}%
+}
+
+
 \end{document}
