@@ -3,14 +3,14 @@ import triton.language as tl
 
 @triton.jit
 def softmin_kernel(
-    output_ptr, 
-    x_ptr, 
-    y_ptr, 
-    z_ptr, 
-    x_row_stride, 
-    output_row_stride, 
+    output_ptr,
+    x_ptr,
+    y_ptr,
+    z_ptr,
+    x_row_stride,
+    output_row_stride,
     n_cols,
-    BLOCK_SIZE: tl.constexpr, 
+    BLOCK_SIZE: tl.constexpr,
 ):
     # The rows of the softmax are independent, so we parallelize across those
     row_idx = tl.program_id(0)
