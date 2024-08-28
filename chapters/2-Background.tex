@@ -249,7 +249,7 @@
 
 	 The cost function is adapted to the problem; for the \gls{ae}, a reconstruction loss is used, and the goal is to minimize the difference between the input \(\symbf{x}\) and the reconstructed input \(\hat{x}\):
 	 \begin{equation}
-		 \symcal{L}_{AE}\left(\theta\right) = \frac{1}{N}\sum_{i=1}^{N} {\left\|x_i - \hat{x}_i \right\|}_2^{2}
+		 \symcal{L}_{AE}\left(\theta\right) = \frac{1}{N}\sum_{i=1}^{N} {\left\|x_i - \hat{x}_i \right\|}_2^{2} \label{eq:loss_ae}
 	 \end{equation}
 	 The \gls{vae} cost function is composed of the reconstruction term of the \gls{ae} loss and a regularization term that forces the latent space to follow a gaussian distribution: the Kullback-Leibler divergence (\(\KL\)):
 	 \begin{equation}

@@ -44,7 +44,7 @@
 	Biological system and their knowledge representation are hierarchical, making this kind of inductive bias suitable for hierarchical architecture such as \gls{mlp}~\cite{bourgeaisDeepGONetSelfexplainable2021,haoPASNetPathwayassociatedSparse2018}.
 	In DeepGONet~\cite{bourgeaisDeepGONetSelfexplainable2021}, authors constrain the \gls{mlp} architecture with the GO biological processes hierarchy.
 	In PASNet~\cite{haoPASNetPathwayassociatedSparse2018,Hao2018}, authors use the REACTOME hierarchy to constrain their \gls{mlp} architecture.
-	With such architectures, each neuron represents a known pathway, and only neurons with known relations are connected.
+	With such architectures, each neuron of a hidden layer represents a known pathway, and only neurons with known relations are connected.
 	For the input layer, neurons represent genes, and they are connected to neurons of the first hidden layers if they are involved in the corresponding pathway.
 	In practice, this is achieved by masking the unknown relationships in a fully connected layer:
 	\begin{equation}
@@ -347,6 +347,10 @@
 		Network-based methods are another way of integrating multi-omics data.
 		For instance, \gls{snf} infer relationships based on similarity between patients or features in the different omics, and the combine the various similarity matrices into one.
 
+		\begin{mybox}[label=box:snf]{\Glsfmtfull{snf}}
+			This is a numbered box.
+		\end{mybox}
+
 		supervised task, early fusion or late fusion (ensemble) easy to use
 		%https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8829812/pdf/main.pdf
 		%http://eprints-phd.biblio.unitn.it/2981/1/thesis.pdf
@@ -419,16 +423,7 @@
 		intermediate fusion
 		multi omics no improvement over single omics equivalent for classification tasks
 
-		MiNet~\cite{Hao2019} Cox-PasNet extension
-		adds a layer that generate multiomics features
-		mRNa, DNAm, CNV
-		Early fusion define a new input vector concatentation of the 3 omics and paired interactions
-		\begin{equation}
-			X = \left[X_{mRNA}, X_{CNV}, X_{DNAm}, X_{mRNA}\odot X_{CNV}, X_{DNAm}, X_{mRNA}\odot X_{DNAm} \right]
-		\end{equation}
-		this new input is then transformed by projection and an activation function: \(\tilde{X} = g\left(XW\right)\).
-		used to project onto the gene layer of pasnet
-		this transformed input is passed to an architecture based on PASNet
+		
 
 		\cite{Tong2021} autoencoders intermediate fusion
 		concatenate latent spaces, or pooling
@@ -443,9 +438,6 @@
 		tested various combination of modalities but always  included clinical information and obtained similar performances to model trained only on clinical data only +mRNA obtain better perf on this specific taks, suggest that survival prediciotn is driven by clinical information (gender, disease treatment, ...)
 		survival prediciotn
 		WSI, clinical, mRNA, miRNA, DNAm, CNV
-
-		AIME~\cite{Yu2022} miRNA and mRNA early fusion AE
-		clustering BRCA subtypes
 
 		MultiGATAE~\cite{MultiGATAE} GAT + AE
 		patient similarity graph for each omics, then apply SNF
@@ -470,11 +462,6 @@
 		explainable model, detect important modules related to the predicited phenotype then select the most important features of each modules, pathway enrichment analysis applied afterwards to identify the most important pathways
 		intermediate fusion
 
-		SALMON~\cite{SALMON} mRNA, miRNA, CNV
-		variance threshold on features
-		SALMON is a model combining an intermediate fusion strategy with a \gls{mlp}~\cite{SALMON}.
-		Omics features are transformed to an eigengene matrix, a weighted average of gene expression of genes in a given set of genes, before being fed to an \gls{mlp}.
-		survival task
 
 		\cite{Yin2022} mRNA, CNV, SNV,
 		threshold filtering
@@ -483,10 +470,6 @@
 		non linear transformation of the omics data then concatenation, IF
 		maps the new representation to each nodes
 		GCN , subtype prediction
-
-		MoGCN~\cite{MoGCN} GCN on SNF patient similarity fused graphs
-		CNV, mRNA, Prot
-		Early fusion, concat the omics, AE, use latent space as features for the GCN subtype classification
 
 		Stacked AEs~\cite{Wu2022StackedAB}
 		mRNA, CNV, clinical
@@ -502,22 +485,12 @@
 		applied on a bipartite graph intermediate Fusion
 		survival task
 
-		\glspl{ae} were primarily used with an early fusion strategy; the features of each modality are stacked before being encoded in a latent space with unsupervised training.
-		To prevent overfitting, an elastic net regularization is added~\cite{Chaudhary2018}.
-		mRNA, miRNA, DNAm
-		AE used as a dimension reduction methods
-		from latent space, survival related feature selection then clustering to identify groups, used to construct a SVM classifier.
-		survival group
-
 		\cite{Cheerla2019}
 		miRNA, mRNA, WSI
 		intermediate fusion transform each modality in a latent representation
 		force similarity of the latent representation, for each pairs of modality that is present similairity based loss
 		survival task
 		multimodal dropout improve the network’s ability to deal with missing data. In this method, instead of dropping neurons, we drop entire feature vectors corresponding to each modality
-
-		PNet~\cite{PNet} MLP + knowledge, early fusion
-		SNV, CNV , REACTOME pathway survival
 
 		AGMI~\cite{AGMI} GNN based on a multi-edge graph: multi types of edges between two nodes. node = genes , edges a known relation between 2 genes PPI, gene pathway, correlation
 		Early fusion concat features, map to nodes
@@ -526,21 +499,6 @@
 
 		%TODO
 		\cite{Ma2019} AEs one per omics intermediate fusion
-
-		\cite{PathCNN}
-		mRNA, CNV, DNAm survival classification LTS/STS
-		construct an image based on knowledge, use KEGG pathways (146)
-		for all samples features from a pathway were extracted to form a pathways matrix. PCA is applied to extract top k PCs (new matrix) done for the 146 pathways. concat to form a new matrix.
-		each row, ie a sample is rearranged into a matrix 146 x 3n PCs = pathway image. row (pathways) are reodered to have correlated pathways close to each other
-		used as the input of a CNN
-		data matrix X -- Xpathways -- XPCA
-		grad cam used to identify important pixel ie pathway of the pathway image
-		Early fusion with features engineering
-
-		\cite{DeepProg} mRNA, miRNA, DNAm, intermediate fusion
-		clustering to idneitfy subtypes, labels used to construct a SVM classifier
-		In DeepProg, \citeauthor{DeepProg} proposed an ensemble of \gls{ae}; for each omics, an \gls{ae} is used to create a lower dimensional representation~\cite{DeepProg}.
-		Survival-associated features are then selected in each latent representation to construct the multimodal representation.
 
 		ConcatAE and CrossAE~\cite{CrossAE} mRNA, miRNA, DNAm, CNV / IF
 		task = survival or BRCA subtype
@@ -561,9 +519,7 @@
 		On the contrary, \citeauthor{MOGONET} developed a late fusion strategy.
 		A \gls{gcn} is used on a patient similarity graph for each modality, and then predictions are combined through the cross-discovery tensor and the \gls{vcdn} module~\cite{MOGONET}.
 
-		DeepOmix~\cite{DeepOmix}, similar to P-NET but use another source of knowledge: pathway gene set
-		Early fusion, mRNA, DNAm, CNV, SNV, survival task
-		restrict to features available in the source of knowledge
+
 
 		SubtypeFormer~\cite{SubtypeFormer}
 		CNV, mRNA, miRNA, DNAm, feature selection but not specified
@@ -624,14 +580,6 @@
 		compute self attention between samples of the same batch
 		add a discriminator
 
-		Attention- based GCN Integrates Multi-omics Data for Breast Cancer Subtype Classification and Patient-specific Gene Marker Identification~\cite{Guo2023}
-		CNV, mRNA, DNAm
-		MAD to select top features + knowledge selection based on DisGenet
-		Graph PPI + GCN + attention layers
-		EF concat feature
-		attention used before Graph convolution
-		subtype prediction
-
 		MOLI~\cite{MOLI}
 		mRNA, SNV, CNV
 		task = drug response, IF
@@ -654,16 +602,6 @@
 		explore sharing weight between the 2 branch (ie each omics) but reduced perf
 
 
-
-		Incorporating deep learning and multi-omics autoencoding for analysis of lung adenocarcinoma prognostication~\cite{Lee2020}
-		AE, EF
-		mRNA, miRNA, DNAm, CNV
-		survival group classification, cox model and kmeans clustering to obtain survival groups on the latent space of the AE
-
-		Deep learning-based ovarian cancer subtypes identification using multi-omics data~\cite{Guo2020}
-		mRNA, miRNA, CNV
-		AE, EF
-		K-means clustering on the latent space to obtain labels to construct a logistic classifier based only on mRNA data (subtype)
 
 		Multi-omics integration method based on attention deep learning network for biomedical data classification
 
@@ -725,36 +663,122 @@
 
 		%A benchmark study of deep learning‑based multi‑omics data fusion methods for cancer
 		precise the CCL of this study
+
+		Different deep-learning architectures like \gls{mlp}, \gls{ae}, \gls{vae}, \gls{cnn}, \gls{gnn}, or transformers can be combined with the various fusion methods: early fusion, intermediate fusion, and late fusion. 
+		Early fusion combines raw or abstracted features before feeding them to a model. 
+		Intermediate fusion combines latent representation obtained with modality-specific encoders. 
+		With this approach, it is not necessary to fuse all modalities at once; the modalities' fusion can happen gradually. 
+		Late fusion combines the predictions obtained from each omics. 
+		The different fusion strategies can also be combined to have more complex integration schemes. 
+		
+		The different approaches previously developed for omics data integration will be presented according to their fusion strategy. 
 		\subsubsection{Early fusion}
+		Early fusion was primarily used with \glspl{ae} as a dimension reduction method. 
+		Features of the different modalities are concatenated before being encoded into a multi-omics latent representation. 
+		The latent representation is then used for various tasks. 
+		In~\cite{Chaudhary2018}, survival-associated features of the latent representation are selected with a Cox model, and a K-means clustering is applied to the selected features to infer survival groups. 
+		The resulting labels are used to construct a \gls{svm} based classifier from a subset of the multi-omics features. 
+		To prevent overfitting, an elastic net regularization\footnote{\(\lambda_{1} \left\|\theta\right\|_{1}^{2} + \lambda_{2} \left\|\theta\right\|_{2}^{2}\), where \(\theta\) are model parameters} is added to the reconstruction loss, \(\symcal{L}_{AE}\)~\cref{eq:loss_ae}. 
+				\citeauthor{Lee2020} applied a similar strategy to identify survival groups in \gls{luad} patient but used a classifier based on \glspl{rf}~\cite{Lee2020}.  
+		Similarly, \citeauthor{Guo2020} extracted a multi-omics latent representation by applying an \gls{ae} on concatenated multi-omics data and constructed a logistic classifier to predict ovarian subtypes from mRNA data. 
+		The labels used to train the classifier were obtained by applying a K-means clustering on the multi-omics latent representation~\cite{Guo2020}. 
+		A recent study~\cite{Yu2022} showed that \glspl{ae} was an excellent method to extract nonlinear relationships in multi-omics data when the sample size is large enough. 
+		The \gls{ae} architecture also excluded the influence of confounding factors by adding them to the latent representation before passing it to the decoder during training. 
+				
+		Those reconstruction methods are suitable for unsupervised training when no labels are available, but reconstruction of large dimensional vectors such as omics profiles is challenging. 
+		In presence of known labels, supervised training of \gls{mlp} architectures is a better approach. 
+		However, with an early fusion strategy the \gls{mlp} input is very high-dimensional, leading to a high number of parameters. 
+		Introduction of biological knowledge in the \gls{mlp} architecture is a common way to reduce the number of parameters to estimate. 
+		Similarly to PasNet~\cite{haoPASNetPathwayassociatedSparse2018} or DeepGONet~\cite{bourgeaisDeepGONetSelfexplainable2021}, connections between neurons are restricted to known biological relationships: Reactome~\cite{PNet} or pathway gene set~\cite{DeepOmix}.
+		A neuron \(h^{0}_{i}\) from the first layer combines features \(x_{i}^{m}\) from the \(M\) different omics correponding to the gene \(i\): \(h^{0}_{i} = f\left( \sum_{m=1}^{M} w_{m}x_{i}^{m} \right) \). 
+		Neurons in the following layer combine the information from these functional genes. 
+		MiNet~\cite{Hao2019} explicitly models features interactions by creating a multi-omics feature vector accounting for the regulatory effects of CNV and DNAm on gene expression. 
+		The multi-omics feature vector is constructed as:
+		\begin{equation}
+			\symbf{x} = {
+				\begin{bmatrix}
+				\symbf{x}_{mRNA}\\ 
+				\symbf{x}_{CNV}\\ 
+				\symbf{x}_{DNAm}\\ 
+				\symbf{x}_{mRNA}\odot \symbf{x}_{CNV}\\ 
+				\symbf{x}_{mRNA}\odot \symbf{x}_{DNAm} 
+			\end{bmatrix}
+			}^T
+		\end{equation}
+		where \(\symbf{x}_{mRNA}\odot \symbf{x}_{CNV}\) models the regulatory effect of CNV on mRNA. 
+		The multi-omics feature vector is then transformed to a functional representation by projection: \(\tilde{\symbf{x}} = f\left(\symbf{x}W\right)\).
+		The resulting functional gene representation is fed to a network based on the PasNet architecture.  
+		
+		Some architectures drew inspiration from the promising results of \gls{cnn} in computer vision. 
+		The application of 1D-\gls{cnn} on concatenated multi-omics features was explored~\cite{CNN1D} or the development of complex transformation, \(\symcal{T}\), to obtain a 2D image~\cite{PathCNN}. 
+		In PathCNN, the transformation is based on biological knowledge: 146 KEGG pathways. 
+		For each pathway \(p\) and each omics \(m\), the input matrix \(X^{m} \in \symbb{R}^{n \times d}\) is transformed into a pathway matrix, \(X_{p}^{m} \in \symbb{R}^{n \times d_{p}}\), by selecting only the \(d_{p}\) genes related to this pathway. 
+		The pathway matrix is decomposed into its PCA representation: \(Z_{p}^{m} \in \symbb{R}^{n \times k}\), where \(k\) is the number of selected principal components. 
+		All the PCAs pathway matrix are concatenated to form a single matrix: \(Z^{m} \in \symbb{R}^{n \times 146k}\). 
+		The matrix is then rearranged to obtain a matrix representation for each sample: \(Z_{i}^{m} \in \symbb{R}^{146 \times k}\), then the representation of the different omics are combined to form the pathway image \(Z_{i} \in \symbb{R}^{146 \times mk}\). 
+		Finally, pathways (\ie{}rows) are reordered to have correlated pathways close to each other. 
+
+		\Glspl{gnn} with an early fusion strategy have also been applied to integrate multi-omics data with different type of graphs: \gls{ppi}~\cite{Guo2023} or patient similarity graphs~\cite{MoGCN}. 
+		In MoGCN~\cite{MoGCN}, the graph is obtained by fusing the patient similairity graphs obtained on each omics with \gls{snf}. 
+		In an early fusion context, the features from the different omics are concatenated before being map to the graph nodes. 
+		For the \gls{ppi} graph, each node represents a gene therefore features corresponding to this gene from the different omics are concatenated. 
+		The node embedding is a vector \(h_{v} \in \symbb{R}^{M}\), where \(M\) is the number of omics considered. 
+		For patient graphs, each node represents a patient and the node embedding is the concatenation of the \(M\) expression profile of the corresponding patient: \(h_{v} \in \symbb{R}^{\sum_{i=1}^{M}d_i}\). 
+		Instead, the latent representation obtained with an \gls{ae} on the concatenated expression profile can also be used~\cite{MoGCN}. 
+		This strategy reduce the node embeddings dimension. 
+		Then, \gls{gcn} are applied on the graph to obtain a new graph representation for \glsxtrshort{ppi}-based approach, and a new node representation for patient-graph approach. 
+		\citeauthor{Guo2023}~\cite{Guo2023} applied an attention mechanism to the initial node embedding \(X\). 
+		This attention mechanism is used to capture the association between the different omics. 
+		
+
+		GNN fusion of graph or concat features
+		MoGCN = SNF
+		MoGCN~\cite{MoGCN} GCN on SNF patient similarity fused graphs
+		CNV, mRNA, Prot
+		Early fusion, concat the omics, AE, use latent space as features for the GCN subtype classification
+		
+		Attention- based GCN Integrates Multi-omics Data for Breast Cancer Subtype Classification and Patient-specific Gene Marker Identification~\cite{Guo2023}
+		CNV, mRNA, DNAm
+		MAD to select top features + knowledge selection based on DisGenet
+		Graph PPI + GCN + attention layers
+		EF concat feature
+		attention mechanism applied on the data matrix before mapping to the graph to capture association between the different omics. 
+		attention used before Graph convolution
+		subtype prediction
+
+		attention based 
+		DeepPathNet
+		SubtypeFormer
+		
+		
+		
+		
+
 		\subsubsection{Late fusion}
+		MOGONET details on the VCDN strategy as it is used multiple times 
+		other approach using VCDN module 
 		\subsubsection{Intermediate fusion}
+		\cite{DeepProg} mRNA, miRNA, DNAm, intermediate fusion
+		clustering to idneitfy subtypes, labels used to construct a SVM classifier
+		In DeepProg, \citeauthor{DeepProg} proposed an ensemble of \gls{ae}; for each omics, an \gls{ae} is used to create a lower dimensional representation~\cite{DeepProg}.
+		Survival-associated features are then selected in each latent representation to construct the multimodal representation.
+
+		SALMON~\cite{SALMON} mRNA, miRNA, CNV
+		variance threshold on features
+		SALMON is a model combining an intermediate fusion strategy with a \gls{mlp}~\cite{SALMON}.
+		Omics features are transformed to an eigengene matrix, a weighted average of gene expression of genes in a given set of genes, before being fed to an \gls{mlp}.
+		survival task
 			organise by type of integration
 			start with early fusion, simplest
 			go to late fusion
 			finish with intermediate fusion
-			\setlength\rotheadsize{1.45cm}
 
-			\begin{longtblr}[
-				caption = {examples multi omics},
-				entry = {short caption},
-				note{a} = {EF = Early Fusion, LF = Late Fusion, IF = Intermediate Fusion},
-				]{
-				colspec = {Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[l,m,, wd=2.8cm]},%
-				cell{1}{2-7} = {halign=c,cmd=\rothead},
-				row{2-Z} = {font=\small},%
-				cell{2-Z}{2-7} = {font=\scriptsize},
-				row{1} = {valign=m},
-				column{2-7} = {colsep=1pt},
-				column{1} = {colsep=3pt},
-				column{8-12} = {colsep=5pt},
-				hline{1,Z} = {2pt},%
-						hline{2} = {1pt},%
-						rowhead = 1, %
-						rowfoot = 0%
-					}
-				Ref.                   & mRNA      & miRNA & DNAm      & Protein & CNV       & SNV       & Fusion\TblrNote{a} & Task & Arch.     & Graph & Feature engineering     \\
-				\cite{Althubaiti_2021} & \faCircle &       & \faCircle &         & \faCircle & \faCircle & EF                 & surv & \gls{gat} & PPI   & Differential expression \\
-			\end{longtblr}
+			\ifSubfilesClassLoaded{%
+		\input{figures/3-SOTA/table_multi_omics.tex}%
+	}{
+		\input{../figures/3-SOTA/table_multi_omics.tex}%
+	}
+			
 
 
 \section{Model interpretability}

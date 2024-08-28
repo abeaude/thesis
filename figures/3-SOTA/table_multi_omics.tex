@@ -1,0 +1,41 @@
+\setlength\rotheadsize{1.45cm}
+
+\begin{longtblr}[
+	caption = {examples multi omics},
+	entry = {short caption},
+	note{a} = {EF = Early Fusion, LF = Late Fusion, IF = Intermediate Fusion},
+	note{1} = {As a classification task, estimate survival groups},
+	note{2} = {based on the result of a clustering},
+	]{
+	colspec = {Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[l,m,, wd=2.8cm]},%
+	cell{1}{2-7} = {halign=c,cmd=\rothead},
+	row{2-Z} = {font=\small},%
+	cell{2-Z}{2-7} = {font=\scriptsize},
+	row{1} = {valign=m},
+	row{4} = {belowsep=10pt},
+	row{5} = {abovesep=10pt},
+	hline{5} = {dashed, 0.75pt},
+	column{2-7} = {colsep=1pt},
+	column{1} = {colsep=3pt},
+	column{8-12} = {colsep=5pt},
+	hline{1,Z} = {2pt},%
+			hline{2} = {1pt},%
+			rowhead = 1, %
+			rowfoot = 0%
+		}
+	Ref.                   & mRNA      & miRNA     & DNAm      & Protein & CNV       & SNV       & Fusion\TblrNote{a} & Task                & Arch.             & Graph & Feature engineering           \\
+	\cite{Althubaiti_2021} & \faCircle &           & \faCircle &         & \faCircle & \faCircle & EF                 & surv                & \gls{gat}         & PPI   & Differential expression       \\
+	\cite{Chaudhary2018}   & \faCircle & \faCircle & \faCircle &         &           &           & EF                 & surv\TblrNote{1}    & \glsxtrshort{ae}  &       & Survival related features     \\
+	\cite{Lee2020}         & \faCircle & \faCircle & \faCircle &         & \faCircle &           & EF                 & surv\TblrNote{1}    & \glsxtrshort{ae}  &       & Survival related features     \\
+	\cite{Guo2020}         & \faCircle & \faCircle &           &         & \faCircle &           & EF                 & subtype\TblrNote{2} & \glsxtrshort{ae}  &       &                               \\
+	\cite{Yu2022}          & \faCircle & \faCircle &           &         &           &           & EF                 & subtype\TblrNote{2} & \glsxtrshort{ae}  &       &                               \\
+	\cite{DeepOmix}        & \faCircle &           & \faCircle &         & \faCircle & \faCircle & EF                 & surv                & \glsxtrshort{mlp} &       & Feature selection (knowledge) \\
+    \cite{PNet}        &  &           &  &         & \faCircle & \faCircle & EF                 & surv                & \glsxtrshort{mlp} &       & Feature selection (knowledge) \\
+    \cite{Hao2019}        & \faCircle &           & \faCircle &         & \faCircle &  & EF                 & surv                & \glsxtrshort{mlp} &       & Feature selection (threshold) \\
+    \cite{PathCNN}        & \faCircle &           & \faCircle &         & \faCircle &  & EF                 & surv\TblrNote{1}                & \glsxtrshort{mlp} &       & PCA \\
+    \cite{MoGCN}        & \faCircle &           &  &  \faCircle       & \faCircle &  & EF                 & subtype                & \glsxtrshort{gnn} & \glsxtrshort{snf}      & \glsxtrshort{ae} \\
+    \cite{Guo2023}        & \faCircle &           & \faCircle &         & \faCircle &  & EF                 & subtype                & \glsxtrshort{gnn} &       & DisGenet + MAD \\
+
+
+    \cite{SALMON}        & \faCircle &    \faCircle       &  &         & \faCircle &  & IF                 & surv                & \glsxtrshort{mlp} &       & Feature selection (threshold) \\
+\end{longtblr}
