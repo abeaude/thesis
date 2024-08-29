@@ -8,13 +8,16 @@
 	note{2} = {based on the result of a clustering},
 	]{
 	colspec = {Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[l,m,, wd=2.8cm]},%
-	cell{1}{2-7} = {halign=c,cmd=\rothead},
+	cell{1}{2-8} = {halign=c,cmd=\rothead},
 	row{2-Z} = {font=\small},%
 	cell{2-Z}{2-7} = {font=\scriptsize},
 	row{1} = {valign=m},
-	row{4} = {belowsep=10pt},
-	row{5} = {abovesep=10pt},
-	hline{5} = {dashed, 0.75pt},
+	row{14} = {belowsep=10pt},
+	row{15} = {abovesep=10pt},
+	hline{15} = {dashed, 0.75pt},
+	row{17} = {belowsep=10pt},
+	row{18} = {abovesep=10pt},
+	hline{18} = {dashed, 0.75pt},
 	column{2-7} = {colsep=1pt},
 	column{1} = {colsep=3pt},
 	column{8-12} = {colsep=5pt},
@@ -34,7 +37,12 @@
     \cite{Hao2019}        & \faCircle &           & \faCircle &         & \faCircle &  & EF                 & surv                & \glsxtrshort{mlp} &       & Feature selection (threshold) \\
     \cite{PathCNN}        & \faCircle &           & \faCircle &         & \faCircle &  & EF                 & surv\TblrNote{1}                & \glsxtrshort{mlp} &       & PCA \\
     \cite{MoGCN}        & \faCircle &           &  &  \faCircle       & \faCircle &  & EF                 & subtype                & \glsxtrshort{gnn} & \glsxtrshort{snf}      & \glsxtrshort{ae} \\
-    \cite{Guo2023}        & \faCircle &           & \faCircle &         & \faCircle &  & EF                 & subtype                & \glsxtrshort{gnn} &       & DisGenet + MAD \\
+    \cite{Guo2023}        & \faCircle &           & \faCircle &         & \faCircle &  & EF                 & subtype                & \glsxtrshort{gnn} & PPI      & DisGenet + MAD \\
+	\cite{SubtypeFormer}        & \faCircle &    \faCircle       & \faCircle &         & \faCircle &  & EF                 & subtype\TblrNote{2}                & Trans. &       &  \\
+	\cite{DeepPathNet}        & \faCircle &           &  &         & \faCircle & \faCircle & EF                 & {subtype \\ cancer}                & Trans.       &  & Feature selection (knowledge) \\
+	\cite{MOGONET}        & \faCircle & \faCircle           & \faCircle  &         &  &  & LF                 & subtype                 & \glsxtrshort{gnn}       & patient  &  \\
+	\cite{MODILM}        & \faCircle  & \faCircle           & \faCircle  &         &  &  & LF                 & subtype                 & \glsxtrshort{gat}       & patient  & Feature selection (variance threshold)  \\
+	\cite{Sun2019}        &  &           &  &         &  &  & LF                 &                 & \glsxtrshort{mlp}       &  &  \\
 
 
     \cite{SALMON}        & \faCircle &    \faCircle       &  &         & \faCircle &  & IF                 & surv                & \glsxtrshort{mlp} &       & Feature selection (threshold) \\

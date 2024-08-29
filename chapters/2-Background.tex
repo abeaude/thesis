@@ -172,11 +172,14 @@
 
 	 The attention mechanism is used in the transformer, an encoder-decoder architecture.
 	 I will only describe the encoder where the self-attention is used.
-	 The transformer encoder is a stacking of \(n\) blocks, each block is composed of a self-attention and a feed-forward network.
-	 The feed-forward network transform each element \({\left(Z_i\right)}_{1 \leq i \leq L}\) independently with two successive linear transformation with an intermediate \(\operatorname{ReLU}\) activation~(\cref{eq:ffn}).
-
+	 The transformer encoder is a stacking of \(n\) blocks, each block is composed of a self-attention and a feed-forward network, \(\operatorname{FFN}\)~\cref{eq:transformer_block}.
+	 Each sublayer of the block has a residual connection to prevent vanishing gradients followed by a layer normalization \(\LN\)\footnote{We only describe the orignial transformer architecture where post-normalization is used but many recent architectures employ a pre-normalization scheme, which has been shown to work better~\cite{TransformerpreLN}.}.
 	 \begin{equation}
-		 \operatorname{FFN}\left(x\right) = \operatorname{ReLU}\left(xW_1 + B_1\right)W_2 + B_2 \label{eq:ffn}
+		\operatorname{TransformerBlock}\left(X\right) = \operatorname{FFN}\left(\LN\left(X + \MHSA\left(X\right)\right)\right)\label{eq:transformer_block}
+	 \end{equation}
+	 The feed-forward network transform each element \({\left(Z_i\right)}_{1 \leq i \leq L}\) independently with two successive linear transformation with an intermediate \(\operatorname{ReLU}\) activation~(\cref{eq:ffn}).
+	 \begin{equation}%add add norm 
+		 \operatorname{FFN}\left(X\right) = \LN\left( X + \operatorname{ReLU}\left(XW_1 + B_1\right)W_2 + B_2\right) \label{eq:ffn}
 	 \end{equation}
 	 Usually, the input is first projected in a higher dimension, \(4d\), and projected back to its original dimension, \(d\).
 	 In addition to these two elements, the encoder blocks include a layer normalization known to speed up the training and skip connections to prevent vanishing gradients.
