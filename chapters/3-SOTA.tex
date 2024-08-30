@@ -478,50 +478,74 @@
 			The first projection requires \(C^{2M}\) parameters; this can easily represent billions of parameters for multiclass problems with multiple modalities.
 			This integration strategy cannot be considered in some scenarios as the memory requirements are too high.
 			Subsequent works replaced the individual omics predictors based on \gls{gcn} with one based on \gls{gat}~\cite{MODILM,Leng2022}.
-
-			HyperTMO brca subtype
-			mRNA miRNA DNAm
-			hypergraphs construction which can better represent the complex association and heterogeneous of multi-omics data.
-			each vertex corresponds to a patient sample, and
-			each hyperedge contains an arbitrary subset of the set V
-			The KNN algorithm (Zhang and Zhou 2007) was utilized
-			to construct the hypergraph structure for each omics data
-			type based on the sample similarity matrix. HGCN
-			Evidence results of each omics data type are subjected to confidence and uncertainty estimation.
-			Evidence from different views is combined to produce trusted
-			results
-
-			% 		The shortcoming of such integration strategy is that it cannot
-			% capture inter-omics interactions and at no point in the learning
-			% process can the different machine learning models share knowledge and utilize the complementarity information between omics.
-			% Combining predictions is simply not enough to accurately exploit
-			% multi-omics data and understand the underlying biological mechanisms of diseases. For that reason, and because it boils down to
-			% multiple single-omics analysis, we will not discuss it further. \cite{Picard2021}
+			HyperTMO~\cite{Wang2024} is another late fusion strategy used to integrate mRNA, miRNA and DNAm. 
+			Each omics is processed independently using \gls{hgcn}. 
+			\Glspl{hgcn} are similar to \glspl{gcn} but instead of using a graph they use an hypergraph. 
+			An hypergraph is a generalization of a graph where edges can join any number of nodes. 
+			In their study, each nodes represents a patient and the edges were determined by applying the \gls{knn} algorithm on the patient similairity matrix. 
+			\Glspl{hgcn} are used to extract evidences from each omics. 
+			The evidences are then parameterized with a 
+			Each network provide evidences Dirichlet distribution for uncertainty estimation. 
+			This uncertainty estimation us used to weight the reliability of each omics. 
+			The different evidences are combined using an evidential reasoning approach, the fusion is done considering the uncertainty of each evidence. 
+			The combined evidence is used to make the final classification. 
+			
+			Late fusion approaches cannot capture inter-omics interactions and use the complementarity information between omics~\cite{Picard2021}. 
+			A simple combination of the different predicitons might not be sufficient to consider the complex omics interactions.
 
 		\subsubsection{Intermediate fusion}
-			Due to its flexibility... widely used
+			Intermediate fusion is a flexible approach that can adapt complex integration scheme.
+			This flexibility might explain why this approach has been widely studied. 
 
-			% AE and VAE
-			\cite{DeepProg} mRNA, miRNA, DNAm, intermediate fusion
-			clustering to idneitfy subtypes, labels used to construct a SVM classifier
-			In DeepProg, \citeauthor{DeepProg} proposed an ensemble of \gls{ae}; for each omics, an \gls{ae} is used to create a lower dimensional representation~\cite{DeepProg}.
-			Survival-associated features are then selected in each latent representation to construct the multimodal representation.
-
-			\cite{Wissel2021} hierarchical autoencoders
-			modality specific autoencoders supervised with a cox loss
-			an integration methods to combine the different latent spaces
-			intermediate fusion, comparison of different approaches
-			concatenation, pooling (mean or max), another level of AE (hierarchical)
-			hierarchical methods is the best
-			survival tasks (Cox)
-			omics CNV, SNV, miRNA, mRNA, DNA, proteins
-
-			Deepathology~\cite{Azarkhalili2019}: multitask model, includes modality translation
-			AE and VAE: encode mRNA profile.
-			multi task from the latent representation
-			coding genes only
-			using of cosine similarity for classification tasks ??
-			4 tasks: mRNA and miRNA profile prediction, tissue and caner type predicition, jointly trained on all losses
+			\Glspl{ae} have been widely used for intermediate fusion of multi-omics data. 
+			One \gls{ae} is trained per omics and the latent representation are combined into a multimodal representation. 
+			The newly constructed representation is then used for downstream tasks such as cancer classification or survival predictions.
+			\citeauthor{DeepProg} proposed DeepProg~\cite{DeepProg} an architecture based on \glspl{ae}.
+			Survival associated features are selected in each omics latent representation. 
+			The resulting features are concatenated and used to construct an \gls{svm} based classifier to predict the survival risk groups. 
+			Other ways of combining the latent representation have been explored. 
+			In~\cite{Wissel2021}, \citeauthor{Wissel2021} explored various ways of combining the latent representation: 
+			\begin{itemize}[nosep]
+				\item concatenation of the different latent spaces,
+				\item mean or max pooling of the different latent spaces,
+				\item after concatenating the different latent spaces a second level \gls{ae} is added (hierarchical).
+			\end{itemize} 
+			To ensure a relevant latent space for downstream tasks, a supervision of the individual latent spaces was added and all \glspl{ae} are jointly trained. 
+			They showed that the best strategy was the hierarchical \gls{ae}. 
+			\citeauthor{Tong2021}~\cite{Tong2021} proposed to combine the latent spaces by taking the average of the latent spaces learned from each omics and added consensus constraints between latent representation.
+			The consensus constraints is achieved by adding a regularization maximizing the cosine similarity between latent spaces. 
+			Hierarchical \glspl{ae} concatenate all the latent representation available before passing the resulting representation to the secondary \gls{ae}. 
+			\citeauthor{Wu2022StackedAB} proposed a variation of this scheme where only two modalities are initially combined and passed to secondary \gls{ae}. 
+			The latent spaces obtained with the secondary \gls{ae} is combined with a third modality and passed to a third \gls{ae}. 
+			If they are more modalities the process is repeated. 
+			They called this approach stacked-\gls{ae}~\cite{Wu2022StackedAB}. 
+			The encoder-decoder architecture allows to create new training strategies. 
+			The classical way to train an \gls{ae} is to use the decoder to reconstruct the input, in a multi-omics framework the decoder can also be used to reconstruct the other modalities. 
+			DeePathlogy\footnote{Suprisingly they used a cosine-similarity loss for their classification tasks.}~\cite{Azarkhalili2019} uses an encoder to encode mRNA expression profile and the a decoder that reconstruct the mRNA profile but also predict the level of miRNA expression. 
+			They did ensure that no miRNA genes were present in the mRNA expression profile. 
+			This translation tasks forces the network to learn the relationships between the two omics and thus should improve the latent representation.
+			Instead of having a single \gls{ae}, \citeauthor{CrossAE} proposed to have one \gls{ae} per omics and each \gls{ae} reconstruct its input and the other omics. 
+			In a first step, each \gls{ae} is trained to reconstruct its input, in a second step the latent representation of each omics is passed to the decoder of the other omics to reconstruct the second omics~\cite{CrossAE}. 
+			In a final step the latent spaces are combined with an element-wise average and passsed to task-specific network. 
+			With this strategy, the authors aims to extract the consensus information across the different omics. 
+			As their strategy of combining encoders and decoders from different omics significantly increases the number of calculation, for \(M\) modalities there are \(M(M-1)\) combinations to consider, they restricted their analysis to pair of modalities. 
+			\Glspl{vae} have also been explored with intermediate fusion strategies. 
+			Each omics is individually processed with \glspl{fcn}, the latent representation are combined and the variational framework is applied on this combined representation. 
+			In~\cite{Zhang2019}, authors used this strategy to integrate mRNA and DNAm expression profiles. 
+			However as they used raw CpGs features, the first \gls{fcl} were restricted to CpGs features belonging to the same chromosome in order to reduce the number of parameters in the network encoding DNAm.
+			The mean of the latent state distributions was used in a task-specific network. 
+			The task-specific network and the \gls{vae} were jointly trained. 
+			The authors proposed an extension of their approach were they added multiple supervision of the latent space: cancer classification, survival prediction, demographic (age, gender) prediction~\cite{Zhang2021}. 
+			Instead of jointly training the networks \citeauthor{Hira2021} used the mean of the latent state distributions to construct an \gls{svm} classifier and a Cox model~\cite{Hira2021}.
+			\citeauthor{customics} proposed a method combining \glspl{ae} and \glspl{vae}~\cite{customics}.
+			Each modality is encoded with its own \gls{ae}; the different \glspl{ae} are trained individually. 
+			Afterwards, the different latent spaces are passed to a central \gls{vae}. 
+			During the training of the central \gls{vae} omics \glspl{ae} are finetuned.  
+			
+			In custOmics, \citeauthor{customics} combine \gls{ae} and \gls{vae}; each modality is encoded with an \gls{ae}, and the multimodal representation is obtained by passing all the latent spaces in a \gls{vae}~\cite{customics}.
+			hierarchical mixed integration, 2 training phases: 1 each ae individually then a joint integration and fine tuning the AEs
+			task: survival or classification (cancer or subtype)
+			CNV, DNAm, mRNA, IF
 
 			omiVAE~\cite{Zhang2019}: VAE intermediate fusion
 			use of CpG features, high numbers,
@@ -544,6 +568,28 @@
 			different tasks after unsupervised training: subtype (SVM), survival (CoxPH)
 			intermediate fusion
 			multi omics no improvement over single omics equivalent for classification tasks
+			% AE and VAE
+			\cite{DeepProg} mRNA, miRNA, DNAm, intermediate fusion
+			clustering to idneitfy subtypes, labels used to construct a SVM classifier
+			In DeepProg, \citeauthor{DeepProg} proposed an ensemble of \gls{ae}; for each omics, an \gls{ae} is used to create a lower dimensional representation~\cite{DeepProg}.
+			Survival-associated features are then selected in each latent representation to construct the multimodal representation.
+			Feature selection variance threshold 
+
+			\cite{Wissel2021} hierarchical autoencoders
+			modality specific autoencoders supervised with a cox loss
+			an integration methods to combine the different latent spaces
+			intermediate fusion, comparison of different approaches
+			concatenation, pooling (mean or max), another level of AE (hierarchical)
+			hierarchical methods is the best
+			survival tasks (Cox)
+			omics CNV, SNV, miRNA, mRNA, DNA, proteins
+
+			Deepathology~\cite{Azarkhalili2019}: multitask model, includes modality translation
+			AE and VAE: encode mRNA profile.
+			multi task from the latent representation
+			coding genes only
+			using of cosine similarity for classification tasks ??
+			4 tasks: mRNA and miRNA profile prediction, tissue and caner type predicition, jointly trained on all losses
 
 			\cite{Tong2021} autoencoders intermediate fusion
 			concatenate latent spaces, or pooling
@@ -570,21 +616,6 @@
 			An \gls{ae} is trained for each modality, and latent spaces are concatenated and fed to a multimodal \gls{ae} or a prediction network~\cite{CrossAE, HierachicalAE}.
 			New training strategies like cross-modality translation have been devised with the encoder-decoder architecture.
 			After encoding a modality, the decoder reconstructs not only the input modality but also other modalities~\cite{CrossAE}.
-
-			In custOmics, \citeauthor{customics} combine \gls{ae} and \gls{vae}; each modality is encoded with an \gls{ae}, and the multimodal representation is obtained by passing all the latent spaces in a \gls{vae}~\cite{customics}.
-			Those reconstruction methods are suitable for unsupervised training when no labels are available, but reconstruction of large dimensional vectors such as omics profiles is challenging.
-			hierarchical mixed integration, 2 training phases: 1 each ae individually then a joint integration and fine tuning the AEs
-			task: survival or classification (cancer or subtype)
-			CNV, DNAm, mRNA, IF
-
-			A Variational Information Bottleneck Approach to Multi-Omics Data Integration
-			\cite{Lee2021AVI}
-			mRNA, DNAm, miRNA, Protein
-			learning from incomplete multi-view observations
-			omics = views handle missingness patterns
-			IF, view specific encoders = obtain a latent representation
-			product of experts get a joint representation
-			predictor from the joint repr and one predictor for each encoder
 
 			% FCN/MLP
 
@@ -658,6 +689,15 @@
 			force similarity of the latent representation, for each pairs of modality that is present similairity based loss
 			survival task
 			multimodal dropout improve the network’s ability to deal with missing data. In this method, instead of dropping neurons, we drop entire feature vectors corresponding to each modality
+
+			A Variational Information Bottleneck Approach to Multi-Omics Data Integration
+			\cite{Lee2021AVI}
+			mRNA, DNAm, miRNA, Protein
+			learning from incomplete multi-view observations
+			omics = views handle missingness patterns
+			IF, view specific encoders = obtain a latent representation
+			product of experts get a joint representation
+			predictor from the joint repr and one predictor for each encoder
 
 			% GNN 
 			DeepMOCCA~\cite{Althubaiti_2021}: GCN on PPI graph, concat features and map them to the corresponding nodes

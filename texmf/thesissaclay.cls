@@ -229,6 +229,7 @@
 }
 
 \DefTblrTemplate{firsthead}{default}{%
+	\addtocounter{table}{-1}%
 	\IfTokenListEmpty{\InsertTblrText{entry}}{%
 		\captionsetup{type=table}%
 		\caption{\InsertTblrText{caption}}%

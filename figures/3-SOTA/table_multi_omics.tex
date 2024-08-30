@@ -6,6 +6,7 @@
 	note{a} = {EF = Early Fusion, LF = Late Fusion, IF = Intermediate Fusion},
 	note{1} = {As a classification task, estimate survival groups},
 	note{2} = {based on the result of a clustering},
+	note{3} = {A patient hypergraph},
 	]{
 	colspec = {Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[l,m,, wd=2.8cm]},%
 	cell{1}{2-8} = {halign=c,cmd=\rothead},
@@ -15,9 +16,9 @@
 	row{14} = {belowsep=10pt},
 	row{15} = {abovesep=10pt},
 	hline{15} = {dashed, 0.75pt},
-	row{17} = {belowsep=10pt},
-	row{18} = {abovesep=10pt},
-	hline{18} = {dashed, 0.75pt},
+	row{18} = {belowsep=10pt},
+	row{19} = {abovesep=10pt},
+	hline{19} = {dashed, 0.75pt},
 	column{2-7} = {colsep=1pt},
 	column{1} = {colsep=3pt},
 	column{8-12} = {colsep=5pt},
@@ -43,6 +44,7 @@
 	\cite{MOGONET}        & \faCircle & \faCircle           & \faCircle  &         &  &  & LF                 & subtype                 & \glsxtrshort{gnn}       & patient  &  \\
 	\cite{MODILM}        & \faCircle  & \faCircle           & \faCircle  &         &  &  & LF                 & subtype                 & \glsxtrshort{gat}       & patient  & Feature selection (variance threshold)  \\
 	\cite{Sun2019}        &  &           &  &         &  &  & LF                 &                 & \glsxtrshort{mlp}       &  &  \\
+	\cite{Wang2024} & \faCircle  & \faCircle          & \faCircle  &         &  &  & LF                 & subtype                & \glsxtrshort{hgcn}       & Patient\TblrNote{3}  &  \\
 
 
     \cite{SALMON}        & \faCircle &    \faCircle       &  &         & \faCircle &  & IF                 & surv                & \glsxtrshort{mlp} &       & Feature selection (threshold) \\
