@@ -434,11 +434,11 @@
 			All the PCAs pathway matrices are concatenated to form a single matrix: \(Z^{m} \in \symbb{R}^{n \times 146k}\).
 			The matrix is then rearranged to obtain a matrix representation for each sample: \(Z_{i}^{m} \in \symbb{R}^{146 \times k}\), then the representation of the different omics are combined to form the pathway image \(Z_{i} \in \symbb{R}^{146 \times mk}\).
 			Finally, pathways (\ie{}rows) are reordered to have correlated pathways close to each other.
-
-			\Glspl{gnn} with an early fusion strategy have also been applied to integrate multi-omics data with different types of graphs: \gls{ppi}~\cite{Guo2023} or patient similarity graphs~\cite{MoGCN}.
+		
+			\Glspl{gnn} with an early fusion strategy have also been applied to integrate multi-omics data with different types of graphs: \gls{ppi}~\cite{Althubaiti_2021,Guo2023} or patient similarity graphs~\cite{MoGCN}.
 			In MoGCN~\cite{MoGCN}, the graph is obtained by fusing the patient similarity graphs obtained on each omics with \gls{snf}.
 			In an early fusion context, the features from the different omics are concatenated before being mapped to the graph nodes.
-			Each node represents a gene for the \gls{ppi} graph; therefore, features corresponding to this gene from the different omics are concatenated.
+			For the \gls{ppi} graph each node represents a gene; therefore, features corresponding to this gene from the different omics are concatenated.
 			The node embedding is a vector \(h_{v} \in \symbb{R}^{M}\), where \(M\) is the number of omics considered.
 			For patient graphs, each node represents a patient, and the node embedding is the concatenation of the \(M\) expression profile of the corresponding patient: \(h_{v} \in \symbb{R}^{\sum_{i=1}^{M}d_i}\).
 			Instead, the latent representation obtained with an \gls{ae} on the concatenated expression profile can also be used~\cite{MoGCN}.
@@ -446,6 +446,14 @@
 			Then, \gls{gcn} are applied on the graph to obtain a new graph representation for \glsxtrshort{ppi}-based approach and a new node representation for the patient-graph approach.
 			\citeauthor{Guo2023}~\cite{Guo2023} applied an attention mechanism to the initial node embedding \(X\).
 			This attention mechanism is used to capture the association between the different omics.
+			AGMI~\cite{AGMI} proposed an early fusion approach based on an homogeneous multigraph. 
+			Each node represent a gene and there are three types of edges: 
+			\begin{itemize}[nosep]
+				\item edges extracted from \gls{ppi},
+				\item edges connecting genes involved in a common pathway,
+				\item edges based on expression profile correlation. 
+			\end{itemize}
+			The message-pasing step is done sequentially for each type of edge.
 
 			Architectures based on the Transformer architecture have been proposed.
 			\citeauthor{SubtypeFormer} proposed applying self-attention on the concatenation of the multi-omics features~\cite{SubtypeFormer}.
@@ -541,228 +549,74 @@
 			Each modality is encoded with its own \gls{ae}; the different \glspl{ae} are trained individually. 
 			Afterwards, the different latent spaces are passed to a central \gls{vae}. 
 			During the training of the central \gls{vae} omics \glspl{ae} are finetuned.  
-			
-			In custOmics, \citeauthor{customics} combine \gls{ae} and \gls{vae}; each modality is encoded with an \gls{ae}, and the multimodal representation is obtained by passing all the latent spaces in a \gls{vae}~\cite{customics}.
-			hierarchical mixed integration, 2 training phases: 1 each ae individually then a joint integration and fine tuning the AEs
-			task: survival or classification (cancer or subtype)
-			CNV, DNAm, mRNA, IF
-
-			omiVAE~\cite{Zhang2019}: VAE intermediate fusion
-			use of CpG features, high numbers,
-			These methylation
-			features are separated into different fully connected blocks
-			according to their targeting chromosomes in order to reduce
-			the number of parameters in fully connected layers that encode
-			methylation data
-			each modality process individually before conatenting a latent representation, decoder mirrored architecture
-			multimodal latent space supervision cancer type
-			mRNA and DNAm
-
-			omiEMbedded~\cite{Zhang2021} VAE similar to omiVAE but FC or CNN based
-			multitask cancer, survival, demographic gender/age predicition
-			miRNA, mRNA, DNAm
-
-			\cite{Hira2021}: similar to omiVAE but on survival task
-			use 3 omics: mRNA, CNV, DNAm and combination of only 2
-			focus on ovarian cancer
-			different tasks after unsupervised training: subtype (SVM), survival (CoxPH)
-			intermediate fusion
-			multi omics no improvement over single omics equivalent for classification tasks
-			% AE and VAE
-			\cite{DeepProg} mRNA, miRNA, DNAm, intermediate fusion
-			clustering to idneitfy subtypes, labels used to construct a SVM classifier
-			In DeepProg, \citeauthor{DeepProg} proposed an ensemble of \gls{ae}; for each omics, an \gls{ae} is used to create a lower dimensional representation~\cite{DeepProg}.
-			Survival-associated features are then selected in each latent representation to construct the multimodal representation.
-			Feature selection variance threshold 
-
-			\cite{Wissel2021} hierarchical autoencoders
-			modality specific autoencoders supervised with a cox loss
-			an integration methods to combine the different latent spaces
-			intermediate fusion, comparison of different approaches
-			concatenation, pooling (mean or max), another level of AE (hierarchical)
-			hierarchical methods is the best
-			survival tasks (Cox)
-			omics CNV, SNV, miRNA, mRNA, DNA, proteins
-
-			Deepathology~\cite{Azarkhalili2019}: multitask model, includes modality translation
-			AE and VAE: encode mRNA profile.
-			multi task from the latent representation
-			coding genes only
-			using of cosine similarity for classification tasks ??
-			4 tasks: mRNA and miRNA profile prediction, tissue and caner type predicition, jointly trained on all losses
-
-			\cite{Tong2021} autoencoders intermediate fusion
-			concatenate latent spaces, or pooling
-			for pooling add contraints by macimizing cosine similarity of the latent spaces
-			mRNa, MiRNA, DNAm, CNV
-			PCA transformation of each modality or threshold on variance
-			cancer type or survival
-
-			Stacked AEs~\cite{Wu2022StackedAB}
-			mRNA, CNV, clinical
-			log rank test to selecte features
-			intermediate fusion
-			1 AEs per omics, concat latent spaces, new AE, ...
-			survival prediction
-			multistep predicition
-
-			ConcatAE and CrossAE~\cite{CrossAE} mRNA, miRNA, DNAm, CNV / IF
-			task = survival or BRCA subtype
-			features selection: variance threshold or PCA dim reduction
-			ConcatAE jointly trained
-			CrossAE multiple step training: 1 reconstruct the encoded omics, 2 reconstruct the other omics (translation) 3 elementwise average of latent spaces, passed to a classifier
-			actually applied only on pairs of modality
-			\glspl{ae} are also used with intermediate fusion strategies.
-			An \gls{ae} is trained for each modality, and latent spaces are concatenated and fed to a multimodal \gls{ae} or a prediction network~\cite{CrossAE, HierachicalAE}.
-			New training strategies like cross-modality translation have been devised with the encoder-decoder architecture.
-			After encoding a modality, the decoder reconstructs not only the input modality but also other modalities~\cite{CrossAE}.
 
 			% FCN/MLP
-
-			SALMON~\cite{SALMON} mRNA, miRNA, CNV
-			variance threshold on features
-			SALMON is a model combining an intermediate fusion strategy with a \gls{mlp}~\cite{SALMON}.
+			As for previous fusion strategy, reconstruction of large dimensional vectors such as omics profiles is challenging.
+			\Glspl{fcn} are used to encode the different omics profile into a latent representation, then representations are combined and passed to task-specifc network. 
+			These approaches are exclusively trained in a supervised fashion, even though modalities encoders can be pretrained. 
+			MultiSurv~\cite{MultiSurv} is a method that has been proposed to integrate mRNA, CNV, miRNA, DNAm, clinical information and \gls{wsi} to estimate patient survival time.
+			Omics data and clinical information are encoded with an \gls{fcn}, \gls{wsi} is encoded with a CNN. 
+			Each modality encoders is used to project its input into a 512-dimensional space. 
+			Modalities representation are fused into a single representation by taking the maxima of each latent features over the different modalities. 
+			In their study, authors compared various combination of modalities and their impact on the predictive performances\footnote{Concordance-index, as they perform a survival-time prediction}. 
+			However all the combinations they considered included the clinical information and many combinations had worse performances than the same model trained on clinical information only. 
+			This suggest that the clinical information is a key modality when doing survival predictions. 
+			The maximum pooling on the latent representation proposed in MultiSurv~\cite{MultiSurv} to fused multiple modalities add an implicit coordination constraints on the latent features of the different modalities. 
+			Instead various approaches simply concatenate the latent representation into a single multimodal representation~\cite{MOLI,Lin2020}.
+			\citeauthor{SALMON} also proposed a concatenation-based fusion but they transformed raw espression profile into a representation incorporating knowledge~\cite{SALMON}.
 			Omics features are transformed to an eigengene matrix, a weighted average of gene expression of genes in a given set of genes, before being fed to an \gls{mlp}.
-			survival task
-
-			MultiSurv~\cite{MultiSurv} indiividual encoders for each modality (CNN for WSI), mlp for others,
-			intermediate fusion by pooling the various latent representatino
-			WSI encoder pretrained on imagenet
-			tested various combination of modalities but always  included clinical information and obtained similar performances to model trained only on clinical data only +mRNA obtain better perf on this specific taks, suggest that survival prediciotn is driven by clinical information (gender, disease treatment, ...)
-			survival prediciotn
-			WSI, clinical, mRNA, miRNA, DNAm, CNV
-
-			MOLI~\cite{MOLI}
-			mRNA, SNV, CNV
-			task = drug response, IF
-			1 encoder per omics , concat features, passed to a classifier network
-			MLP
-
-			Classifying Breast Cancer Subtypes Using Deep Neural Networks Based on Multi-Omics Data~\cite{Lin2020} = DeepMO
-			mRNA, DNAm, CNV
-			subtype classification ?
-			chi2 test to select top features done separately on each omics
-			each omics is encoded individually MLP
-			IF concat latent representation
-			passed to another network for prediction
-
-			% GAN
-			\Glspl{gan} have been explored as a way of integrating two omics.
-			The generative process is used to construct an enriched feature set combining the information of the other omics and their interaction network~\cite{omicsGAN}.
-			miRNA and mRNA, exploit miRNA-mRNA network
-			applied on a bipartite graph intermediate Fusion
-			survival task
-
-			SADLN~\cite{SADLN} Encoder decoder architecture VAEs + GAN with self attention
-			CNV, DNAm, miRNA, mRNA
-			Feature selection threshold
-			subtype clustering (Gaussian mixture model)
-			IF concat latent representation
-			compute self attention between samples of the same batch
-			add a discriminator
-
-			% cnn 
-			An integrative deep learning framework for classifying molecular subtypes of breast cancer~\cite{MohaiminulIslam2020}
-			CNV + mRNA
-			CNN IF, subtype classification
-			explore sharing weight between the 2 branch (ie each omics) but reduced perf
-
-			% self-supervised / contrastive 
-			SelfOmics~\cite{selfOmics}
-			cancer type classification
-			mRNA, DNAm, miRNA
-			focus on self supervised training, and pretrining of modality AEs
-			obtain 3 latent representation one for each omics
-			mRNA and DNAm features are grouped by chromosomes, Fullyconnected only if on the same chr
-			losses:
-			1. reconstruction loss, from one latent representation reconstruct all the omics
-			2. reconstruct the input omics but some features associated to a chr where masked
-			3. alignment loss of the 3 latent representation based on CLIP
-
-			cat all latent repre and mlp to predict cancer type = IF
-			showed that pretraining encoders help boos perf however the impact of the different self supervised loss is limited on the classification perf
-			while they state that their methods is able to handle missing omics data during pretraining by only training the AEs of the available omics they do not evaluate the impact of omics data
-
-			\cite{Cheerla2019}
-			miRNA, mRNA, WSI
-			intermediate fusion transform each modality in a latent representation
-			force similarity of the latent representation, for each pairs of modality that is present similairity based loss
-			survival task
-			multimodal dropout improve the network’s ability to deal with missing data. In this method, instead of dropping neurons, we drop entire feature vectors corresponding to each modality
-
-			A Variational Information Bottleneck Approach to Multi-Omics Data Integration
-			\cite{Lee2021AVI}
-			mRNA, DNAm, miRNA, Protein
-			learning from incomplete multi-view observations
-			omics = views handle missingness patterns
-			IF, view specific encoders = obtain a latent representation
-			product of experts get a joint representation
-			predictor from the joint repr and one predictor for each encoder
-
-			% GNN 
-			DeepMOCCA~\cite{Althubaiti_2021}: GCN on PPI graph, concat features and map them to the corresponding nodes
-			use a self attention based pooling to identify prognostic markers genes
-			omics: mRNA, DNAm, CNV, SNV, clinical
-			use of absolute and differential data
-			survival cox
-
-			MultiGATAE~\cite{MultiGATAE} GAT + AE
-			patient similarity graph for each omics, then apply SNF
-			mRNA, DNAm, miRNA
-			GAT with the SNF graph for each omics, combine the latent representation with an attention based mechanism
-			attention weight is determinded by a linear combination of the graph representation and structure
-			latent representation passed to decoder to reconstruct the similairity graph
-			early and intermediate fusion
-			K-means clustering (cancer subtyping) on the latent representation after training
-
-			Variation of MultiGATAE~\cite{Zhang2022}, instead of representing each patient with its full profile, use autoencoders to embedded each expression profile.
-			pass to a GCN where all layers are densely connected, ie a layer is connected to all downstream layers
-			compared combination show that the multiomics was the best
-			task: predict subtype
-			mRNA, DNAm, CNV
-
-			\cite{Yin2022} mRNA, CNV, SNV,
+			Similarly, \gls{cnn} have been explored as a way to encode individual omics before fusing their latent representation by concatenation~\cite{MohaiminulIslam2020}. 
+			Authors also explored weight sharing between the different omics branches, but this strategy reduced the overall performances.
+			\cite{Yin2022} mRNA, CNV, SNV, CNN
 			threshold filtering
 			supervised feature slecteion based on LASSO
 			patient graph from mRNA data
 			non linear transformation of the omics data then concatenation, IF
 			maps the new representation to each nodes
 			GCN , subtype prediction
+			\Glspl{gan} have been explored as a way of integrating two omics.
+			The generative process is used to construct an enriched feature set combining the information of the other omics and their interaction network~\cite{omicsGAN}.
 
-			AGMI~\cite{AGMI} GNN based on a multi-edge graph: multi types of edges between two nodes. node = genes , edges a known relation between 2 genes PPI, gene pathway, correlation
-			Early fusion concat features, map to nodes
-			aggregation from neighbouring nodes in three step, one for each edge type with a GRU as an attention guidance
-			CNV, mRNA, SNV drug adequation
+			% self-supervised / contrastive 
+			In the multimodal deep learning field, self-supervised learning has become an attractive strategy to learn from multiple modalities while benefiting from the large corpus of unlabelled data. 
+			\citeauthor{Cheerla2019} proposed to integrate multi-omics data by coordinating the different latent representation~\cite{Cheerla2019}. 
+			The latent spaces coordination is achieved by maximizing the cosine similarity between pairs of available latent representation.  
+			They also introduced a modality dropout strategy that drops entire features of one or more modality. 
+			This approach improved the network’s ability to deal with missing data.
+			SelfOmics focused on self-supervised training and explored various losses to fuse multi-omics data~\cite{selfOmics}: 
+			\begin{enumerate}[nosep]
+				\item reconstruction losses: from one latent representation all available omics are reconstructed. 
+				\item Masking: reconstruction of the input but features associated to a chromosome are masked. 
+				\item Alignment loss\footnote{inspired from CLIP}: alignment of pairs of modalities with a contrastive loss. 
+			\end{enumerate}
+			They also showed that pretraining modality-specifc encoders boost predictive performances. 
+			However, the impact of the different self-supervised losses on the classificatio task remain limited. 
 
-			Multi-Omic Graph Transformers for Cancer Classification and Interpretation~\cite{Kaczmarek2021}
-			mRNA and miRNA
-			GAT on a bipartite graph, miRNA-mRNA [TargetScan]
-			positional encoding of the nodes
-			feature selection: knowledge and variance threshold
-			IF  cancer classification
+			\Glspl{gnn} have been widely studied for the intermediate fusion of multi-omics data as graphs are ubiquitous in biology. 
+			\citeauthor{Kaczmarek2021}~\cite{Kaczmarek2021} exploited the knwon interactions between mRNAs and miRNAs by constructing a \gls{gat} applied on a miRNA-mRNA bipartite graph extracted from TargetScan. 
+			More complex graphs ave also been explored. 
+			\citeauthor{Li2024} constructed an heterogeneous multigraph~\cite{Li2024}: 
+			\begin{itemize}[nosep]
+				\item there are two types of nodes: genes and miRNA;
+				\item there are three different types of edges:
+				\begin{itemize}[nosep]
+					\item edges extracted from BioGRID\cite{biogrid} connecting two genes nodes,
+					\item edges extracted from miRDB\cite{mirdb} connecting a miRNA node and its target gene node,
+					\item edges connecting miRNA nodes targetting the same gene. 
+				\end{itemize}
+			\end{itemize}
+			They proposed a mixed integration scheme, mRNA and CNV are fused early to construct the gene-node embeddings and miRNA is incorporated into the final representation later through the graph convolutions. 
+			Instead of graph constructed from biological knowledge, patient graph have also been considered. 
+			\citeauthor{MultiGATAE}~\cite{MultiGATAE} construct a patient graph for each omics and combined the graph with \gls{snf}. 
+			The resulting graph is used to construct a \gls{gat} for each omics, the full expression profile is mapped to the corresponding patient node. 
+			The latent representations are combined with an attention mechanism, attention weights are estimated by a linear projection of the graph representation and structure. 
+			The training objective was to reconstruct the original graph structure from the multimodal embedding. 
+			After the training this embedding was used as input to clustering algorithm to identify cancer subtypes. 
+			Instead of representing each patient by its full expression profile, \citeauthor{Zhang2022}~\cite{Zhang2022} used \glspl{ae} to embedded each expression profile. 
+			They used a densely connected \gls{gcn}, a layer is connected to all subsequent layers. 
+			In SUPREME~\cite{Kesimoglu2022}, \citeauthor{Kesimoglu2022} used a supervised training strategy to identify cancer subtypes. 
+			They also used a patient similairity graph and to reduced the node embeddings dimension they appllied a prior feature selection based on a \gls{rf} algorithm. 
 
-			SUPREME~\cite{Kesimoglu2022} GCN subtype or survival patient similairity graph 1 per omics
-			apply GCN to generate a patient embedding by concat all the patient embedings combination obtain from the different graphs
-			feature selection step to create the raw feature embedings
-			mRNA, miRNA, DNAm, CNV, SNV
-			kept differentially expressed genes
-
-			A multimodal graph neural network framework for cancer molecular subtype classification~\cite{Li2024}
-			mRNA, miRNA, CNV, subtype
-			feature selection variance threshold
-			heterogeneous graph gene-gene interaction from biogrid and miRNA-mRNA from miRDB + metapath connect miRNA if they are connected to the same genes
-			3 type of edges
-			two types of nodes: genes 2D features (mRNA+CNV), miRNA (1d features)
-			nodes features are passed through a FCN to increase their dimension to F
-			GCN or GAT
-			mixed integration: EF and IF
-
-			Classifying breast cancer using multi-view graph neural network based on multi-omics data~\cite{Ren2024}
-			mRNA, DNAm, CNV
-			feature selection top based on chi2 + minimum Redundancy Maximum Relevance
-			GNN patient similarity
-			1 graph and 1 GCN per omics IF
-			Fuse the omics based on attention: GAT ?
 
 			% Attention
 			TransVCOX: Bridging Transformer Encoder and Pre-trained VAE for Robust Cancer Multi-Omics Survival Analysis~\cite{10385668}
