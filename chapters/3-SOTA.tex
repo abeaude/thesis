@@ -617,44 +617,25 @@
 			In SUPREME~\cite{Kesimoglu2022}, \citeauthor{Kesimoglu2022} used a supervised training strategy to identify cancer subtypes. 
 			They also used a patient similairity graph and to reduced the node embeddings dimension they appllied a prior feature selection based on a \gls{rf} algorithm. 
 
-
-			% Attention
-			TransVCOX: Bridging Transformer Encoder and Pre-trained VAE for Robust Cancer Multi-Omics Survival Analysis~\cite{10385668}
-			survival, pretrain a VAE for each omics, used the latent space in a second step for the integration
-			IF, use of self-attention on each omics after embedding them embedding to get the correct shape for attention
-			survival pred
-			mRNA, CNV, microbiome data
-
-			Multimodal attention-based variational autoencoder for clinical risk prediction~\cite{Li2023}
-			same as previous but no VAE pretraining
-
-			%DeepKEGG: a multi-omics data integration framework with biological insights for cancer recurrence prediction and biomarker discovery
-			MOMA~\cite{MOMA}
-			project the different features into a set of modules of same dimensions, each module is represented by a vector
-			attention mechanism (cosine similarity) used to focus on modules with high similarity between 2 different modalities
-			mRNA, DNAm, cancer type classification
-			DNAm CpG mapped to genes
-			explainable model, detect important modules related to the predicited phenotype then select the most important features of each modules, pathway enrichment analysis applied afterwards to identify the most important pathways
-			intermediate fusion
-
-			MOCAT~\cite{Yao_2024}
-			mRNA, DNAm, miRNA
-			subtype or grade
-			pretrain AEs to have a latent repr for each omics
-			supervised latent space
-			IF, cross omics fusion
-			concat latent repr, passed to a multimodal AEs
-			latent space passed to a attention layer, self attention but applied between samples !!
-
-			moBRCA~\cite{moBRCA}
-			DNAm, mRNA, miRNA, cancer subtype
-			Feature selection based on gene differential expression
-			selected features linke to the selected genes in the other omics
-			targeted by a miRNAs or methylation of the corresponding promoter
-			embedding of the expression profile to high dim. Each scalar feature randomly mapped to a Kdim vector
-			compute attention score with tanh activation gate
-			IF = concat new representation
-			subtype prediction with FC network
+			In machine learning, attention mechanisms correspond to a weighting of the data. 
+			There are various ways of computing attention weights, the most well known being the self-attention mechanism used in the Transformer architecture~\cite{AttentionAllYouNeed}. 
+			\citeauthor{MOMA}~\cite{MOMA} proposed an attention mechanism based on cosine similarity. 
+			In each omics, features are projected into a set of different modules, and each module is represented by a vector.
+			The attention mechanism is then used to focus on modules with high similairity between two omics. 
+			Their approach can be extended to more than two omics but the computational cost increase as all pairs need to be considered.
+			The attention mechanism is later used to detect the most important modules and identify important genes. 
+			Identified genes are used in pathway enrichment analysis to identify the most important pathways. 
+			\citeauthor{moBRCA}~\cite{moBRCA} used another attention mechanism. 
+			Each scalar feature is mapped with a random embedding vector to a higher dimensional space. 
+			The resulting matrix is passed into a \gls{fcn} with hyperbolic tangent activation. 
+			A \(\softmax\) is then applied to normalize the attention weights. 
+			Approaches based on the self-attention mechanism have also been explored for intermediate fusion of multi-omics data~\cite{Yao_2024,Lan2024}.
+			Both methods proposed to use a \textit{row self-attention}, self-attention is used to compute interactions between patients.
+			In \cite{Lan2024}, each expression profile is transformed into a pathway representation. 
+			The pathway representation is obtained by concatenating scalar pathway representation which corresponds to the sum of features belonging to this pathway. 
+			Then, for each omics, self-attention is used to infer patient-interactions and the resulting representations are concatenated and passed to task-specifc classifier. 
+			In \cite{Yao_2024}, pretrained \glspl{ae} are used to embedded each omics profile, the concatenated representation is used as the input of a self-attention layer, computing patient interactions. 
+			Such uses of the self-attention to compute patient interactions can be seen as the application of a \gls{gat} on a complete patient graph\footnote{A graph where every pair of nodes is connected.}.
 
 			\ifSubfilesClassLoaded{%
 				\input{figures/3-SOTA/table_multi_omics.tex}%
@@ -662,8 +643,10 @@
 				\input{../figures/3-SOTA/table_multi_omics.tex}%
 			}
 
-			%A benchmark study of deep learning‑based multi‑omics data fusion methods for cancer
-			precise the CCL of this study
+			\citeauthor{Leng2022}~\cite{Leng2022} compared the three integration strategies with various architectures including \gls{fcn}, \gls{cnn}, \gls{gnn}, \gls{ae}. 
+			They showed that \gls{gnn} with an early fusion was the best methods for the supervised integration of multi-omics data. 
+
+			
 
 
 

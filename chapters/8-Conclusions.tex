@@ -38,4 +38,11 @@ IF, view specific encoders = obtain a latent representation
 product of experts get a joint representation
 predictor from the joint repr and one predictor for each encoder
 
+% \csvreader[
+% 	head to column names, 
+% 	centered tabularray={
+% 		colspec={S[table-format=2.2]S[table-format=2.2]S[table-format=2.2]S[table-format=2.2]S[table-format=2.2]S[table-format=2.2]}
+% 		}
+% 		]{temp.csv}{}{}
+\csvautotabularray[respect backslash=false, respect leftbrace=false, respect rightbrace=false]{temp.csv}
 \end{document}

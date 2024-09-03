@@ -3,25 +3,27 @@
 \begin{longtblr}[
 	caption = {examples multi omics},
 	entry = {short caption},
-	note{a} = {EF = Early Fusion, LF = Late Fusion, IF = Intermediate Fusion},
+	note{a} = {EF = Early Fusion, LF = Late Fusion, IF = Intermediate Fusion, EIF = Early and Late Fusion},
+	note{b} = {Trans. = Transformer, \tableabbrev{gnn}, \tableabbrev{gat}, \tableabbrev{hgcn}, \tableabbrev{cnn}, \tableabbrev{ae}, \tableabbrev{vae}, \tableabbrev{mlp}, \tableabbrev{gan}, \tableabbrev{fcn}},
 	note{1} = {As a classification task, estimate survival groups},
 	note{2} = {based on the result of a clustering},
 	note{3} = {A patient hypergraph},
 	note{4} = {use the latent space to construct a second model (\glsxtrshort{svm}, CoxPH)},
 	note{5} = {only pairs of modalities are considered},
 	note{6} = {also inlcudes \glsxtrshort{wsi}}, 
+	note{7} = {secondary tasks involved modality translation}, 
 	]{
-	colspec = {Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m, wd=2cm]Q[c,m]Q[c,m, wd=1.5cm]Q[l,m,, wd=2.8cm]},%
+	colspec = {Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m]Q[c,m, wd=2cm]Q[c,m, wd=1.4cm]Q[c,m, wd=1.5cm]Q[l,m,, wd=2.8cm]},%
 	cell{1}{2-8} = {halign=c,cmd=\rothead},
 	row{2-Z} = {font=\small},%
 	cell{2-Z}{2-7} = {font=\scriptsize},
 	row{1} = {valign=m},
-	row{14} = {belowsep=10pt},
-	row{15} = {abovesep=10pt},
-	hline{15} = {dashed, 0.75pt},
-	row{18} = {belowsep=10pt},
-	row{19} = {abovesep=10pt},
-	hline{19} = {dashed, 0.75pt},
+	row{15} = {belowsep=10pt},
+	row{16} = {abovesep=10pt},
+	hline{16} = {dashed, 0.75pt},
+	row{19} = {belowsep=10pt},
+	row{20} = {abovesep=10pt},
+	hline{20} = {dashed, 0.75pt},
 	column{2-7} = {colsep=1pt},
 	column{1} = {colsep=3pt},
 	column{8-12} = {colsep=5pt},
@@ -31,22 +33,22 @@
 			rowfoot = 0%
 		}
 	Ref.                   & mRNA                  & miRNA                 & DNAm                  & Protein   & CNV                   & SNV       & Fusion\TblrNote{a} & Task                       & Arch.              & Graph               & Feature engineering                                               \\
-	\cite{Althubaiti_2021} & \faCircle             &                       & \faCircle             &           & \faCircle             & \faCircle & EF                 & surv                       & \gls{gat}          & PPI                 & Differential expression                                           \\
-	\cite{Chaudhary2018}   & \faCircle             & \faCircle             & \faCircle             &           &                       &           & EF                 & surv\TblrNote{1}           & \glsxtrshort{ae}   &                     & Survival related features                                         \\
-	\cite{Lee2020}         & \faCircle             & \faCircle             & \faCircle             &           & \faCircle             &           & EF                 & surv\TblrNote{1}           & \glsxtrshort{ae}   &                     & Survival related features                                         \\
+	\cite{Althubaiti_2021} & \faCircle             &                       & \faCircle             &           & \faCircle             & \faCircle & EF                 & survival                       & \gls{gat}          & PPI                 & Differential expression                                           \\
+	\cite{Chaudhary2018}   & \faCircle             & \faCircle             & \faCircle             &           &                       &           & EF                 & survival\TblrNote{1}           & \glsxtrshort{ae}   &                     & Survival related features                                         \\
+	\cite{Lee2020}         & \faCircle             & \faCircle             & \faCircle             &           & \faCircle             &           & EF                 & survival\TblrNote{1}           & \glsxtrshort{ae}   &                     & Survival related features                                         \\
 	\cite{Guo2020}         & \faCircle             & \faCircle             &                       &           & \faCircle             &           & EF                 & subtype\TblrNote{2}        & \glsxtrshort{ae}   &                     &                                                                   \\
 	\cite{Yu2022}          & \faCircle             & \faCircle             &                       &           &                       &           & EF                 & subtype\TblrNote{2}        & \glsxtrshort{ae}   &                     &                                                                   \\
-	\cite{DeepOmix}        & \faCircle             &                       & \faCircle             &           & \faCircle             & \faCircle & EF                 & surv                       & \glsxtrshort{mlp}  &                     & Feature selection (knowledge)                                     \\
-	\cite{PNet}            &                       &                       &                       &           & \faCircle             & \faCircle & EF                 & surv                       & \glsxtrshort{mlp}  &                     & Feature selection (knowledge)                                     \\
-	\cite{Hao2019}         & \faCircle             &                       & \faCircle             &           & \faCircle             &           & EF                 & surv                       & \glsxtrshort{mlp}  &                     & Feature selection (threshold)                                     \\
-	\cite{PathCNN}         & \faCircle             &                       & \faCircle             &           & \faCircle             &           & EF                 & surv\TblrNote{1}           & \glsxtrshort{mlp}  &                     & PCA                                                               \\
+	\cite{DeepOmix}        & \faCircle             &                       & \faCircle             &           & \faCircle             & \faCircle & EF                 & survival                       & \glsxtrshort{mlp}  &                     & Feature selection (knowledge)                                     \\
+	\cite{PNet}            &                       &                       &                       &           & \faCircle             & \faCircle & EF                 & survival                       & \glsxtrshort{mlp}  &                     & Feature selection (knowledge)                                     \\
+	\cite{Hao2019}         & \faCircle             &                       & \faCircle             &           & \faCircle             &           & EF                 & survival                       & \glsxtrshort{mlp}  &                     & Feature selection (threshold)                                     \\
+	\cite{PathCNN}         & \faCircle             &                       & \faCircle             &           & \faCircle             &           & EF                 & survival\TblrNote{1}           & \glsxtrshort{mlp}  &                     & PCA                                                               \\
 	\cite{MoGCN}           & \faCircle             &                       &                       & \faCircle & \faCircle             &           & EF                 & subtype                    & \glsxtrshort{gnn}  & \glsxtrshort{snf}   & \glsxtrshort{ae}                                                  \\
 	\cite{Guo2023}         & \faCircle             &                       & \faCircle             &           & \faCircle             &           & EF                 & subtype                    & \glsxtrshort{gnn}  & PPI                 & DisGenet + MAD                                                    \\
 	\cite{AGMI}         & \faCircle             &                       &              &           & \faCircle             &  \faCircle         & EF                 & drug                    & \glsxtrshort{gnn}  & PPI + pathway + correlation                 &                                 \\
 	\cite{SubtypeFormer}   & \faCircle             & \faCircle             & \faCircle             &           & \faCircle             &           & EF                 & subtype\TblrNote{2}        & Trans.             &                     &                                                                   \\
 	\cite{DeepPathNet}     & \faCircle             &                       &                       &           & \faCircle             & \faCircle & EF                 & {subtype                                                                                                                                  \\ cancer}                & Trans.       &  & Feature selection (knowledge) \\
-	\cite{MOGONET}         & \faCircle             & \faCircle             & \faCircle             &           &                       &           & LF                 & subtype                    & \glsxtrshort{gnn}  & patient             &                                                                   \\
-	\cite{MODILM}          & \faCircle             & \faCircle             & \faCircle             &           &                       &           & LF                 & subtype                    & \glsxtrshort{gat}  & patient             & Feature selection (variance threshold)                            \\
+	\cite{MOGONET}         & \faCircle             & \faCircle             & \faCircle             &           &                       &           & LF                 & subtype                    & \glsxtrshort{gnn}  & Patient             &                                                                   \\
+	\cite{MODILM}          & \faCircle             & \faCircle             & \faCircle             &           &                       &           & LF                 & subtype                    & \glsxtrshort{gat}  & Patient             & Feature selection (variance threshold)                            \\
 	\cite{Sun2019}         &                       &                       &                       &           &                       &           & LF                 &                            & \glsxtrshort{mlp}  &                     &                                                                   \\
 	\cite{Wang2024}        & \faCircle             & \faCircle             & \faCircle             &           &                       &           & LF                 & subtype                    & \glsxtrshort{hgcn} & Patient\TblrNote{3} &                                                                   \\
 	\cite{customics}       & \faCircle             &                       & \faCircle             &           & \faCircle             &           & IF                 & {subtype                                                                                                                                  \\ cancer \\ survival}                & \glsxtrshort{ae} + \glsxtrshort{vae}       &  &  \\
@@ -55,7 +57,7 @@
 	\cite{Hira2021}        & \faCircle             &                       & \faCircle             &           & \faCircle             &           & IF                 & {survival\TblrNote{4}                                                                                                                     \\ subtype\TblrNote{4}}              & \glsxtrshort{vae}      &  &  \\
 	\cite{DeepProg}        & \faCircle             & \faCircle             & \faCircle             &           &                       &           & IF                 & subtype\TblrNote{4}        & \glsxtrshort{ae}   &                     & Feature selection (threshold) Survival-associated latent features \\
 	\cite{Wissel2021}      & \faCircle             & \faCircle             & \faCircle             & \faCircle & \faCircle             & \faCircle & IF                 & survival                   & \glsxtrshort{ae}   &                     &                                                                   \\
-	\cite{Azarkhalili2019} & \faCircle             & \faCircle             &                       &           &                       &           & IF                 & cancer + omics translation & {\glsxtrshort{ae}                                                                                            \\ \glsxtrshort{vae}}      &  &   \\
+	\cite{Azarkhalili2019} & \faCircle             & \faCircle             &                       &           &                       &           & IF                 & cancer\TblrNote{7} & {\glsxtrshort{ae}                                                                                            \\ \glsxtrshort{vae}}      &  &   \\
 	\cite{Tong2021}        & \faCircle             & \faCircle             & \faCircle             &           & \faCircle             &           & IF                 & {cancer                                                                                                                                   \\ survival}             & \glsxtrshort{ae}    &  & {Feature selection (threshold) \\ PCA}   \\
 	\cite{Wu2022StackedAB} & \faCircle             &                       &                       &           & \faCircle             &           & IF                 & survival                   & \glsxtrshort{ae}   &                     & Feature selection (log-rank test)                                 \\
 	\cite{CrossAE}         & \faCircle\TblrNote{5} & \faCircle\TblrNote{5} & \faCircle\TblrNote{5} &           & \faCircle\TblrNote{5} &           & IF                 & survival                   & \glsxtrshort{ae}   &                     & {Feature selection (threshold)                                    \\ PCA}   \\
@@ -63,7 +65,7 @@
 	\cite{MOLI}         & \faCircle &  &  &           & \faCircle &\faCircle           & IF                 & drug                   & \glsxtrshort{mlp}   &                     &    \\
 	\cite{Lin2020}         & \faCircle &  &\faCircle  &           & \faCircle &           & IF                 & subtype                   & \glsxtrshort{mlp}   &                     & Feature selection (\(\chi^{2}\))   \\
 
-	\cite{SALMON}          & \faCircle             & \faCircle             &                       &           & \faCircle             &           & IF                 & surv                       & \glsxtrshort{mlp}  &                     & Feature selection (threshold)   + knowledge                                  \\
+	\cite{SALMON}          & \faCircle             & \faCircle             &                       &           & \faCircle             &           & IF                 & survival                       & \glsxtrshort{mlp}  &                     & Feature selection (threshold)   + knowledge                                  \\
 	\cite{MohaiminulIslam2020}          & \faCircle             &              &                       &           & \faCircle             &           & IF                 & subtype                       & \glsxtrshort{cnn}  &                     &                                 \\
 	\cite{omicsGAN}          & \faCircle             &  \faCircle             &                       &           &              &           & IF                 & survival                       & \glsxtrshort{gan}  &                     &                                 \\
 	\cite{Cheerla2019}          & \faCircle\TblrNote{6}             &  \faCircle\TblrNote{6}             &                       &           &              &           & IF                 & survival                       & \glsxtrshort{mlp}  &                     &                                 \\
@@ -72,5 +74,9 @@
 	\cite{MultiGATAE}          & \faCircle            &  \faCircle             &   \faCircle                    &           &              &           & IF                 & subtype\TblrNote{2}                       & \glsxtrshort{gat}  & Patient                    &                               \\
 	\cite{Zhang2022}          & \faCircle            &               &   \faCircle                    &           &  \faCircle            &           & IF                 & subtype                      & \glsxtrshort{gat}  & Patient                    &                               \\
 	\cite{Kaczmarek2021}          & \faCircle            & \faCircle              &                       &           &              &           & IF                 & cancer                      & \glsxtrshort{gat}  & miRNA-mRNA                    &  Feature selection (variance threshold and knowledge)                             \\
-	\cite{Li2024}          & \faCircle            & \faCircle              &                       &           &  \faCircle             &           & EF + IF                 & subtype                      & \glsxtrshort{gat}  & BioGRID + miRDB                    &  Feature selection (variance threshold)                             \\
+	\cite{Li2024}          & \faCircle            & \faCircle              &                       &           &  \faCircle             &           & EIF                 & subtype                      & \glsxtrshort{gat}  & BioGRID + miRDB                    &  Feature selection (variance threshold)                             \\
+	\cite{Yao_2024}          & \faCircle            & \faCircle              & \faCircle                      &           &               &           & IF                 & {subtype \\ grade}                      & \glsxtrshort{ae} + att.  &                     &                               \\
+	\cite{moBRCA}          & \faCircle            & \faCircle              & \faCircle                      &           &               &           & IF                 & subtype                    & \glsxtrshort{fcn} + att.  &                     & Feature selection (threshold on DE)                              \\
+	\cite{Lan2024}          & \faCircle            & \faCircle              &                      &           &               &  \faCircle          & IF                 & Rec.                    & \glsxtrshort{fcn} + att.  &                     & Feature selection (knowledge)                              \\
+	\cite{MOMA}          & \faCircle            & \faCircle              &                      &           &               &            & IF                 & cancer                    & \glsxtrshort{fcn} + att.  &                     &                             \\
 \end{longtblr}

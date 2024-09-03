@@ -1,0 +1,4 @@
+,Boundary thickness (\( \uparrow\)),Boundary thickness (\( \uparrow\)),Margin decision (\( \uparrow\)),Margin decision (\( \uparrow\)),Model smoothness (\( \downarrow\)),Model smoothness (\( \downarrow\))
+\diagbox{Models}{Robust},\cmark,\xmark,\cmark,\xmark,\cmark,\xmark
+MLP\_BN,0.8144395351409912,0.3520947396755218,0.9188560247421264,0.9420821666717528,1.4320313930511477,15.65235710144043
+MLP\_LN,0.9509769082069396,0.2943035066127777,0.8860117793083191,0.9399083256721495,1.479545831680298,15.36919403076172
