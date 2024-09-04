@@ -38,37 +38,37 @@ IF, view specific encoders = obtain a latent representation
 product of experts get a joint representation
 predictor from the joint repr and one predictor for each encoder
 
-\begin{table}[htbp]
-	\sisetup{round-mode=places,round-precision=2}
-	\caption{Some LEGEND, a robust model corresponds to a model that have been adversarially trained.}\label{tab:metrics_adv}
-	\csvreader[
-		no head,
-		centered tabularray={%
-			colspec={%
-				Q[c,m]
-				Q[si={table-format=2.2,table-number-alignment=center}, wd=1.4cm]%
-				Q[si={table-format=2.2,table-number-alignment=center}, wd=1.4cm]%
-				Q[si={table-format=2.2,table-number-alignment=center}, wd=1.4cm]%
-				Q[si={table-format=2.2,table-number-alignment=center}, wd=1.4cm]%
-				Q[si={table-format=2.2,table-number-alignment=center}, wd=1.6cm]%
-				Q[si={table-format=2.2,table-number-alignment=center}, wd=1.6cm]%
-				},%
-			row{1-2} = {guard},
-			row{2} = {c,m},
-			row{3-Z} = {font=\small},
-			row{1} = {font=\bfseries},
-			cell{1}{2} = {r=1,c=2}{c, wd=2.8cm},
-			cell{1}{4} = {r=1,c=2}{c, wd=2.8cm},
-			cell{1}{6} = {r=1,c=2}{c, wd=3.2cm},
-			hline{1} = {2-Z}{2pt},%
-			hline{Z} = {2pt},%
-			hline{2-3} = {1pt},%
-			column{even} = {rightsep=2pt},
-			column{odd[3-Z]} = {leftsep=2pt},
-			cell{3-Z}{1} = {font=\normalsize}
-			}
-			]{temp.csv}{}{\csvlinetotablerow}
-\end{table}
+% \begin{table}[htbp]
+% 	\sisetup{round-mode=places,round-precision=2}
+% 	\caption{Some LEGEND, a robust model corresponds to a model that have been adversarially trained.}\label{tab:metrics_adv}
+% 	\csvreader[
+% 		no head,
+% 		centered tabularray={%
+% 			colspec={%
+% 				Q[c,m]
+% 				Q[si={table-format=2.2,table-number-alignment=center}, wd=1.4cm]%
+% 				Q[si={table-format=2.2,table-number-alignment=center}, wd=1.4cm]%
+% 				Q[si={table-format=2.2,table-number-alignment=center}, wd=1.4cm]%
+% 				Q[si={table-format=2.2,table-number-alignment=center}, wd=1.4cm]%
+% 				Q[si={table-format=2.2,table-number-alignment=center}, wd=1.6cm]%
+% 				Q[si={table-format=2.2,table-number-alignment=center}, wd=1.6cm]%
+% 				},%
+% 			row{1-2} = {guard},
+% 			row{2} = {c,m},
+% 			row{3-Z} = {font=\small},
+% 			row{1} = {font=\bfseries},
+% 			cell{1}{2} = {r=1,c=2}{c, wd=2.8cm},
+% 			cell{1}{4} = {r=1,c=2}{c, wd=2.8cm},
+% 			cell{1}{6} = {r=1,c=2}{c, wd=3.2cm},
+% 			hline{1} = {2-Z}{2pt},%
+% 			hline{Z} = {2pt},%
+% 			hline{2-3} = {1pt},%
+% 			column{even} = {rightsep=2pt},
+% 			column{odd[3-Z]} = {leftsep=2pt},
+% 			cell{3-Z}{1} = {font=\normalsize}
+% 			}
+% 			]{temp.csv}{}{\csvlinetotablerow}
+% \end{table}
 
 % \csvautotabularray{temp.csv}
 \end{document}
