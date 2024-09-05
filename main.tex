@@ -6,40 +6,27 @@
 \usepackage[l3]{csvsimple}
 \usepackage{subfiles}
 \usepackage{lscape}
-\usepackage{pifont}
+\usepackage{xstring}
 \usepackage{eqparbox}
 \usepackage{rotating}
 \usepackage{makecell}
 \renewcommand\theadfont{}
-% TO REMOVE ?
-\usepackage{wrapfig}
+\usepackage{wrapfig2}
+\usepackage{pifont}
 \newcommand{\cmark}{\ding{51}\xspace}%
 \newcommand{\xmark}{\ding{55}\xspace}%
-\newcommand{\ie}{\textit{i}.\textit{e}.\ }%
-\newcommand\mylabelformat[2][l]{\eqmakebox[listlabel@\EnumitemId][#1]{#2}}
-\renewcommand*{\mkbibcompletename}[1]{%
-  \ifitemannotation{highlight}
-    {\textbf{#1}}
-    {#1}%
-}
-\newcommand{\tableabbrev}[1]{\glsxtrshort{#1} = \glsxtrlong{#1}}
-% try length=* in env instead
-% \newcommand\temptextitemdescription{}
-% \newcommand{\labelsinglespace}[1]{\def\temptextitemdescription{#1}\begin{singlespace}\temptextitemdescription\end{singlespace}}
-\setoperatorfont\mathrm%
+
 
 \newtcolorbox[auto counter, number within=chapter]{mybox}[2][]{%
     title=Box~\thetcbcounter: #2, #1}
 
-\tikzset{
-  square/.style={regular polygon,regular polygon sides=4}
-}
+
 
 %%%%%%%%%%%%%%%%%%%
 %% CONFIGURATION %%
 %%%%%%%%%%%%%%%%%%%
-\title{Titre de la thèse (sur plusieurs lignes si nécessaire)}
-\subtitle{Traduction du titre de la thèse (sur plusieurs lignes si nécessaire)}
+\title{Developping and exploring the interest of deep learning approaches in the field of multi-omics data}
+\subtitle{Développer et explorer l'intérêt des approches de deep learning dans le domaine des données multi-omiques}
 \author{Aurélien \textsc{Beaude}}
 
 \date{XX month YYYY}
@@ -102,6 +89,7 @@
 %% Hyphenation %%
 %%%%%%%%%%%%%%%%%
 \input{preamble/hyphenation}
+\input{preamble/extra_commands.tex}
 
 %\tikzexternalize[prefix=tikz/, system call/.append = {; pdfcrop --margins 1 "\image.pdf" "\image.pdf"}] % must create this path manually, with a file in it
 

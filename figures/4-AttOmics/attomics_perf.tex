@@ -1,0 +1,108 @@
+\begin{tikzpicture}
+    \begin{groupplot}[group style={
+                    group size=2 by 2,
+                    horizontal sep=0.07\textwidth,
+                    vertical sep=0.05\textheight,
+                    xlabels at=edge bottom,
+                    ylabels at=edge left,
+                    xticklabels at=all,
+                    yticklabels at=all,
+                    group name=perfattomics
+                    },
+                    tick label style={/pgf/number format/assume math mode=true},
+                    xtick=data, xlabel=Number of training examples, ylabel=Test Error-rate, minor y tick num=5,legend cell align={left}, legend style={draw=none},xtick pos=bottom, ytick pos = left, scaled y ticks=false,
+                    yticklabel style={
+            /pgf/number format/fixed,
+            /pgf/number format/precision=2
+    }, height=0.45\textheight, width=0.5\textwidth, title style={yshift=-1.2ex, font=\small}
+              ]
+        \nextgroupplot[title=\textbf{DNAm}]
+            \attomicsplotomics{y__DNAm__}
+            \draw[gray] (axis cs:5900,0.03) rectangle (axis cs:6368,0.055);
+            \coordinate (dnamx1) at (axis cs:5900,0.055);
+            \coordinate (dnamx2) at (axis cs:6368,0.055);
+        \nextgroupplot[legend to name={myleg}, legend style={legend columns=1}, title=\textbf{mRNA}]
+            \attomicsplotomics{y__mRNA__}
+            \draw[gray] (axis cs:5900,0.032) rectangle (axis cs:6368,0.061);
+            \coordinate (mrnax1) at (axis cs:5900,0.061);
+            \coordinate (mrnax2) at (axis cs:6368,0.061);
+        \nextgroupplot[title=\textbf{miRNA}]
+            \attomicsplotomics{y__miRNA__}
+            \draw[gray] (axis cs:5900,0.035) rectangle (axis cs:6368,0.13);
+            \coordinate (mirnax1) at (axis cs:5900,0.13);
+            \coordinate (mirnax2) at (axis cs:6368,0.13);
+        \nextgroupplot[group/empty plot]
+    \end{groupplot}
+    
+    \node at (perfattomics c1r2.east -| perfattomics c2r1.south west) [inner sep=0pt,anchor=west] {\pgfplotslegendfromname{myleg}};
+    \node at (perfattomics c1r1.north west) [font=\bfseries, anchor=south east, inner sep=1pt] {A};
+    \node at (perfattomics c2r1.north west) [font=\bfseries, anchor=south east, inner sep=1pt] {B};
+    \node at (perfattomics c1r2.north west) [font=\bfseries, anchor=south east, inner sep=1pt] {C};
+    
+    \begin{axis}[
+        at={(perfattomics c1r1.north east)},
+        anchor=north east,
+        width=4.5cm, 
+        height=3.5cm, 
+        xtick=\empty, 
+        xshift=-2mm, yshift=-2mm,
+        xtick pos=bottom, ytick pos = left, 
+        ymajorgrids=true,
+        xlabel=6134, name=dnamzoom, 
+        axis line style={gray}, 
+        label style={font=\footnotesize},
+        tick label style={/pgf/number format/assume math mode=true},
+        yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=2},
+        scaled ticks=false,
+        minor y tick num=3]
+    \plotattomicszoom{y__DNAm}
+    \end{axis}
+    
+    \begin{axis}[
+        at={(perfattomics c2r1.north east)},
+        anchor=north east,
+        width=4.5cm, 
+        height=3.5cm, 
+        xtick=\empty, 
+        xshift=-2mm, yshift=-2mm,
+        xtick pos=bottom, ytick pos = left, 
+        ymajorgrids=true,
+        xlabel=6134, name=mrnazoom, 
+        axis line style={gray}, 
+        label style={font=\footnotesize},
+        tick label style={/pgf/number format/assume math mode=true},
+        yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=2},
+        scaled ticks=false,
+        minor y tick num=3]
+    \plotattomicszoom{y__mRNA}
+    \end{axis}
+    
+    \begin{axis}[
+        at={(perfattomics c1r2.north east)},
+        anchor=north east,
+        width=4.5cm, 
+        height=3.5cm, 
+        xtick=\empty, 
+        xshift=-2mm, yshift=-2mm,
+        xtick pos=bottom, ytick pos = left, 
+        ytick distance=0.04,
+        ymajorgrids=true,
+        xlabel=6134, name=mirnazoom, 
+        axis line style={gray}, 
+        label style={font=\footnotesize},
+        tick label style={/pgf/number format/assume math mode=true},
+        yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=2},
+        scaled ticks=false,
+        minor y tick num=3]
+    \plotattomicszoom{y__miRNA}
+    \end{axis}
+    
+    \draw[gray] (dnamx1) -- (dnamzoom.south west);
+    \draw[gray] (dnamx2) -- (dnamzoom.south east);
+    
+    \draw[gray] (mrnax1) -- (mrnazoom.south west);
+    \draw[gray] (mrnax2) -- (mrnazoom.south east);
+    
+    \draw[gray] (mirnax1) -- (mirnazoom.south west);
+    \draw[gray] (mirnax2) -- (mirnazoom.south east);
+    \end{tikzpicture}

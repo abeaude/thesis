@@ -11,6 +11,7 @@ Silent
 		\xmark \cmark
 		\endfirsthead \endhead \endfoot \endlastfoot
 		\textbullet
+		\addplot \attomicsperfzoom \attomicsperf \Nattomicszoom \foreach
 	}
 UserWarnRegex =
 {

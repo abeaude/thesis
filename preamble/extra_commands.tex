@@ -1,0 +1,132 @@
+\newcommand{\ie}{\textit{i}.\textit{e}.\ }%
+\newcommand\mylabelformat[2][l]{\eqmakebox[listlabel@\EnumitemId][#1]{#2}}
+\renewcommand*{\mkbibcompletename}[1]{%
+	\ifitemannotation{highlight}
+	{\textbf{#1}}
+	{#1}%
+}
+\newcommand{\tableabbrev}[1]{\glsxtrshort{#1} = \glsxtrlong{#1}}
+
+\usepgfplotslibrary{groupplots}
+\usetikzlibrary{shadings, positioning, shapes.multipart, shapes.geometric, fit, shadows, backgrounds, shapes, shapes.misc, calc, intersections, arrows.meta, graphs, fadings, quotes}
+\tikzset{
+	square/.style={regular polygon,regular polygon sides=4}
+}
+\pgfplotsset{
+	compat=1.18,
+	every tick label/.append style={font=\footnotesize},
+	every label/.append style={font=\small},
+	every legend/.append style={font=\footnotesize, black},
+	modelline/.style = {color = #1},
+	% every axis/.append style={line width=1pt, tick style={line width=0.6pt}}
+}
+\pgfkeys{/pgf/number format/.cd,1000 sep={\,}}
+
+\definecolor{attomicsclusteringColor}{HTML}{006e00}
+\definecolor{attomicsgoColor}{HTML}{80BA5A}
+\definecolor{attomicshallmarksColor}{HTML}{878500}
+\definecolor{attomicsrandomColor}{HTML}{00bbad}
+\definecolor{cnnColor}{HTML}{5954d6}
+\definecolor{gcnCoExpColor}{HTML}{ff9287}
+\definecolor{gcnPPIColor}{HTML}{d163e6}
+\definecolor{mlpColor}{HTML}{000000}
+\definecolor{RFColor}{HTML}{b80058}
+\definecolor{SVMColor}{HTML}{ebac23}
+\definecolor{xgboostColor}{HTML}{008cf9}
+
+\pgfplotstableread[col sep=comma,]{data/attomics_perf.csv}\attomicsperf
+\pgfplotstableread[col sep=comma,]{data/attomics_perf_zoom.csv}\attomicsperfzoom
+
+\pgfplotstablegetrowsof{\attomicsperfzoom}
+\pgfmathsetmacro{\Nattomicszoom}{\pgfplotsretval-1}
+
+\newcommand{\attomicsline}[4]{
+	\addplot [
+		mark=*,
+		color=#4,
+		#3,
+		mark options={solid},
+		mark layer=like plot
+	] plot [
+			error bars/.cd,
+			y dir=both,
+			y explicit,
+			error bar style={solid}
+		] table [x={n_train_examples}, y={#1}, y error={#2}] {\attomicsperf};
+}
+\newcommand{\attomicslinecolor}[3]{%
+	\IfSubStr{#1}{AttOmics}{
+		\attomicsline{#1}{#2}{solid}{#3}
+	}{
+		\attomicsline{#1}{#2}{dashed}{#3}
+	}
+}
+\newcommand{\attomicsplotomics}[1]{
+	\pgfplotstableforeachcolumn\attomicsperf\as\col{%
+		\IfBeginWith{\col}{#1}{%
+			\StrSubstitute{\col}{y}{err}[\colerr]
+			\StrBehind{\col}{#1}[\model]
+			\IfStrEqCase{\model}{%
+				{AttOmics - Clustering}{\attomicslinecolor{\col}{\colerr}{attomicsclusteringColor}}%
+					{AttOmics - GO}{\attomicslinecolor{\col}{\colerr}{attomicsgoColor}}%
+					{AttOmics - Hallmarks}{\attomicslinecolor{\col}{\colerr}{attomicshallmarksColor}}%
+					{AttOmics - Random}{\attomicslinecolor{\col}{\colerr}{attomicsrandomColor}}%
+					{CNN1d}{\attomicslinecolor{\col}{\colerr}{cnnColor}}%
+					{GCN - CoExp}{\attomicslinecolor{\col}{\colerr}{gcnCoExpColor}}%
+					{GCN - PPI}{\attomicslinecolor{\col}{\colerr}{gcnPPIColor}}%
+					{MLP}{\attomicslinecolor{\col}{\colerr}{mlpColor}}%
+					{RF}{\attomicslinecolor{\col}{\colerr}{RFColor}}%
+					{SVM}{\attomicslinecolor{\col}{\colerr}{SVMColor}}%
+					{XGBoost}{\attomicslinecolor{\col}{\colerr}{xgboostColor}}%
+			}
+			\IfSubStr{#1}{mRNA}{\addlegendentryexpanded{\model}}{}
+		}{}
+	}
+}
+
+\newcommand{\plotattomicspoint}[4]{
+	\addplot [
+		mark=*,
+		color=#4,
+		only marks,
+		mark options={solid},
+		mark layer=like plot
+	] plot [
+			error bars/.cd,
+			y dir=both,
+			y explicit,
+			error bar style={solid}
+		] coordinates {(#1,#2) +- (0, #3)};
+}
+\newcommand{\plotattomicszoom}[1]{
+	\pgfplotstableforeachcolumn\attomicsperfzoom\as\col{%
+		\IfBeginWith{\col}{#1}{%
+			\StrSubstitute{\col}{y}{err}[\colerr]
+			\foreach \i in {0,...,\Nattomicszoom}{
+					\pgfplotstablegetelem{\i}{model}\of\attomicsperfzoom
+					\edef\model{\pgfplotsretval}
+					\pgfplotstablegetelem{\i}{\col}\of\attomicsperfzoom
+					\pgfmathsetmacro{\y}{\pgfplotsretval}
+					\pgfplotstablegetelem{\i}{\colerr}\of\attomicsperfzoom
+					\pgfmathsetmacro{\yerr}{\pgfplotsretval}
+					\ifdefempty{\y}{}{%
+						\IfStrEqCase{\model}{%
+							{AttOmics - Clustering}{\plotattomicspoint{\i}{\y}{\yerr}{attomicsclusteringColor}}%
+								{AttOmics - GO}{\plotattomicspoint{\i}{\y}{\yerr}{attomicsgoColor}}%
+								{AttOmics - Hallmarks}{\plotattomicspoint{\i}{\y}{\yerr}{attomicshallmarksColor}}%
+								{AttOmics - Random}{\plotattomicspoint{\i}{\y}{\yerr}{attomicsrandomColor}}%
+								{CNN1d}{\plotattomicspoint{\i}{\y}{\yerr}{cnnColor}}%
+								{GCN - CoExp}{\plotattomicspoint{\i}{\y}{\yerr}{gcnCoExpColor}}%
+								{GCN - PPI}{\plotattomicspoint{\i}{\y}{\yerr}{gcnPPIColor}}%
+								{MLP}{\plotattomicspoint{\i}{\y}{\yerr}{mlpColor}}%
+								{RF}{\plotattomicspoint{\i}{\y}{\yerr}{RFColor}}%
+								{SVM}{\plotattomicspoint{\i}{\y}{\yerr}{SVMColor}}%
+								{XGBoost}{\plotattomicspoint{\i}{\y}{\yerr}{xgboostColor}}%
+						}
+					}
+
+				}
+
+		}{}
+	}
+}

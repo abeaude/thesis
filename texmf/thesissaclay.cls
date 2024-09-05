@@ -114,7 +114,7 @@
 %% GRAPHICS %%
 \RequirePackage{graphicx} % Required for inserting images
 \RequirePackage{tikz}
-\usetikzlibrary{shadings, positioning, shapes.multipart, shapes.geometric, fit, shadows, backgrounds, shapes, shapes.misc, calc, intersections, arrows.meta, graphs, fadings, quotes}
+\RequirePackage{pgfplots}
 \RequirePackage{subcaption}
 \renewcommand{\thesubfigure}{\Alph{subfigure}}
 \DeclareCaptionLabelFormat{bf-parens}{(\textbf{#2})}
@@ -174,7 +174,7 @@
 %\DeclareMathSizes{10}{10}{8}{6}
 % investigate
 \newfontfamily{\lmm}{latinmodern-math.otf}[Scale=1, Path = fonts/]
-\pretocmd{\tikzpicture}{\KOMAoptions{fontsize=10pt}\setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/]}{\ClassInfo{Thesis Saclay}{Patched tikzpicture to use a font size of 10pt}}{\ClassWarning{Thesis Saclay}{Cannot patch tikzpicture to have a smaller font size}}
+%\pretocmd{\tikzpicture}{\KOMAoptions{fontsize=10pt}\setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/]}{\ClassInfo{Thesis Saclay}{Patched tikzpicture to use a font size of 10pt}}{\ClassWarning{Thesis Saclay}{Cannot patch tikzpicture to have a smaller font size}}
 %%%%%%%%%%%%
 %% COLORS %%
 %%%%%%%%%%%%

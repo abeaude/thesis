@@ -13,497 +13,525 @@
 \minitocpagecentered
 
 \section{Deep-Learning models}
- In this section, I will introduce the main deep learning architectures used for discriminative tasks: \glsxtrfull{mlp}, \glsxtrfull{cnn}, \glsxtrfull{gnn}.
- The work of this thesis relies on applying the attention mechanism.
- Therefore, I will detail the attention mechanism and its usage in the transformer architecture.
- I will also describe the \glsxtrfull{ae} and its probabilistic variant, the \glsxtrfull{vae}, as they are commonly used in the literature to study omics data.
- Finally, I will present the \glsxtrfull{gan} architecture, which is used in some of the work in this thesis.
+	In this section, I will introduce the main deep learning architectures used for discriminative tasks: \glsxtrfull{mlp}, \glsxtrfull{cnn}, \glsxtrfull{gnn}.
+	The work of this thesis relies on applying the attention mechanism.
+	Therefore, I will detail the attention mechanism and its usage in the transformer architecture.
+	I will also describe the \glsxtrfull{ae} and its probabilistic variant, the \glsxtrfull{vae}, as they are commonly used in the literature to study omics data.
+	Finally, I will present the \glsxtrfull{gan} architecture, which is used in some of the work in this thesis.
 
- Let \(\symbf{x}\) be the input and \(y \in \left\{1,2, \ldots, C \right\} \) the associated label, where \(C\) is the number of classes.
- The dimension of \(\symbf{x}\) will be specified in each architecture described.
- For discriminative tasks, the goal is to return a prediction \(\hat{y} \in {\left[0,1\right]}^C\).
- The goal of the different deep learning architectures is to find the best approximation \(g^{*}\) that maps an input \(\symbf{x}\) into a class \(y\): \(y = g^{*}\left(\symbf{x}\right)\).
- A deep learning architecture defines a mapping \(y=g\left(\symbf{x}; \theta\right)\) and learns the parameters \(\theta\) that give the best function approximation.
-
-
- \subsection{\Glsfmtfull{mlp}}\label{subsec:mlp}
-	 \Gls{mlp} is an architecture taking one-dimensional input, \(\symbf{x} \in \symbb{R}^d\).
-	 The architecture comprises an input layer, \(L\) hidden layers, and one output layer.
-	 There are a total of \(L+2\) layers, \(L=0\) corresponds to the input layer, and the layer \(L+1\) is the output layer.
-	 The input layer has \(d\) neurons, one for each input feature in \(\symbf{x}\).
-	 The number of neurons in the output layer depends on the type of task:
-	 \begin{itemize}
-		 \item for binary classification, \(C=2\), it has only one neuron,
-		 \item for multiclass classification \(C > 2 \), it has one neuron per class.
-	 \end{itemize}
-	 Each one of the hidden layers \(l\) has a defined number of neurons \(N_{l}\).
-	 Each neuron \(j\) in a layer \(l\) is connected to all neurons in the layer \(l-1\).
-	 Connection between a neuron \(i\) in layer \(l-1\) and neuron \(j\) in layer \(l\) is weighted by \(w^{l}_{ij}\).
-	 This type of layer is called a \glsxtrfull{fcn} or dense layer.
-
-	 The activation of a neuron \(j\) in layer \(l\) is the non-linear activation \(f\) of the weighted-sum of neurons in layer \(l-1\) and some bias \(b_{j}^{l}\)~(\cref{eq:mlp_neuron}).
-	 \begin{align}
-		 a_{j}^{l} & = f\left(\sum_{i}^{N_{l-1}}a_{i}^{l-1}w_{ij}^{l} + b_{j}^{l} \right) \\ \label{eq:mlp_neuron}
-		           & = f\left(z^{l}\right)
-	 \end{align}
-	 The computation of the activation of all neurons in layer \(l\) can be expressed in a matrix form~(\cref{eq:mlp_matrix}).
-	 \begin{equation}
-		 \symbf{a}^{l} = f\left( \symbf{a}^{l-1} \cdot W^l + \symbf{b}^{l} \right) \label{eq:mlp_matrix}
-	 \end{equation}
-	 \(W^l \in \symbb{R}^{N_{l-1} \times N_{l}}\) is the weight matrix of general element: \(w_{ij}\), and \(\symbf{b}^{l}\) is the bias vector of layer \(l\).
-	 The non-linear activation \(f\) is usually a \glsxtrfull{relu}, \(f\left(x\right) = \max\left(0, x\right)\).
-	 The activation of neurons in layers \(l\)~(\cref{eq:mlp_matrix}) defines a mapping \(g^{l}\) that computes the activation of layer \(l\) from the activation of layer \(l-1\): \( \symbf{a}^{l} = g^{l}\left(\symbf{a}^{l-1}; \theta^{l}\right)\), where \(\theta^{l}\) are the parameters of the layer \(l\): \(W^l\) and \( \symbf{b}^{l}\).
-	 The activation function of the last layer, layer \(L+1\), depends on the type of task:
-	 \begin{itemize}
-		 \item for binary classification, the unique output neuron has a sigmoid activation: \(a^{L+1} = \cfrac{1}{1-\exp\left(z^{L+1}\right)}\) and yields the probability of the positive class,
-		 \item for multiclass classification, a softmax activation function is used: \(a_{c}^{L} = \cfrac{\exp\left(z_{c}^{L+1}\right)}{\sum_{j}^{C}\exp\left(z_{j}^{L+1}\right)}\), each \(a_{c}^{L}\) gives the probability that the input \(\symbf{x}\) belongs to the class \(c\).
-	 \end{itemize}
-	 The mapping \(g\) of the \gls{mlp} can be expressed as the composition of the mapping of the individual layer: \(g = g^{L+1} \circ g^{L} \circ \cdots \circ g^{1}\).
-
-	 \Gls{mlp} are called feedforward networks; the information flows from the input \(\symbf{x}\) to the output \(y\) without any feedback connection, where the output of the model would be fed back to the model itself.
+	Let \(\symbf{x}\) be the input and \(y \in \left\{1,2, \ldots, C \right\} \) the associated label, where \(C\) is the number of classes.
+	The dimension of \(\symbf{x}\) will be specified in each architecture described.
+	For discriminative tasks, the goal is to return a prediction \(\hat{y} \in {\left[0,1\right]}^C\).
+	The goal of the different deep learning architectures is to find the best approximation \(g^{*}\) that maps an input \(\symbf{x}\) into a class \(y\): \(y = g^{*}\left(\symbf{x}\right)\).
+	A deep learning architecture defines a mapping \(y=g\left(\symbf{x}; \theta\right)\) and learns the parameters \(\theta\) that give the best function approximation.
 
 
-	 The \gls{mlp} is one of the simplest models but can have many parameters, especially for high-dimensional inputs.
-	 Indeed, the number of parameters roughly corresponds to the sum of the number of parameters in each weight matrix \(W^{l}\).
-	 The weight matrix \(W^1\) depends on the input dimension \(d\); the larger \(d\), the higher the number of parameters to learn.
+	\subsection{\Glsfmtfull{mlp}}\label{subsec:mlp}
+		\Gls{mlp} is an architecture taking one-dimensional input, \(\symbf{x} \in \symbb{R}^d\).
+		The architecture comprises an input layer, \(L\) hidden layers, and one output layer.
+		There are a total of \(L+2\) layers, \(L=0\) corresponds to the input layer, and the layer \(L+1\) is the output layer.
+		The input layer has \(d\) neurons, one for each input feature in \(\symbf{x}\).
+		The number of neurons in the output layer depends on the type of task:
+		\begin{itemize}
+			\item for binary classification, \(C=2\), it has only one neuron,
+			\item for multiclass classification \(C > 2 \), it has one neuron per class.
+		\end{itemize}
+		Each one of the hidden layers \(l\) has a defined number of neurons \(N_{l}\).
+		Each neuron \(j\) in a layer \(l\) is connected to all neurons in the layer \(l-1\).
+		Connection between a neuron \(i\) in layer \(l-1\) and neuron \(j\) in layer \(l\) is weighted by \(w^{l}_{ij}\).
+		This type of layer is called a \glsxtrfull{fcn} or dense layer.
 
- \subsection{\Glsfmtfull{cnn}}
-	 \Gls{cnn} is an architecture composed of an input layer, \(L\) hidden layers and one output layer.
-	 This architecture has been initially developed for images; hence it accepts three-dimensional inputs \(\symbf{x} \in \symbb{R}^{h\times w \times p} \), where \(h\), \(w\) are respectively the height and the width of the image.
-	 \(p\) represents the number of channels; a gray image has only one channel, whereas an RGB image has three channels.
-	 Compared to the \gls{mlp}, some hidden layers are replaced with convolutional and pooling layers.
-	 Convolution layers are based on the convolution of a one-channel input with a two-dimensional kernel \(K\)~(\cref{eq:conv}).
-	 \begin{equation}
-		 \left(K * \symbf{x}\right)\left(i,j\right) =\sum_m\sum_n \symbf{x}_{i-m, j-n}K_{m,n} \label{eq:conv}
-	 \end{equation}
-	 Usually, multiple filters are applied simultaneously to the multiple input channels.
-	 In this case, the kernel is four-dimensional to account for the in and out channels dimensions~(\cref{eq:conv_multi}).
-	 \begin{equation}
-		 \left(K * \symbf{x}\right)\left(i,j, c_{out}\right) =\sum_m\sum_n \symbf{x}_{i-m, j-n, c_{in}}K_{m,n, c_{in}, c_{out}} \label{eq:conv_multi}
-	 \end{equation}
-	 After convolving the inputs, a bias term is added, and a \gls{relu} activation is applied.
-	 After one or more convolution layers, a pooling layer is used to introduce some invariance by combining the neurons in the fixed window to a single neuron in the next layer.
-	 The neurons in the window are usually reduced with the maximum or average function.
-	 The output layer is similar to the one used with the \gls{mlp}; for binary classification, a single neuron with a sigmoid activation is used, and for multiclass classification problems, there is one neuron per class with a softmax activation~(\cref{subsec:mlp}).
+		The activation of a neuron \(j\) in layer \(l\) is the non-linear activation \(f\) of the weighted-sum of neurons in layer \(l-1\) and some bias \(b_{j}^{l}\)~(\cref{eq:mlp_neuron}).
+		\begin{align}
+			a_{j}^{l} & = f\left(\sum_{i}^{N_{l-1}}a_{i}^{l-1}w_{ij}^{l} + b_{j}^{l} \right) \\ \label{eq:mlp_neuron}
+			          & = f\left(z^{l}\right)
+		\end{align}
+		The computation of the activation of all neurons in layer \(l\) can be expressed in a matrix form~(\cref{eq:mlp_matrix}).
+		\begin{equation}
+			\symbf{a}^{l} = f\left( \symbf{a}^{l-1} \cdot W^l + \symbf{b}^{l} \right) \label{eq:mlp_matrix}
+		\end{equation}
+		\(W^l \in \symbb{R}^{N_{l-1} \times N_{l}}\) is the weight matrix of general element: \(w_{ij}\), and \(\symbf{b}^{l}\) is the bias vector of layer \(l\).
+		The non-linear activation \(f\) is usually a \glsxtrfull{relu}, \(f\left(x\right) = \max\left(0, x\right)\).
+		The activation of neurons in layers \(l\)~(\cref{eq:mlp_matrix}) defines a mapping \(g^{l}\) that computes the activation of layer \(l\) from the activation of layer \(l-1\): \( \symbf{a}^{l} = g^{l}\left(\symbf{a}^{l-1}; \theta^{l}\right)\), where \(\theta^{l}\) are the parameters of the layer \(l\): \(W^l\) and \( \symbf{b}^{l}\).
+		The activation function of the last layer, layer \(L+1\), depends on the type of task:
+		\begin{itemize}
+			\item for binary classification, the unique output neuron has a sigmoid activation: \(a^{L+1} = \cfrac{1}{1-\exp\left(z^{L+1}\right)}\) and yields the probability of the positive class,
+			\item for multiclass classification, a softmax activation function is used: \(a_{c}^{L} = \cfrac{\exp\left(z_{c}^{L+1}\right)}{\sum_{j}^{C}\exp\left(z_{j}^{L+1}\right)}\), each \(a_{c}^{L}\) gives the probability that the input \(\symbf{x}\) belongs to the class \(c\).
+		\end{itemize}
+		The mapping \(g\) of the \gls{mlp} can be expressed as the composition of the mapping of the individual layer: \(g = g^{L+1} \circ g^{L} \circ \cdots \circ g^{1}\).
 
-	 Similarly to \glspl{mlp}, \glspl{cnn} are feedforward networks, the mapping \(g\) of the \gls{cnn} is also expressed as the composition of the mapping of the individual layers.
+		\Gls{mlp} are called feedforward networks; the information flows from the input \(\symbf{x}\) to the output \(y\) without any feedback connection, where the output of the model would be fed back to the model itself.
 
-	 As the \gls{cnn} is constructed around the convolution operator, it can easily be adapted to use one-dimensional input, \(\symbf{x} \in \symbb{R}^d\), by using one-dimensional kernel instead of two-dimensional kernel.
 
-	 It should be noted that using the convolution operator implies spatial dependencies between input features.
+		The \gls{mlp} is one of the simplest models but can have many parameters, especially for high-dimensional inputs.
+		Indeed, the number of parameters roughly corresponds to the sum of the number of parameters in each weight matrix \(W^{l}\).
+		The weight matrix \(W^1\) depends on the input dimension \(d\); the larger \(d\), the higher the number of parameters to learn.
 
- \subsection{\Glsfmtfull{gnn}}
-	 \Gls{gnn} is an architecture that processes graphs.
-	 A graph \(\symcal{G}\) is a structure that consists of vertices \(\symcal{V}\) and edges \(\symcal{E}\).
-	 An edge \(\left(u,v\right) \in \symcal{V}^2,\, u\neq v\) connects two vertices \(u\) and \(v\), this link represents a relationship between the two vertices.
-	 The relationship between two nodes can be directed or undirected.
-	 In a homogeneous graph, each vertex represents the same type of entities, whereas, in a heterogeneous graph, each node can represent different types of entities.
-	 When different relationship types exist between two nodes, the graph is called a multigraph.
-	 Graphs are ubiquitous and are found in many domains:
-	 \begin{itemize}[nosep]
-		 \item molecules are graphs where nodes represent an atom and edges the covalent bond between two atoms,
-		 \item social networks are graphs where nodes represent people and edges a relationship between two people,
-		 \item the scientific literature can be seen as a graph, nodes represent a paper and edges a citation,
-		 \item in biology \gls{ppi} networks are graphs where nodes represent a protein and edges describe an interaction between two proteins.
-	 \end{itemize}
+	\subsection{\Glsfmtfull{cnn}}
+		\Gls{cnn} is an architecture composed of an input layer, \(L\) hidden layers and one output layer.
+		This architecture has been initially developed for images; hence it accepts three-dimensional inputs \(\symbf{x} \in \symbb{R}^{h\times w \times p} \), where \(h\), \(w\) are respectively the height and the width of the image.
+		\(p\) represents the number of channels; a gray image has only one channel, whereas an RGB image has three channels.
+		Compared to the \gls{mlp}, some hidden layers are replaced with convolutional and pooling layers.
+		Convolution layers are based on the convolution of a one-channel input with a two-dimensional kernel \(K\)~(\cref{eq:conv}).
+		\begin{equation}
+			\left(K * \symbf{x}\right)\left(i,j\right) =\sum_m\sum_n \symbf{x}_{i-m, j-n}K_{m,n} \label{eq:conv}
+		\end{equation}
+		Usually, multiple filters are applied simultaneously to the multiple input channels.
+		In this case, the kernel is four-dimensional to account for the in and out channels dimensions~(\cref{eq:conv_multi}).
+		\begin{equation}
+			\left(K * \symbf{x}\right)\left(i,j, c_{out}\right) =\sum_m\sum_n \symbf{x}_{i-m, j-n, c_{in}}K_{m,n, c_{in}, c_{out}} \label{eq:conv_multi}
+		\end{equation}
+		After convolving the inputs, a bias term is added, and a \gls{relu} activation is applied.
+		After one or more convolution layers, a pooling layer is used to introduce some invariance by combining the neurons in the fixed window to a single neuron in the next layer.
+		The neurons in the window are usually reduced with the maximum or average function.
+		The output layer is similar to the one used with the \gls{mlp}; for binary classification, a single neuron with a sigmoid activation is used, and for multiclass classification problems, there is one neuron per class with a softmax activation~(\cref{subsec:mlp}).
 
-	 A graph is represented by three different matrices: its adjacency matrix \(A \in {\left\{0,1\right\}}^{\left|\symcal{V}\right| \times \left|\symcal{V}\right|}\) which describe the structure of the graph, the node embeddings \(X \in \symbb{R}^{\left|\symcal{V}\right| \times d_v}\) and the edge embeddings \(E \in \symbb{R}^{\left|\symcal{V}\right| \times d_e}\).
-	 Each row of the node embedding matrix is a node's \(d_v\)-length vector embedding.
-	 Similarly, each row of the edge embeddings matrix is the \(d_e\)-legnth vector embedding of an edge.
-	 In the following, I will focus on undirected graphs without edge embedding \(E\).
+		Similarly to \glspl{mlp}, \glspl{cnn} are feedforward networks, the mapping \(g\) of the \gls{cnn} is also expressed as the composition of the mapping of the individual layers.
 
-	 A \gls{gnn} is an architecture composed of an input layer, \(L\) hidden layers, and one output layer.
-	 Similarly to the \gls{cnn}, some hidden layers are replaced with graph convolution layers
-	 \Glspl{gcn}, update node embeddings by aggregating information from neighboring nodes.
-	 The embedding of node \(v\), \(h^{l+1}_{v} \in \symbb{R}^{d_{l+1}}\) is updated by combining its previous embedding \(h^{l}_{v} \in \symbb{R}^{d_{l}}\) with the aggregated embedding \(h^{l}_{v,\text{agg}}\) from neighboring nodes \(\left|\symcal{N}\left(v\right) \right|\):
-	 \begin{align}
-		 h^{l+1}_{v}          & = f\left( \frac{h^{l}_{v}W^{l}}{\left|\symcal{N}\left(v\right) \right|} + h^{l}_{v,\text{agg}}W^{l}\right)                                    \\
-		 h^{l}_{v,\text{agg}} & = \sum_{u \in \symcal{N}\left(v\right)} \frac{h^{l}_{u}}{\sqrt{\left|\symcal{N}\left(v\right) \right|\left|\symcal{N}\left(u\right) \right|}}
-	 \end{align}
-	 \(W^{l} \in \symbb{R}^{d_{l}\times d_{l+1}}\) is the learnable weight matrix applied to the node embeddings, and \(f\) is a non-linear activation function, such as \(\operatorname{ReLU}\).
-	 Node embeddings \(h_{u}^{l}\) are normalized by the size of their neighborhood, \ie{}their degree: \(\left|\symcal{N}\left(u\right) \right|\) to prevent explosion of the embeddings.
-	 The updates of all nodes can be written in the following matrix form:
-	 \begin{equation}
-		 H_{l+1} = \tilde{D}^{-\tfrac12}\tilde{A}\tilde{D}^{-\tfrac12}H_{l}W^{l}
-	 \end{equation}
-	 where, \(\tilde{A} = A + I_{\left|\symcal{V}\right|}\) is the adjacency matrix with self loops added, \(\tilde{D}\) is the corresponding degree matrix, and \(H_{l} \in \symbb{R}^{\left|\symcal{V}\right| \times d_{l}}\) is the node embedding matrix at layer \(l\).
-	 Variations of the aggregation step have been proposed; for instance, graph attention network weight the neighborhood based on attention mechanism or spectral approaches where the aggregation is done in the Fourier space.
+		As the \gls{cnn} is constructed around the convolution operator, it can easily be adapted to use one-dimensional input, \(\symbf{x} \in \symbb{R}^d\), by using one-dimensional kernel instead of two-dimensional kernel.
 
-	 With \glspl{gnn}, predictions can be made at different levels:
-	 \begin{itemize}[nosep]
-		 \item \textbf{Graph level}: The model outputs a prediction for the entire graph.
-		       The different node embeddings are combined before passing to a classifier network, often a \gls{mlp}.
-		 \item \textbf{Node level}: The model makes a prediction for each node individually.
-		       Each node embedding is passed to a classifier network.
-		 \item \textbf{Edge level}: predict the existence of an edge between two nodes.
-	 \end{itemize}
+		It should be noted that using the convolution operator implies spatial dependencies between input features.
 
- \subsection{Self-attention and transformers}
-	 To correctly understand a sentence, one must relate words to the sentence's other words to augment their meaning.
-	 In machine learning, this is achieved through attention mechanisms.
-	 Attention mechanisms are a simple weighting of the data, and they enhance the data elements by dynamically including information about the input's context.
-	 There are multiple flavors of attention; the most well-known one is the scaled-dot product attention.
-	 The self-attention, based on the scaled-dot product attention, takes a two-dimensional input, \(\symbf{x} \in \symbb{R}^{L\times s}\), where \(L\) is the number of input elements and \(s\) the embedding dimension.
-	 The input \(\symbf{x}\) is projected by three independent trainable linear projections into the query \(Q \in \symbb{R}^{L \times d}\), the key \(K \in \symbb{R}^{L \times d}\) and the value \(V \in \symbb{R}^{L \times d}\):
-	 \begin{align}
-		 Q & = \symbf{x}\cdot W^{Q} \\
-		 K & = \symbf{x}\cdot W^{K} \\
-		 V & = \symbf{x}\cdot W^{V}
-	 \end{align}
-	 Projection matrix \(W^Q \in \symbb{R}^{s \times d} \) (respectively \(W^K\in \symbb{R}^{s \times d}\) and \(W^V\in \symbb{R}^{s \times d}\)) maps the input, \(\symbf{x}\), from an \(s\)-dimensional space to a \(d\)-dimensional space.
-	 The attention is then applied to those three matrices, \(Q\), \(K\), and \(V\).
-	 \begin{align}
-		 \operatorname{Attention}\left(Q,K,T\right) & = \softmax\left( \frac{Q\cdot K^T}{\sqrt{d}}\right) \cdot V\label{eq:selfattention} \\
-		                                            & = A \cdot V \label{eq:attention_small}
-	 \end{align}
-	 The attention map, \(A \in \symbb{R}^{L \times L}\), measures the similarity between the keys and the query.
-	 Each row of the attention matrix contains the weights of each input element that are important to the others.
-	 The information of other input elements is incorporated by multiplying the matrix value by the attention matrix~(\cref{eq:attention_small}).
+	\subsection{\Glsfmtfull{gnn}}
+		\Gls{gnn} is an architecture that processes graphs.
+		A graph \(\symcal{G}\) is a structure that consists of vertices \(\symcal{V}\) and edges \(\symcal{E}\).
+		An edge \(\left(u,v\right) \in \symcal{V}^2,\, u\neq v\) connects two vertices \(u\) and \(v\), this link represents a relationship between the two vertices.
+		The relationship between two nodes can be directed or undirected.
+		In a homogeneous graph, each vertex represents the same type of entities, whereas, in a heterogeneous graph, each node can represent different types of entities.
+		When different relationship types exist between two nodes, the graph is called a multigraph.
+		Graphs are ubiquitous and are found in many domains:
+		\begin{itemize}[nosep]
+			\item molecules are graphs where nodes represent an atom and edges the covalent bond between two atoms,
+			\item social networks are graphs where nodes represent people and edges a relationship between two people,
+			\item the scientific literature can be seen as a graph, nodes represent a paper and edges a citation,
+			\item in biology \gls{ppi} networks are graphs where nodes represent a protein and edges describe an interaction between two proteins.
+		\end{itemize}
 
-	 Usually, the self-attention computation is performed in \(h\) different heads to learn different types of interactions, this operation is called \gls{mhsa}.
-	 In each head, the input is projected into a \(\frac{d}{h}\)-dimensional space before applying the attention.
-	 Each head has its own independent projection matrices: \(W^Q_h \in \symbb{R}^{s \times \frac{d}{h}}\), \(W^K_h \in \symbb{R}^{s \times \frac{d}{h}}\), \(W^V_h \in \symbb{R}^{s \times \frac{d}{h}}\)
-	 The output of each head, \(H_i\), is concatenated and projected back to a \(d\)-dimensional space with another weight matrix \(W^O \in \symbb{R}^{d \times d}\).
-	 \begin{align}
-		 \MHSA\left(X\right) & = \operatorname{concat}\left(\left[H_1, \ldots, H_h \right] \right)\cdot W^O \\
-		 H_i                 & = \operatorname{Attention}\left(XW^Q_i, XW^K_i, XW^V_i\right)
-	 \end{align}
-	 Let \(Z \in \symbb{R}^{L \times d}\) be the output of the \gls{mhsa} operation.
+		A graph is represented by three different matrices: its adjacency matrix \(A \in {\left\{0,1\right\}}^{\left|\symcal{V}\right| \times \left|\symcal{V}\right|}\) which describe the structure of the graph, the node embeddings \(X \in \symbb{R}^{\left|\symcal{V}\right| \times d_v}\) and the edge embeddings \(E \in \symbb{R}^{\left|\symcal{V}\right| \times d_e}\).
+		Each row of the node embedding matrix is a node's \(d_v\)-length vector embedding.
+		Similarly, each row of the edge embeddings matrix is the \(d_e\)-legnth vector embedding of an edge.
+		In the following, I will focus on undirected graphs without edge embedding \(E\).
 
-	 The attention mechanism is used in the transformer, an encoder-decoder architecture.
-	 I will only describe the encoder where the self-attention is used.
-	 The transformer encoder is a stacking of \(n\) blocks, each block is composed of a self-attention and a feed-forward network, \(\operatorname{FFN}\)~\cref{eq:transformer_block}.
-	 Each sublayer of the block has a residual connection to prevent vanishing gradients followed by a layer normalization \(\LN\)\footnote{We only describe the orignial transformer architecture where post-normalization is used but many recent architectures employ a pre-normalization scheme, which has been shown to work better~\cite{TransformerpreLN}.}.
-	 \begin{equation}
-		\operatorname{TransformerBlock}\left(X\right) = \operatorname{FFN}\left(\LN\left(X + \MHSA\left(X\right)\right)\right)\label{eq:transformer_block}
-	 \end{equation}
-	 The feed-forward network transform each element \({\left(Z_i\right)}_{1 \leq i \leq L}\) independently with two successive linear transformation with an intermediate \(\operatorname{ReLU}\) activation~(\cref{eq:ffn}).
-	 \begin{equation}%add add norm 
-		 \operatorname{FFN}\left(X\right) = \LN\left( X + \operatorname{ReLU}\left(XW_1 + B_1\right)W_2 + B_2\right) \label{eq:ffn}
-	 \end{equation}
-	 Usually, the input is first projected in a higher dimension, \(4d\), and projected back to its original dimension, \(d\).
-	 In addition to these two elements, the encoder blocks include a layer normalization known to speed up the training and skip connections to prevent vanishing gradients.
+		A \gls{gnn} is an architecture composed of an input layer, \(L\) hidden layers, and one output layer.
+		Similarly to the \gls{cnn}, some hidden layers are replaced with graph convolution layers
+		\Glspl{gcn}, update node embeddings by aggregating information from neighboring nodes.
+		The embedding of node \(v\), \(h^{l+1}_{v} \in \symbb{R}^{d_{l+1}}\) is updated by combining its previous embedding \(h^{l}_{v} \in \symbb{R}^{d_{l}}\) with the aggregated embedding \(h^{l}_{v,\text{agg}}\) from neighboring nodes \(\left|\symcal{N}\left(v\right) \right|\):
+		\begin{align}
+			h^{l+1}_{v}          & = f\left( \frac{h^{l}_{v}W^{l}}{\left|\symcal{N}\left(v\right) \right|} + h^{l}_{v,\text{agg}}W^{l}\right)                                    \\
+			h^{l}_{v,\text{agg}} & = \sum_{u \in \symcal{N}\left(v\right)} \frac{h^{l}_{u}}{\sqrt{\left|\symcal{N}\left(v\right) \right|\left|\symcal{N}\left(u\right) \right|}}
+		\end{align}
+		\(W^{l} \in \symbb{R}^{d_{l}\times d_{l+1}}\) is the learnable weight matrix applied to the node embeddings, and \(f\) is a non-linear activation function, such as \(\operatorname{ReLU}\).
+		Node embeddings \(h_{u}^{l}\) are normalized by the size of their neighborhood, \ie{}their degree: \(\left|\symcal{N}\left(u\right) \right|\) to prevent explosion of the embeddings.
+		The updates of all nodes can be written in the following matrix form:
+		\begin{equation}
+			H_{l+1} = \tilde{D}^{-\tfrac12}\tilde{A}\tilde{D}^{-\tfrac12}H_{l}W^{l}
+		\end{equation}
+		where, \(\tilde{A} = A + I_{\left|\symcal{V}\right|}\) is the adjacency matrix with self loops added, \(\tilde{D}\) is the corresponding degree matrix, and \(H_{l} \in \symbb{R}^{\left|\symcal{V}\right| \times d_{l}}\) is the node embedding matrix at layer \(l\).
+		Variations of the aggregation step have been proposed; for instance, graph attention network weight the neighborhood based on attention mechanism or spectral approaches where the aggregation is done in the Fourier space.
 
-	 While the transformer and, in particular, the self-attention was primarily designed to study text sequences, it can be applied to various data types that can be represented in a format compatible with the attention mechanism, such as images, videos, time series, etc.
-	 This section mainly describes self-attention, where the query, key, and value are generated from the same input.
-	 The query can be obtained from one input, and the key and value can be obtained from another.
-	 In this case, we talk about cross-attention:
-	 \begin{equation}
-		\operatorname{CA}\left(X_1, X_2 \right) = \operatorname{Attention} \left(X_1W^Q, X_2W^K, X_2W^V\right) \label{eq:cross_attention}
-	 \end{equation}
+		With \glspl{gnn}, predictions can be made at different levels:
+		\begin{itemize}[nosep]
+			\item \textbf{Graph level}: The model outputs a prediction for the entire graph.
+				The different node embeddings are combined before passing to a classifier network, often a \gls{mlp}.
+			\item \textbf{Node level}: The model makes a prediction for each node individually.
+				Each node embedding is passed to a classifier network.
+			\item \textbf{Edge level}: predict the existence of an edge between two nodes.
+		\end{itemize}
 
-	 One limitation of the scaled-dot product attention is its quadratic complexity in time and space.
-	 This quadratic complexity limits the number of elements \(L\) in the inputs to a few thousand.
-	 New approaches have been proposed to have more efficient transformer architectures to circumvent this limitation.
-	 Among those methods, some proposed sparsifying the attention matrix by limiting the attention window to fixed or learnable patterns.
-	 Another approach proposed a low-rank approximation of the self-attention matrix.
-	 It has also been proposed to use kernelization of the attention matrix to enable a write of the attention computation to avoid computing the large \(L \times L\) attention matrix.
-	 Approximation methods of the attention matrix have been proposed.
-	 Some other methods did not change the attention formulation but proposed new algorithms to compute the attention matrix or optimized cuda kernel to leverage the GPU memory hierarchy efficiently.
+	\subsection{Self-attention and transformers}
+		To correctly understand a sentence, one must relate words to the sentence's other words to augment their meaning.
+		In machine learning, this is achieved through attention mechanisms.
+		Attention mechanisms are a simple weighting of the data, and they enhance the data elements by dynamically including information about the input's context.
+		There are multiple flavors of attention; the most well-known one is the scaled-dot product attention.
+		The self-attention, based on the scaled-dot product attention, takes a two-dimensional input, \(\symbf{x} \in \symbb{R}^{L\times s}\), where \(L\) is the number of input elements and \(s\) the embedding dimension.
+		The input \(\symbf{x}\) is projected by three independent trainable linear projections into the query \(Q \in \symbb{R}^{L \times d}\), the key \(K \in \symbb{R}^{L \times d}\) and the value \(V \in \symbb{R}^{L \times d}\):
+		\begin{align}
+			Q & = \symbf{x}\cdot W^{Q} \\
+			K & = \symbf{x}\cdot W^{K} \\
+			V & = \symbf{x}\cdot W^{V}
+		\end{align}
+		Projection matrix \(W^Q \in \symbb{R}^{s \times d} \) (respectively \(W^K\in \symbb{R}^{s \times d}\) and \(W^V\in \symbb{R}^{s \times d}\)) maps the input, \(\symbf{x}\), from an \(s\)-dimensional space to a \(d\)-dimensional space.
+		The attention is then applied to those three matrices, \(Q\), \(K\), and \(V\).
+		\begin{align}
+			\operatorname{Attention}\left(Q,K,T\right) & = \softmax\left( \frac{Q\cdot K^T}{\sqrt{d}}\right) \cdot V\label{eq:selfattention} \\
+			                                           & = A \cdot V \label{eq:attention_small}
+		\end{align}
+		The attention map, \(A \in \symbb{R}^{L \times L}\), measures the similarity between the keys and the query.
+		Each row of the attention matrix contains the weights of each input element that are important to the others.
+		The information of other input elements is incorporated by multiplying the matrix value by the attention matrix~(\cref{eq:attention_small}).
 
- \subsection{\Glsfmtfull{ae} and \Glsfmtfull{vae}}
-	 \Gls{ae} is a feedforward architecture used to learn a latent data representation with unsupervised training.
-	 The \glsxtrlong{ae} is composed of an input \(\symbf{x}\), an encoder \(E\), a latent representation \(\symbf{z}\), a decoder \(D\) and an output \(\symbf{\hat{x}}\).
-	 The encoder learns the latent representation of the input by encoding the input: \(\symbf{z} = E\left(\symbf{x}\right)\).
-	 Then, the decoder reconstructs the input from the latent representation: \(\symbf{\hat{x}} = D\left(\symbf{z}\right)\).
-	 The auto-encoder principles can be applied to numerous architecture and various input data; the encoder \(E\) and the decoder \(D\) can be an \gls{mlp}, a \gls{cnn} or a \gls{gnn}.
+		Usually, the self-attention computation is performed in \(h\) different heads to learn different types of interactions, this operation is called \gls{mhsa}.
+		In each head, the input is projected into a \(\frac{d}{h}\)-dimensional space before applying the attention.
+		Each head has its own independent projection matrices: \(W^Q_h \in \symbb{R}^{s \times \frac{d}{h}}\), \(W^K_h \in \symbb{R}^{s \times \frac{d}{h}}\), \(W^V_h \in \symbb{R}^{s \times \frac{d}{h}}\)
+		The output of each head, \(H_i\), is concatenated and projected back to a \(d\)-dimensional space with another weight matrix \(W^O \in \symbb{R}^{d \times d}\).
+		\begin{align}
+			\MHSA\left(X\right) & = \operatorname{concat}\left(\left[H_1, \ldots, H_h \right] \right)\cdot W^O \\
+			H_i                 & = \operatorname{Attention}\left(XW^Q_i, XW^K_i, XW^V_i\right)
+		\end{align}
+		Let \(Z \in \symbb{R}^{L \times d}\) be the output of the \gls{mhsa} operation.
 
-	 The mapping of the \gls{ae} is expressed as the composition of the encoder and the decoder: \(g\left(\symbf{x}, \theta\right) = D\left(E\left(\symbf{x}, \theta_E\right), \theta_D\right)\), where \(\theta\) corresponds to the parameters of the encoder \(\theta_E\) and the parameters of the decoder \(\theta_D\).
+		The attention mechanism is used in the transformer, an encoder-decoder architecture.
+		I will only describe the encoder where the self-attention is used.
+		The transformer encoder is a stacking of \(n\) blocks, each block is composed of a self-attention and a feed-forward network, \(\operatorname{FFN}\)~\cref{eq:transformer_block}.
+		Each sublayer of the block has a residual connection to prevent vanishing gradients followed by a layer normalization \(\LN\)\footnote{We only describe the orignial transformer architecture where post-normalization is used but many recent architectures employ a pre-normalization scheme, which has been shown to work better~\cite{TransformerpreLN}.}.
+		\begin{equation}
+			\operatorname{TransformerBlock}\left(X\right) = \operatorname{FFN}\left(\LN\left(X + \MHSA\left(X\right)\right)\right)\label{eq:transformer_block}
+		\end{equation}
+		The feed-forward network transform each element \({\left(Z_i\right)}_{1 \leq i \leq L}\) independently with two successive linear transformation with an intermediate \(\operatorname{ReLU}\) activation~(\cref{eq:ffn}).
+		\begin{equation}%add add norm 
+			\operatorname{FFN}\left(X\right) = \LN\left( X + \operatorname{ReLU}\left(XW_1 + B_1\right)W_2 + B_2\right) \label{eq:ffn}
+		\end{equation}
+		Usually, the input is first projected in a higher dimension, \(4d\), and projected back to its original dimension, \(d\).
+		In addition to these two elements, the encoder blocks include a layer normalization known to speed up the training and skip connections to prevent vanishing gradients.
 
-	 Variations of the \gls{ae} add different regularizations to improve the latent representation.
-	 A commonly used strategy is the \gls{dae}, where a random noise, usually gaussian, is added to the input, and the model aims to reconstruct the denoised input.
-	 The \gls{vae} adds regularization on the latent space by constraining the latent representation to follow a multivariate gaussian distribution, and each latent feature is represented by a gaussian distribution of parameters \(\mu\) and \(\sigma\).
-	 The encoder does not anymore learn the latent representation but learns the parameters \(\mu_{\symbf{x}}\) and \(\sigma_{\symbf{x}}\) of the distribution: \(E\left(\symbf{x}\right) = \left(\mu_{\symbf{x}},\sigma_{\symbf{x}}\right) \).
-	 The latent representation, \(\symbf{z}\), is then sampled from this distribution and fed to the decoder.
+		While the transformer and, in particular, the self-attention was primarily designed to study text sequences, it can be applied to various data types that can be represented in a format compatible with the attention mechanism, such as images, videos, time series, etc.
+		This section mainly describes self-attention, where the query, key, and value are generated from the same input.
+		The query can be obtained from one input, and the key and value can be obtained from another.
+		In this case, we talk about cross-attention:
+		\begin{equation}
+			\operatorname{CA}\left(X_1, X_2 \right) = \operatorname{Attention} \left(X_1W^Q, X_2W^K, X_2W^V\right) \label{eq:cross_attention}
+		\end{equation}
 
-	 If the latent representation is later used for classification tasks, a classifier branch can be added to the latent representation to predict the corresponding class: \(\hat{y} = \operatorname{Classifier}\left(z\right)\).
-	 Adding a classification branch should improve the latent representation with more relevant features for the classification.
-	 In this case, there are two different tasks:
-	 \begin{enumerate}[nosep]
-		 \item Encode the input and reconstruct it.
-		 \item Predict the corresponding class from the latent representation.
-	 \end{enumerate}
+		One limitation of the scaled-dot product attention is its quadratic complexity in time and space.
+		This quadratic complexity limits the number of elements \(L\) in the inputs to a few thousand.
+		New approaches have been proposed to have more efficient transformer architectures to circumvent this limitation.
+		Among those methods, some proposed sparsifying the attention matrix by limiting the attention window to fixed or learnable patterns.
+		Another approach proposed a low-rank approximation of the self-attention matrix.
+		It has also been proposed to use kernelization of the attention matrix to enable a write of the attention computation to avoid computing the large \(L \times L\) attention matrix.
+		Approximation methods of the attention matrix have been proposed.
+		Some other methods did not change the attention formulation but proposed new algorithms to compute the attention matrix or optimized cuda kernel to leverage the GPU memory hierarchy efficiently.
 
- \subsection{\Glsfmtfull{gan}}
+	\subsection{\Glsfmtfull{ae} and \Glsfmtfull{vae}}
+		\Gls{ae} is a feedforward architecture used to learn a latent data representation with unsupervised training.
+		The \glsxtrlong{ae} is composed of an input \(\symbf{x}\), an encoder \(E\), a latent representation \(\symbf{z}\), a decoder \(D\) and an output \(\symbf{\hat{x}}\).
+		The encoder learns the latent representation of the input by encoding the input: \(\symbf{z} = E\left(\symbf{x}\right)\).
+		Then, the decoder reconstructs the input from the latent representation: \(\symbf{\hat{x}} = D\left(\symbf{z}\right)\).
+		The auto-encoder principles can be applied to numerous architecture and various input data; the encoder \(E\) and the decoder \(D\) can be an \gls{mlp}, a \gls{cnn} or a \gls{gnn}.
 
- \subsection{Model training and evaluation}
-	 Earlier, we said that the goal of the different deep learning architectures was to find the best approximation \(g^{*}\) of the mapping \(g\).
-	 The mapping \(g^{*}\) is found by solving an optimization problem through empirical risk minimization.
-	 \begin{equation}
-		 % J\left(\theta\right) = \symbb{E}_{\left(x,y\right)\sim \hat{p}_{data}}\; \symcal{L}\left(g\left(\symbf{x}; \theta\right), y\right)
-		 \argmin_{\theta} \symcal{L}\left(g\left(\symbf{x}; \theta\right), y\right) \label{eq:dl_opt}
-	 \end{equation}
-	 where \(\symcal{L}\) is the cost function.
-	 In the supervised learning case, learning a discriminative task, \(y\) is the target output.
-	 In the self-supervised case~(\gls{ae} and \gls{vae}), \(y\) is the training example itself.
-	 For a multiclass classification problem, the cross-entropy loss is used as a cost function \(\symcal{L}\).
-	 \begin{equation}
-		 \symcal{L}_{CE}\left(\theta\right) = \frac{-1}{N}\sum_{i=1}^{N}\sum_{c=1}^{C} w_c y_{i,c}\log\left(\hat{y}_{i,c}\right)
-	 \end{equation}
-	 where \(w_c\) denotes the weight, inversely proportional to the class size, of class \(c\) and \(N\) is the number of training examples.
-	 \(\hat{y}_{i,c}\) is the probability predicted by the model that the example \(i\) belongs to the class \(c\).
-	 \(y_{i,c}\) is an indicator of the correct class of the sample \(i\):
-	 \(
-	 y_{i,c} = \begin{cases}
-		 1 \quad \text{if}\; y_i = c \, , \\
-		 0 \quad \text{else}
-	 \end{cases}
-	 \).
+		The mapping of the \gls{ae} is expressed as the composition of the encoder and the decoder: \(g\left(\symbf{x}, \theta\right) = D\left(E\left(\symbf{x}, \theta_E\right), \theta_D\right)\), where \(\theta\) corresponds to the parameters of the encoder \(\theta_E\) and the parameters of the decoder \(\theta_D\).
 
-	 The cost function is adapted to the problem; for the \gls{ae}, a reconstruction loss is used, and the goal is to minimize the difference between the input \(\symbf{x}\) and the reconstructed input \(\hat{x}\):
-	 \begin{equation}
-		 \symcal{L}_{AE}\left(\theta\right) = \frac{1}{N}\sum_{i=1}^{N} {\left\|x_i - \hat{x}_i \right\|}_2^{2} \label{eq:loss_ae}
-	 \end{equation}
-	 The \gls{vae} cost function is composed of the reconstruction term of the \gls{ae} loss and a regularization term that forces the latent space to follow a gaussian distribution: the Kullback-Leibler divergence (\(\KL\)):
-	 \begin{equation}
-		 \symcal{L}_{VAE}\left(\theta\right) = \symcal{L}_{AE}\left(\theta\right) + \KL\left(\symcal{N}\left(\mu_{x}, \sigma_{x}\right), \symcal{N}\left(0, I\right)\right)
-	 \end{equation}
-	 The \(\KL\) divergence measures how a probability distribution is different from another probability distribution.
+		Variations of the \gls{ae} add different regularizations to improve the latent representation.
+		A commonly used strategy is the \gls{dae}, where a random noise, usually gaussian, is added to the input, and the model aims to reconstruct the denoised input.
+		The \gls{vae} adds regularization on the latent space by constraining the latent representation to follow a multivariate gaussian distribution, and each latent feature is represented by a gaussian distribution of parameters \(\mu\) and \(\sigma\).
+		The encoder does not anymore learn the latent representation but learns the parameters \(\mu_{\symbf{x}}\) and \(\sigma_{\symbf{x}}\) of the distribution: \(E\left(\symbf{x}\right) = \left(\mu_{\symbf{x}},\sigma_{\symbf{x}}\right) \).
+		The latent representation, \(\symbf{z}\), is then sampled from this distribution and fed to the decoder.
 
-	 \begin{equation}
-		 \symcal{L}_{GAN}\left(\theta\right)
-	 \end{equation}
+		If the latent representation is later used for classification tasks, a classifier branch can be added to the latent representation to predict the corresponding class: \(\hat{y} = \operatorname{Classifier}\left(z\right)\).
+		Adding a classification branch should improve the latent representation with more relevant features for the classification.
+		In this case, there are two different tasks:
+		\begin{enumerate}[nosep]
+			\item Encode the input and reconstruct it.
+			\item Predict the corresponding class from the latent representation.
+		\end{enumerate}
 
-	 % TODO improve survival introduction
-	 There are two types of loss for survival prediction: risk-based approach and discrete-time approach.
-	 Risk-based approaches extend the Cox model to deep-learning architecture and use partial log-likelihood loss.
-	 \begin{equation}
-		 \symcal{L}_{Cox}\left(\theta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\hat{y}_i - \log \sum_{j \in \mathcal{R}(T_i)}\phi_j \right)\; \text{,} \label{eq:cox_loss}
-	 \end{equation}
-	 where \(\delta_i\) specifies if the event occurred for patient \(i\), \(T_i\) represents the time associated with the event, and \(N_{\delta_i = 1}\) is the number of patients for which the event occurred (\(\delta_i = 1\)).
-	 \(\phi_i = e^{\hat{y}_i}\) is the predicted risk for patient \(i\).
-	 \(\symcal{R}(T_i) = \{j: T_j > T_i\}\) is the risk set, the set of patients who are still at risk of death at time \(T_i\).
+	\subsection{Model training and evaluation}
+		Earlier, we said that the goal of the different deep learning architectures was to find the best approximation \(g^{*}\) of the mapping \(g\).
+		The mapping \(g^{*}\) is found by solving an optimization problem through empirical risk minimization.
+		\begin{equation}
+			% J\left(\theta\right) = \symbb{E}_{\left(x,y\right)\sim \hat{p}_{data}}\; \symcal{L}\left(g\left(\symbf{x}; \theta\right), y\right)
+			\argmin_{\theta} \symcal{L}\left(g\left(\symbf{x}; \theta\right), y\right) \label{eq:dl_opt}
+		\end{equation}
+		where \(\symcal{L}\) is the cost function.
+		In the supervised learning case, learning a discriminative task, \(y\) is the target output.
+		In the self-supervised case~(\gls{ae} and \gls{vae}), \(y\) is the training example itself.
+		For a multiclass classification problem, the cross-entropy loss is used as a cost function \(\symcal{L}\).
+		\begin{equation}
+			\symcal{L}_{CE}\left(\theta\right) = \frac{-1}{N}\sum_{i=1}^{N}\sum_{c=1}^{C} w_c y_{i,c}\log\left(\hat{y}_{i,c}\right)
+		\end{equation}
+		where \(w_c\) denotes the weight, inversely proportional to the class size, of class \(c\) and \(N\) is the number of training examples.
+		\(\hat{y}_{i,c}\) is the probability predicted by the model that the example \(i\) belongs to the class \(c\).
+		\(y_{i,c}\) is an indicator of the correct class of the sample \(i\):
+		\(
+		y_{i,c} = \begin{cases}
+			1 \quad \text{if}\; y_i = c \, , \\
+			0 \quad \text{else}
+		\end{cases}
+		\).
 
-	 There is no closed form to the optimization problem described in \cref{eq:dl_opt} to find the optimal parameters \(\theta^{*}\).
-	 The minimization of the loss function is achieved with gradient descent.
-	 The parameters \(\theta\) are randomly initialized, then the parameters are updated in gradient steps by back-propagating a fraction of the error, \ie{}the gradient of the loss with respect to the parameters: \(\theta_{n+1} = \theta_{n} - \eta \nabla \symcal{L}_{|\theta_n}\left(\theta_{n}\right)\).
-	 The hyperparameters \(\eta\) is called the learning rate, and it controls the convergence speed to the optimal solution.
-	 Instead of considering all the training data \(N\), data is split into mini-batches of size \(N_b\), and the gradient descent is done on these mini-batches.
-	 This is called \gls{sgd}.
-	 There are algorithmic variations to this gradient descent strategy.
-	 It has been proposed to add a momentum term; it remembers the update \(\delta_{\theta}\) at each iteration and updates the weights as a linear combination of the gradient and the previous update.
-	 RMSprop ensures that the learning rate is adapted for each model weight by normalizing the gradients with the moving average of the squares of gradients.
-	 Adam combines the previous algorithm and keeps an exponential moving average estimate of the second-order moments of the gradients.
-	 The processing of all mini-batches corresponds to one epoch, and the training is repeated for multiple epochs until convergence.
+		The cost function is adapted to the problem; for the \gls{ae}, a reconstruction loss is used, and the goal is to minimize the difference between the input \(\symbf{x}\) and the reconstructed input \(\hat{x}\):
+		\begin{equation}
+			\symcal{L}_{AE}\left(\theta\right) = \frac{1}{N}\sum_{i=1}^{N} {\left\|x_i - \hat{x}_i \right\|}_2^{2} \label{eq:loss_ae}
+		\end{equation}
+		The \gls{vae} cost function is composed of the reconstruction term of the \gls{ae} loss and a regularization term that forces the latent space to follow a gaussian distribution: the Kullback-Leibler divergence (\(\KL\)):
+		\begin{equation}
+			\symcal{L}_{VAE}\left(\theta\right) = \symcal{L}_{AE}\left(\theta\right) + \KL\left(\symcal{N}\left(\mu_{x}, \sigma_{x}\right), \symcal{N}\left(0, I\right)\right)
+		\end{equation}
+		The \(\KL\) divergence measures how a probability distribution is different from another probability distribution.
 
-	 % Describe GAN training
+		% TODO improve survival introduction
+		There are two types of loss for survival prediction: risk-based approach and discrete-time approach.
+		Risk-based approaches extend the Cox model to deep-learning architecture and use partial log-likelihood loss.
+		\begin{equation}
+			\symcal{L}_{Cox}\left(\theta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\hat{y}_i - \log \sum_{j \in \mathcal{R}(T_i)}\phi_j \right)\; \text{,} \label{eq:cox_loss}
+		\end{equation}
+		where \(\delta_i\) specifies if the event occurred for patient \(i\), \(T_i\) represents the time associated with the event, and \(N_{\delta_i = 1}\) is the number of patients for which the event occurred (\(\delta_i = 1\)).
+		\(\phi_i = e^{\hat{y}_i}\) is the predicted risk for patient \(i\).
+		\(\symcal{R}(T_i) = \{j: T_j > T_i\}\) is the risk set, the set of patients who are still at risk of death at time \(T_i\).
 
-	 Deep learning models are sensitive to overfitting.
-	 Models are complex with numerous parameters; they might learn how to perfectly solve a task on the training set without generalizing to new data.
-	 The risk of overfitting is increased when number of training samples is limited.
-	 Different regularization techniques have been designed to prevent this overfitting.
-	 Batch normalization normalizes the signal \(z^{l}\) by re-centering and re-scaling it before applying the activation function \(f\).
-	 Dropout randomly ignores some neurons during training.
-	 The ignored neurons are sampled independently from a Bernoulli distribution.
-	 Regularization terms can be added to the loss such as L1 regularization \({\|\theta\|}_{1}\) which forces model weights to be sparse or L2 regularization \({\|\theta\|}_{2}\) favoring smaller and evenly distributed weights.
-	 Early stopping monitors a validation metric; the training is stopped to prevent overfitting when it no longer improves.
-	 The best way to have good generalization is to train the model on more data.
-	 An excellent way to get more data is to generate fake data and add it to the training set.
-	 For images, simple transformations like translations and rotations can be used to generate fake data.
-	 However, it is not always possible to generate fake data; for instance, there is no such simple transformation for omics data.
+		There is no closed form to the optimization problem described in \cref{eq:dl_opt} to find the optimal parameters \(\theta^{*}\).
+		The minimization of the loss function is achieved with gradient descent.
+		The parameters \(\theta\) are randomly initialized, then the parameters are updated in gradient steps by back-propagating a fraction of the error, \ie{}the gradient of the loss with respect to the parameters: \(\theta_{n+1} = \theta_{n} - \eta \nabla \symcal{L}_{|\theta_n}\left(\theta_{n}\right)\).
+		The hyperparameters \(\eta\) is called the learning rate, and it controls the convergence speed to the optimal solution.
+		Instead of considering all the training data \(N\), data is split into mini-batches of size \(N_b\), and the gradient descent is done on these mini-batches.
+		This is called \gls{sgd}.
+		There are algorithmic variations to this gradient descent strategy.
+		It has been proposed to add a momentum term; it remembers the update \(\delta_{\theta}\) at each iteration and updates the weights as a linear combination of the gradient and the previous update.
+		RMSprop ensures that the learning rate is adapted for each model weight by normalizing the gradients with the moving average of the squares of gradients.
+		Adam combines the previous algorithm and keeps an exponential moving average estimate of the second-order moments of the gradients.
+		The processing of all mini-batches corresponds to one epoch, and the training is repeated for multiple epochs until convergence.
 
-	 A deep learning model and its training strategy have many hyperparameters that can influence the model's performance.
-	 A good strategy to select the best hyperparameters is conducting a random search and comparing the performance on a validation set.
-	 The hyperparameters leading to the best performances are then selected.
+		Deep learning models are sensitive to overfitting.
+		Models are complex with numerous parameters; they might learn how to perfectly solve a task on the training set without generalizing to new data.
+		The risk of overfitting is increased when number of training samples is limited.
+		Different regularization techniques have been designed to prevent this overfitting.
+		Batch normalization normalizes the signal \(z^{l}\) by re-centering and re-scaling it before applying the activation function \(f\).
+		Dropout randomly ignores some neurons during training.
+		The ignored neurons are sampled independently from a Bernoulli distribution.
+		Regularization terms can be added to the loss such as L1 regularization \({\|\theta\|}_{1}\) which forces model weights to be sparse or L2 regularization \({\|\theta\|}_{2}\) favoring smaller and evenly distributed weights.
+		Early stopping monitors a validation metric; the training is stopped to prevent overfitting when it no longer improves.
+		The best way to have good generalization is to train the model on more data.
+		An excellent way to get more data is to generate fake data and add it to the training set.
+		For images, simple transformations like translations and rotations can be used to generate fake data.
+		However, it is not always possible to generate fake data; for instance, there is no such simple transformation for omics data.
 
-	 For classification tasks, the performances were evaluated with the error rate or the accuracy, recall, precision, specificity, F1-score, and the \gls{auroc}.
-	 For survival prediction tasks, performances were evaluated with the concordance-index.
-	 It estimates that for a pair of individuals, the predicted risks, \(\phi\),  are concordant with their actual survival times.
-	 \begin{equation}
-		 \operatorname{C-Index} = \frac{\sum_{i,j}\symbb{1}_{T_j < T_i}\symbb{1}_{\phi_j > \phi_i}\delta_j}{\sum_{i,j}\symbb{1}_{T_j < T_i}\delta_j}
-	 \end{equation}
-	 A \(\operatorname{C-Index} = 0.5\) represents a random prediction and \(\operatorname{C-Index} = 1\) corresponds to a perfect ranking.
+		A deep learning model and its training strategy have many hyperparameters that can influence the model's performance.
+		A good strategy to select the best hyperparameters is conducting a random search and comparing the performance on a validation set.
+		The hyperparameters leading to the best performances are then selected.
+
+		For classification tasks, the performances were evaluated with the error rate or the accuracy, recall, precision, specificity, F1-score, and the \gls{auroc}.
+		For survival prediction tasks, performances were evaluated with the concordance-index.
+		It estimates that for a pair of individuals, the predicted risks, \(\phi\),  are concordant with their actual survival times.
+		\begin{equation}
+			\operatorname{C-Index} = \frac{\sum_{i,j}\symbb{1}_{T_j < T_i}\symbb{1}_{\phi_j > \phi_i}\delta_j}{\sum_{i,j}\symbb{1}_{T_j < T_i}\delta_j}
+		\end{equation}
+		A \(\operatorname{C-Index} = 0.5\) represents a random prediction and \(\operatorname{C-Index} = 1\) corresponds to a perfect ranking.
+
+	\subsection{\Glsfmtfull{gan}}
+		Previously, we mainly describe models used for \textbf{discriminative} tasks, which learn a mapping between data and labels.
+		Deep learning models are suitable for capturing data characteristics, opening possibilities for \textbf{generative} tasks where the model generates new samples indistinguishable from the real samples.
+		Let \(p_{d}\) be the true data distribution, generative models learn a distribution \(p_{g}\) as close as possible to the true distribution \(p_{d}\).
+		\Glspl{gan} are a type of generative model introduced by \citeauthor{Goodfellow2014GAN} in \citeyear{Goodfellow2014GAN} consisting of two components: a generator \(G\) and a discriminator \(D\)~\cite{Goodfellow2014GAN}.
+		The generator and the discriminator are neural networks whose architecture is adapted to the data type considered.
+		The generator captures the data distribution and is able to generate new data \(\hat{x} = G\left(z\right)\), where \(z\) is a latent noise vector sampled from a prior distribution \(p_z\).
+		The discriminator attempts to distinguish real samples from generated ones, it has a sigmoid activation and outputs the probability that a sample is real.
+		The generator and the discriminator compete with each other; the generator network attempts to fool the discriminator while the discriminator tries to be a better expert at detecting fake samples.
+		\(G\) and \(D\) are jointly trained at generating a distribution \(p_{g}\) such that \(D\) cannot distinguish between \(p_{d}\) and \(p_{g}\).
+		A \gls{gan} is trained by solving the following min-max problem:
+		\begin{multline}
+			\min_{G} \max_{D} \symcal{L}_{GAN}\left(G,D\right) = \\ \E_{x\sim p_{d}}\left[ \log\left(D\left(x\right)\right)\right] + \E_{z\sim p_{z}}\left[ \log\left( 1 - D\left(G\left(z\right)\right)\right)\right]
+		\end{multline}
+
+		In practice \gls{gan} training is implemented as an iterative process alternatin between \(k\) steps of optimizing \(D\) and one step optimizing \(G\). 
+		The complete training procedure is presented in XX. 
+
+		Classical GAN problem Gradient vanishing problem.
+		Risk of blocking in the early stages of
+		GAN learning, when the discriminator
+		work is very easy. mode collapse ? 
+		What is the best way to measure the distance between two distributions ? Earth mover distance Wasserstein distance
+		present earth mover distance 
+		% https://arxiv.org/pdf/1904.08994
+		% https://cloud.univ-grenoble-alpes.fr/index.php/s/wxCztjYBbQ6zwd6?dir=undefined&openfile=837709648
+		% https://d2l.ai/chapter_generative-adversarial-networks/gan.html
+		WGAN
+		According to the authors, the discriminator should
+no longer be considered as a classifier but more as a critic.
+The output of the discriminator will be greater for true
+instances than for false instances.
+this approach has also some constraints, hard to satisfy 
+introduce gradient penalty 
+		WGAN-GP
 
 \section{Cancer biology}
- %https://www.cell.com/fulltext/S0092-8674(11)00127-9
- %https://en.wikipedia.org/wiki/The_Hallmarks_of_Cancer#Emerging_Hallmarks
- %file:///nhome/siniac/abeaude/T%C3%A9l%C3%A9chargements/nrc2827.pdf
- %https://en.wikipedia.org/wiki/Cancer
- %https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10618731/pdf/1142.pdf
- %https://www.cancer.gov/about-cancer/understanding/what-is-cancer
- %https://www.who.int/en/health-topics/cancer#tab=tab_1
- %file:///nhome/siniac/abeaude/T%C3%A9l%C3%A9chargements/Molecular%20Biology%20of%20Human%20Cancers_%20Second%20Edition%20--%20Wolfgang%20A_%20Schulz%20--%202,%202023%20--%20Springer,%20Springer%20Nature%20Switzerland%20AG%20--%209783031162855%20--%20c4af4ff1d84151f27d34687b2ca398f9%20--%20Anna%E2%80%99s%20Archive.pdf
- This section does not presume to be a complete presentation of cancer biology but aims to provide the necessary keys to understanding cancer origins and the molecular components involved.
+	%https://www.cell.com/fulltext/S0092-8674(11)00127-9
+	%https://en.wikipedia.org/wiki/The_Hallmarks_of_Cancer#Emerging_Hallmarks
+	%file:///nhome/siniac/abeaude/T%C3%A9l%C3%A9chargements/nrc2827.pdf
+	%https://en.wikipedia.org/wiki/Cancer
+	%https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10618731/pdf/1142.pdf
+	%https://www.cancer.gov/about-cancer/understanding/what-is-cancer
+	%https://www.who.int/en/health-topics/cancer#tab=tab_1
+	%file:///nhome/siniac/abeaude/T%C3%A9l%C3%A9chargements/Molecular%20Biology%20of%20Human%20Cancers_%20Second%20Edition%20--%20Wolfgang%20A_%20Schulz%20--%202,%202023%20--%20Springer,%20Springer%20Nature%20Switzerland%20AG%20--%209783031162855%20--%20c4af4ff1d84151f27d34687b2ca398f9%20--%20Anna%E2%80%99s%20Archive.pdf
+	This section does not presume to be a complete presentation of cancer biology but aims to provide the necessary keys to understanding cancer origins and the molecular components involved.
 
- Organisms are composed of cells organized in tissue.
- Nearly every cell has a genome, the DNA sequence containing the genetic information.
- The DNA sequence contains genes that code for proteins and non-coding sequences.
- Proteins are involved in many cell functions: they act as enzymes, are involved in signaling pathways, or have structural roles.
- In the central dogma of molecular biology, the DNA is converted into RNA  during the transcription, and then RNAs are converted into proteins during the translation.
- Despite all cells sharing the same genetic information, protein content may vary among cells as genes are differentially expressed in response to various environmental and developmental signals.
+	Organisms are composed of cells organized in tissue.
+	Nearly every cell has a genome, the DNA sequence containing the genetic information.
+	The DNA sequence contains genes that code for proteins and non-coding sequences.
+	Proteins are involved in many cell functions: they act as enzymes, are involved in signaling pathways, or have structural roles.
+	In the central dogma of molecular biology, the DNA is converted into RNA  during the transcription, and then RNAs are converted into proteins during the translation.
+	Despite all cells sharing the same genetic information, protein content may vary among cells as genes are differentially expressed in response to various environmental and developmental signals.
 
- \subsection{Regulation of the gene expression}\label{subsec:gene_regulation}
-	 The regulation of gene expression corresponds to the control of the expression of gene products through various mechanisms,
-	 where any step of the gene expression process can be controlled.
-	 The promoter region of a gene mediates the start of the transcription.
-	 Many promoters contain a CpG island, a region of DNA with a high frequency of CpG sites.
-	 The cytosine in these CpG islands can be methylated, \glsxtrlong{dnam} in the gene promoter usually corresponds to a repression of the gene expression.
-	 The transcription of the DNA is regulated by its accessibility.
-	 Indeed, the DNA molecule is wrapped around histone proteins.
-	 Acetylation or methylation of the histones can make the DNA more or less accessible to transcription factors, hence regulating the gene expression.
-	 \Gls{ncrna} regulates the expression of thousands of genes.
-	 For instance, \gls{mirna} can silence the expression of genes by binding to its mRNA and inducing its cleavage.
-	 The mRNA degradation leads to the absence of translation into a protein.
-	 The mechanisms previously described are also known as epigenetic regulation.
-	 Alternative splicing is another way of regulating gene expression; it creates a wide range of proteins by varying the exon composition of an mRNA\@.
-	 A stable mRNA will produce more proteins, acting directly on the mRNA stability through its poly-A tail, another mechanism to control gene expression.
-	 Proteins obtained after the translation can undergo modifications, known as post-translational modifications.
-	 Those modifications are involved in the regulation of protein function.
+	\subsection{Regulation of the gene expression}\label{subsec:gene_regulation}
+		The regulation of gene expression corresponds to the control of the expression of gene products through various mechanisms,
+		where any step of the gene expression process can be controlled.
+		The promoter region of a gene mediates the start of the transcription.
+		Many promoters contain a CpG island, a region of DNA with a high frequency of CpG sites.
+		The cytosine in these CpG islands can be methylated, \glsxtrlong{dnam} in the gene promoter usually corresponds to a repression of the gene expression.
+		The transcription of the DNA is regulated by its accessibility.
+		Indeed, the DNA molecule is wrapped around histone proteins.
+		Acetylation or methylation of the histones can make the DNA more or less accessible to transcription factors, hence regulating the gene expression.
+		\Gls{ncrna} regulates the expression of thousands of genes.
+		For instance, \gls{mirna} can silence the expression of genes by binding to its mRNA and inducing its cleavage.
+		The mRNA degradation leads to the absence of translation into a protein.
+		The mechanisms previously described are also known as epigenetic regulation.
+		Alternative splicing is another way of regulating gene expression; it creates a wide range of proteins by varying the exon composition of an mRNA\@.
+		A stable mRNA will produce more proteins, acting directly on the mRNA stability through its poly-A tail, another mechanism to control gene expression.
+		Proteins obtained after the translation can undergo modifications, known as post-translational modifications.
+		Those modifications are involved in the regulation of protein function.
 
-	 Mutations are not a mechanism of gene regulation but can impact gene expression.
-	 Mutations correspond to an alteration of the DNA sequence by uncorrected errors during DNA replication or induced by environmental factors causing DNA damage.
-	 The mutation can occur in a coding or non-coding sequence.
-	 In coding sequences, the mutation can be synonymous: the mutation does not change the amino acid in the protein sequence due to the redundancy of the genetic code.
-	 On the contrary, non-synonymous mutations could change the amino acid in the protein sequence.
-	 The replacement by a premature stop codon, a nonsense mutation, would result in a truncated non-functional protein.
-	 The change of amino acid could change the structure of the protein or impact its catalytic site, leading to a malfunctioning protein.
-	 Mutations in non-coding regions can have various impacts.
+		Mutations are not a mechanism of gene regulation but can impact gene expression.
+		Mutations correspond to an alteration of the DNA sequence by uncorrected errors during DNA replication or induced by environmental factors causing DNA damage.
+		The mutation can occur in a coding or non-coding sequence.
+		In coding sequences, the mutation can be synonymous: the mutation does not change the amino acid in the protein sequence due to the redundancy of the genetic code.
+		On the contrary, non-synonymous mutations could change the amino acid in the protein sequence.
+		The replacement by a premature stop codon, a nonsense mutation, would result in a truncated non-functional protein.
+		The change of amino acid could change the structure of the protein or impact its catalytic site, leading to a malfunctioning protein.
+		Mutations in non-coding regions can have various impacts.
 
- \subsection{Cancer}
-	 Cancer is not a single disease but rather a group of diseases characterized by abnormal cell growth that can invade tissue and spread to other organs (metastasis).
-	 The transformation of a normal cell into a cancer cell is a multi-step process.
-	 The abnormal growth phenotype is acquired by the dysregulation of pathways controlling cell growth.
-	 This dysregulation occurs by altering the expression of oncogenes, genes promoting cell growth, and tumor suppressor genes, genes inhibiting cell division and cell survival.
-	 Mutations in a promoter region can alter these genes' expression, and the acquisition of mutations in the coding sequence of those genes can alter the protein function.
-	 Mutations in the non-coding part of the genome can alter gene expression regulators and thus indirectly impact oncogenes or tumor suppressor genes expression.
-	 Epigenetic alterations are known to occur in cancer development.
-	 These alterations can be hereditary and transmitted or acquired by environmental exposure to carcinogenic substances.
-	 It is important to consider all the cell's molecular constituents to characterize cancer better, as cancers result from multiscale alterations.
+	\subsection{Cancer}
+		Cancer is not a single disease but rather a group of diseases characterized by abnormal cell growth that can invade tissue and spread to other organs (metastasis).
+		The transformation of a normal cell into a cancer cell is a multi-step process.
+		The abnormal growth phenotype is acquired by the dysregulation of pathways controlling cell growth.
+		This dysregulation occurs by altering the expression of oncogenes, genes promoting cell growth, and tumor suppressor genes, genes inhibiting cell division and cell survival.
+		Mutations in a promoter region can alter these genes' expression, and the acquisition of mutations in the coding sequence of those genes can alter the protein function.
+		Mutations in the non-coding part of the genome can alter gene expression regulators and thus indirectly impact oncogenes or tumor suppressor genes expression.
+		Epigenetic alterations are known to occur in cancer development.
+		These alterations can be hereditary and transmitted or acquired by environmental exposure to carcinogenic substances.
+		It is important to consider all the cell's molecular constituents to characterize cancer better, as cancers result from multiscale alterations.
 
-	 Despite being a group of more than a hundred different diseases, cancers share similar characteristics.
-	 These shared properties are known as the hallmarks of cancer.
-	 Hallmarks define eight capabilities and two enabling capabilities, and they present an organizing principle to approach the complexity of cancers.
+		Despite being a group of more than a hundred different diseases, cancers share similar characteristics.
+		These shared properties are known as the hallmarks of cancer.
+		Hallmarks define eight capabilities and two enabling capabilities, and they present an organizing principle to approach the complexity of cancers.
 
 \section{Omics data}
- The omics field corresponds to the characterization and quantification of pools of biological molecules.
- Each omics field studies an \textit{ome}.
- The \textit{ome} suffix refers to all constituents.
- For instance, the genome refers to all the genetic information of an organism, and genomics corresponds to the study of the genome.
+	The omics field corresponds to the characterization and quantification of pools of biological molecules.
+	Each omics field studies an \textit{ome}.
+	The \textit{ome} suffix refers to all constituents.
+	For instance, the genome refers to all the genetic information of an organism, and genomics corresponds to the study of the genome.
 
- The development of high-throughput technologies and the cost decline associated with those technologies helped foster a wide adoption of those methods.
- This adoption enabled a large availability of omics data, particularly multi-omics data, which helped revolutionize the field of precision medicine.
+	The development of high-throughput technologies and the cost decline associated with those technologies helped foster a wide adoption of those methods.
+	This adoption enabled a large availability of omics data, particularly multi-omics data, which helped revolutionize the field of precision medicine.
 
- There are multiple platforms to study omics data with different protocols, multiple references and annotations files, and various tools to perform the final quantification.
- This variability leads to highly heterogeneous data.
- Furthermore, omics data are complex data with many variables; for instance, transcriptomics has around 60K variables, and genomics and methylation data can exceed the hundreds of thousands of variables.
+	There are multiple platforms to study omics data with different protocols, multiple references and annotations files, and various tools to perform the final quantification.
+	This variability leads to highly heterogeneous data.
+	Furthermore, omics data are complex data with many variables; for instance, transcriptomics has around 60K variables, and genomics and methylation data can exceed the hundreds of thousands of variables.
 
- In the following section, I will describe the main omics used in precision medicine and how they are obtained.
+	In the following section, I will describe the main omics used in precision medicine and how they are obtained.
 
- \subsection{Genomics}\label{subsec:genomics}
-	 Genomics corresponds to the study of an organism's genome, \ie{}all its genetic information.
-	 The genetic information corresponds to the DNA sequence, which includes protein-coding genes, non-coding genes, and other regulatory elements.
-	 The DNA sequence is obtained with \gls{ngs} techniques.
-	 In the following, I will only describe Illumina sequencing, a sequencing-by-synthesis approach.
-	 After extracting and purifying the DNA of a sample, it is cut into small fragments of hundreds of base pairs to form the DNA library.
-	 Then, adapters are added to the fragments; the adapters contain a barcode to identify the sample, the binding site for the sequencing primer, and the complementary sequence to the oligonucleotides on the flow cell.
-	 The complementary sequence allows the fragment to attach to the flow cell during the sequencing.
-	 Each fragment is then amplified into distinct clonal clusters by bridge amplification.
-	 Sequencing is then performed using a cyclic process that adds fluorescently labeled nucleotides one at a time.
-	 A camera that captures the emitted fluorescence identifies the incorporated base at each position.
-	 The cycle is repeated numerous times to obtain completed DNA sequences: reads.
-	 After the sequencing, a set of reads is obtained, and those reads are aligned to a reference genome with an aligner.
-	 A variant calling step is then performed to identify single nucleotide variants.
-	 The variant calling step will quantify the different \gls{snp} in a DNA sequence; in other words, it will show the mutations that occur compared to the reference sequence.
+	\subsection{Genomics}\label{subsec:genomics}
+		Genomics corresponds to the study of an organism's genome, \ie{}all its genetic information.
+		The genetic information corresponds to the DNA sequence, which includes protein-coding genes, non-coding genes, and other regulatory elements.
+		The DNA sequence is obtained with \gls{ngs} techniques.
+		In the following, I will only describe Illumina sequencing, a sequencing-by-synthesis approach.
+		After extracting and purifying the DNA of a sample, it is cut into small fragments of hundreds of base pairs to form the DNA library.
+		Then, adapters are added to the fragments; the adapters contain a barcode to identify the sample, the binding site for the sequencing primer, and the complementary sequence to the oligonucleotides on the flow cell.
+		The complementary sequence allows the fragment to attach to the flow cell during the sequencing.
+		Each fragment is then amplified into distinct clonal clusters by bridge amplification.
+		Sequencing is then performed using a cyclic process that adds fluorescently labeled nucleotides one at a time.
+		A camera that captures the emitted fluorescence identifies the incorporated base at each position.
+		The cycle is repeated numerous times to obtain completed DNA sequences: reads.
+		After the sequencing, a set of reads is obtained, and those reads are aligned to a reference genome with an aligner.
+		A variant calling step is then performed to identify single nucleotide variants.
+		The variant calling step will quantify the different \gls{snp} in a DNA sequence; in other words, it will show the mutations that occur compared to the reference sequence.
 
-	 Quantification of \gls{cnv} is done with sequencing-based approaches or microarray.
+		Quantification of \gls{cnv} is done with sequencing-based approaches or microarray.
 
- \subsection{Transcriptomics}\label{subsec:transcriptomics}
-	 Transcriptomics studies all RNAs transcript of an organism, \ie{}its transcriptome.
-	 The RNA is extracted from the sample, and messenger RNAs are enriched with a poly-A selection process.
-	 After fragmentation of the RNA molecule, a reverse transcriptase is used to convert the transcript into its \gls{cdna} sequence.
-	 The \gls{cdna} fragment is then sequenced as described in the \cref{subsec:genomics}.
-	 The reads are aligned to a reference genome; an annotation file is used to count the number of reads that map to a region known as a coding gene.
-	 The resulting counts are expressed in \gls{fpkm}, accounting for the sequencing depth and the length of the gene.
+	\subsection{Transcriptomics}\label{subsec:transcriptomics}
+		Transcriptomics studies all RNAs transcript of an organism, \ie{}its transcriptome.
+		The RNA is extracted from the sample, and messenger RNAs are enriched with a poly-A selection process.
+		After fragmentation of the RNA molecule, a reverse transcriptase is used to convert the transcript into its \gls{cdna} sequence.
+		The \gls{cdna} fragment is then sequenced as described in the \cref{subsec:genomics}.
+		The reads are aligned to a reference genome; an annotation file is used to count the number of reads that map to a region known as a coding gene.
+		The resulting counts are expressed in \gls{fpkm}, accounting for the sequencing depth and the length of the gene.
 
- \subsection{Epigenomics}
-	 Epigenomics is the study of the epigenome, the epigenetic modification of the genetic material.
-	 Epigenetic modification corresponds to a modification of a cell function, a gene regulation without any modification to the DNA sequence.
-	 Different mechanisms can produce such changes:
-	 \begin{itemize}[nosep]
-		 \item \glsxtrfull{dnam},
-		 \item histone modification,
-		 \item \glsxtrfull{mirna},
-		 \item \glsxtrfull{lncrna}.
-	 \end{itemize}
-	 \Gls{mirna} and \gls{lncrna} quantification is obtained similarly to mRNAs quantification~(\cref{subsec:transcriptomics}).
-	 Histone modifications are quantified with a mass-spectrometry-based approach, see \cref{subsec:proteomics}.
-	 \Gls{dnam} is quantified with bead-chip-based methylation assay or bisulfite sequencing.
-	 The bisulfite treatment converts unmethylated cytosine into uracil.
-	 Then, the DNA sequence is sequenced as described in \cref{subsec:genomics}.
-	 A bisulfite treatment is also applied to the bead-chip assay.
-	 There are two types of beads for each targeted CpG on the plate.
-	 One of the beads corresponds to the methylated site, and the other to the unmethylated cytosine.
-	 After hybridization with the bead, a single base extension is performed with labeled nucleotides.
-	 The plate is then read to quantify the intensities of the methylated and unmethylated beads.
-	 For each CpG site, a ratio of the two intensities is computed, known as the \(\beta\) value.
-	 A value of one corresponds to a total methylation of the locus, and a value of zero to a total unmethylation of the locus.
-	 There are three different Illumina BeadChip methylation assays, each with a different coverage of the methylation sites in the human genome.
-	 The \(\beta\) values represent the methylation ratio at the locus level, and the methylation ratio at the gene level is computed as the average of all probes located within 1500 base pairs of a gene transcription start site.
+	\subsection{Epigenomics}
+		Epigenomics is the study of the epigenome, the epigenetic modification of the genetic material.
+		Epigenetic modification corresponds to a modification of a cell function, a gene regulation without any modification to the DNA sequence.
+		Different mechanisms can produce such changes:
+		\begin{itemize}[nosep]
+			\item \glsxtrfull{dnam},
+			\item histone modification,
+			\item \glsxtrfull{mirna},
+			\item \glsxtrfull{lncrna}.
+		\end{itemize}
+		\Gls{mirna} and \gls{lncrna} quantification is obtained similarly to mRNAs quantification~(\cref{subsec:transcriptomics}).
+		Histone modifications are quantified with a mass-spectrometry-based approach, see \cref{subsec:proteomics}.
+		\Gls{dnam} is quantified with bead-chip-based methylation assay or bisulfite sequencing.
+		The bisulfite treatment converts unmethylated cytosine into uracil.
+		Then, the DNA sequence is sequenced as described in \cref{subsec:genomics}.
+		A bisulfite treatment is also applied to the bead-chip assay.
+		There are two types of beads for each targeted CpG on the plate.
+		One of the beads corresponds to the methylated site, and the other to the unmethylated cytosine.
+		After hybridization with the bead, a single base extension is performed with labeled nucleotides.
+		The plate is then read to quantify the intensities of the methylated and unmethylated beads.
+		For each CpG site, a ratio of the two intensities is computed, known as the \(\beta\) value.
+		A value of one corresponds to a total methylation of the locus, and a value of zero to a total unmethylation of the locus.
+		There are three different Illumina BeadChip methylation assays, each with a different coverage of the methylation sites in the human genome.
+		The \(\beta\) values represent the methylation ratio at the locus level, and the methylation ratio at the gene level is computed as the average of all probes located within 1500 base pairs of a gene transcription start site.
 
- \subsection{Proteomics}\label{subsec:proteomics}
-	 Proteomics is the study of all proteins of an organism, also known as the proteome.
-	 Proteomics is more challenging to study; the DNA content of an organism is the same in all cells, whereas the protein content between two cells can strongly differ.
-	 This results from cell differentiation, where different genes are expressed in different cell types.
-	 Quantification of proteins can be achieved with an antibodies-based approach or antibody-free methods.
-	 One of the main antibody-based methods is \gls{rppa}, which allows for the simultaneous quantification of multiple proteins from multiple samples.
-	 Samples are immobilized on a solid support and probed with specific antibodies targeted to the proteins of interest.
-	 One antibody-free approach is based on mass-spectrometry; it is used to determine the amino acid sequence of a protein.
-	 Proteins are digested into smaller peptides; mass-to-charge ratios are measured with mass-spectrometry.
-	 The signal intensities reflect the quantity of peptides.
+	\subsection{Proteomics}\label{subsec:proteomics}
+		Proteomics is the study of all proteins of an organism, also known as the proteome.
+		Proteomics is more challenging to study; the DNA content of an organism is the same in all cells, whereas the protein content between two cells can strongly differ.
+		This results from cell differentiation, where different genes are expressed in different cell types.
+		Quantification of proteins can be achieved with an antibodies-based approach or antibody-free methods.
+		One of the main antibody-based methods is \gls{rppa}, which allows for the simultaneous quantification of multiple proteins from multiple samples.
+		Samples are immobilized on a solid support and probed with specific antibodies targeted to the proteins of interest.
+		One antibody-free approach is based on mass-spectrometry; it is used to determine the amino acid sequence of a protein.
+		Proteins are digested into smaller peptides; mass-to-charge ratios are measured with mass-spectrometry.
+		The signal intensities reflect the quantity of peptides.
 
 \section{Datasets}
- Large multi-omics datasets are limited, and although the cost of high-throughput technologies has decreased, many difficulties remain in the acquisition of multi-omics data.
- \Gls{tcga} is the main dataset with high-quality patient data, \gls{ccle} is another multi-omics dataset on cell-lines.
- Those datasets present uniformly processed data, ensuring that samples were analyzed the same way.
+	Large multi-omics datasets are limited, and although the cost of high-throughput technologies has decreased, many difficulties remain in the acquisition of multi-omics data.
+	\Gls{tcga} is the main dataset with high-quality patient data, \gls{ccle} is another multi-omics dataset on cell-lines.
+	Those datasets present uniformly processed data, ensuring that samples were analyzed the same way.
 
- \subsection{\Glsfmtfull{tcga}}
-	 Among the 33 cancer types available in the \gls{tcga} project, we selected 19 cancers with more than a hundred patients.
-	 We collected a total of 8777 samples, 8416 were cancerous samples and 361 normal samples from the GDC Data Portal\footnote{\url{https://portal.gdc.cancer.gov/}} with the \textsf{TCGABiolinks} R package.
-	 For all selected patients we collected, when available, \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna} expression, \glsxtrfull{cnv}, and proteomics.
-	 Clinical annotations are also available for each patient.
-	 In \gls{tcga}, cancerous samples encompass primary solid tumor, recurrent solid tumor, and metastasis.
-	 The normal samples correspond to solid tissue normal; a portion of tissue is sampled at a certain distance from the tumor or are blood-derived.
-	 Multiple predictive endpoints are available in \gls{tcga}:
-	 \begin{itemize}[nosep]
-		 \item type of sample (binary classification),
-		 \item type of cancer (multiclass classification),
-		 \item cancer subtype (multiclass classification),
-		 \item metastasis origin (multiclass classification),
-		 \item cancer stage (multiclass classification),
-		 \item primary diagnosis (multiclass classification),
-		 \item disease type (multiclass classification),
-		 \item survival (risk prediction or survival time prediction).
-	 \end{itemize}
-	 This non-exhaustive list shows the diversity of available tasks in \gls{tcga}, making it a well-studied dataset.
-	 When using the cancer stage as predictive endpoints, it is important to note that in \gls{tcga}, patients with the same stage might not share the same properties.
-	 Indeed, the cancer staging criteria differ between cancers, and those criteria evolve over time as new staging classifications are regularly published.
+	\subsection{\Glsfmtfull{tcga}}
+		Among the 33 cancer types available in the \gls{tcga} project, we selected 19 cancers with more than a hundred patients.
+		We collected a total of 8777 samples, 8416 were cancerous samples and 361 normal samples from the GDC Data Portal\footnote{\url{https://portal.gdc.cancer.gov/}} with the \textsf{TCGABiolinks} R package.
+		For all selected patients we collected, when available, \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna} expression, \glsxtrfull{cnv}, and proteomics.
+		Clinical annotations are also available for each patient.
+		In \gls{tcga}, cancerous samples encompass primary solid tumor, recurrent solid tumor, and metastasis.
+		The normal samples correspond to solid tissue normal; a portion of tissue is sampled at a certain distance from the tumor or are blood-derived.
+		Multiple predictive endpoints are available in \gls{tcga}:
+		\begin{itemize}[nosep]
+			\item type of sample (binary classification),
+			\item type of cancer (multiclass classification),
+			\item cancer subtype (multiclass classification),
+			\item metastasis origin (multiclass classification),
+			\item cancer stage (multiclass classification),
+			\item primary diagnosis (multiclass classification),
+			\item disease type (multiclass classification),
+			\item survival (risk prediction or survival time prediction).
+		\end{itemize}
+		This non-exhaustive list shows the diversity of available tasks in \gls{tcga}, making it a well-studied dataset.
+		When using the cancer stage as predictive endpoints, it is important to note that in \gls{tcga}, patients with the same stage might not share the same properties.
+		Indeed, the cancer staging criteria differ between cancers, and those criteria evolve over time as new staging classifications are regularly published.
 
-	 % https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8368987/
-	 %primary origin of a metastasis % https://www.nature.com/articles/s41467-019-13825-8
-	 %predict primary or metastasis % https://www.frontiersin.org/articles/10.3389/fmolb.2022.913602/full
-	 % https://www.nature.com/articles/s41598-023-35842-w
+		% https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8368987/
+		%primary origin of a metastasis % https://www.nature.com/articles/s41467-019-13825-8
+		%predict primary or metastasis % https://www.frontiersin.org/articles/10.3389/fmolb.2022.913602/full
+		% https://www.nature.com/articles/s41598-023-35842-w
 
 
-	 All samples in \gls{tcga} are processed in an harmonized way\footnote{\url{https://gdc.cancer.gov/about-data/gdc-data-processing}} against common reference files\footnote{\url{https://gdc.cancer.gov/about-data/gdc-data-processing/gdc-reference-files}}.
-	 According to the \gls{tcga} consortium recommendation, we removed FFPE samples as they are not suitable for molecular analysis\footnote{\href{https://web.archive.org/web/20150919082952/https://gdac.broadinstitute.org/runs/sampleReports/latest/FPPP_FFPE_Cases.html}{https://gdac.broadinstitute.org/runs/sampleReports/latest/FPPP\_FFPE\_Cases.html}}.
-	 We also followed their recommendation to select the best replicate\footnote{\href{https://web.archive.org/web/20150919044554/http://gdac.broadinstitute.org/runs/sampleReports/latest/READ_Replicate_Samples.html}{https://gdac.broadinstitute.org/runs/sampleReports/latest/READ\_Replicate\_Samples.html}}.
-	 In \gls{tcga}, \gls{dnam} data is analyzed with two different methods: Illumina Human Methylation 450 and Human Methylation 27.
-	 The methylation 450 platform contains more CpG sites but contains 94\% of the CpG sites detected by the methylation 27 method.
-	 \Gls{dnam} data was restricted to the probes common to both HumanMethylation27 and HumanMethylation450 platforms.
-	 Features with more than 10\% of NA values were removed, remaining NA were imputed using \gls{knn} imputation.
-	 No feature selection was applied, and data were standardized to a zero mean and unit variance.
-	 Patients with incorrect survival information were removed.
+		All samples in \gls{tcga} are processed in an harmonized way\footnote{\url{https://gdc.cancer.gov/about-data/gdc-data-processing}} against common reference files\footnote{\url{https://gdc.cancer.gov/about-data/gdc-data-processing/gdc-reference-files}}.
+		According to the \gls{tcga} consortium recommendation, we removed FFPE samples as they are not suitable for molecular analysis\footnote{\href{https://web.archive.org/web/20150919082952/https://gdac.broadinstitute.org/runs/sampleReports/latest/FPPP_FFPE_Cases.html}{https://gdac.broadinstitute.org/runs/sampleReports/latest/FPPP\_FFPE\_Cases.html}}.
+		We also followed their recommendation to select the best replicate\footnote{\href{https://web.archive.org/web/20150919044554/http://gdac.broadinstitute.org/runs/sampleReports/latest/READ_Replicate_Samples.html}{https://gdac.broadinstitute.org/runs/sampleReports/latest/READ\_Replicate\_Samples.html}}.
+		In \gls{tcga}, \gls{dnam} data is analyzed with two different methods: Illumina Human Methylation 450 and Human Methylation 27.
+		The methylation 450 platform contains more CpG sites but contains 94\% of the CpG sites detected by the methylation 27 method.
+		\Gls{dnam} data was restricted to the probes common to both HumanMethylation27 and HumanMethylation450 platforms.
+		Features with more than 10\% of NA values were removed, remaining NA were imputed using \gls{knn} imputation.
+		No feature selection was applied, and data were standardized to a zero mean and unit variance.
+		Patients with incorrect survival information were removed.
 
-	 For the multi-omics study, we restricted the dataset to patients having all modalities present, which led us to select 5862 patients of 18 different cancers.
-	 This selection process ensures that the dataset only contains paired data.
-	 We also considered coding and \gls{ncrna} as two different modalities, as \gls{ncrna} can affect cancer cell fate through various mechanisms~\cite{Grillone2020} and are involved in the oncogenesis~\cite{Toden2021}.
-	 In this manuscript, we focused on two tasks: cancer-type prediction and risk-based survival prediction.
-	 70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
-	 The training set is used to train the different models, the validation set is used to select the best model hyperparameters, and the test set is used to assess the model performances.
+		For the multi-omics study, we restricted the dataset to patients having all modalities present, which led us to select 5862 patients of 18 different cancers.
+		This selection process ensures that the dataset only contains paired data.
+		We also considered coding and \gls{ncrna} as two different modalities, as \gls{ncrna} can affect cancer cell fate through various mechanisms~\cite{Grillone2020} and are involved in the oncogenesis~\cite{Toden2021}.
+		In this manuscript, we focused on two tasks: cancer-type prediction and risk-based survival prediction.
+		70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
+		The training set is used to train the different models, the validation set is used to select the best model hyperparameters, and the test set is used to assess the model performances.
 
- \subsection{\Glsfmtfull{ccle}}
-	 This second dataset, available on the DepMap portal\footnote{\url{https://depmap.org/portal/data_page/?tab=allData}}, is composed of \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna} expression, \glsxtrfull{cnv}, metabolomics, and proteomics for 536 cells of 16 different cancers.
-	 No feature selection was applied, and data were standardized to a zero mean and unit variance.
-	 70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
+	\subsection{\Glsfmtfull{ccle}}
+		This second dataset, available on the DepMap portal\footnote{\url{https://depmap.org/portal/data_page/?tab=allData}}, is composed of \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna} expression, \glsxtrfull{cnv}, metabolomics, and proteomics for 536 cells of 16 different cancers.
+		No feature selection was applied, and data were standardized to a zero mean and unit variance.
+		70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
 
 \end{document}
