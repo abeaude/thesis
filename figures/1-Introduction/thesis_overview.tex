@@ -1,3 +1,4 @@
+\begin{spacing}{1}
 \begin{tikzpicture}
 	\node[circle, fill=Prune, text=white, draw=Prune] (n1) at (0,0){\ref*{chap:background}};
 	\node[circle, fill=Prune, text=white, below=2.5cm of n1.south] (n2) {\ref*{chap:sota}};
@@ -18,24 +19,24 @@
 		colframe=Prune,
 		colback=white,
 		colupper=Prune,
-		fontupper=\footnotesize\hypersetup{linkcolor=Prune},
+		fontupper=\scriptsize\hypersetup{linkcolor=Prune},
 		fonttitle=\small\bfseries,
 		nobeforeafter,
 		tcbox width=auto limited,
 		center title,
 		width=6cm,
-		left=1mm,right=1mm,top=1mm,bottom=1mm, boxsep=1.5mm
+		left=1mm,right=1mm,top=1mm,bottom=1mm, boxsep=1.5mm,
 	}
 
 	\node[right=1cm of n1.east, anchor=west] (b1) {
 		\tcbox[title=Background]{
-			In this chapter, I present the different deep learning architectures used during this thesis work and how to train them. A brief presentation of gene expression regulation and cancer formation is done. I also describe how the different omics are obtained. Finally, I describe the two datasets used: \glsxtrshort{tcga} and \glsxtrshort{ccle}.
+			In this chapter, the different deep learning architectures used during this thesis work are presented. A brief presentation of gene expression regulation and cancer formation is done. The methods to obtain the different omics are described. Finally, the different datasets used are described.
 		}
 	};
 
 	\node[left=1cm of n2.west, anchor=east] (b2) {
 		\tcbox[title=State-of-the-art]{
-			This chapter is dedicated to the description of the current deep learning methods used to predict a phenotype from omics data. I will also present multimodal deep learning and its application to integrate multi-omics data.
+			This chapter is dedicated to the description of the current deep learning methods used to predict a phenotype from omics data. A bried introduction to multimodal machine learning is done before describing its application to integrate multi-omics data.
 		}
 	}; %4.85 cm available for images
 
@@ -89,3 +90,4 @@
 	\tcbhypernode{\hyperref[chap:crossattomicsgate]}{b5}
 	\tcbhypernode{\hyperref[chap:counterfactuals]}{b6}
 \end{tikzpicture}
+\end{spacing}

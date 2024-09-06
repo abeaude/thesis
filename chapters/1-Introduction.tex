@@ -98,23 +98,47 @@
  \begin{itemize}[nosep]
     \item it helps the end-user (physician or patient) understand the prediction;
     \item it allows detecting potential biases;
-    \item knowledge discovery
+    \item it can be used for knowledge discovery.
  \end{itemize}
 Enhancing deep learning models with interpretability can help physicians in making informed decisions.
 
 \section{Thesis context and objectives}
  This Ph.D. is a collaboration between the IBISC laboratory\footnote{\url{https://www.ibisc.univ-evry.fr/}} and Sanofi\footnote{\url{https://www.sanofi.com/}} under the \gls{cifre} program.
- The \gls{cifre} program is ... 
- Through this collaboration the goal of Sanofi was 
+ The \gls{cifre} program is a french program aiming at strenghten exchanges between academic laboratory and private industries.  
+ The company perceive a financial assistance to recruit a doctoral student whose research work is performed under the supervision of the academic partner.
+ The program is funded by the french government and its management is handled by the \gls{anrt}.
+ aim of the project explore the interest of deep learning approaches in the integration and analysis of multi omics data. 
+ Through this collaboration the goal of Sanofi was to increase its skills/capabilities in the domain of multi-omics data analysis with deep learning methods.
+ Internalize the methods to apply them and various internal datasets
+ The project proposal was approved by the \gls{anrt}. 
+
+ expected results
+ better understanting of the disease
+ patient stratification strategies
+
+ Through this collaboration, the Genhotel laboratory aims at expanding its expertise in maps and models construction and validation for RA via the integration of
+the multicellular scale. To achieve this objective, the laboratory benefits from
+Sanofi’s calculation services and facilitated access to commercially available databases and softwares as well as its expertise in RA.
+Sanofi, on the other hand, is interested in increasing its skills in the domain of
+disease map and Boolean based model simulation. The expected output from this
+collaboration for the company is to have access to a multiscale model of RA, fully
+operational and easy to maintain, that is able to simulate the pathogenesis. This
+model will allow Sanofi to have a better understanding of the disease with a full
+up to date knowledge base on RA. It will also be used to integrate and analyse
+in-house data, perform large-scale screenings of potential therapeutic targets
+and to better understand the mechanism of action of drugs currently under development at Sanofi. 
+ 
 
  \begin{description}[
 		 style=multiline,
 		 leftmargin=!,
 		 labelwidth=\eqboxwidth{listlabel@\EnumitemId}, format=\mylabelformat
 	 ]
-	 \item[First objective] Classical deep learning models
-	 \item[Second objective]
-	 \item[Third objective]
+	 \item[First objective] construct a model for each omics data independently, limited training data TCGA
+	 avoid limits of the previous methods 
+	 \item[Second objective] construct a model integrating the different modalities 
+	 challenging to vombine the conflicts between sources. handle missing modalities at inference ie be more robust
+	 \item[Third objective] interpretation use of knowledge back propagation of the signal was used, new methods 
  \end{description}
 
 

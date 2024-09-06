@@ -315,32 +315,63 @@
 		The generator captures the data distribution and is able to generate new data \(\hat{x} = G\left(z\right)\), where \(z\) is a latent noise vector sampled from a prior distribution \(p_z\).
 		The discriminator attempts to distinguish real samples from generated ones, it has a sigmoid activation and outputs the probability that a sample is real.
 		The generator and the discriminator compete with each other; the generator network attempts to fool the discriminator while the discriminator tries to be a better expert at detecting fake samples.
-		\(G\) and \(D\) are jointly trained at generating a distribution \(p_{g}\) such that \(D\) cannot distinguish between \(p_{d}\) and \(p_{g}\).
+		\(G\) and \(D\) are jointly trained at generating a distribution \(p_{g}\) such that \(D\) cannot distinguish between \(p_{d}\) and \(p_{g}\), \ie{}\(D\left(\symbf{x}\right) = \tfrac12\).
 		A \gls{gan} is trained by solving the following min-max problem:
 		\begin{multline}
-			\min_{G} \max_{D} \symcal{L}_{GAN}\left(G,D\right) = \\ \E_{x\sim p_{d}}\left[ \log\left(D\left(x\right)\right)\right] + \E_{z\sim p_{z}}\left[ \log\left( 1 - D\left(G\left(z\right)\right)\right)\right]
+			\min_{G} \max_{D} \symcal{L}_{GAN}\left(G,D\right) = \\ \E_{x\sim p_{d}}\left[ \log\left(D\left(x\right)\right)\right] + \E_{z\sim p_{z}}\left[ \log\left( 1 - D\left(G\left(z\right)\right)\right)\right] \label{eq:gan_loss}
 		\end{multline}
 
 		In practice \gls{gan} training is implemented as an iterative process alternatin between \(k\) steps of optimizing \(D\) and one step optimizing \(G\). 
-		The complete training procedure is presented in XX. 
+		The complete training procedure is presented in \cref{alg:gan}. 
 
-		Classical GAN problem Gradient vanishing problem.
-		Risk of blocking in the early stages of
-		GAN learning, when the discriminator
-		work is very easy. mode collapse ? 
-		What is the best way to measure the distance between two distributions ? Earth mover distance Wasserstein distance
-		present earth mover distance 
-		% https://arxiv.org/pdf/1904.08994
-		% https://cloud.univ-grenoble-alpes.fr/index.php/s/wxCztjYBbQ6zwd6?dir=undefined&openfile=837709648
-		% https://d2l.ai/chapter_generative-adversarial-networks/gan.html
-		WGAN
-		According to the authors, the discriminator should
-no longer be considered as a classifier but more as a critic.
-The output of the discriminator will be greater for true
-instances than for false instances.
-this approach has also some constraints, hard to satisfy 
-introduce gradient penalty 
-		WGAN-GP
+		\begin{algorithm}[htbp]
+			\DontPrintSemicolon
+			\KwIn{\(G\), \(D\), their respective parameters \(\theta_{G}\) and \(\theta_{D}\)}
+			\For{\(T\) training steps}{
+				\For{\(k\) steps}{
+					Sample a batch of real data \({\left\{x_{i}\right\}}_{i=1}^{N} \sim p_{d}\)\;
+					Sample a batch of noise \({\left\{z_{i}\right\}}_{i=1}^{N} \sim p_{g}\)\;
+					\(\hat{x}_{i} \leftarrow G\left(z_{i}\right)\)\;
+					Update the discriminator:
+					\begin{algomathdisplay}
+						\theta_{D} \leftarrow \theta_{D} - \eta \nabla_{\theta_{D}}\frac{1}{N}\sum_{i=1}^{N}\log\left(D\left(x_{i}\right)\right) + \log\left( 1 - D\left(\hat{x}_{i}\right)\right)
+					\end{algomathdisplay}
+				}
+				Sample a batch of noise \({\left\{z_{i}\right\}}_{i=1}^{N} \sim p_{g}\)\;
+				\(\hat{x}_{i} \leftarrow G\left(z_{i}\right)\)\;
+				Update the generator:
+				\begin{algomathdisplay}
+					\theta_{G} \leftarrow \theta_{G} - \eta \nabla_{\theta_{G}}\frac{1}{N}\sum_{i=1}^{N} \log\left( 1 - D\left(\hat{x}_{i}\right)\right)
+				\end{algomathdisplay}
+			}
+			\caption{\glsfmtshort{gan} training algorithm}\label{alg:gan}
+		\end{algorithm}
+
+		In practice, \glspl{gan} suffers from unstable training. 
+		Optimization of the \gls{gan} loss function \cref{eq:gan_loss} corresponds to the minimization of the \gls{js} divergence between \(p_{d}\) and \(p_{g}\). 
+		When the two distributions \(p_d\) and \(p_g\) do not overlap significantly, the discriminator will be perfect and have no difficulty distinguishing between the two distributions. 
+		It has been shown that a perfect discriminator leads to vanishing gradients on the generator~\cite{Arjovsky2017TowardsPM}.
+		The joint training of the two components corresponds to finding the Nash-equilibrium in a non-cooperative two-player game~\cite{Salimans2016ImprovedTF}. 
+		Each players aims at minimizing its cost function, \(\symcal{L}_{G}\left(\theta_{G}, \theta_{D}\right)\) for the generator and \(\symcal{L}_{D}\left(\theta_{G}, \theta_{D}\right)\) for the discriminator. 
+		As each component updates its weight concurrently, no convergence can be guaranteed.
+		\Glspl{gan} also suffers from model collapse, the generator ends always producing the same outputs that easily fools the discriminator. 
+		However, it fails to correctly capture the true data distribution \(p_{d}\) and produces samples with low diversity. 
+
+		\Gls{wgan}~\cite{WGAN} was proposed to address issues in the original \gls{gan} formulation. 
+		\citeauthor{WGAN} replaced the Jensen-shannon divergence with \(L^{1}\)-Wasserstein distance metric. 
+		Wasserstein distance is another way of comparing two distributions, it measures the minimum cost of transforming one probability distribution into another, and provide a meaningful distance even if distributions do not overlap. 
+		The discriminator is now called a critc that instead of classifying samples as real or fake provide a realness score\footnote{There are no more sigmoid activation at its output}.
+		The computation of the Wasserstein distance is complex and can be simplified by forcing the critic to be a K-Lipschitz function. 
+		They add constraints on the critic \(D\), \(D\) must belongs to the set \( \symcal{D}\) of K-Lipschitz function:
+		\begin{equation}
+			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{WGAN}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \label{eq:wgan_loss}
+		\end{equation}
+		To satisfy the Lipschitz constraint on the critic, \citeauthor{WGAN} proposed to clip critic weigths to maintain them in a fixed interval while acknowledging that is not a good way to ensure the Lipschitz constraint~\cite{WGAN}.
+		\citeauthor{WGANGP} replaced the weight clipping with a gradient penalty to ensure the Lipschitz constraint~\cite{WGANGP}:
+		\begin{multline}
+			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{WGAN}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \\ + \lambda \E_{\tilde{x}\sim p_{g}}\left[ {\left( {\left\|\nabla_{\tilde{x}}D\left(\tilde{x}\right) \right\|}_{2} -1 \right)}^{2}\right]  \label{eq:wgangp_loss}
+		\end{multline}
+		where \(\tilde{x}\) is a linearly interpolated sample between a true sample \(x\) and a generated one \(G\left(z\right)\). 
 
 \section{Cancer biology}
 	%https://www.cell.com/fulltext/S0092-8674(11)00127-9

@@ -1,5 +1,14 @@
 name: Compile Thesis manuscript
-on: [push]
+on:
+  push:
+    branches:
+      - writing
+    paths:
+      - "**.tex"
+      - "**.cls"
+      - "**.bib"
+      - "**.pdf"
+      - "**.csv"
 permissions:
   contents: write
 jobs:
