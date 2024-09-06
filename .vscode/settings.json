@@ -129,7 +129,15 @@
         "**/*.synctex.gz": true,
         "**/*.thm": true,
         "**/*.toc": true,
-        "**/*.xdy": true
+        "**/*.xdy": true,
+        "**/_minted*": true,
+        "**/PDF/appendix": true,
+        "**/PDF/chapters": true,
+        "**/PDF/figures": true,
+        "**/PDF/frontmatter": true,
+        "**/PDF/preamble": true,
+        "**/chapters/PDF": true,
+        "**/.latexindent.bak": true
     },
     "terminal.integrated.defaultProfile.linux": "bash",
 }
