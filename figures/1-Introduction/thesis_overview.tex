@@ -1,4 +1,5 @@
 \begin{spacing}{1}
+	\fontsize{10}{10}\selectfont
 \begin{tikzpicture}
 	\node[circle, fill=Prune, text=white, draw=Prune] (n1) at (0,0){\ref*{chap:background}};
 	\node[circle, fill=Prune, text=white, below=2.5cm of n1.south] (n2) {\ref*{chap:sota}};
@@ -19,7 +20,7 @@
 		colframe=Prune,
 		colback=white,
 		colupper=Prune,
-		fontupper=\scriptsize\hypersetup{linkcolor=Prune},
+		fontupper=\relscale{0.9}\hypersetup{linkcolor=Prune},
 		fonttitle=\small\bfseries,
 		nobeforeafter,
 		tcbox width=auto limited,

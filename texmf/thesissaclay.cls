@@ -80,6 +80,9 @@
 \UseTblrLibrary{booktabs}
 \UseTblrLibrary{diagbox}
 \UseTblrLibrary{siunitx}
+\RequirePackage{rotating}
+\RequirePackage{makecell}
+\renewcommand\theadfont{}
 % \RequirePackage{booktabs}
 % \RequirePackage{multirow}
 % \RequirePackage{colortbl}
@@ -113,6 +116,7 @@
 \AtBeginEnvironment{longtable}{\scriptsize}
 %% GRAPHICS %%
 \RequirePackage{graphicx} % Required for inserting images
+\RequirePackage{wrapfig2}
 \RequirePackage{tikz}
 \RequirePackage{pgfplots}
 \RequirePackage{subcaption}
@@ -129,7 +133,16 @@
 \RequirePackage[all]{nowidow}
 \RequirePackage[hyphenation, parindent]{impnattypo}
 \RequirePackage[inline]{enumitem}
-%\RequirePackage{minted}
+\RequirePackage{minted}
+\RequirePackage[algoruled, algochapter]{algorithm2e}
+\RequirePackage[l3]{csvsimple}
+\RequirePackage{lscape}
+\RequirePackage{xstring}
+\RequirePackage{eqparbox}
+\RequirePackage{relsize}
+\RequirePackage{pifont}
+\newcommand{\cmark}{\ding{51}\xspace}%
+\newcommand{\xmark}{\ding{55}\xspace}%
 %\RequirePackage[french, backgroundcolor=B5, textcolor=white, linecolor=B5, bordercolor=A5]{todonotes}
 \RequirePackage{multicol}
 %% BIBLIOGRAPHY %%

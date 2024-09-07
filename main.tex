@@ -2,66 +2,9 @@
 %https://tex.stackexchange.com/questions/719543/how-do-i-add-icons-in-front-of-bibliography-entries
 % https://tex.stackexchange.com/questions/563696/add-icons-to-bibliography-style-in-scrbook
 
-\usepackage{minted}
-\usepackage[l3]{csvsimple}
 \usepackage{subfiles}
-\usepackage{lscape}
-\usepackage{xstring}
-\usepackage{eqparbox}
-\usepackage{rotating}
-\usepackage{makecell}
-\renewcommand\theadfont{}
-\usepackage[algoruled, algochapter]{algorithm2e}
-\usepackage{wrapfig2}
-\usepackage{pifont}
-\newcommand{\cmark}{\ding{51}\xspace}%
-\newcommand{\xmark}{\ding{55}\xspace}%
 
-
-\newtcolorbox[auto counter, number within=chapter]{mybox}[2][]{%
-    title=Box~\thetcbcounter: #2, #1}
-
-
-
-%%%%%%%%%%%%%%%%%%%
-%% CONFIGURATION %%
-%%%%%%%%%%%%%%%%%%%
-\title{Developping and exploring the interest of deep learning approaches in the field of multi-omics data}
-\subtitle{Développer et explorer l'intérêt des approches de deep learning dans le domaine des données multi-omiques}
-\author{Aurélien \textsc{Beaude}}
-
-\date{XX month YYYY}
-\location{Paris-Saclay}
-
-\subject{Informatique}
-\keywordsfr{Mots clés 1, 2, 3}
-\keywordsen{Mots clés 1, 2, 3}
-
-\nnt{2024UPASA001}
-
-\doctoralschool{STIC}
-\graduateschool{Informatique et sciences du numérique}
-\referee{Université d’Évry Val d’Essonne}
-\unit{IBISC (Université Paris-Saclay, Univ Évry)}
-
-%%%%%%%%%%%%%%%%%
-%% SUPERVISORS %%
-%%%%%%%%%%%%%%%%%
-% order is important
-\thesisdirector{\textbf{Blaise \textsc{Hanczar}}, Professeur}
-%\thesiscodirector{}
-\thesissupervisor{\textbf{Farida \textsc{Zehraoui}}, Maîtresse de conférence}
-\thesisindustrysupervisor{\textbf{Franck \textsc{Augé}}, Docteur}
-
-%%%%%%%%%%
-%% JURY %%
-%%%%%%%%%%
-% Order is important, the jury table is filling according to the entry order
-\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Président}
-\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Rapporteur \& Éxaminateur}
-\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Rapporteur \& Éxaminateur}
-\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Éxaminateur}
-\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Éxaminateur}
+\input{preamble/information.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %% BIBLIOGRAPHY SOURCES %%
@@ -92,7 +35,9 @@
 \input{preamble/hyphenation}
 \input{preamble/extra_commands.tex}
 
-%\tikzexternalize[prefix=tikz/, system call/.append = {; pdfcrop --margins 1 "\image.pdf" "\image.pdf"}] % must create this path manually, with a file in it
+%https://stackoverflow.com/questions/40768426/tikz-externalize-issue-when-using-pdflatex-with-output-directory
+%\tikzexternalize[prefix=tikz/] 
+% , system call/.append = {; pdfcrop --margins 1 "\image.pdf" "\image.pdf"}
 
 \begin{document}
 %%%%%%%%%%%%%%%%
