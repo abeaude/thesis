@@ -29,10 +29,10 @@
      In this section, we describe attention-based modality encoders that encode individual modalities.
 
      Let \( X = \left\{X^{1}, \cdots, X^{M} \right\} \) be a multimodal training example, where \(M\) is the number of modalities and \(Y\) is the associated label.
-     We denote with \(X^{i} \in \mathbb{R}^{p_i}\) each modality input, and $p_i$ is the number of features for modality $i$.
+     We denote with \(X^{i} \in \symbb{R}^{p_i}\) each modality input, and $p_i$ is the number of features for modality $i$.
      Each modality input \(X^{i}\) is encoded with a self-attention-based encoder: \(\enc^{i}\)~\cite{AttOmics}.
 
-     The omics profile \(X^{i} \in \mathbb{R}^{p_i} \) is reshaped to a set of $k^i$ groups of similar sizes~(eq.~\ref{eq:attomics_groups}).
+     The omics profile \(X^{i} \in \symbb{R}^{p_i} \) is reshaped to a set of $k^i$ groups of similar sizes~(eq.~\ref{eq:attomics_groups}).
      \begin{equation}
          X^{i}_{G} = \left\{X^{i}_{g_j} \right\}_{1\leq j\leq k^i}\label{eq:attomics_groups}
      \end{equation}
@@ -58,8 +58,8 @@
      Let us consider two modalities, a source \(i\) and a target \(j\), \(i \neq j\), which are encoded with their respective encoders to obtain the new representations \(U^i\) and \(U^j\).
      Cross-attention is performed with $H$ heads that learn different types of cross-modal interactions.
      For each head, cross-attention is applied to each group of the modalities \(g_p\) in order to obtain:
-     \[ Z^{i\rightarrow j} = \left\{ Z^{i\rightarrow j}_{g_p} \in \mathbb{R}^{l^j} \right\}_{1 \leq p \leq k^j}\text{,}\]
-     where $l^j = \frac{s^j}{H} \in \mathbb{N}$.
+     \[ Z^{i\rightarrow j} = \left\{ Z^{i\rightarrow j}_{g_p} \in \symbb{R}^{l^j} \right\}_{1 \leq p \leq k^j}\text{,}\]
+     where $l^j = \frac{s^j}{H} \in \symbb{N}$.
      \( Z^{i\rightarrow j}\) has the same number of groups as the target modality $j$.
 
      \(Z^{i\rightarrow j}_{g_p}\) is obtained by applying the scale dot product attention~\cite{AttentionAllYouNeed} where the source modality \(i\) is used as the key and value.
