@@ -1,8 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{thesissaclay}[2014/08/16 Example LaTeX class]
 \overfullrule=2cm
-\newif\ifgitmark
-\gitmarkfalse
+\newif\if@gitmark\@gitmarkfalse
 %%%%%%%%%%%%%
 %% OPTIONS %%
 %%%%%%%%%%%%%
@@ -22,7 +21,7 @@
 	\overfullrule=0cm
 }
 \DeclareOption{english}{\global\def\@lang{english}}
-\DeclareOption{gitmark}{\gitmarktrue}
+\DeclareOption{gitmark}{\@gitmarktrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrbook}}
 \ProcessOptions\relax
 
@@ -35,7 +34,7 @@
 \WarningFilter{hyperref}{Token not allowed in a PDF string}
 \LoadClass[fontsize=12pt, a4paper, titlepage=firstiscover, cleardoublepage=empty, appendixprefix=true, parskip=half, DIV=11]{scrbook}
 \KOMAoption{toc}{listof, index, bibliography, graduated}
-\RequirePackage{setspace}
+\RequirePackage[nodisplayskipstretch]{setspace}
 \setstretch{1.2}
 \AfterTOCHead{\singlespacing}
 \KOMAoptions{DIV=last}
@@ -179,6 +178,9 @@
 \AtEndPreamble{%
 	\RequirePackage[capitalise, nameinlink]{cleveref}
 	\crefrangelabelformat{subfigure}{#3#1--\crefstripprefix{#1}{#2}#4}
+	\newtcolorbox[auto counter, number within=chapter, crefname={see Box}{see Boxes}]{mybox}[2][]{title=Box~\thetcbcounter: #2, fontupper=\small, fontlower=\small, #1}
+	\BeforeBeginEnvironment{mybox}{\begin{singlespace}}
+	\AfterEndEnvironment{mybox}{\end{singlespace}}
 }
 
 % customize caption
@@ -659,7 +661,7 @@
 	oddpage,
 	contents=Compiled on \DTMToday\xspace from \href{https://github.com/abeaude/thesis/tree/\gitHash}{[\gitBranch] -- \gitAbbrevHash}\xspace\textcolor{Prune}{\gitDirty}
 	]{gitmetadata}
- \ifgitmark \AddLayersToPageStyle{scrheadings}{gitmetadata} \fi
+ \if@gitmark \AddLayersToPageStyle{scrheadings}{gitmetadata} \fi
 
  %% DEFINE HEADER AND FOOTER %%
  \clearpairofpagestyles

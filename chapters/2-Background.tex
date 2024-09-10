@@ -258,15 +258,42 @@
 		\end{equation}
 		The \(\KL\) divergence measures how a probability distribution is different from another probability distribution.
 
-		% TODO improve survival introduction
-		There are two types of loss for survival prediction: risk-based approach and discrete-time approach.
-		Risk-based approaches extend the Cox model to deep-learning architecture and use partial log-likelihood loss.
+		\begin{mybox}[label={box:survival}]{Survial analysis}
+			Survival analysis corresponds to the analysis of the duration before an event occurs. 
+			Survival and hazard functions are two fundamentals quantifies used in survival analysis.
+			Survival time is represented by a non-negative random variable \(T\). 
+			The survival function, \(S(t)\), represents the probability of a patient surviving past time \(t\):
+			\[S(t) = P(T > t)\]
+			The hazard function, \(\lambda(t)\), represents the probability that the event of interest will occur in the interval \(\Delta t\) knowing that it did not occur for a time \(t\):
+			\[\lambda(t) = \lim_{\Delta t \to 0} \frac{P(t \leq T < t + \Delta t | T \geq t)}{\Delta t}\]
+			A greater hazard correspond to a greater risk that the event occurs. 
+			\tcbsubtitle{Survival data}
+			In survival analysis, for patient \(i\), \(\symbf{x}_{i}\) represents the feature or covariate vector, \(\delta_{i}\) is the event indicator taking 1 if the event occured and 0 for censored patient, and \(t_{i}\) represents the time at which the event occured or the censoring time for censored patient. 
+		\end{mybox}
+
+		In precision medicine a common task is to predict the time an event of interest occurs, also known as survival analysis~(\cref{box:survival}). 
+		One of the main challenge with survival analysis is censoring\footnote{only right censoring is considered here}: the event of interest is not experienced by some patient during the study. 
+		The exact survival time is not knwon but the survival time is at least the period the patient has been followed.
+		Specific methods are needed to account for the partial information provided by censoring. 
+		Cox models or proportional hazards models are survival models to relate the time before an event occurs to one or more covariates~(\cref{box:cox}). 
+		Cox models have been adapted to deep learning architectures by replacing the relative risk score by an estimation from a neural network in the partial log-likelihood loss:
 		\begin{equation}
 			\symcal{L}_{Cox}\left(\theta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\hat{y}_i - \log \sum_{j \in \mathcal{R}(T_i)}\phi_j \right)\; \text{,} \label{eq:cox_loss}
 		\end{equation}
 		where \(\delta_i\) specifies if the event occurred for patient \(i\), \(T_i\) represents the time associated with the event, and \(N_{\delta_i = 1}\) is the number of patients for which the event occurred (\(\delta_i = 1\)).
 		\(\phi_i = e^{\hat{y}_i}\) is the predicted risk for patient \(i\).
 		\(\symcal{R}(T_i) = \{j: T_j > T_i\}\) is the risk set, the set of patients who are still at risk of death at time \(T_i\).
+		Other approaches discretize the survival times and compute the survival function on those intervals or directly estimates the probability mass function with a neural network~\cite{Lee2018}.
+
+		\begin{mybox}[label={box:cox}]{Cox models}
+			The Cox proportional hazards model\footnote{The hazard ratio of two patients is idependant of time: \(\frac{\lambda(t | \symbf{x}_{i})}{\lambda(t | \symbf{x}_{j})} = e^{\beta\cdot \left(\symbf{x}_{i} - \symbf{x}_{j}\right)}\)} is a method used to estimate a patient survival from its covariates \(\symbf{x}\). 
+			The hazard function has two components, a baseline hazard \(\lambda_0(t)\) and a relative risk score \(e^{\beta \symbf{x}}\): 
+			\[\lambda(t | \symbf{x}) = \lambda_0(t) e^{\beta \symbf{x}}\]
+			The relative risk is estimated as a linear transformation of the covariates. 
+			The model is estimated in two steps, in the first step the partial log-likelihood is maximized to estimate the parameters \(\beta\):
+			\[\symcal{l}_{Cox}\left(\theta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\beta \symbf{x} - \log \sum_{j \in \mathcal{R}(T_i)}e^{\beta \symbf{x}} \right)\]
+			in a second step the baseline hazard is estimated. 
+		\end{mybox}
 
 		There is no closed form to the optimization problem described in \cref{eq:dl_opt} to find the optimal parameters \(\theta^{*}\).
 		The minimization of the loss function is achieved with gradient descent.
