@@ -33,3 +33,9 @@ UserWarnRegex =
 (?!#-3:Optional! arguments! []! inside! optional! arguments! []! must! be! enclosed! in! {})PCRE:\[(?!![^\]\[{}]*{(?!![^\]\[{}]*}))[^\]]*\[
 
 }
+UserWarn
+{
+	# Use \symcal instead of \mathcal
+	\mathcal
+	\mathbf
+}

@@ -92,43 +92,43 @@
      In the first step, each modality encoder $\enc^i$ is trained individually to learn a compact representation of the modality $i$ by adding an \gls{fcn} layer with one neuron per class and a $\operatorname{softmax}$ activation function.
      Each encoder is trained end-to-end with a weighted cross-entropy loss to account for class imbalance:
      \begin{equation*}
-         \mathcal{L}_{CE}(\theta^{i}) = - \sum_{c=1}^{C}w_c Y_c \log\left( \fcn\left(\enc^{i}\left(X^{i}, \theta^{i}\right)\right)\right) \text{,}
+         \symcal{L}_{CE}(\theta^{i}) = - \sum_{c=1}^{C}w_c Y_c \log\left( \fcn\left(\enc^{i}\left(X^{i}, \theta^{i}\right)\right)\right) \text{,}
      \end{equation*}
      where \( \theta^{i}\), are the parameters associated with the encoder \(\enc^{i}\) and \(w_c\) denotes the weight\footnote{inversely proportional to the class size} of class $c \in \left\{1, \cdots,C \right\}$.
 
      In a second step, we freeze the encoder parameters \(\theta^i\), and train the multimodal weights of the model, i.e. all the cross-attention and the predictor module weights.
      The training on the predictive task is done with a weighted cross-entropy loss:
      \begin{equation*}
-         \mathcal{L}_{CE}(\theta) = - \sum_{c=1}^{C}w_c Y_c \log\left( p_c\right) \text{,}
+         \symcal{L}_{CE}(\theta) = - \sum_{c=1}^{C}w_c Y_c \log\left( p_c\right) \text{,}
      \end{equation*}
      where $\theta$ denotes the multimodal parameters, i.e., the cross-attention and predictor parameters.
      To have an interpretable model, the \(\alpha^{ij}\) values must be sparse.
      We want to select only the relevant interactions for each sample.
      In addition, the selected \(\alpha^{ij}\) must be diverse across samples; samples should have different important interactions.
-     In order to favor sparse and diverse values of the importance scores \(\alpha^{ij}\), we added four penalty terms: \(\mathcal{L}_{01}\) and \(\mathcal{L}_{b}\) that ensure sparsity, \(\mathcal{L}_{e}\) and \(\mathcal{L}_{v}\) that force the diversity.
-     \(\mathcal{L}_{b}\) and \(\mathcal{L}_{e}\) depends on a sparsity term \(\tau\).
+     In order to favor sparse and diverse values of the importance scores \(\alpha^{ij}\), we added four penalty terms: \(\symcal{L}_{01}\) and \(\symcal{L}_{b}\) that ensure sparsity, \(\symcal{L}_{e}\) and \(\symcal{L}_{v}\) that force the diversity.
+     \(\symcal{L}_{b}\) and \(\symcal{L}_{e}\) depends on a sparsity term \(\tau\).
 
-     The \(\mathcal{L}_{01}\) is based on the loss used in FairDARTS~\cite{FairDARTS} to push the sigmoid value of \(\alpha^{ij}\) towards 0 or 1 in order to eliminate the ambiguities regarding the significance of the interactions between modalities \(i\) and \(j\):
-     \[ \mathcal{L}_{01} = - \frac{1}{n_{b}}\sum_{k}^{n_b}\frac{1}{n_{\alpha}}\sum_{\substack{i,j \\ i \neq j}} \left( \alpha_k^{ij} - 0.5 \right)^2 \]
+     The \(\symcal{L}_{01}\) is based on the loss used in FairDARTS~\cite{FairDARTS} to push the sigmoid value of \(\alpha^{ij}\) towards 0 or 1 in order to eliminate the ambiguities regarding the significance of the interactions between modalities \(i\) and \(j\):
+     \[ \symcal{L}_{01} = - \frac{1}{n_{b}}\sum_{k}^{n_b}\frac{1}{n_{\alpha}}\sum_{\substack{i,j \\ i \neq j}} \left( \alpha_k^{ij} - 0.5 \right)^2 \]
 
-     Combined with the term \(\mathcal{L}_{01}\), the term \(\mathcal{L}_{e}\), constrains the \(\alpha^{ij}\) values to have the desired sparsity \(\tau\)~\cite{Bengio2015ConditionalCI}.
+     Combined with the term \(\symcal{L}_{01}\), the term \(\symcal{L}_{e}\), constrains the \(\alpha^{ij}\) values to have the desired sparsity \(\tau\)~\cite{Bengio2015ConditionalCI}.
 
-     \[ \mathcal{L}_{e} = \frac{1}{n_b} \sum_{k}^{n_b} \left\| \left(\frac{1}{n_{\alpha}}\sum_{\substack{i,j \\ i \neq j}} \alpha^{ij}_{k}\right) - \tau \right\|_2\]
+     \[ \symcal{L}_{e} = \frac{1}{n_b} \sum_{k}^{n_b} \left\| \left(\frac{1}{n_{\alpha}}\sum_{\substack{i,j \\ i \neq j}} \alpha^{ij}_{k}\right) - \tau \right\|_2\]
 
-     Using only the terms \(\mathcal{L}_{01}\) and \(\mathcal{L}_{e}\), a valid solution would be to select some of the \(\alpha^{ij}\) with a high probability and ignore the others for any samples.
+     Using only the terms \(\symcal{L}_{01}\) and \(\symcal{L}_{e}\), a valid solution would be to select some of the \(\alpha^{ij}\) with a high probability and ignore the others for any samples.
      Indeed, all \(\alpha^{ij}\) can not be equally selected during the training, limiting the diversity of selected interactions across patients.
-     To avoid this problem, the terms \(\mathcal{L}_{b}\) and \(\mathcal{L}_{v}\) are used.
-     The term \(\mathcal{L}_{b}\) ensures that each \(\alpha^{ij}\) can be used with a probability \(\tau\)~\cite{Bengio2015ConditionalCI}.
+     To avoid this problem, the terms \(\symcal{L}_{b}\) and \(\symcal{L}_{v}\) are used.
+     The term \(\symcal{L}_{b}\) ensures that each \(\alpha^{ij}\) can be used with a probability \(\tau\)~\cite{Bengio2015ConditionalCI}.
 
-     \[ \mathcal{L}_{b} = \sum_{\substack{i,j \\ i \neq j}} \left\|\frac{1}{n_b}\sum_{k}^{n_b}\alpha^{ij}_k - \tau \right\|_2\]
+     \[ \symcal{L}_{b} = \sum_{\substack{i,j \\ i \neq j}} \left\|\frac{1}{n_b}\sum_{k}^{n_b}\alpha^{ij}_k - \tau \right\|_2\]
 
-     The term \(\mathcal{L}_{v}\) aims to maximize the variances of \(\alpha^{ij}\) across the data.
+     The term \(\symcal{L}_{v}\) aims to maximize the variances of \(\alpha^{ij}\) across the data.
      This term ensures that the model is not learning a uniform distribution of \(\alpha^{ij}\) across samples.
-     \[ \mathcal{L}_{v} = - \sum_{\substack{i,j \\ i \neq j}} \operatorname{var}_k\left\{\alpha^{ij}_{k} \right\}\]
-     The diversity constraints, represented by the terms \(\mathcal{L}_{b}\) and \(\mathcal{L}_{v}\) forces the network to learn a set of sample-specific interactions.
+     \[ \symcal{L}_{v} = - \sum_{\substack{i,j \\ i \neq j}} \operatorname{var}_k\left\{\alpha^{ij}_{k} \right\}\]
+     The diversity constraints, represented by the terms \(\symcal{L}_{b}\) and \(\symcal{L}_{v}\) forces the network to learn a set of sample-specific interactions.
 
-     In the second step, the total loss, \(\mathcal{L}_{total}\), that the network is trained on, is the sum of the task loss \(\mathcal{L}_{CE}\) and the different regularization terms:
-     \[ \mathcal{L}_{total} = \mathcal{L}_{CE}\left(\theta\right) + w_{01}\mathcal{L}_{01} + w_{v}\mathcal{L}_{v} + w_{e}\mathcal{L}_{e} + w_{b}\mathcal{L}_{b}\]
+     In the second step, the total loss, \(\symcal{L}_{total}\), that the network is trained on, is the sum of the task loss \(\symcal{L}_{CE}\) and the different regularization terms:
+     \[ \symcal{L}_{total} = \symcal{L}_{CE}\left(\theta\right) + w_{01}\symcal{L}_{01} + w_{v}\symcal{L}_{v} + w_{e}\symcal{L}_{e} + w_{b}\symcal{L}_{b}\]
 
 
 \section{Results}
@@ -161,17 +161,26 @@
      The model with the gating mechanism slightly outperforms the baseline approach.
 
      \begin{table}[htbp]
+        \sisetup{separate-uncertainty-units=single, separate-uncertainty,detect-mode}
          \centering
-         \caption{Impact of the gating mechanism on the accuracy}
-         \begin{tabular}{lcccc}
-             \toprule
-             Model   & Accuracy \(\uparrow\) & Precision \(\uparrow\) & Recall \(\uparrow\) & F1 \(\uparrow\)   \\
-             \midrule
-             No gate & $0.980 \pm 0.001$     & $0.982 \pm 0.002$      & $0.979 \pm 0.002$   & $0.980 \pm 0.002$ \\
-             Gate    & $0.987 \pm 0.001$     & $0.989 \pm 0.001$      & $0.987 \pm 0.001$   & $0.987 \pm 0.001$ \\
-             \bottomrule
-         \end{tabular}
-         \label{tab:base_table}
+         \caption{Impact of the gating mechanism on the accuracy}\label{tab:base_table}
+         \begin{tblr}{
+            colspec={
+                Q[l,m]
+                Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
+                Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
+                Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
+                Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
+                },%
+            row{1} = {guard, c},%
+            row{2-Z} = {font=\small},%
+            hline{1,Z} = {2pt},%
+			hline{2} = {1pt},%
+            }
+            Model   & Accuracy \(\uparrow\) & Precision \(\uparrow\) & Recall \(\uparrow\) & F1 \(\uparrow\)   \\
+            No gate & 0.980(1)     & 0.982(2)      & 0.979(2)   & 0.980(2) \\
+            Gate    & 0.987(1)     & 0.989(1)      & 0.987(1)   & 0.987(1)
+         \end{tblr}
      \end{table}
 
      The gating blocks enable us to directly measure the importance scores of each of the thirty calculated interactions (Fig.~\ref{fig:alphas_signature}).
@@ -184,7 +193,7 @@
      These two cancers originate from the same organ and have only a single difference in their signature.
 
  \subsection{Stability of the selected interactions}
-     \begin{wrapfigure}[21]{l}{0.45\textwidth}
+     \begin{wrapfigure}[15]{l}{0.45\textwidth}
          \centering
          \vspace{-\intextsep}
          \includegraphics[scale=1]{selection_stability.pdf}
@@ -219,19 +228,25 @@
          \end{subfigure}
          \hfill
          \begin{subtable}[c]{0.33\textwidth}
-             \centering
-             \caption{}
-             \begin{tabular}{cc}
-                 \toprule
-                 Sparsity rate & Accuracy          \\
-                 \midrule
-                 0.010         & $0.982 \pm 0.003$ \\
-                 0.050         & $0.983 \pm 0.002$ \\
-                 0.100         & $0.983 \pm 0.003$ \\
-                 0.300         & $0.982 \pm 0.002$ \\
-                 \bottomrule
-             \end{tabular}
-             \label{tab:acc_sparsity}
+            \sisetup{separate-uncertainty-units=single, separate-uncertainty,detect-mode}
+         \centering
+         \label{tab:acc_sparsity}
+         \begin{tblr}{
+            colspec={
+                Q[si={table-format=1.3,table-number-alignment=center, table-align-uncertainty = true},c, wd=1.5cm]
+                Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
+                },%
+            row{1} = {guard, c, m},%
+            row{2-Z} = {font=\small},%
+            hline{1,Z} = {2pt},%
+			hline{2} = {1pt},%
+            }
+            Sparsity rate & Accuracy          \\
+            0.010         & 0.982(3) \\
+            0.050         & 0.983(2) \\
+            0.100         & 0.983(3) \\
+            0.300         & 0.982(2) 
+         \end{tblr}
          \end{subtable}
          \caption{Impact of the sparsity rate \(\tau\) on (a) the number of selected interactions and (b) the accuracy.}
      \end{figure}
@@ -242,93 +257,115 @@
      We performed a comprehensive ablation study to study the influence of individual regularizations.
      Three of the regularizations did not impact the accuracy but impacted the \(\alpha^{ij}\) selected (Table~\ref{tab:ablation}\subref{tab:ablation_wv},\subref{tab:ablation_we},\subref{tab:ablation_wb}).
      \begin{table}[htbp]
+        \centering
+        \sisetup{separate-uncertainty-units=single, separate-uncertainty,detect-mode}
          \caption{Results of the ablation study of the four regularization terms.}
-         \begin{subtable}[h]{0.2\textwidth}
-             \centering
-             \caption{\(\mathcal{L}_v\) ablation}
-             \begin{tabular}{cccccc}
-                 \toprule
-                 \(w_v\) & Accuracy            \\
-                 \midrule
-                 0.0     & \(0.982 \pm 0.001\) \\
-                 5.0     & \(0.983 \pm 0.001\) \\
-                 10.0    & \(0.981 \pm 0.001\) \\
-                 \bottomrule
-             \end{tabular}
-             \label{tab:ablation_wv}
+         \hspace{0.2\textwidth}
+         \begin{subtable}[h]{0.27\textwidth}
+             \caption{\(\symcal{L}_v\) ablation}\label{tab:ablation_wv}
+             \begin{tblr}{
+                colspec={
+                    Q[si={table-format=2.1,table-number-alignment=center, table-align-uncertainty = true},c]
+                    Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
+                    },%
+                row{1} = {guard, c, m},%
+                row{2-Z} = {font=\small},%
+                hline{1,Z} = {2pt},%
+                hline{2} = {1pt},%
+                }
+                \(w_v\) & Accuracy  \\
+                 0.0     & 0.982(1) \\
+                 5.0     & 0.983(1) \\
+                 10.0    & 0.981(1) 
+             \end{tblr}
          \end{subtable}
          \hfill
-         \begin{subtable}[h]{0.2\textwidth}
-             \centering
-             \caption{\(\mathcal{L}_e\) ablation}
-             \begin{tabular}{cccccc}
-                 \toprule
-                 \(w_e\) & Accuracy            \\
-                 \midrule
-                 0.0     & \(0.983 \pm 0.001\) \\
-                 0.02    & \(0.983 \pm 0.001\) \\
-                 0.05    & \(0.981 \pm 0.002\) \\
-                 \bottomrule
-             \end{tabular}
-             \label{tab:ablation_we}
+         \begin{subtable}[h]{0.27\textwidth}
+             \caption{\(\symcal{L}_e\) ablation}\label{tab:ablation_we}
+             \begin{tblr}{
+                colspec={
+                    Q[si={table-format=1.2,table-number-alignment=center, table-align-uncertainty = true},c]
+                    Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
+                    },%
+                row{1} = {guard, c, m},%
+                row{2-Z} = {font=\small},%
+                hline{1,Z} = {2pt},%
+                hline{2} = {1pt},%
+                }
+                \(w_e\) & Accuracy            \\
+                0.0     & 0.983(1) \\
+                0.02    & 0.983(1) \\
+                0.05    & 0.981(2) 
+             \end{tblr}
+         \end{subtable}\hspace{0.2\textwidth}
+
+         \bigskip
+
+         \hspace{0.2\textwidth}
+         \begin{subtable}[h]{0.27\textwidth}
+             \caption{\(\symcal{L}_b\) ablation}\label{tab:ablation_wb}
+             \begin{tblr}{
+                colspec={
+                    Q[si={table-format=1.2,table-number-alignment=center, table-align-uncertainty = true},c]
+                    Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
+                    },%
+                row{1} = {guard, c, m},%
+                row{2-Z} = {font=\small},%
+                hline{1,Z} = {2pt},%
+                hline{2} = {1pt},%
+                }
+               \(w_{b}\) & Accuracy            \\
+                 0.0       & 0.983(2) \\
+                 0.06      & 0.983(1) \\
+                 0.10      & 0.981(2) 
+             \end{tblr}
          \end{subtable}
          \hfill
-         \begin{subtable}[h]{0.2\textwidth}
-             \centering
-             \caption{\(\mathcal{L}_b\) ablation}
-             \begin{tabular}{cccccc}
-                 \toprule
-                 \(w_{b}\) & Accuracy            \\
-                 \midrule
-                 0.0       & \(0.983 \pm 0.002\) \\
-                 0.06      & \(0.983 \pm 0.001\) \\
-                 0.10      & \(0.981 \pm 0.002\) \\
-                 \bottomrule
-             \end{tabular}
-             \label{tab:ablation_wb}
-         \end{subtable}
-         \hfill
-         \begin{subtable}[h]{0.2\textwidth}
-             \centering
-             \caption{\(\mathcal{L}_{01}\) ablation}
-             \begin{tabular}{cccccc}
-                 \toprule
-                 \(w_{01}\) & Accuracy            \\
-                 \midrule
-                 0.0        & \(0.977 \pm 0.002\) \\
-                 0.5        & \(0.977 \pm 0.003\) \\
-                 1.0        & \(0.983 \pm 0.001\) \\
-                 \bottomrule
-             \end{tabular}
-             \label{tab:ablation_w01}
-         \end{subtable}
+         \begin{subtable}[h]{0.27\textwidth}
+             \caption{\(\symcal{L}_{01}\) ablation}\label{tab:ablation_w01}
+             \begin{tblr}{
+                colspec={
+                    Q[si={table-format=1.2,table-number-alignment=center, table-align-uncertainty = true},c]
+                    Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
+                    },%
+                row{1} = {guard, c, m},%
+                row{2-Z} = {font=\small},%
+                hline{1,Z} = {2pt},%
+                hline{2} = {1pt},%
+                }
+               \(w_{01}\) & Accuracy            \\
+                 0.0        & 0.977(2) \\
+                 0.5        & 0.977(3) \\
+                 1.0        & 0.983(1)
+             \end{tblr}
+         \end{subtable}\hspace{0.2\textwidth}
          \label{tab:ablation}
      \end{table}
 
-     Firstly, we consider the impact of the \(\mathcal{L}_b\) regularization by testing different values of \(w_b\).
+     Firstly, we consider the impact of the \(\symcal{L}_b\) regularization by testing different values of \(w_b\).
      We find that a high value of \(w_b\) favors an important sparsity where all the alphas are close to zeros, in the range \(\left[10^{-5}; 10^{-1}\right]\).
      The absence of this regularization term limits the diversity of interactions among samples (Fig.~\ref{fig:alphas_signature_ablation}).
      A larger set of \(\alpha^{ij}\) is commonly selected for different samples in this configuration.
 
-     Secondly, we looked at the impact of \(\mathcal{L}_e\) regularization by testing different values of \(w_e\).
-     Similarly to \(\mathcal{L}_b\), high \(w_e\) values favor more sparse solution.
+     Secondly, we looked at the impact of \(\symcal{L}_e\) regularization by testing different values of \(w_e\).
+     Similarly to \(\symcal{L}_b\), high \(w_e\) values favor more sparse solution.
      The absence of this regularization term increases the number of interactions that are selected; this term is crucial to ensure enough sparsity of the selected interactions (Fig.~\ref{fig:alphas_signature_ablation}).
 
      \begin{figure}
          \centering
          \includegraphics[width=0.7\textwidth]{ablation_heatmaps.pdf}
-         \caption{Impact of the different regularization terms on the \(\alpha^{ij}\). (Top left) Impact of the \(\mathcal{L}_{01}\) regularization. (Top right) Impact of the \(\mathcal{L}_{b}\) regularization. (Bottom left) Impact of the \(\mathcal{L}_{e}\) regularization. (Bottom right) Impact of the \(\mathcal{L}_{v}\) regularization.}
+         \caption{Impact of the different regularization terms on the \(\alpha^{ij}\). (Top left) Impact of the \(\symcal{L}_{01}\) regularization. (Top right) Impact of the \(\symcal{L}_{b}\) regularization. (Bottom left) Impact of the \(\symcal{L}_{e}\) regularization. (Bottom right) Impact of the \(\symcal{L}_{v}\) regularization.}
          \label{fig:alphas_signature_ablation}
      \end{figure}
 
-     The \(\mathcal{L}_v\) is essential to counterbalance the sparsity and ensure there is enough diversity among the selected \(\alpha^{ij}\).
-     In the absence of the \(\mathcal{L}_v\), \(w_v = 0\), only the regularization terms controlling the sparsity are applied.
+     The \(\symcal{L}_v\) is essential to counterbalance the sparsity and ensure there is enough diversity among the selected \(\alpha^{ij}\).
+     In the absence of the \(\symcal{L}_v\), \(w_v = 0\), only the regularization terms controlling the sparsity are applied.
      The solution that is obtained is a solution with a maximum of \(\alpha^{ij}\)  as close as possible to zero to fulfill the sparsity constraints (Fig.~\ref{fig:alphas_signature_ablation}).
      \(\alpha^{ij}\) that are not set to zeros have small values in the range \(\left[10^{-5}; 10^{-2}\right]\).
      On the contrary, high values of \(w_v\) favor more diversity among the selected \(\alpha^{ij}\) but with a lower sparsity.
      To ensure the diversity constraints, more \(\alpha^{ij}\) are selected.
 
-     The absence \(\mathcal{L}_{01}\) regularization reduced the accuracy and reduced the sparsity of the selected \(\alpha^{ij}\) (Table~\ref{tab:ablation_w01} and Fig.~\ref{fig:alphas_signature_ablation}).
+     The absence \(\symcal{L}_{01}\) regularization reduced the accuracy and reduced the sparsity of the selected \(\alpha^{ij}\) (Table~\ref{tab:ablation_w01} and Fig.~\ref{fig:alphas_signature_ablation}).
      This regularization term is essential in the correct training of the gating mechanism.
 
      It is necessary to balance those regularization terms to ensure enough diversity and sparsity.
@@ -352,7 +389,7 @@
      The importance score variance across samples was around 0.1, whereas, with our approach, the diversity was higher, with variances up to 0.5.
 
 \section{Conclusion}
- This paper introduced a new interpretable multimodal architecture.
+ This chapter introduced a new interpretable multimodal architecture.
  The model is interpretable by construction thanks to a gating mechanism that scores the interactions of different modalities.
  We showed that the gating mechanism improves both accuracy and interpretability compared to our baseline.
  Gate importance scores must be sparse to ensure correct interpretability and diversity to reflect the diversity that exists between samples.
