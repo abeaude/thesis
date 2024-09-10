@@ -38,4 +38,5 @@ UserWarn
 	# Use \symcal instead of \mathcal
 	\mathcal
 	\mathbf
+	\mathbb
 }
