@@ -41,6 +41,12 @@ sub drawio2pdf {
     system("drawio --export --format pdf --border 0 --crop --page-index 1 \"$_[0].drawio\"");
 }
 
+if( ($ENV{GITHUB_ACTIONS} // "false") eq "true" ){
+    print "Not running `git_info_2` in github actions.";
+} else {
+    do './perl/gitinfo2.pm';
+}
+print "";
 ####################
 # externaldocument #
 ####################

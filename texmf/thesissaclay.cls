@@ -1,6 +1,8 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{thesissaclay}[2014/08/16 Example LaTeX class]
 \overfullrule=2cm
+\newif\ifgitmark
+\gitmarkfalse
 %%%%%%%%%%%%%
 %% OPTIONS %%
 %%%%%%%%%%%%%
@@ -20,6 +22,7 @@
 	\overfullrule=0cm
 }
 \DeclareOption{english}{\global\def\@lang{english}}
+\DeclareOption{gitmark}{\gitmarktrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrbook}}
 \ProcessOptions\relax
 
@@ -127,6 +130,7 @@
 %% OTHER %%
 \RequirePackage{lipsum}
 \RequirePackage[framemethod=tex]{mdframed}
+\RequirePackage[object=vectorian]{pgfornament}
 \RequirePackage{tcolorbox}
 \tcbuselibrary{skins}
 \RequirePackage[]{mindflow}
@@ -140,6 +144,8 @@
 \RequirePackage{xstring}
 \RequirePackage{eqparbox}
 \RequirePackage{relsize}
+\RequirePackage[local, dirty={with uncommited changes!}]{gitinfo2}
+\RequirePackage{datetime2}
 \RequirePackage{pifont}
 \newcommand{\cmark}{\ding{51}\xspace}%
 \newcommand{\xmark}{\ding{55}\xspace}%
@@ -643,6 +649,18 @@
 	 }
  }
 
+ \DeclareNewLayer[
+	background, 
+	bottommargin,
+	addvoffset=1.4cm,
+	addhoffset=\hoffset+1in+\oddsidemargin,
+	width=\textwidth,
+	mode=text, 
+	oddpage,
+	contents=Compiled on \DTMToday\xspace from \href{https://github.com/abeaude/thesis/tree/\gitHash}{[\gitBranch] -- \gitAbbrevHash}\xspace\textcolor{Prune}{\gitDirty}
+	]{gitmetadata}
+ \ifgitmark \AddLayersToPageStyle{scrheadings}{gitmetadata} \fi
+
  %% DEFINE HEADER AND FOOTER %%
  \clearpairofpagestyles
  \renewcommand*{\chaptermarkformat}{}
@@ -657,7 +675,12 @@
 	 \cfoot*{}
 	 \ofoot*{\pagemark}
  \else%
-	 \cfoot*{\pagemark}
+	 \cfoot*{\begin{tikzpicture}
+    \node (a) [inner sep=0pt]{\pgfornament[height=2ex]{72}};
+    \node (b) [right=1mm of a.east, inner sep=0pt, anchor=west]{\pagemark};
+    \node[inner sep=0pt, right=1mm of b.east, anchor=west]{\pgfornament[height=2ex, symmetry=v]{72}};
+\end{tikzpicture}}
+	%  \cfoot*{\pagemark}
 	 \ofoot*{}
  \fi%
 

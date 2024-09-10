@@ -1,9 +1,21 @@
-\documentclass[web, english]{thesissaclay}
+\documentclass[web, english, gitmark]{thesissaclay}
 %https://tex.stackexchange.com/questions/719543/how-do-i-add-icons-in-front-of-bibliography-entries
 % https://tex.stackexchange.com/questions/563696/add-icons-to-bibliography-style-in-scrbook
 
 \usepackage{subfiles}
-
+% \usepackage[local, dirty={with uncommited changes!}]{gitinfo2}
+% \usepackage{datetime2}
+% \DeclareNewLayer[
+% 	background, 
+% 	bottommargin,
+% 	addvoffset=1.4cm,
+% 	addhoffset=\hoffset+1in+\oddsidemargin,
+% 	width=\textwidth,
+% 	mode=text, 
+% 	oddpage,
+% 	contents=Compiled on \DTMToday\xspace from \href{https://github.com/abeaude/thesis/tree/\gitHash}{[\gitBranch] -- \gitAbbrevHash}\xspace\textcolor{Prune}{\gitDirty}
+% 	]{gitmetadata}
+% \AddLayersToPageStyle{scrheadings}{gitmetadata} 
 \input{preamble/information.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%

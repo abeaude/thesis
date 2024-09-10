@@ -1,5 +1,6 @@
 \documentclass[../main.tex]{subfiles}
 \usepackage{silence}
+\usepackage{layout}
 \WarningFilter{glossaries}{No \printglossary or \printglossaries found}
 
 \begin{document}
@@ -306,7 +307,7 @@
 		\begin{equation}
 			X \approx WH
 		\end{equation}
-		where \(X \in \symbb{R}^{N\times d}\) is a data matrix,\(W \in \symbb{R}^{N\times k}\) a factor matrix and \(H \symbb{R}^{k\times d}\) a loading matrix, \(k < d\) reprsents the number of dimensions used to construct the low dimensional space.
+		where \(X \in \symbb{R}^{N\times d}\) is a data matrix,\(W \in \symbb{R}^{N\times k}\) a factor matrix and \(H \in \symbb{R}^{k\times d}\) a loading matrix, \(k < d\) reprsents the number of dimensions used to construct the low dimensional space.
 		As there are more than one data matrix in multi-omics studies, \(X_i\quad i \in \left\{1, \cdots, m\right\}\), different strategies have been depicted to perform the integration:
 		\begin{itemize}[nosep]
 			\item Each data matrix is decomposed individually, \(X_i \approx W_iH_i\) and one of the factor matrix \(W_i\) is used for downstream analyses. The cost function used to find the optimal factor and loading matrix should be designed to allow multi-omics information to be shared across factor matrices.
@@ -446,7 +447,7 @@
 			Then, \gls{gcn} are applied on the graph to obtain a new graph representation for \glsxtrshort{ppi}-based approach and a new node representation for the patient-graph approach.
 			\citeauthor{Guo2023}~\cite{Guo2023} applied an attention mechanism to the initial node embedding \(X\).
 			This attention mechanism is used to capture the association between the different omics.
-			AGMI~\cite{AGMI} proposed an early fusion approach based on an homogeneous multigraph. 
+			AGMI~\cite{AGMI} proposed an early fusion approach based on an \gls{hmg}. 
 			Each node represent a gene and there are three types of edges: 
 			\begin{itemize}[nosep]
 				\item edges extracted from \gls{ppi},
@@ -460,8 +461,8 @@
 			However, the method is only succinctly described, and they do not specify how the self-attention mechanism is applied to one-dimensional inputs.
 			Based on the code, they reshape the input vector to a three-dimensional vector to consider multi-heads.
 			In practice, this reshaping corresponds to creating multiple input elements or tokens and considering a single head in the self-attention mechanism.
-			DeepPathNet is another architecture combining the self-attention mechanism with an early fusion strategy~\cite{DeepPathNet}.
-			Multi-omics features are transformed into a pathway representation, and they used the 241 curated pathways from LCpathways~\cite{LCpathways}.
+			DeepPathNet is another architecture combining the self-attention mechanism with early fusion~\cite{DeepPathNet}.
+			Multi-omics features are transformed into a pathway representation using the 241 curated pathways from LCpathways~\cite{LCpathways}.
 			Multi-omics features belonging to pathways are concatenated and projected to a 512-dimensional vector with pathway-specific weights.
 			Interactions between the 241 pathways are then computed with a transformer block~\cref{eq:transformer_block}.
 
@@ -638,8 +639,6 @@
 
 			\citeauthor{Leng2022}~\cite{Leng2022} compared the three integration strategies with various architectures including \gls{fcn}, \gls{cnn}, \gls{gnn}, \gls{ae}. 
 			They showed that \gls{gnn} with an early fusion was the best methods for the supervised integration of multi-omics data. 
-
-			
 
 
 
