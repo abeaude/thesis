@@ -12,7 +12,14 @@
 \chapter{CrossAttOmics}\label{chap:crossattomics}
 \minitocpage
 
-\begin{figure}[htbp]
+\section{Model Architecture}
+ Our proposed architecture consists of two main components, illustrated in~\cref{fig:crossattomics_arch}.
+ Initially, a series of encoders independently projects each modality into a representational space, utilizing a self-attention mechanism to capture intra-modality interactions.
+ Subsequently, the architecture employs cross-attention modules to represent modality pairs, focusing on inter-modality interactions.
+ Given the high dimensionality of omics data, direct computation of attention matrices becomes impractical.
+ To address this challenge, we used a strategy of data decomposition into groups, effectively reducing the memory demands associated with attention calculations~\cite{AttOmics}.
+
+ \begin{figure}[htbp]
     \begin{subcaptiongroup}
         \ifSubfilesClassLoaded{%
             \input{figures/5-CrossAttOmics/model_architecture.tex}%
@@ -28,13 +35,6 @@
     \caption[The CrossAttOmics architecture]{The CrossAttOmics architecture is composed of modalities encoders, cross-attention modules and a predictor~\subref{fig:crossattomics_A}. Each modality is encoded with its specific attention based encoders capturing intra-modality interactions~\subref{fig:crossattomics_C}. Modality interactions are computed with cross-attentions~\subref{fig:crossattomics_D} according to the modality interaction graph~\subref{fig:crossattomics_B}.}
     \label{fig:crossattomics_arch}
 \end{figure}
-
-\section{Model Architecture}
- Our proposed architecture consists of two main components, illustrated in~\cref{fig:crossattomics_arch}.
- Initially, a series of encoders independently projects each modality into a representational space, utilizing a self-attention mechanism to capture intra-modality interactions.
- Subsequently, the architecture employs cross-attention modules to represent modality pairs, focusing on inter-modality interactions.
- Given the high dimensionality of omics data, direct computation of attention matrices becomes impractical.
- To address this challenge, we used a strategy of data decomposition into groups, effectively reducing the memory demands associated with attention calculations~\cite{AttOmics}.
 
  \subsection{Modalities Encoder}
      Let \( X = \left\{X^{1}, \cdots, X^{M} \right\} \) be a multimodal training example, where \(M\) is the number of modalities and \(Y\) is the associated label.

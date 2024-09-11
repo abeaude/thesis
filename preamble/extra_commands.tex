@@ -36,6 +36,7 @@
 
 \pgfplotstableread[col sep=comma,]{data/attomics_perf.csv}\attomicsperf
 \pgfplotstableread[col sep=comma,]{data/attomics_perf_zoom.csv}\attomicsperfzoom
+\pgfplotstableread[col sep=comma]{data/CrossAttOmicsGateSelFreq.csv}\CrossAttOmicsGateSelFreq
 
 \pgfplotstablegetrowsof{\attomicsperfzoom}
 \pgfmathsetmacro{\Nattomicszoom}{\pgfplotsretval-1}

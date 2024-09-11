@@ -98,12 +98,8 @@
 \RequirePackage{amsfonts}
 \RequirePackage[all,warning]{onlyamsmath}
 \RequirePackage[math-style=TeX, bold-style=TeX, active-frac=small]{unicode-math}
-\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/, version=default] %FractionNumeratorShiftUp=20, FractionDenominatorShiftDown=20, FractionDenominatorGapMin=20
-\setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/, version=tikz]
-% \setmathfont[range=sfup]{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
-% \setmathfont[range=sfit]{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
-%\setmathfont\mathrm{lmroman12-regular.otf}[Scale=MatchLowercase, Path = fonts/]
-\setoperatorfont\mathsf
+\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/] 
+\setoperatorfont{\symsfup}
 \newtheorem{definition}{Definition} %TODO: language support
 \newtheorem{property}{Property}
 \newtheorem{theorem}{Theorem}
@@ -124,6 +120,7 @@
 \RequirePackage{wrapfig2}
 \RequirePackage{tikz}
 \RequirePackage{pgfplots}
+\RequirePackage{pgfplotstable}
 \RequirePackage{subcaption}
 \renewcommand{\thesubfigure}{\Alph{subfigure}}
 \DeclareCaptionLabelFormat{bf-parens}{(\textbf{#2})}
@@ -181,20 +178,17 @@
 \AtEndPreamble{%
 	\RequirePackage[capitalise, nameinlink]{cleveref}
 	\crefrangelabelformat{subfigure}{#3#1--\crefstripprefix{#1}{#2}#4}
-	\newtcolorbox[auto counter, number within=chapter, crefname={see Box}{see Boxes}]{mybox}[2][]{title=Box~\thetcbcounter: #2, fontupper=\small, fontlower=\small, #1}
-	\BeforeBeginEnvironment{mybox}{\begin{singlespace}}
-	\AfterEndEnvironment{mybox}{\end{singlespace}}
-}
-\BeforeBeginEnvironment{tikzpicture}{
-	\fontsize{10}{10}\selectfont
-    \setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/]
-    % \setmathfont[range=sfup]{latinmodern-math.otf}[Scale=1, Path = fonts/]
-	% \setmathfont[range=sfit]{latinmodern-math.otf}[Scale=1, Path = fonts/]
-}
-\AfterEndEnvironment{tikzpicture}{
-	\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
-	% \setmathfont[range=sfup]{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
-	% \setmathfont[range=sfit]{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
+	\newtcolorbox[auto counter, number within=chapter, crefname={see Box}{see Boxes}]{mybox}[2][]{title=Box~\thetcbcounter: #2, fontupper=\footnotesize, fontlower=\footnotesize, #1}
+	\BeforeBeginEnvironment{mybox}{
+		\begin{singlespace}
+		\setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/]
+		\setoperatorfont\symsfup
+			}
+	\AfterEndEnvironment{mybox}{
+		\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
+    	\setoperatorfont\symsfup
+		\end{singlespace}
+		}
 }
 
 % customize caption
@@ -208,7 +202,7 @@
 % see floatrowbytocbasic and floatrow
 %\DeclareMathSizes{10}{10}{8}{6}
 % investigate
-\newfontfamily{\lmm}{latinmodern-math.otf}[Scale=1, Path = fonts/]
+%\newfontfamily{\lmm}{latinmodern-math.otf}[Scale=1, Path = fonts/]
 %\pretocmd{\tikzpicture}{\KOMAoptions{fontsize=10pt}\setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/]}{\ClassInfo{Thesis Saclay}{Patched tikzpicture to use a font size of 10pt}}{\ClassWarning{Thesis Saclay}{Cannot patch tikzpicture to have a smaller font size}}
 %%%%%%%%%%%%
 %% COLORS %%

@@ -32,11 +32,11 @@
      We denote with \(X^{i} \in \symbb{R}^{p_i}\) each modality input, and $p_i$ is the number of features for modality $i$.
      Each modality input \(X^{i}\) is encoded with a self-attention-based encoder: \(\enc^{i}\)~\cite{AttOmics}.
 
-     The omics profile \(X^{i} \in \symbb{R}^{p_i} \) is reshaped to a set of $k^i$ groups of similar sizes~(eq.~\ref{eq:attomics_groups}).
+     The omics profile \(X^{i} \in \symbb{R}^{p_i} \) is reshaped to a set of $k^i$ groups of similar sizes~(\cref{eq:attomics_groups}).
      \begin{equation}
          X^{i}_{G} = \left\{X^{i}_{g_j} \right\}_{1\leq j\leq k^i}\label{eq:attomics_groups}
      \end{equation}
-     Each group vector $X^{i}_{g_j}$ is projected into an $s^i$-dimensional space with a trainable projection \(\phi^i\) (eq.~\ref{eq:attomics_groups_proj}).
+     Each group vector $X^{i}_{g_j}$ is projected into an $s^i$-dimensional space with a trainable projection \(\phi^i\) (\cref{eq:attomics_groups_proj}).
      \begin{equation}
          X^{'i}_{G} = \left\{\phi^i\left(X^{i}_{g_j} \right) \right\}_{1\leq j\leq k^i}\label{eq:attomics_groups_proj}
      \end{equation}
@@ -157,7 +157,7 @@
      Adding the gating mechanism does not significantly change the number of parameters, ensuring a fair comparison.
 
      We first evaluated the impact of the gating on the accuracy when predicting the type of cancer.
-     Table~\ref{tab:base_table} shows the accuracy obtained with the baseline model (no gate) and the gated model (gate).
+     \Cref{tab:base_table} shows the accuracy obtained with the baseline model (no gate) and the gated model (gate).
      The model with the gating mechanism slightly outperforms the baseline approach.
 
      \begin{table}[htbp]
@@ -183,8 +183,8 @@
          \end{tblr}
      \end{table}
 
-     The gating blocks enable us to directly measure the importance scores of each of the thirty calculated interactions (Fig.~\ref{fig:alphas_signature}).
-     Fig.~\ref{fig:alphas_signature} is obtained by taking the mean of the \(\alpha^{ij}_k\), where sample \(k\) belong to class \(c\).
+     The gating blocks enable us to directly measure the importance scores of each of the thirty calculated interactions (\cref{fig:alphas_signature}).
+     \Cref{fig:alphas_signature} is obtained by taking the mean of the \(\alpha^{ij}_k\), where sample \(k\) belong to class \(c\).
      It shows that many interactions are not used; only a small subset is used to obtain the class predictions.
 
      This result suggests that not all interactions are necessary for good predictive performance.
@@ -193,16 +193,38 @@
      These two cancers originate from the same organ and have only a single difference in their signature.
 
  \subsection{Stability of the selected interactions}
-     \begin{wrapfigure}[15]{l}{0.45\textwidth}
+     \begin{wrapfigure}[16]{l}{0.48\textwidth}
          \centering
-         \vspace{-\intextsep}
-         \includegraphics[scale=1]{selection_stability.pdf}
+         \vspace{-0.5\intextsep}
+         \begin{tikzpicture}
+            \begin{axis}[
+            xbar=2pt, 
+            ytick=data, 
+            yticklabels from table={\CrossAttOmicsGateSelFreq}{interactions}, 
+            y dir=reverse, 
+            xmin=0, xmax=1, 
+            xlabel=Selection frequency, 
+            minor x tick num=2, 
+            ytick style={draw=none}, ytick align=inside, 
+            xtick pos=lower,
+            height=14\baselineskip,
+            width=0.8\linewidth,
+            enlarge y limits=0.05,
+            bar width=0.8,
+            yticklabel style={font=\scriptsize},
+            xticklabel style={font=\scriptsize},
+            xlabel style={font=\footnotesize}
+            ]
+                \addplot[draw=none,fill=gray!80] table[y expr=\coordindex, x=freq]{\CrossAttOmicsGateSelFreq};
+            \end{axis}
+        \end{tikzpicture}
+         %\includegraphics[scale=1]{selection_stability.pdf}
          \caption{Selection frequency of the different interactions.}
          \label{fig:alphas_stability}
      \end{wrapfigure}
      The gating block helps increase the prediction's accuracy and interpretability by highlighting the important interactions between modalities.
      In a multimodal setting, where many modalities are available, one could hypothesize that the selected interactions are random, as different modalities could provide the same amount of information.
-     We trained the model fifty times to test this hypothesis and looked at the top selected interactions and their selection frequency (Fig.~\ref{fig:alphas_stability}).
+     We trained the model fifty times to test this hypothesis and looked at the top selected interactions and their selection frequency~(\cref{fig:alphas_stability}).
 
      A core of 5 interactions was selected in most of the runs: Protein $\rightarrow$ DNAm, miRNA $\rightarrow$ DNAm, CNV $\rightarrow$ DNAm, nc mRNA $\rightarrow$ DNAm, mRNA $\rightarrow$ DNAm.
      These interactions are the most important as they are likely to contribute to the exploitation of complementary information between modalities.
@@ -255,7 +277,7 @@
  \subsection{Ablation study}
      Our training loss includes four different regularization terms.
      We performed a comprehensive ablation study to study the influence of individual regularizations.
-     Three of the regularizations did not impact the accuracy but impacted the \(\alpha^{ij}\) selected (Table~\ref{tab:ablation}\subref{tab:ablation_wv},\subref{tab:ablation_we},\subref{tab:ablation_wb}).
+     Three of the regularizations did not impact the accuracy but impacted the \(\alpha^{ij}\) selected~(\cref{tab:ablation_wv,tab:ablation_we,tab:ablation_wb}).
      \begin{table}[htbp]
         \centering
         \sisetup{separate-uncertainty-units=single, separate-uncertainty,detect-mode}
@@ -344,12 +366,12 @@
 
      Firstly, we consider the impact of the \(\symcal{L}_b\) regularization by testing different values of \(w_b\).
      We find that a high value of \(w_b\) favors an important sparsity where all the alphas are close to zeros, in the range \(\left[10^{-5}; 10^{-1}\right]\).
-     The absence of this regularization term limits the diversity of interactions among samples (Fig.~\ref{fig:alphas_signature_ablation}).
+     The absence of this regularization term limits the diversity of interactions among samples (\cref{fig:alphas_signature_ablation}).
      A larger set of \(\alpha^{ij}\) is commonly selected for different samples in this configuration.
 
      Secondly, we looked at the impact of \(\symcal{L}_e\) regularization by testing different values of \(w_e\).
      Similarly to \(\symcal{L}_b\), high \(w_e\) values favor more sparse solution.
-     The absence of this regularization term increases the number of interactions that are selected; this term is crucial to ensure enough sparsity of the selected interactions (Fig.~\ref{fig:alphas_signature_ablation}).
+     The absence of this regularization term increases the number of interactions that are selected; this term is crucial to ensure enough sparsity of the selected interactions (\cref{fig:alphas_signature_ablation}).
 
      \begin{figure}
          \centering
@@ -360,12 +382,12 @@
 
      The \(\symcal{L}_v\) is essential to counterbalance the sparsity and ensure there is enough diversity among the selected \(\alpha^{ij}\).
      In the absence of the \(\symcal{L}_v\), \(w_v = 0\), only the regularization terms controlling the sparsity are applied.
-     The solution that is obtained is a solution with a maximum of \(\alpha^{ij}\)  as close as possible to zero to fulfill the sparsity constraints (Fig.~\ref{fig:alphas_signature_ablation}).
+     The solution that is obtained is a solution with a maximum of \(\alpha^{ij}\)  as close as possible to zero to fulfill the sparsity constraints (\cref{fig:alphas_signature_ablation}).
      \(\alpha^{ij}\) that are not set to zeros have small values in the range \(\left[10^{-5}; 10^{-2}\right]\).
      On the contrary, high values of \(w_v\) favor more diversity among the selected \(\alpha^{ij}\) but with a lower sparsity.
      To ensure the diversity constraints, more \(\alpha^{ij}\) are selected.
 
-     The absence \(\symcal{L}_{01}\) regularization reduced the accuracy and reduced the sparsity of the selected \(\alpha^{ij}\) (Table~\ref{tab:ablation_w01} and Fig.~\ref{fig:alphas_signature_ablation}).
+     The absence \(\symcal{L}_{01}\) regularization reduced the accuracy and reduced the sparsity of the selected \(\alpha^{ij}\) (\cref{tab:ablation_w01,fig:alphas_signature_ablation}).
      This regularization term is essential in the correct training of the gating mechanism.
 
      It is necessary to balance those regularization terms to ensure enough diversity and sparsity.
@@ -373,13 +395,12 @@
  \subsection{Comparison with post-hoc methods}
 
      We compare our approach with post-hoc methods.
-     A model with no gate is trained, and we used LRP to estimate the importance score of each interaction (Fig.~\ref{fig:signature_LRP}).
+     A model with no gate is trained, and we used LRP to estimate the importance score of each interaction (\cref{fig:signature_LRP}).
 
      \begin{figure}[htbp]
          \centering
          \includegraphics[scale=0.75]{signature_alphas_LRP.pdf}
-         \caption{LRP importance score for the different modalities interactions.}
-         \label{fig:signature_LRP}
+         \caption{LRP importance score for the different modalities interactions.}\label{fig:signature_LRP}
      \end{figure}
 
      With LRP, all interactions contribute to the predictions to some extent.

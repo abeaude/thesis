@@ -191,13 +191,13 @@
 		\begin{equation}
 			\operatorname{CA}\left(X_1, X_2 \right) = \operatorname{Attention} \left(X_1W^Q, X_2W^K, X_2W^V\right) \label{eq:cross_attention}
 		\end{equation}
-
+		\(\log \symsfup{log}\)
 		One limitation of the scaled-dot product attention is its quadratic complexity in time and space.
 		This quadratic complexity limits the number of elements \(L\) in the inputs to a few thousand.
 		New approaches have been proposed to have more efficient transformer architectures to circumvent this limitation.
 		Among those methods, some proposed sparsifying the attention matrix by limiting the attention window to fixed or learnable patterns.
 		Another approach proposed a low-rank approximation of the self-attention matrix.
-		It has also been proposed to use kernelization of the attention matrix to enable a write of the attention computation to avoid computing the large \(L \times L\) attention matrix.
+		It has also been proposed to use kernelization of the attention matrix to enable a rewrite of the attention computation to avoid computing the large \(L \times L\) attention matrix.
 		Approximation methods of the attention matrix have been proposed.
 		Some other methods did not change the attention formulation but proposed new algorithms to compute the attention matrix or optimized cuda kernel to leverage the GPU memory hierarchy efficiently.
 
@@ -291,7 +291,7 @@
 			\[\lambda(t | \symbf{x}) = \lambda_0(t) e^{\beta \symbf{x}}\]
 			The relative risk is estimated as a linear transformation of the covariates. 
 			The model is estimated in two steps, in the first step the partial log-likelihood is maximized to estimate the parameters \(\beta\):
-			\[\symcal{l}_{Cox}\left(\theta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\beta \symbf{x} - \log \sum_{j \in \mathcal{R}(T_i)}e^{\beta \symbf{x}} \right)\]
+			\[\ell_{Cox}\left(\theta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\beta \symbf{x} - \log \sum_{j \in \symcal{R}(T_i)}e^{\beta \symbf{x}} \right)\]
 			in a second step the baseline hazard is estimated. 
 		\end{mybox}
 

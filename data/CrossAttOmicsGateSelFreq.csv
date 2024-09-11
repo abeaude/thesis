@@ -1,0 +1,21 @@
+interactions,freq
+miRNA\(\rightarrow\)DNAm,0.9387755102040817
+Protein\(\rightarrow\)DNAm,0.9387755102040817
+nc mRNA\(\rightarrow\)DNAm,0.9183673469387755
+CNV\(\rightarrow\)DNAm,0.9183673469387755
+mRNA\(\rightarrow\)DNAm,0.7959183673469388
+nc mRNA\(\rightarrow\)mRNA,0.46938775510204084
+Protein\(\rightarrow\)mRNA,0.42857142857142855
+nc mRNA\(\rightarrow\)Protein,0.40816326530612246
+CNV\(\rightarrow\)Protein,0.40816326530612246
+DNAm\(\rightarrow\)mRNA,0.3877551020408163
+miRNA\(\rightarrow\)mRNA,0.3673469387755102
+mRNA\(\rightarrow\)Protein,0.3469387755102041
+DNAm\(\rightarrow\)Protein,0.32653061224489793
+miRNA\(\rightarrow\)Protein,0.32653061224489793
+CNV\(\rightarrow\)mRNA,0.32653061224489793
+mRNA\(\rightarrow\)nc mRNA,0.10204081632653061
+Protein\(\rightarrow\)nc mRNA,0.10204081632653061
+CNV\(\rightarrow\)nc mRNA,0.04081632653061224
+miRNA\(\rightarrow\)nc mRNA,0.04081632653061224
+DNAm\(\rightarrow\)nc mRNA,0.02040816326530612
