@@ -98,8 +98,11 @@
 \RequirePackage{amsfonts}
 \RequirePackage[all,warning]{onlyamsmath}
 \RequirePackage[math-style=TeX, bold-style=TeX, active-frac=small]{unicode-math}
-\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/] %FractionNumeratorShiftUp=20, FractionDenominatorShiftDown=20, FractionDenominatorGapMin=20
-\setmathrm{lmroman12-regular.otf}[Scale=MatchLowercase, Path = fonts/]
+\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/, version=default] %FractionNumeratorShiftUp=20, FractionDenominatorShiftDown=20, FractionDenominatorGapMin=20
+\setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/, version=tikz]
+% \setmathfont[range=sfup]{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
+% \setmathfont[range=sfit]{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
+%\setmathfont\mathrm{lmroman12-regular.otf}[Scale=MatchLowercase, Path = fonts/]
 \setoperatorfont\mathsf
 \newtheorem{definition}{Definition} %TODO: language support
 \newtheorem{property}{Property}
@@ -181,6 +184,17 @@
 	\newtcolorbox[auto counter, number within=chapter, crefname={see Box}{see Boxes}]{mybox}[2][]{title=Box~\thetcbcounter: #2, fontupper=\small, fontlower=\small, #1}
 	\BeforeBeginEnvironment{mybox}{\begin{singlespace}}
 	\AfterEndEnvironment{mybox}{\end{singlespace}}
+}
+\BeforeBeginEnvironment{tikzpicture}{
+	\fontsize{10}{10}\selectfont
+    \setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/]
+    % \setmathfont[range=sfup]{latinmodern-math.otf}[Scale=1, Path = fonts/]
+	% \setmathfont[range=sfit]{latinmodern-math.otf}[Scale=1, Path = fonts/]
+}
+\AfterEndEnvironment{tikzpicture}{
+	\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
+	% \setmathfont[range=sfup]{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
+	% \setmathfont[range=sfit]{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
 }
 
 % customize caption
@@ -654,12 +668,12 @@
  \DeclareNewLayer[
 	background, 
 	bottommargin,
-	addvoffset=1.4cm,
+	%addvoffset=1.4cm,
 	addhoffset=\hoffset+1in+\oddsidemargin,
 	width=\textwidth,
 	mode=text, 
 	oddpage,
-	contents=Compiled on \DTMToday\xspace from \href{https://github.com/abeaude/thesis/tree/\gitHash}{[\gitBranch] -- \gitAbbrevHash}\xspace\textcolor{Prune}{\gitDirty}
+	contents=\vfill\hfill Compiled on \DTMToday\xspace from \href{https://github.com/abeaude/thesis/tree/\gitHash}{[\gitBranch] -- \gitAbbrevHash}\xspace\textcolor{Prune}{\gitDirty}\hfill\vfill
 	]{gitmetadata}
  \if@gitmark \AddLayersToPageStyle{scrheadings}{gitmetadata} \fi
 

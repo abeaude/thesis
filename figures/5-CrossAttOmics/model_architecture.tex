@@ -4,25 +4,24 @@
 \definecolor{H}{HTML}{2A9D8F}
 \definecolor{mod2D}{HTML}{535353}
 \definecolor{mod1D}{HTML}{535353}
-\begin{tikzpicture}
-    %\draw (-2,-9) grid (15,1);
-    \clip (-1.8,-8.05) rectangle (15.9, 0.3);
-    \node (a_lgd) [inner sep=0pt] at (-1.5,0.2) {\textbf{(a)}};
-    \node (b_lgd) [right=14.7cm of a_lgd.east, anchor=west, inner sep=0pt] {\textbf{(b)}};
-    \node (c_lgd) [below=4.5cm of a_lgd.south, anchor=north, inner sep=0pt] {\textbf{(c)}};
-    \node (d_lgd) [right=7.8cm of c_lgd.east, anchor=west, inner sep=0pt ] {\textbf{(d)}};
+\begin{spacing}{1}
+    \begin{tikzpicture}
+    \node (a_lgd) [inner sep=0pt] at (-2,0.2) {\textbf{A}};
+    \node (b_lgd) [right=14.7cm of a_lgd.east, anchor=west, inner sep=0pt] {\textbf{B}};
+    \node (c_lgd) [below=5.2cm of a_lgd.south, anchor=north, inner sep=0pt] {\textbf{C}};
+    \node (d_lgd) [right=8.5cm of c_lgd.east, anchor=west, inner sep=0pt ] {\textbf{D}};
     \node (in_A) at (-1,0) [inner sep=1pt, text=mod1] {\(X^A\)};
     \node (in_C) [below=1.25cm of in_A.south, anchor=north, inner sep=1pt, text=mod3] {\(X^C\)};
     \node (in_B) [below=1.25cm of in_C.south, anchor=north, inner sep=1pt, text=mod2] {\(X^B\)};
 
     \foreach \lab/\c in {A/mod1, B/mod2, C/mod3}
         {
-            \node (enc_\lab) [draw=\c, text=\c, thick, rounded rectangle, rounded rectangle west arc=none, right=15mm of in_\lab.east, anchor=west] {$\enc^{\lab}$};
-            \node [text=\c, right=3mm of enc_\lab.north east, anchor=north west, inner sep=0pt, yshift=1mm] {\(U^{\lab}\)};
+            \node (enc_\lab) [draw=\c, text=\c, thick, rounded rectangle, rounded rectangle west arc=none, right=5mm of in_\lab.east, anchor=west] {$\enc^{\lab}$};
+            \node [text=\c, right=5mm of enc_\lab.north east, anchor=north west, inner sep=0pt, yshift=1mm] {\(U^{\lab}\)};
             \draw[thick, -stealth, color=\c] (in_\lab.east) -- (enc_\lab.west);
         }
 
-    \begin{scope}[yshift=-5.3cm, scale=0.9, transform shape, every node/.style={font=\tiny, thick}]
+    \begin{scope}[yshift=-6.2cm, scale=0.9, transform shape, every node/.style={font=\tiny, thick}]
         % \tikzstyle{every node}=[font=\tiny]
         \node (g1) [draw=mod2, square, inner sep=0pt, fill=mod2!10, text=mod2D] at (0,0) {$X^{B}_{g_1}$};
         \node (gi) [draw=mod2, square, below=0.5 cm of g1.south, anchor=north, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^{B}_{g_j}$};
@@ -87,7 +86,7 @@
         \draw[-stealth, color=mod2] (out1-|mhsa.east) -- (out1);
     \end{scope}
 
-    \begin{scope}[xshift=7.5cm, yshift=-4.7cm, scale=0.9, transform shape, every node/.style={font=\tiny, thick}]
+    \begin{scope}[xshift=7.5cm, yshift=-6.2cm, scale=0.9, transform shape, every node/.style={font=\tiny, thick}]
         \node (b1) [draw=mod1, fill=mod1!10, square, inner sep=0pt, minimum size=10mm] at (0,0) {};
         \node (b2) [draw=mod1, fill=mod1!10, square, right=0mm of b1.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
         \node (b3) [draw=mod1, fill=mod1!10, square, right=0mm of b2.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
@@ -218,7 +217,7 @@
     \draw [thick, -stealth] (Z.east) -- (FCN.west);
     \draw [thick, -stealth] (FCN.east) -- (out.west);
 
-    \node (A) [inner sep=1pt, right=2cm of Z_A.east, anchor=west, text=mod1, yshift=2mm] {A};
+    \node (A) [inner sep=1pt, right=1cm of Z_A.east, anchor=west, text=mod1, yshift=2mm] {A};
     \node (B) [inner sep=1pt, right=6mm of A.east, anchor=west, text=mod2] {B};
     \node (C) [inner sep=1pt, below=6mm of B.south, anchor=north, text=mod3] {C};
     \draw[thick, -stealth] (A.east) -- (B.west) ;
@@ -235,4 +234,5 @@
     \end{scope}
 
 \end{tikzpicture}
+\end{spacing}
 
