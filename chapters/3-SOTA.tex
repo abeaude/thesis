@@ -372,13 +372,18 @@
 			\end{equation*}			
 		\end{mybox}
 
-		Classical machine learning algorithm like \glspl{svm} or \glspl{rf} can be used to integrate multi-omics data with an early or late fusion approach.
-		An \gls{svm} classifier is trained for each omics and preditions are combined with learnable weights~\cite{CarrilloPerez2022}.
-		In an early fusion strategy the different omics are combined in a single matrix and a \gls{rf} variant called BlockForest is used to get prediction from fused omics data~\cite{Hornung2019}.
+		Classical machine learning algorithms like \glspl{svm} or \glspl{rf} can also integrate multi-omics data with an early or late fusion approach.
+		An \gls{svm} classifier is trained for each omics, and predictions are combined with learnable weights~\cite{CarrilloPerez2022}.
+		In an early fusion strategy, the different omics are combined in a single matrix, and a \gls{rf} variant called BlockForest is used to get predictions from fused omics data~\cite{Hornung2019}.
 
-		rise of deep learning approaches
-		motivate use of deep learning methods
-		multimodal DL is able to model nonlinear within and cross-modality relationships
+		The recent rise of deep learning in many domains such as computer vision, audio, \gls{nlp} allowed the development of multimodal integration methods using deep learning, particularly for omics data~\cite{Kang2021}.
+		Such approaches provide new modeling capacities capturing complex patterns with nonlinear relationships between modalities. 
+		One advantage of deep learning-based approaches is its flexibility:
+		\begin{itemize}[nosep]
+			\item it can adapt the various data types encountered in precision medicine (tabular, categorical, images, text, time-series);
+			\item the architecture can be designed to model the integration strategy explicitly. 
+		\end{itemize}
+		
 		%https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8829812/pdf/main.pdf
 		%http://eprints-phd.biblio.unitn.it/2981/1/thesis.pdf
 		%https://compgenomr.github.io/book/matrix-factorization-methods-for-unsupervised-multi-omics-data-integration.html
