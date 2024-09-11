@@ -346,14 +346,35 @@
 		The DIABLO methods~\cite{DIABLO} is an extension of \gls{sgcca} to supervised tasks.
 		It replaces one the data matrix \(X_k\) by an indicator matrix \(Y\)which indicates the class of each samples.
 		Network-based methods are another way of integrating multi-omics data.
-		For instance, \gls{snf} infer relationships based on similarity between patients or features in the different omics, and the combine the various similarity matrices into one.
+		For instance, \gls{snf} infer relationships based on similarity between patients or features in the different omics, and the combine the various similarity matrices into one~(\cref{box:snf}).
 
-		\begin{mybox}[label=box:snf]{\Glsfmtfull{snf}}
-			This is a numbered box.
+		\begin{mybox}[label={box:snf}]{\Glsfmtfull{snf}}
+			\Gls{snf} is a method developped to multi-omics data from networks of samples~\cite{SNF}. 
+			Each omics \(m \in \left\{1, \ldots, M\right\}\) is represented as a patient similarity graph \(\symcal{G}\left(\symcal{V}, \symcal{E}, \symbfsf{w}\right)\) where \(\symbfsf{w} : \symcal{E} \mapsto \symbb{R}\) is a function weighting each edge with the similarity between patient \(u\) and \(v\):
+			\[\symbfsf{w}\left(u,v\right) = \exp\left(\frac{{\left\| X_{u} - X_{v} \right\|}^{2}_{2}}{\mu\symbf{\varepsilon}_{uv}}\right)\]
+			where \(\mu\) is an hyperparameter and \(\symbf{\varepsilon}_{uv}\) a scaling factor. 
+			A normalized similarity matrix \(P^{m} = {\left[P^{m}_{uv}\right]}_{\substack{1 \leq u \leq n \\ 1 \leq v \leq n}}\) is used to prevent numerical instabilities. 
+			A second similarity matrix, \(S^{m} = {\left[S^{m}_{uv}\right]}_{\substack{1 \leq u \leq n \\ 1 \leq v \leq n}}\), focusing on local connections is used. 
+			Only the similarities between a patient \(u\) and a set of neighbors \(\symcal{N}_{u}\) are considered. 
+			\begin{align*}
+				P^{m}_{uv} & = \begin{cases}
+					\cfrac{\symbfsf{w}\left(u,v\right)}{2\sum\limits_{w\neq u}\symbfsf{w}\left(u,w\right)} & u \neq v\\
+					\nicefrac{1}{2} & u = v
+				\end{cases}	& 
+				S^{m}_{uv} & = \begin{cases}
+					\cfrac{\symbfsf{w}\left(u,v\right)}{2\sum\limits_{w\in \symcal{N}_{u}}\symbfsf{w}\left(u,w\right)} & v \in \symcal{N}_{u}\\
+					0 & \text{otherwise}
+				\end{cases}
+			\end{align*}
+			The matrices are then fused until convergence  of the \(P^{m}\) matrices: 
+			\begin{equation*}
+				\forall m \in \left\{1, \ldots, M\right\},\quad P^{m} = S^{m} \frac{\sum_{k\neq m}P^{k}}{M - 1}{\left(S^{m}\right)}^{T}
+			\end{equation*}			
 		\end{mybox}
 
-		Classical machine learning algorithm like \gls{svm} can be used to integrate multi-omics data with a late fusion approach.
+		Classical machine learning algorithm like \glspl{svm} or \glspl{rf} can be used to integrate multi-omics data with an early or late fusion approach.
 		An \gls{svm} classifier is trained for each omics and preditions are combined with learnable weights~\cite{CarrilloPerez2022}.
+		In an early fusion strategy the different omics are combined in a single matrix and a \gls{rf} variant called BlockForest is used to get prediction from fused omics data~\cite{Hornung2019}.
 
 		rise of deep learning approaches
 		motivate use of deep learning methods

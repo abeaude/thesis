@@ -108,20 +108,20 @@
 		\end{itemize}
 
 		A graph is represented by three different matrices: its adjacency matrix \(A \in {\left\{0,1\right\}}^{\left|\symcal{V}\right| \times \left|\symcal{V}\right|}\) which describe the structure of the graph, the node embeddings \(X \in \symbb{R}^{\left|\symcal{V}\right| \times d_v}\) and the edge embeddings \(E \in \symbb{R}^{\left|\symcal{V}\right| \times d_e}\).
-		Each row of the node embedding matrix is a node's \(d_v\)-length vector embedding.
+		Each row of the node embedding matrix, \(X_{v}\), is node \(v\) \(d_v\)-length vector embedding.
 		Similarly, each row of the edge embeddings matrix is the \(d_e\)-legnth vector embedding of an edge.
 		In the following, I will focus on undirected graphs without edge embedding \(E\).
 
 		A \gls{gnn} is an architecture composed of an input layer, \(L\) hidden layers, and one output layer.
 		Similarly to the \gls{cnn}, some hidden layers are replaced with graph convolution layers
 		\Glspl{gcn}, update node embeddings by aggregating information from neighboring nodes.
-		The embedding of node \(v\), \(h^{l+1}_{v} \in \symbb{R}^{d_{l+1}}\) is updated by combining its previous embedding \(h^{l}_{v} \in \symbb{R}^{d_{l}}\) with the aggregated embedding \(h^{l}_{v,\text{agg}}\) from neighboring nodes \(\left|\symcal{N}\left(v\right) \right|\):
+		The embedding of node \(v\), \(h^{l+1}_{v} \in \symbb{R}^{d_{l+1}}\) is updated by combining its previous embedding \(h^{l}_{v} \in \symbb{R}^{d_{l}}\) with the aggregated embedding \(h^{l}_{v,\text{agg}}\) from neighboring nodes \(\symcal{N}_{v}\):
 		\begin{align}
-			h^{l+1}_{v}          & = f\left( \frac{h^{l}_{v}W^{l}}{\left|\symcal{N}\left(v\right) \right|} + h^{l}_{v,\text{agg}}W^{l}\right)                                    \\
-			h^{l}_{v,\text{agg}} & = \sum_{u \in \symcal{N}\left(v\right)} \frac{h^{l}_{u}}{\sqrt{\left|\symcal{N}\left(v\right) \right|\left|\symcal{N}\left(u\right) \right|}}
+			h^{l+1}_{v}          & = f\left( \frac{h^{l}_{v}W^{l}}{\left|\symcal{N}_{v} \right|} + h^{l}_{v,\text{agg}}W^{l}\right)                                    \\
+			h^{l}_{v,\text{agg}} & = \sum_{u \in \symcal{N}_{v}} \frac{h^{l}_{u}}{\sqrt{\left|\symcal{N}_{v} \right|\left|\symcal{N}_{u} \right|}}
 		\end{align}
 		\(W^{l} \in \symbb{R}^{d_{l}\times d_{l+1}}\) is the learnable weight matrix applied to the node embeddings, and \(f\) is a non-linear activation function, such as \(\operatorname{ReLU}\).
-		Node embeddings \(h_{u}^{l}\) are normalized by the size of their neighborhood, \ie{}their degree: \(\left|\symcal{N}\left(u\right) \right|\) to prevent explosion of the embeddings.
+		Node embeddings \(h_{u}^{l}\) are normalized by the size of their neighborhood, \ie{}their degree: \(\left|\symcal{N}_{u} \right|\) to prevent explosion of the embeddings.
 		The updates of all nodes can be written in the following matrix form:
 		\begin{equation}
 			H_{l+1} = \tilde{D}^{-\tfrac12}\tilde{A}\tilde{D}^{-\tfrac12}H_{l}W^{l}

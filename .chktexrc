@@ -11,7 +11,7 @@ Silent
 		\xmark \cmark
 		\endfirsthead \endhead \endfoot \endlastfoot
 		\textbullet
-		\addplot \attomicsperfzoom \attomicsperf \Nattomicszoom \foreach
+		\addplot \attomicsperfzoom \attomicsperf \Nattomicszoom \foreach \faCircle
 	}
 UserWarnRegex =
 {
