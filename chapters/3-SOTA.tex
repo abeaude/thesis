@@ -441,15 +441,15 @@
 			\begin{equation}
 				\symbf{x} = {
 				\begin{bmatrix}
-					\symbf{x}_{mRNA}                      \\
-					\symbf{x}_{CNV}                       \\
-					\symbf{x}_{DNAm}                      \\
-					\symbf{x}_{mRNA}\odot \symbf{x}_{CNV} \\
-					\symbf{x}_{mRNA}\odot \symbf{x}_{DNAm}
+					\symbf{x}_{\text{mRNA}}                      \\
+					\symbf{x}_{\text{CNV}}                       \\
+					\symbf{x}_{\text{DNAm}}                      \\
+					\symbf{x}_{\text{mRNA}}\odot \symbf{x}_{\text{CNV}} \\
+					\symbf{x}_{\text{mRNA}}\odot \symbf{x}_{\text{DNAm}}
 				\end{bmatrix}
 				}^T
 			\end{equation}
-			where \(\symbf{x}_{mRNA}\odot \symbf{x}_{CNV}\) models the regulatory effect of CNV on mRNA.
+			where \(\symbf{x}_{\text{mRNA}}\odot \symbf{x}_{\text{CNV}}\) models the regulatory effect of CNV on mRNA.
 			The multi-omics feature vector is then transformed to a functional representation by projection: \(\tilde{\symbf{x}} = f\left(\symbf{x}W\right)\).
 			The resulting functional gene representation is fed to a network based on the PasNet architecture.
 

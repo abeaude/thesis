@@ -177,6 +177,8 @@
 %% MUST BE LOADED LAST %%
 \AtEndPreamble{%
 	\RequirePackage[capitalise, nameinlink]{cleveref}
+	\crefname{figure}{Figure}{Figures}
+	\Crefname{figure}{Figure}{Figures}
 	\crefrangelabelformat{subfigure}{#3#1--\crefstripprefix{#1}{#2}#4}
 	\newtcolorbox[auto counter, number within=chapter, crefname={see Box}{see Boxes}]{mybox}[2][]{title=Box~\thetcbcounter: #2, fontupper=\footnotesize, fontlower=\footnotesize, #1}
 	\BeforeBeginEnvironment{mybox}{

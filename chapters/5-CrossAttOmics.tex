@@ -118,12 +118,6 @@
          \mathcal{L}(\theta) = - \sum_{c=1}^{C}w_c Y_c \log\left( p_c\right) \text{,}
      \end{equation*}
      where $\theta$ denotes the multimodal parameters, i.e. the cross-attention and predictor parameters.
-     \begin{figure}[htbp]
-         \centering
-         \includegraphics[width=1\textwidth]{tcga_perf_omics_comb.pdf}
-         \caption{Comparison of the test accuracy of different multi-omics deep learning integration models across different omics combination on the TCGA dataset. Each dot represents the mean accuracy obtained by a model on the test set after 5 different training. The error-bars represents the standard-error. For each combination a \cmark means that the omics is included in the combination and a \xmark means that the omics is excluded from the combination.}
-         \label{fig:tcga_perf_comb}
-     \end{figure}
 
 \section{Experiments}
  \subsection{Data}
@@ -139,16 +133,20 @@
 
      70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
 
-     \begin{figure}[htbp]
+ \subsection{Comparative study}
+     For a comprehensive and comparative evaluation, we chose various deep learning architectures with different integration strategies: \gls{mlp} early fusion (MLP EF), \gls{mlp} intermediate fusion (MLP IF), AttOmics early fusion (AttOmics EF), AttOmics intermediate fusion (AttOmics IF), \gls{gnn} early fusion (GNN EF), P-NET~\cite{PNet} and MOGONET~\cite{MOGONET}.
+     We also considered single-omics architecture for comparison: attention-based model~(AttOmics), \gls{mlp} and \gls{gnn} based on the \gls{ppi} graph.
+     \begin{wrapfigure}[9]{o}{0.4\textwidth}
+        \centering
+        \vspace{-1\intextsep}
          \small
-         \centering
          \begin{tikzpicture}
-             \node (DNAm) at (-1.5,0.3) {DNAm};
-             \node (miRNA) at (-1.5,-0.5) {miRNA};
+             \node (DNAm) at (-2,0.5) {DNAm};
+             \node (miRNA) at (-2,-0.8) {miRNA};
              \node (CNV) at (0,0) {CNV};
-             \node (nc mRNA) at (1.5,-0.5) {nc mRNA};
-             \node (mRNA) at (0,-1) {mRNA};
-             \node (Proteins) at (0,-1.65) {Proteins};
+             \node (nc mRNA) at (2,-0.8) {nc mRNA};
+             \node (mRNA) at (0,-1.6) {mRNA};
+             \node (Proteins) at (0,-2.7) {Proteins};
 
              \draw [->] (DNAm) to (miRNA);
              \node (temp) at ([xshift=-3mm]DNAm.west) {};
@@ -162,13 +160,8 @@
              \draw [->] (CNV) to (nc mRNA);
 
          \end{tikzpicture}
-         \caption{Interaction graph between modalities used for TCGA}
-         \label{fig:tcga_graph}
-     \end{figure}
-
- \subsection{Comparative study}
-     For a comprehensive and comparative evaluation, we chose various deep learning architectures with different integration strategies: \gls{mlp} early fusion (MLP EF), \gls{mlp} intermediate fusion (MLP IF), AttOmics early fusion (AttOmics EF), AttOmics intermediate fusion (AttOmics IF), \gls{gnn} early fusion (GNN EF), P-NET~\cite{PNet} and MOGONET~\cite{MOGONET}.
-     We also considered single-omics architecture for comparison: attention-based model~(AttOmics), \gls{mlp} and \gls{gnn} based on the \gls{ppi} graph.
+         \caption{Interaction graph between modalities used for TCGA}\label{fig:tcga_graph}
+     \end{wrapfigure}
      We used the modality interaction graph described in~\cref{fig:tcga_graph} to train CrossAttOmics on TCGA data.
      The details of the different architectures and training hyperparameters is available in the supplementary file.
      Attention based architectures, AttOmics EF, AttOmics IF and CrossAttOmics are impacted by the number of groups.
@@ -179,16 +172,15 @@
      For architecture based on knowledge, not all modalities can be mapped to the knowledge source, for instance miRNA cannot be associated to the \gls{ppi} graph.
      Main results are presented on TCGA, similar results are available for CCLE in the supplementary file.
 
-     \begin{figure*}
-         \centering
-         \includegraphics{umap_mRNA.pdf}
-         \caption{UMAP comparison of pan-cancer samples in the data space (\textbf{A}), after passing through the modality encoder (\textbf{B}) and after applying the cross-attention (\textbf{C}). Each color represent one of the 18 cancer. }
-         \label{fig:umap_mrna}
-     \end{figure*}
-
 \section{Results}
 
  \subsection{Omics combination}
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=1\textwidth]{tcga_perf_omics_comb.pdf}
+        \caption{Comparison of the test accuracy of different multi-omics deep learning integration models across different omics combination on the TCGA dataset. Each dot represents the mean accuracy obtained by a model on the test set after 5 different training. The error-bars represents the standard-error. For each combination a \cmark means that the omics is included in the combination and a \xmark means that the omics is excluded from the combination.}
+        \label{fig:tcga_perf_comb}
+    \end{figure}
      \Cref{fig:tcga_perf_comb} shows the average and standard deviation of the accuracy on the cancer-type classification task according to the best omics combination for all tested methods on the TCGA dataset.
 
      For single-omics baselines, \gls{mlp} and AttOmics achieve better performances than the \gls{gnn}.
@@ -232,6 +224,13 @@
 
      When training on the six available omics, AttOmics IF outperforms CrossAttOmics.
      In this case, AttOmics IF has fewer multimodal parameters than CrossAttOmics and is easier to train.
+
+     \begin{figure*}
+        \centering
+        \includegraphics{umap_mRNA.pdf}
+        \caption{UMAP comparison of pan-cancer samples in the data space (\textbf{A}), after passing through the modality encoder (\textbf{B}) and after applying the cross-attention (\textbf{C}). Each color represent one of the 18 cancer. }
+        \label{fig:umap_mrna}
+    \end{figure*}
 
      To visualize the segregation capabilities in the raw data space, after encoding individual modalities and after enriching individual representation with multi-omics information, we reduce the dimension of each patient representation to a 2D space using a UMAP reduction~(\cref{fig:umap_mrna}).
      Embedding modalities in a latent space with modalities-specific encoders allow for clear identification of cancer clusters, but the separation between some clusters is still unclear (\cref{fig:umap_mrna}A-B).
@@ -308,14 +307,14 @@
      One such method is \gls{lrp}.
      \Gls{lrp} aims to back-propagate the prediction signal $p_c$ in the neural network to assign a relevance score to each neuron.
      We measure the importance of modality interactions as the mean of the \gls{lrp} importance scores assigned to the cross-attention output neurons.
-     \begin{figure}[htbp]
-         \centering
-         \includegraphics[width=\linewidth]{LRP_crossattomics_subset.pdf}
-         \caption{Comparison of the \gls{lrp} relevance score for the different modelled modality interactions for three cancer.}
-         \label{fig:LRP_CrossAttOmics_subset}
-     \end{figure}
 
-     \Cref{fig:LRP_CrossAttOmics_subset} presents the \gls{lrp} attribution score for each considered interaction by cancer.
+     \begin{wrapfigure}[12]{o}{0.48\textwidth}
+        \centering
+        \vspace{-0.5\intextsep}
+        \includegraphics[width=\linewidth]{LRP_crossattomics_subset.pdf}
+        \caption{Comparison of the \gls{lrp} relevance score for the different modelled modality interactions for three cancer.}\label{fig:LRP_CrossAttOmics_subset}
+    \end{wrapfigure}
+    \Cref{fig:LRP_CrossAttOmics_subset} presents the \gls{lrp} attribution score for each considered interaction by cancer.
      Each cancer is characterized by a specific set of important interactions, suggesting that the cross-attention can learn interactions specific to each cancer~(\cref{fig:LRP_CrossAttOmics} in the supplementary file).
      Among the various cancers, the interaction of CNVs with mRNAs stands out as a significant interaction.
      Combining CNVs and mRNAs makes it possible to exploit their complementarity, and the level of mRNAs confirms the presence of multiple copies of the gene.

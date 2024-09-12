@@ -291,7 +291,7 @@
 			\[\lambda(t | \symbf{x}) = \lambda_0(t) e^{\beta \symbf{x}}\]
 			The relative risk is estimated as a linear transformation of the covariates. 
 			The model is estimated in two steps, in the first step the partial log-likelihood is maximized to estimate the parameters \(\beta\):
-			\[\ell_{Cox}\left(\theta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\beta \symbf{x} - \log \sum_{j \in \symcal{R}(T_i)}e^{\beta \symbf{x}} \right)\]
+			\[\ell\left(\beta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\beta \symbf{x} - \log \sum_{j \in \symcal{R}(T_i)}e^{\beta \symbf{x}} \right)\]
 			in a second step the baseline hazard is estimated. 
 		\end{mybox}
 
@@ -344,13 +344,12 @@
 		The generator and the discriminator compete with each other; the generator network attempts to fool the discriminator while the discriminator tries to be a better expert at detecting fake samples.
 		\(G\) and \(D\) are jointly trained at generating a distribution \(p_{g}\) such that \(D\) cannot distinguish between \(p_{d}\) and \(p_{g}\), \ie{}\(D\left(\symbf{x}\right) = \tfrac12\).
 		A \gls{gan} is trained by solving the following min-max problem:
-		\begin{multline}
-			\min_{G} \max_{D} \symcal{L}_{GAN}\left(G,D\right) = \\ \E_{x\sim p_{d}}\left[ \log\left(D\left(x\right)\right)\right] + \E_{z\sim p_{z}}\left[ \log\left( 1 - D\left(G\left(z\right)\right)\right)\right] \label{eq:gan_loss}
-		\end{multline}
+		\begin{equation}
+			\min_{G} \max_{D} \symcal{L}_{GAN}\left(G,D\right) = \E_{x\sim p_{d}}\left[ \log\left(D\left(x\right)\right)\right] + \E_{z\sim p_{z}}\left[ \log\left( 1 - D\left(G\left(z\right)\right)\right)\right] \label{eq:gan_loss}
+		\end{equation}
 
 		In practice \gls{gan} training is implemented as an iterative process alternatin between \(k\) steps of optimizing \(D\) and one step optimizing \(G\). 
 		The complete training procedure is presented in \cref{alg:gan}. 
-
 		\begin{algorithm}[htbp]
 			\DontPrintSemicolon
 			\KwIn{\(G\), \(D\), their respective parameters \(\theta_{G}\) and \(\theta_{D}\)}
@@ -373,7 +372,6 @@
 			}
 			\caption{\glsfmtshort{gan} training algorithm}\label{alg:gan}
 		\end{algorithm}
-
 		In practice, \glspl{gan} suffers from unstable training. 
 		Optimization of the \gls{gan} loss function \cref{eq:gan_loss} corresponds to the minimization of the \gls{js} divergence between \(p_{d}\) and \(p_{g}\). 
 		When the two distributions \(p_d\) and \(p_g\) do not overlap significantly, the discriminator will be perfect and have no difficulty distinguishing between the two distributions. 
