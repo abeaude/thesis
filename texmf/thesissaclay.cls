@@ -32,6 +32,7 @@
 \WarningFilter{latexfont}{Some font shapes were not available}
 \WarningFilter{latexfont}{Font shape}
 \WarningFilter{hyperref}{Token not allowed in a PDF string}
+\WarningFilter{caption}{The option `hypcap=true' will be ignored for this particular}
 \LoadClass[fontsize=12pt, a4paper, titlepage=firstiscover, cleardoublepage=empty, appendixprefix=true, parskip=half, DIV=11]{scrbook}
 \KOMAoption{toc}{listof, index, bibliography, graduated}
 \RequirePackage[nodisplayskipstretch]{setspace}
@@ -85,12 +86,11 @@
 \RequirePackage{rotating}
 \RequirePackage{makecell}
 \renewcommand\theadfont{}
-% \RequirePackage{booktabs}
-% \RequirePackage{multirow}
+\RequirePackage{booktabs}
+\RequirePackage{multirow}
 % \RequirePackage{colortbl}
 % \RequirePackage{tabularx}
 % \RequirePackage{longtable}
-% \RequirePackage{multirow}
 %% MATHS %%
 \RequirePackage{siunitx}
 \RequirePackage{amsmath}
@@ -179,6 +179,8 @@
 	\RequirePackage[capitalise, nameinlink]{cleveref}
 	\crefname{figure}{Figure}{Figures}
 	\Crefname{figure}{Figure}{Figures}
+	\crefname{appendixfigure}{Appendix figure}{Appendix figures}
+	\crefname{appendixtable}{Appendix table}{Appendix tables}
 	\crefrangelabelformat{subfigure}{#3#1--\crefstripprefix{#1}{#2}#4}
 	\newtcolorbox[auto counter, number within=chapter, crefname={see Box}{see Boxes}]{mybox}[2][]{title=Box~\thetcbcounter: #2, fontupper=\footnotesize, fontlower=\footnotesize, #1}
 	\BeforeBeginEnvironment{mybox}{

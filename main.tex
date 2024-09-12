@@ -4,6 +4,11 @@
 
 \usepackage{subfiles}
 \usepackage{nicefrac} 
+\usepackage{functional}
+\usepackage{textcomp}
+\usepackage{newunicodechar}
+\newfontface{\dejavusans}{DejaVuSans}
+\newunicodechar{→}{{\dejavusans{→}}}
 \input{preamble/information.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -117,6 +122,11 @@
 %% APPENDIX %%
 %%%%%%%%%%%%%%
 \appendix
+\crefalias{figure}{appendixfigure}
+\crefalias{table}{appendixtable}
+%\renewcommand{\figurename}{Appendix figure}
+\renewcaptionname{english}{\figurename}{Appendix figure} 
+\renewcaptionname{english}{\tablename}{Appendix table} 
 \pagestyle{appendix}
 \include{chapters/9-Appendix}
 \backmatter

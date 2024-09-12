@@ -34,9 +34,20 @@
 \definecolor{SVMColor}{HTML}{ebac23}
 \definecolor{xgboostColor}{HTML}{008cf9}
 
+\definecolor{lrp1}{HTML}{3969AC}
+\definecolor{lrp2}{HTML}{11A579}
+\definecolor{lrp3}{HTML}{E68310}
+\definecolor{lrp4}{HTML}{E73F74}
+\definecolor{lrp5}{HTML}{F2B701}
+\definecolor{lrp6}{HTML}{7F3C8D}
+\definecolor{lrp7}{HTML}{008695}
+\definecolor{lrp8}{HTML}{A5AA99}
+\definecolor{lrp9}{HTML}{80BA5A}
+
 \pgfplotstableread[col sep=comma,]{data/attomics_perf.csv}\attomicsperf
 \pgfplotstableread[col sep=comma,]{data/attomics_perf_zoom.csv}\attomicsperfzoom
 \pgfplotstableread[col sep=comma]{data/CrossAttOmicsGateSelFreq.csv}\CrossAttOmicsGateSelFreq
+\pgfplotstableread[col sep=comma]{data/LRPCrossAttOmicsSubset.csv}\LRPCrossAttOmicsSubset
 
 \pgfplotstablegetrowsof{\attomicsperfzoom}
 \pgfmathsetmacro{\Nattomicszoom}{\pgfplotsretval-1}

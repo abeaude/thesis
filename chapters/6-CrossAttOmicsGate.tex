@@ -29,14 +29,14 @@
      In this section, we describe attention-based modality encoders that encode individual modalities.
 
      Let \( X = \left\{X^{1}, \cdots, X^{M} \right\} \) be a multimodal training example, where \(M\) is the number of modalities and \(Y\) is the associated label.
-     We denote with \(X^{i} \in \symbb{R}^{p_i}\) each modality input, and $p_i$ is the number of features for modality $i$.
+     We denote with \(X^{i} \in \symbb{R}^{p_i}\) each modality input, and \(p_i\) is the number of features for modality \(i\).
      Each modality input \(X^{i}\) is encoded with a self-attention-based encoder: \(\enc^{i}\)~\cite{AttOmics}.
 
-     The omics profile \(X^{i} \in \symbb{R}^{p_i} \) is reshaped to a set of $k^i$ groups of similar sizes~(\cref{eq:attomics_groups}).
+     The omics profile \(X^{i} \in \symbb{R}^{p_i} \) is reshaped to a set of \(k^i\) groups of similar sizes~(\cref{eq:attomics_groups}).
      \begin{equation}
          X^{i}_{G} = \left\{X^{i}_{g_j} \right\}_{1\leq j\leq k^i}\label{eq:attomics_groups}
      \end{equation}
-     Each group vector $X^{i}_{g_j}$ is projected into an $s^i$-dimensional space with a trainable projection \(\phi^i\) (\cref{eq:attomics_groups_proj}).
+     Each group vector \(X^{i}_{g_j}\) is projected into an \(s^i\)-dimensional space with a trainable projection \(\phi^i\) (\cref{eq:attomics_groups_proj}).
      \begin{equation}
          X^{'i}_{G} = \left\{\phi^i\left(X^{i}_{g_j} \right) \right\}_{1\leq j\leq k^i}\label{eq:attomics_groups_proj}
      \end{equation}
@@ -45,9 +45,9 @@
      \begin{equation}
          U^{i}_{g_j} = A^{i}_{g_j} \cdot \left[ X_{g_1}' \cdot W^V, \cdots ,  X_{g_{k^i}}' \cdot W^V\right]^T \text{,}\label{eq:enc_mhsa}
      \end{equation}
-     where $A^{i}_{g_j}$ is the attention vector computed by the usual dot product attention~\cite{AttentionAllYouNeed}.
+     where \(A^{i}_{g_j}\) is the attention vector computed by the usual dot product attention~\cite{AttentionAllYouNeed}.
 
-     Each modality $i$ is represented in a lower dimensional space: \(U^{i} = \enc^{i}\left(X^{i}\right)\).
+     Each modality \(i\) is represented in a lower dimensional space: \(U^{i} = \enc^{i}\left(X^{i}\right)\).
      Combining the different representations makes it possible to exploit their complementarity and redundancy.
 
  \subsection{CrossAttention: modalities interactions}
@@ -56,11 +56,11 @@
      Cross-attention is applied to construct a new representation in which a target modality is reinforced by features from a source modality.
      The cross-attention is applied to all pairs of modalities, representing \(n_{\alpha}\) interactions to consider.
      Let us consider two modalities, a source \(i\) and a target \(j\), \(i \neq j\), which are encoded with their respective encoders to obtain the new representations \(U^i\) and \(U^j\).
-     Cross-attention is performed with $H$ heads that learn different types of cross-modal interactions.
+     Cross-attention is performed with \(H\) heads that learn different types of cross-modal interactions.
      For each head, cross-attention is applied to each group of the modalities \(g_p\) in order to obtain:
      \[ Z^{i\rightarrow j} = \left\{ Z^{i\rightarrow j}_{g_p} \in \symbb{R}^{l^j} \right\}_{1 \leq p \leq k^j}\text{,}\]
-     where $l^j = \frac{s^j}{H} \in \symbb{N}$.
-     \( Z^{i\rightarrow j}\) has the same number of groups as the target modality $j$.
+     where \(l^j = \frac{s^j}{H} \in \symbb{N}\).
+     \( Z^{i\rightarrow j}\) has the same number of groups as the target modality \(j\).
 
      \(Z^{i\rightarrow j}_{g_p}\) is obtained by applying the scale dot product attention~\cite{AttentionAllYouNeed} where the source modality \(i\) is used as the key and value.
      The target modality \(j\) is used as the query.
@@ -82,26 +82,26 @@
 
  \subsection{Predictor module}
 
-     All \(\tilde{Z}^{ij}\) embeddings are concatenated to form a single multimodal vector $Z$.
-     The vector $Z$ is then fed to a \gls{fcn} to obtain the prediction $\hat{Y}$.
+     All \(\tilde{Z}^{ij}\) embeddings are concatenated to form a single multimodal vector \(Z\).
+     The vector \(Z\) is then fed to a \gls{fcn} to obtain the prediction \(\hat{Y}\).
 
-     The output layer has one neuron per class, and a $\operatorname{softmax}$ activation function is applied to get the probability vector ${P = \left[p_c\right]_{1\leq c\leq C}}$, where $C$ denotes the number of classes.
+     The output layer has one neuron per class, and a \(\operatorname{softmax}\) activation function is applied to get the probability vector \({P = \left[p_c\right]_{1\leq c\leq C}}\), where \(C\) denotes the number of classes.
 
  \subsection{Model training}
      We adopt a two-phase training procedure.
-     In the first step, each modality encoder $\enc^i$ is trained individually to learn a compact representation of the modality $i$ by adding an \gls{fcn} layer with one neuron per class and a $\operatorname{softmax}$ activation function.
+     In the first step, each modality encoder \(\enc^i\) is trained individually to learn a compact representation of the modality \(i\) by adding an \gls{fcn} layer with one neuron per class and a \(\operatorname{softmax}\) activation function.
      Each encoder is trained end-to-end with a weighted cross-entropy loss to account for class imbalance:
      \begin{equation*}
          \symcal{L}_{CE}(\theta^{i}) = - \sum_{c=1}^{C}w_c Y_c \log\left( \fcn\left(\enc^{i}\left(X^{i}, \theta^{i}\right)\right)\right) \text{,}
      \end{equation*}
-     where \( \theta^{i}\), are the parameters associated with the encoder \(\enc^{i}\) and \(w_c\) denotes the weight\footnote{inversely proportional to the class size} of class $c \in \left\{1, \cdots,C \right\}$.
+     where \( \theta^{i}\), are the parameters associated with the encoder \(\enc^{i}\) and \(w_c\) denotes the weight\footnote{inversely proportional to the class size} of class \(c \in \left\{1, \cdots,C \right\}\).
 
      In a second step, we freeze the encoder parameters \(\theta^i\), and train the multimodal weights of the model, i.e. all the cross-attention and the predictor module weights.
      The training on the predictive task is done with a weighted cross-entropy loss:
      \begin{equation*}
          \symcal{L}_{CE}(\theta) = - \sum_{c=1}^{C}w_c Y_c \log\left( p_c\right) \text{,}
      \end{equation*}
-     where $\theta$ denotes the multimodal parameters, i.e., the cross-attention and predictor parameters.
+     where \(\theta\) denotes the multimodal parameters, i.e., the cross-attention and predictor parameters.
      To have an interpretable model, the \(\alpha^{ij}\) values must be sparse.
      We want to select only the relevant interactions for each sample.
      In addition, the selected \(\alpha^{ij}\) must be diverse across samples; samples should have different important interactions.
@@ -226,7 +226,7 @@
      In a multimodal setting, where many modalities are available, one could hypothesize that the selected interactions are random, as different modalities could provide the same amount of information.
      We trained the model fifty times to test this hypothesis and looked at the top selected interactions and their selection frequency~(\cref{fig:alphas_stability}).
 
-     A core of 5 interactions was selected in most of the runs: Protein $\rightarrow$ DNAm, miRNA $\rightarrow$ DNAm, CNV $\rightarrow$ DNAm, nc mRNA $\rightarrow$ DNAm, mRNA $\rightarrow$ DNAm.
+     A core of 5 interactions was selected in most of the runs: Protein \(\rightarrow\) DNAm, miRNA \(\rightarrow\) DNAm, CNV \(\rightarrow\) DNAm, nc mRNA \(\rightarrow\) DNAm, mRNA \(\rightarrow\) DNAm.
      These interactions are the most important as they are likely to contribute to the exploitation of complementary information between modalities.
      Some interactions were only selected in a few training runs and not considered informative for the predictions.
      Another set of interactions has a selection frequency of around 0.5.
