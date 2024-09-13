@@ -1,7 +1,12 @@
 \documentclass[../main.tex]{subfiles}
 \usepackage{silence}
 \WarningFilter{glossaries}{No \printglossary or \printglossaries found}
-
+\robExtConfigure{
+    disable externalization,
+    set placeholder eval={__LRPBARWIDTH__}{\lenToCm{0.25\baselineskip}},
+    set placeholder eval={__LRPHEIGHT__}{\lenToCm{11\baselineskip}},
+    set placeholder eval={__LRPWIDTH__}{\lenToCm{1.1\linewidth}},
+    }
 \begin{document}
 \ifSubfilesClassLoaded{%
     \graphicspath{{figures/5-CrossAttOmics/}}%
@@ -140,7 +145,7 @@
         \centering
         \vspace{-1\intextsep}
          \small
-         \begin{tikzpicture}
+         \begin{tikzpicture}<disable externalization>
              \node (DNAm) at (-2,0.5) {DNAm};
              \node (miRNA) at (-2,-0.8) {miRNA};
              \node (CNV) at (0,0) {CNV};
@@ -314,7 +319,7 @@
         \vspace{-\intextsep}
         \begin{tikzpicture}
             \begin{axis}[
-            xbar=0pt, bar width=0.25\baselineskip,
+            xbar=0pt, bar width=__LRPBARWIDTH__,
             ytick=data, 
             yticklabels from table={\LRPCrossAttOmicsSubset}{cancer}, 
             yticklabel style={rotate=90, font=\footnotesize},
@@ -331,8 +336,8 @@
             xtick pos=lower,
             axis y line*=none,
             axis x line*=bottom,
-            height=11\baselineskip,
-            width=1.1\linewidth,
+            height=__LRPHEIGHT__,
+            width=__LRPWIDTH__,
             legend to name={LRPsubset},
             legend columns=3,
             enlarge y limits=0.3,

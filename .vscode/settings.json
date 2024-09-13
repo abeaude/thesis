@@ -56,7 +56,6 @@
         "%OUTDIR%/%DOCFILE%.gls",
         "%OUTDIR%/%DOCFILE%.gls-abr",
         "%OUTDIR%/%DOCFILE%.fls",
-        "%OUTDIR%/%DOCFILE%.log",
         "%OUTDIR%/%DOCFILE%.fdb_latexmk",
         "%OUTDIR%/%DOCFILE%.snm",
         "%OUTDIR%/%DOCFILE%.synctex(busy)",
@@ -64,7 +63,6 @@
         "%OUTDIR%/%DOCFILE%.nav",
         "%OUTDIR%/%DOCFILE%.vrb",
         "%OUTDIR%/%DOCFILE%.slo",
-        "%OUTDIR%/%DOCFILE%.xdv",
         "%OUTDIR%/%DOCFILE%.slg",
         "%OUTDIR%/%DOCFILE%.sls",
         "%OUTDIR%/chapters/**",
@@ -140,4 +138,5 @@
         "**/.latexindent.bak": true
     },
     "terminal.integrated.defaultProfile.linux": "bash",
+    "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
 }

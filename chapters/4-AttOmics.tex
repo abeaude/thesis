@@ -1,7 +1,7 @@
 \documentclass[../main.tex]{subfiles}
 \usepackage{silence}
 \WarningFilter{glossaries}{No \printglossary or \printglossaries found}
-
+\robExtConfigure{disable externalization}
 \begin{document}
 \ifSubfilesClassLoaded{%
 	\graphicspath{{figures/4-AttOmics/}}%
@@ -37,15 +37,15 @@
 		\end{figure}
 
 		\subsubsection{Grouped FCN (gFCN)}
-			Let \(X \in \mathbb{R}^p\) be a training example where \(p\) is the number of features and \(Y\) is the associated label.
-			The training example \(X\) is split into groups according to a grouping strategy (see \cref{sec:grouping}), \( X_G = \left\{X_{g_i} \right\}_{1 \leq i \leq k}\), where \(k\) is the number of groups.
+			Let \(X \in \symbb{R}^p\) be a training example where \(p\) is the number of features and \(Y\) is the associated label.
+			The training example \(X\) is split into groups according to a grouping strategy (see \cref{sec:grouping}), \( X_G = {\left\{X_{g_i} \right\}}_{1 \leq i \leq k}\), where \(k\) is the number of groups.
 			For each group  \(X_{g_i}\), a group embedding is independently computed as \(X_{g_i}'\) by projecting it into an \(s\)-dimensional space with an \gls{fcn}, a succession of \glspl{fcl}~(\cref{fig:attomics_B}).
 
 			Each \gls{fcl} is the composition of an affine transformation of its inputs with a \gls{relu} activation function:
 			\[ \operatorname{FCL}\left(x\right) = \operatorname{ReLU}\left(Wx+b \right) = \max\left(0, Wx+b\right) \]
 
 			After processing each group \(X_{g_i}\) by the successive \gls{fcl}, we obtain the set of group embeddings \(X'_G\):
-			\[ X_G' = \left\{ X_{g_i}' \in \mathbb{R}^{s}\right\}_{1 \leq i \leq k} \text{,} \]
+			\[ X_G' = {\left\{ X_{g_i}' \in \symbb{R}^{s}\right\}}_{1 \leq i \leq k} \text{,} \]
 			where \(X_{g_i}' = \operatorname{FCN}\left(X_{g_i}\right)\).
 
 			Each group projection is only computed using elements from the same group.
@@ -53,26 +53,26 @@
 
 		\subsubsection{Multi-Head Self-Attention}
 
-			\Gls{mhsa} is applied to construct a new representation of the groups, \(U = \left\{ U_{g_i}\right\}_{1 \leq i \leq k}\), by allowing them to interact with each other~(\cref{fig:attomics_C}).
+			\Gls{mhsa} is applied to construct a new representation of the groups, \(U = {\left\{ U_{g_i}\right\}}_{1 \leq i \leq k}\), by allowing them to interact with each other~(\cref{fig:attomics_C}).
 
 			\Gls{mhsa} is performed with \(h\) different heads to learn different types of interactions.
-			For each head \(j\), self-attention is applied to each group \(g_i\)~(\(1 \leq i \leq k \)), in order to obtain: \(U^{(j)} = \left\{ U^{(j)}_{g_i} \in \mathbb{R}^{l} \right\}_{1 \leq i \leq k}\), where \(l = \frac{s}{h} \in \mathbb{N}\).
+			For each head \(j\), self-attention is applied to each group \(g_i\)~(\(1 \leq i \leq k \)), in order to obtain: \(U^{(j)} = {\left\{ U^{(j)}_{g_i} \in \symbb{R}^{l} \right\}}_{1 \leq i \leq k}\), where \(l = \frac{s}{h} \in \symbb{N}\).
 
 			\(U^{(j)}_{g_i}\) is defined by:
 
-			\[ U^{(j)}_{g_i} = A^{(j)}_{g_i} \cdot \left[ X_{g_1}' \cdot W_j^V, \ldots ,  X_{g_k}' \cdot W_j^V\right]^T \text{,}\]
+			\[ U^{(j)}_{g_i} = A^{(j)}_{g_i} \cdot {\left[ X_{g_1}' \cdot W_j^V, \ldots ,  X_{g_k}' \cdot W_j^V\right]}^T \text{,}\]
 
 			where \(A^{(j)}_{g_i}\) is the attention vector computed by the usual dot product attention~(\cref{fig:attomics_D})~\cite{vaswaniAttentionAllYou2017}:
 
 			\begin{align*}
 				A^{(j)}_{g_i}      & = \operatorname{softmax}\left(\left[A^{(j)}_{g_i,g_1}, \ldots,  A^{(j)}_{g_i,g_k}\right]\right) \text{,}  \\
-				A^{(j)}_{g_i, g_k} & =  \frac{\left(X_{g_i}' \cdot W_j^Q\right)^T \cdot \left(X_{g_k}' \cdot W_j^K \right)}{\sqrt{s}} \text{.}
+				A^{(j)}_{g_i, g_k} & =  \frac{{\left(X_{g_i}' \cdot W_j^Q\right)}^T \cdot \left(X_{g_k}' \cdot W_j^K \right)}{\sqrt{s}} \text{.}
 			\end{align*}
 
 			Projection matrix \(W^Q_j\) (respectively \(W^K_j\) and \(W^V_j\)) maps the group \(X_{g_i}'\), from an \(s\)-dimensional space to an \(l\)-dimensional space.
 			In the transformers formulation \(X_{g_i}' \cdot W_j^Q\), \(X_{g_k}' \cdot W^K_j\), and \(X_{g_i}' \cdot W^V_j\) are called, query, key, and value respectively.
 
-			Each element of \(U_{g_i}\) is obtained by concatenating the representation of all groups in the different heads and projecting each group to an \(s\)-dimensional space using a projection matrix \(W^O \in \mathbb{R}^{s\times s}\) as:
+			Each element of \(U_{g_i}\) is obtained by concatenating the representation of all groups in the different heads and projecting each group to an \(s\)-dimensional space using a projection matrix \(W^O \in \symbb{R}^{s\times s}\) as:
 			\[ U_{g_i} = \operatorname{concat}\left( U^{(1)}_{g_i}, \ldots, U^{(h)}_{g_i} \right) \cdot W^O \text{,}\]
 		\subsubsection{Residual connection and normalization}
 			The value of \(X_{g_i}'\) is added to \(U_{g_i}\), through a residual connection to prevent vanishing gradients.\\
@@ -80,13 +80,13 @@
 
 			\[Z_{g_i} = \operatorname{Norm}\left(X_{g_i}' + U_{g_i} \right) \text{.}\]
 
-			The output of an encoder block is \(Z = \left\{ Z_{g_i} \in \mathbb{R}^{s}\right\}_{1 \leq i \leq k}\), which is a representation of the groups capturing their interactions.
+			The output of an encoder block is \(Z = {\left\{ Z_{g_i} \in \symbb{R}^{s}\right\}}_{1 \leq i \leq k}\), which is a representation of the groups capturing their interactions.
 
 		\subsubsection{Prediction module}
-			The vectors \(Z_{g_i}\) are concatenated into a new vector \(Z' \in \mathbb{R}^{ks}\).
+			The vectors \(Z_{g_i}\) are concatenated into a new vector \(Z' \in \symbb{R}^{ks}\).
 			The output of the encoder \(Z'\) is then fed to a \gls{fcn} followed by a normalization layer to predict the cancer type or the prognosis \(\hat{Y}\)~(\cref{fig:attomics_A}).
 
-			For classification tasks,  the output layer has one neuron per class, and a \(\operatorname{softmax}\) activation function is applied to get the probability vector \(P = \left[p_c\right]_{1\leq c\leq M}\), where \(M\) denotes the number of classes.
+			For classification tasks,  the output layer has one neuron per class, and a \(\operatorname{softmax}\) activation function is applied to get the probability vector \(P = {\left[p_c\right]}_{1\leq c\leq M}\), where \(M\) denotes the number of classes.
 			For the survival analysis, the output is a single neuron with a linear activation function.
 
 	\subsection{Grouping strategies}\label{sec:grouping}
@@ -124,14 +124,14 @@
 	\subsection{Model training}
 
 		For classification problems, our model is trained end-to-end with a weighted cross-entropy loss to account for class imbalance:
-		\[ \mathcal{L}(\theta) = - \sum_{c=1}^{M}w_c Y_c \log\left( p_c\right) \text{,}\]
+		\[ \symcal{L}(\theta) = - \sum_{c=1}^{M}w_c Y_c \log\left( p_c\right) \text{,}\]
 		where \(w_c\) denotes the weight (inversely proportional to the size) of class \(c \in \left\{1, \ldots,M \right\}\) and \(\theta\) the model parameters.
 
 		For survival analysis, our model is end-to-end trained with a partial log-likelihood loss, as proposed in DeepSurv~\cite{katzmanDeepSurvPersonalizedTreatment2018}:
-		\[ \mathcal{L}(\theta) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\hat{Y}_i - \log \sum_{j \in \mathcal{R}(T_i)}\eta_j \right) \text{,}\]
+		\[ \symcal{L}(\theta) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\hat{Y}_i - \log \sum_{j \in \symcal{R}(T_i)}\eta_j \right) \text{,}\]
 		where \(\delta_i\) specifies if the event occurred for patient \(i\), \(T_i\) represents the time associated to the event and \(N_{\delta_i = 1}\) is the number of patients for which the event occurred (\(\delta_i = 1\)).
 		\(\eta_i = e^{\hat{Y}_i}\) is the predicted risk for patient \(i\).
-		\(\mathcal{R}(T_i) = \{j: T_j > T_i\}\) is the risk set, the set of patients who are still at risk of death at time \(T_i\).
+		\(\symcal{R}(T_i) = \{j: T_j > T_i\}\) is the risk set, the set of patients who are still at risk of death at time \(T_i\).
 
 \section{Experiments}
 	\subsection{Data}
@@ -178,7 +178,7 @@
 		For the classification task, models were evaluated with the error rate.
 		Prognosis prediction is evaluated with the concordance index~\cite{harrellMultivariablePrognosticModels1996}.
 		It estimates that for a pair of individuals, the predicted risks, \(\eta\),  are concordant with their actual survival times.
-		\[ \operatorname{C-Index} = \frac{\sum_{i,j}\mathbb{1}_{T_j < T_i}\mathbb{1}_{\eta_j > \eta_i}\delta_j}{\sum_{i,j}\mathbb{1}_{T_j < T_i}\delta_j} \]
+		\[ \operatorname{C-Index} = \frac{\sum_{i,j}\symbb{1}_{T_j < T_i}\symbb{1}_{\eta_j > \eta_i}\delta_j}{\sum_{i,j}\symbb{1}_{T_j < T_i}\delta_j} \]
 		A \(\operatorname{C-Index} = 0.5\) represents a random prediction and \(\operatorname{C-Index} = 1\) corresponds to a perfect ranking.
 		Results for the prognosis task are presented in \cref{chap:attomics_appendix}.
 
