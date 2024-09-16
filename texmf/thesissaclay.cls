@@ -99,7 +99,8 @@
 \RequirePackage[all,warning]{onlyamsmath}
 \RequirePackage[math-style=TeX, bold-style=TeX, active-frac=small]{unicode-math}
 \setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/] 
-\setoperatorfont{\symsfup}
+%\setoperatorfont{\symsfup}
+\setoperatorfont{\symbfsfup}
 \newtheorem{definition}{Definition} %TODO: language support
 \newtheorem{property}{Property}
 \newtheorem{theorem}{Theorem}

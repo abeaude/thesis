@@ -1,8 +1,12 @@
 \documentclass[../main.tex]{subfiles}
 \usepackage{silence}
 \WarningFilter{glossaries}{No \printglossary or \printglossaries found}
-
+\robExtConfigure{disable externalization}
 \begin{document}
+\robExtConfigure{
+    set placeholder eval={__CrossAttHEIGHT__}{\lenToCm{14\baselineskip}},
+    set placeholder eval={__CrossAttWIDTH__}{\lenToCm{0.384\linewidth}},
+    }
 \ifSubfilesClassLoaded{%
     \graphicspath{{figures/6-CrossAttOmicsGate/}}%
     \setcounter{chapter}{5}%
@@ -207,8 +211,8 @@
             minor x tick num=2, 
             ytick style={draw=none}, ytick align=inside, 
             xtick pos=lower,
-            height=14\baselineskip,
-            width=0.8\linewidth,
+            height=__CrossAttHEIGHT__,
+            width=__CrossAttWIDTH__,
             enlarge y limits=0.05,
             bar width=0.8,
             yticklabel style={font=\scriptsize},
@@ -218,7 +222,6 @@
                 \addplot[draw=none,fill=gray!80] table[y expr=\coordindex, x=freq]{\CrossAttOmicsGateSelFreq};
             \end{axis}
         \end{tikzpicture}
-         %\includegraphics[scale=1]{selection_stability.pdf}
          \caption{Selection frequency of the different interactions.}
          \label{fig:alphas_stability}
      \end{wrapfigure}

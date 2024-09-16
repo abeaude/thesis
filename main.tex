@@ -56,6 +56,8 @@
 				ItalicFont = *-Italic,
 				BoldItalicFont = *-BoldItalic
 			]
+			\usepackage{amsmath, amsfonts}
+			\usepackage[all,warning]{onlyamsmath}
 			},
 	},
 }
@@ -74,11 +76,11 @@
       \robExtDebugInfo{The~file~\robExtAddCachePath{#2}~has~the~good~md5~hash.}
     }{
       \robExtDebugInfo{The~md5~hashes~of~#1~and~\robExtAddCachePath{#2}~are~different(\l_tmpa_str \space vs \space \l_tmpb_str),~let~us~copy~the~file.}%
-      \robExtRunCmdIfPossible{\robExtCp \space "#1"~"\robExtAddCachePath{#2}"}%
+	  \sys_shell_now:x {\robExtPrefixAllCompilationCommands \robExtCp \space "#1"~"\robExtAddCachePath{#2}"}% 
     }
   }{
     \robExtDebugInfo{The~file~\robExtAddCachePath{#2}~does~not~exist,~let~us~copy~it:}
-    \robExtRunCmdIfPossible{\robExtCp \space "#1"~"\robExtAddCachePath{#2}"}%   
+    \sys_shell_now:x {\robExtPrefixAllCompilationCommands \robExtCp \space "#1"~"\robExtAddCachePath{#2}"}%    
   }
 }
 \sys_shell_now:x {mkdir ~ -p ~ \robExtOutputDirectory / \robExtCacheFolder /fonts}
@@ -89,14 +91,8 @@
 \MyrobExtCopyFileToCache{../fonts/OpenSans-BoldItalic.ttf}{fonts/OpenSans-BoldItalic.ttf}
 \MyrobExtCopyFileToCache{../fonts/OpenSans-Italic.ttf}{fonts/OpenSans-Italic.ttf}
 \MyrobExtCopyFileToCache{../fonts/OpenSans-Regular.ttf}{fonts/OpenSans-Regular.ttf}
-%\robExtAddCachePathAndName{\robExtFinalHash.tex}
-%\typeout
-% \robExtWriteFile
-%\apptocmd{\robExtWriteFile}{\typeout{\robExtAddCachePathAndName{\robExtFinalHash.tex}}}{Patch robExtWriteFile}{No patch robExtWriteFile}
 \cacheTikz
-% \ExplSyntaxOn
-% \sys_shell_now:x \l__robExt_current_compilation_command_str
-% \ExplSyntaxOff
+
 \input{preamble/information.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %% BIBLIOGRAPHY SOURCES %%
@@ -182,13 +178,13 @@
 %% \dictum[author][citation] % to include a small quote at the begining of each chapter
 %% \minitocpage % or \minitoc to display the content of the chapter
 \subfileinclude{chapters/1-Introduction}
-% \subfileinclude{chapters/2-Background}
-% \subfileinclude{chapters/3-SOTA}
-% \subfileinclude{chapters/4-AttOmics}
-% \subfileinclude{chapters/5-CrossAttOmics}
-% \subfileinclude{chapters/6-CrossAttOmicsGate.tex}
-% \subfileinclude{chapters/7-Interpretability}
-% \subfileinclude{chapters/8-Conclusions}
+\subfileinclude{chapters/2-Background}
+\subfileinclude{chapters/3-SOTA}
+\subfileinclude{chapters/4-AttOmics}
+\subfileinclude{chapters/5-CrossAttOmics}
+\subfileinclude{chapters/6-CrossAttOmicsGate.tex}
+\subfileinclude{chapters/7-Interpretability}
+\subfileinclude{chapters/8-Conclusions}
 
 \KOMAoption{parskip}{false}
 \begin{singlespace}

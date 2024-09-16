@@ -2,7 +2,7 @@
 \usepackage{silence}
 \usepackage{layout}
 \WarningFilter{glossaries}{No \printglossary or \printglossaries found}
-
+\robExtConfigure{disable externalization}
 \begin{document}
 \ifSubfilesClassLoaded{%
 	\graphicspath{{figures/3-SOTA/}}%
@@ -684,5 +684,36 @@
 
 	% need to talk about adversarial examples, details in annex?
 	% how to have a model robust to adv attacks, defenses, adv training
+
+	\begin{mybox}[label={box:adversarial}]{Adversarial examples}
+		Model: \(g:\symcal{X} \mapsto \symbb{R}^{C} \) a mapping from the data space to the prediction space 
+		a loss function: \(\symcal{L}\left(g\left(\symbf{x}\right), y \right)\)
+		Goal: 
+		translate into the following optimization problem: \(\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)\)
+		other formulation: 
+		\[\argmin_{\delta \leq \varepsilon} {\left\|\delta\right\|}_{p} \quad \text{s. t.} \quad f\left(x+\delta\right) = y^{\ast}\]
+		\(\Delta = \left\{\delta: \left\|\delta\right\|_{p} \leq \varepsilon \right\}\) allowed set of perturbation = ensure that the generated point is as close as possible to the original input. 
+		during optimization take the derivative of the loss with repect to the input (or delta) = how small changes to the input affect the loss function.
+		untargeted attack, attack can also be targeted 
+		How to solve this optimization problem: exact solution (difficult), lower bound (most common), upper bound 
+
+		lower bound: descent gradient on\(\delta\) 
+		\[\delta = \delta + \eta \nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)\]
+		and respect the eps ball constraint by porjecting back delta by clipping values to be in the correct range -eps, eps
+		Fast gradient sign method = large step size 
+		 sign gradients only for Linf %https://davidstutz.de/lp-adversarial-examples-using-projected-gradient-descent-in-pytorch/
+		\[\delta = \varepsilon \operatorname{sign}\left(\nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)\right) \]
+		PGD attacks use smaller steps and project back onto the ball of interest with \(\symcal{P}\)
+		\[\delta^{t+1} = \delta^{t} + \eta \operatorname{sign}\left(\nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)\right)\]
+
+		not on eps ball and high dim: 
+		in high dimension spaces almost all points of a compact object are located on the surface of the object. 
+
+		exact solving: combinatorial optimization.
+		mixed integer linear programming for small models 
+
+		upper bounding provide a verification that no attack is possible = garuantee of robustness
+		relaxation of the verification problem 
+	\end{mybox}
 
 \end{document}

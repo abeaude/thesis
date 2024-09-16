@@ -1,13 +1,13 @@
 \documentclass[../main.tex]{subfiles}
 \usepackage{silence}
 \WarningFilter{glossaries}{No \printglossary or \printglossaries found}
+\robExtConfigure{disable externalization}
+\begin{document}
 \robExtConfigure{
-    disable externalization,
     set placeholder eval={__LRPBARWIDTH__}{\lenToCm{0.25\baselineskip}},
     set placeholder eval={__LRPHEIGHT__}{\lenToCm{11\baselineskip}},
-    set placeholder eval={__LRPWIDTH__}{\lenToCm{1.1\linewidth}},
+    set placeholder eval={__LRPWIDTH__}{\lenToCm{0.528\linewidth}},
     }
-\begin{document}
 \ifSubfilesClassLoaded{%
     \graphicspath{{figures/5-CrossAttOmics/}}%
     \setcounter{chapter}{4}%

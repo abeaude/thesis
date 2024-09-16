@@ -12,6 +12,7 @@ Silent
 		\endfirsthead \endhead \endfoot \endlastfoot
 		\textbullet
 		\addplot \attomicsperfzoom \attomicsperf \Nattomicszoom \foreach \faCircle \CrossAttOmicsGateSelFreq
+		\robExtPrefixAllCompilationCommands \robExtCp
 	}
 UserWarnRegex =
 {
