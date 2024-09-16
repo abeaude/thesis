@@ -1,6 +1,6 @@
 CmdLine
 {
--m3
+-m3 -e9
 }
 Silent
 	{

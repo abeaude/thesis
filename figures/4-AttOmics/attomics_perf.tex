@@ -1,8 +1,8 @@
 \begin{tikzpicture}
     \begin{groupplot}[group style={
                     group size=2 by 2,
-                    horizontal sep=0.07\textwidth,
-                    vertical sep=0.05\textheight,
+                    horizontal sep=__ATTOMICSHSEP__,
+                    vertical sep=__ATTOMICSVSEP__,
                     xlabels at=edge bottom,
                     ylabels at=edge left,
                     xticklabels at=all,
@@ -14,20 +14,20 @@
                     yticklabel style={
             /pgf/number format/fixed,
             /pgf/number format/precision=2
-    }, height=0.45\textheight, width=0.5\textwidth, title style={yshift=-1.2ex, font=\small}
+    }, height=__ATTOMICSHEIGHT__, width=__ATTOMICSWIDTH__, title style={yshift=-1.2ex, font=\small}
               ]
         \nextgroupplot[title=\textbf{DNAm}]
-            \attomicsplotomics{y__DNAm__}
+            \attomicsplotomics{y__DNAm__}{\attomicsperf}
             \draw[gray] (axis cs:5900,0.03) rectangle (axis cs:6368,0.055);
             \coordinate (dnamx1) at (axis cs:5900,0.055);
             \coordinate (dnamx2) at (axis cs:6368,0.055);
         \nextgroupplot[legend to name={myleg}, legend style={legend columns=1}, title=\textbf{mRNA}]
-            \attomicsplotomics{y__mRNA__}
+            \attomicsplotomics{y__mRNA__}{\attomicsperf}
             \draw[gray] (axis cs:5900,0.032) rectangle (axis cs:6368,0.061);
             \coordinate (mrnax1) at (axis cs:5900,0.061);
             \coordinate (mrnax2) at (axis cs:6368,0.061);
         \nextgroupplot[title=\textbf{miRNA}]
-            \attomicsplotomics{y__miRNA__}
+            \attomicsplotomics{y__miRNA__}{\attomicsperf}
             \draw[gray] (axis cs:5900,0.035) rectangle (axis cs:6368,0.13);
             \coordinate (mirnax1) at (axis cs:5900,0.13);
             \coordinate (mirnax2) at (axis cs:6368,0.13);
@@ -55,7 +55,7 @@
         yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=2},
         scaled ticks=false,
         minor y tick num=3]
-    \plotattomicszoom{y__DNAm}
+    \plotattomicszoom{y__DNAm}{\attomicsperfzoom}{\Nattomicszoom}
     \end{axis}
     
     \begin{axis}[
@@ -74,7 +74,7 @@
         yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=2},
         scaled ticks=false,
         minor y tick num=3]
-    \plotattomicszoom{y__mRNA}
+    \plotattomicszoom{y__mRNA}{\attomicsperfzoom}{\Nattomicszoom}
     \end{axis}
     
     \begin{axis}[
@@ -94,7 +94,7 @@
         yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=2},
         scaled ticks=false,
         minor y tick num=3]
-    \plotattomicszoom{y__miRNA}
+    \plotattomicszoom{y__miRNA}{\attomicsperfzoom}{\Nattomicszoom}
     \end{axis}
     
     \draw[gray] (dnamx1) -- (dnamzoom.south west);

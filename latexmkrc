@@ -1,7 +1,7 @@
 # Settings
 $ENV{'TEXINPUTS'}='./texmf//:';
 $pdf_mode = 5;
-$max_repeat=10;
+$max_repeat=6;
 $bibtex_use = 2;
 set_tex_cmds( '--shell-escape %O %S' );
 push @generated_exts, 'loe', 'lol', 'lor', 'run.xml', 'glg', 'glstex', 'aux', 'glo', 'bcf', 'fls', 'glg-abr', 'glo-abr', 'ist', 'lof', 'slg', 'slo', 'sls', 'toc', 'fdb_latexmk', 'gls', 'gls-abr', 'xdv';
@@ -39,6 +39,21 @@ sub svg2pdf {
 add_cus_dep('drawio', 'pdf', 0, 'drawio2pdf');
 sub drawio2pdf {
     system("drawio --export --format pdf --border 0 --crop --page-index 1 \"$_[0].drawio\"");
+}
+
+add_cus_dep( 'tex', 'pdf', 0, 'makerobustexternalize' );
+sub makerobustexternalize {
+    # system "pwd";
+    # system "ls", "-l";
+    # system "ls", "-l", "PDF";
+    # system "ls", "-l", "PDF/robustExternalize";
+    if ( $root_filename ne $_[0] )  {
+        print "Compiling external document ", $_[0];
+        my ($base_name, $path) = fileparse( $_[0] );
+        system "cd $path && xelatex -halt-on-error $base_name.tex";
+    } else {
+        print "Not running on main file";
+    }
 }
 
 if( ($ENV{GITHUB_ACTIONS} // "false") eq "true" ){

@@ -7,10 +7,97 @@
 \usepackage{functional}
 \usepackage{textcomp}
 \usepackage{newunicodechar}
+\usepackage{morewrites}
+%\usepackage{scrwfile}
+
 \newfontface{\dejavusans}{DejaVuSans}
 \newunicodechar{→}{{\dejavusans{→}}}
-\input{preamble/information.tex}
+\robExtConfigure{
+	enable manual mode,
+	execute after each externalization={
+		\IfFileExists{
+			\robExtOutputDirectory /\robExtAddCachePathAndName{\robExtFinalHash.pdf}
+		}{}{
+			\typeout{No file \robExtOutputDirectory /\robExtAddCachePathAndName{\robExtFinalHash.pdf}.}
+		}
+		},
+	set placeholder eval={__ATTOMICSHEIGHT__}{\lenToCm{0.45\textheight}},
+	set placeholder eval={__ATTOMICSWIDTH__}{\lenToCm{0.5\textwidth}},
+	set placeholder eval={__ATTOMICSVSEP__}{\lenToCm{0.05\textheight}},
+	set placeholder eval={__ATTOMICSHSEP__}{\lenToCm{0.07\textwidth}},
+	forward color=Prune,
+	set output directory=PDF,
+	add to preset={tikz}{
+		auto forward,
+		add to preamble={
+			\usepackage{pgfplots}
+			\usepackage{pgfplotstable}
+			\usepackage{xstring}
+			\usepackage{functional}
+			\usepackage{etoolbox}
+			\usepackage{tcolorbox}
+			\tcbuselibrary{skins}
+			},
+	},
+	add to preset={latex}{
+		use xelatex,
+		add to latex options={12pt},
+		set preamble hyperref={\usepackage{hyperref}},
+		add to preamble={
+			\usepackage{fontspec}
+			\usepackage[math-style=TeX, bold-style=TeX, active-frac=small]{unicode-math}
+			\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/] 
+			\setoperatorfont{\symsfup}
+			\setmainfont{OpenSans}[
+				Extension = .ttf,
+				Path = fonts/,
+				UprightFont = *-Regular,
+				BoldFont = *-Bold,
+				ItalicFont = *-Italic,
+				BoldItalicFont = *-BoldItalic
+			]
+			},
+	},
+}
+\configIfMacroPresent{\relscale}{forward=\usepackage{relsize}}
+\ExplSyntaxOn
+\NewDocumentCommand{\MyrobExtCopyFileToCache}{mm}{
+  \robExtCheckIfPrefixFolderExists%
+  \file_if_exist:xTF {#1}{}{
+    \msg_error:nnx{robExt}{file does not exist}{#1~(to~copy~to~cache)}
+  }
+  \file_if_exist:xTF {\robExtAddCachePath{#2}}{
+    \robExtDebugInfo{The~file~\robExtAddCachePath{#2}~already~exists,~let~us~compare~md5~sum.}
+    \str_set:Nx \l_tmpa_str {\file_mdfive_hash:n{#1}}
+    \str_set:Nx \l_tmpb_str {\file_mdfive_hash:n{\robExtAddCachePath{#2}}}
+    \str_compare:eNeTF {\l_tmpa_str} = {\l_tmpb_str} {
+      \robExtDebugInfo{The~file~\robExtAddCachePath{#2}~has~the~good~md5~hash.}
+    }{
+      \robExtDebugInfo{The~md5~hashes~of~#1~and~\robExtAddCachePath{#2}~are~different(\l_tmpa_str \space vs \space \l_tmpb_str),~let~us~copy~the~file.}%
+      \robExtRunCmdIfPossible{\robExtCp \space "#1"~"\robExtAddCachePath{#2}"}%
+    }
+  }{
+    \robExtDebugInfo{The~file~\robExtAddCachePath{#2}~does~not~exist,~let~us~copy~it:}
+    \robExtRunCmdIfPossible{\robExtCp \space "#1"~"\robExtAddCachePath{#2}"}%   
+  }
+}
+\sys_shell_now:x {mkdir ~ -p ~ \robExtOutputDirectory / \robExtCacheFolder /fonts}
+\ExplSyntaxOff
 
+\MyrobExtCopyFileToCache{../fonts/latinmodern-math.otf}{fonts/latinmodern-math.otf}
+\MyrobExtCopyFileToCache{../fonts/OpenSans-Bold.ttf}{fonts/OpenSans-Bold.ttf}
+\MyrobExtCopyFileToCache{../fonts/OpenSans-BoldItalic.ttf}{fonts/OpenSans-BoldItalic.ttf}
+\MyrobExtCopyFileToCache{../fonts/OpenSans-Italic.ttf}{fonts/OpenSans-Italic.ttf}
+\MyrobExtCopyFileToCache{../fonts/OpenSans-Regular.ttf}{fonts/OpenSans-Regular.ttf}
+%\robExtAddCachePathAndName{\robExtFinalHash.tex}
+%\typeout
+% \robExtWriteFile
+%\apptocmd{\robExtWriteFile}{\typeout{\robExtAddCachePathAndName{\robExtFinalHash.tex}}}{Patch robExtWriteFile}{No patch robExtWriteFile}
+\cacheTikz
+% \ExplSyntaxOn
+% \sys_shell_now:x \l__robExt_current_compilation_command_str
+% \ExplSyntaxOff
+\input{preamble/information.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %% BIBLIOGRAPHY SOURCES %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -95,13 +182,13 @@
 %% \dictum[author][citation] % to include a small quote at the begining of each chapter
 %% \minitocpage % or \minitoc to display the content of the chapter
 \subfileinclude{chapters/1-Introduction}
-\subfileinclude{chapters/2-Background}
-\subfileinclude{chapters/3-SOTA}
-\subfileinclude{chapters/4-AttOmics}
-\subfileinclude{chapters/5-CrossAttOmics}
-\subfileinclude{chapters/6-CrossAttOmicsGate.tex}
-\subfileinclude{chapters/7-Interpretability}
-\subfileinclude{chapters/8-Conclusions}
+% \subfileinclude{chapters/2-Background}
+% \subfileinclude{chapters/3-SOTA}
+% \subfileinclude{chapters/4-AttOmics}
+% \subfileinclude{chapters/5-CrossAttOmics}
+% \subfileinclude{chapters/6-CrossAttOmicsGate.tex}
+% \subfileinclude{chapters/7-Interpretability}
+% \subfileinclude{chapters/8-Conclusions}
 
 \KOMAoption{parskip}{false}
 \begin{singlespace}

@@ -119,6 +119,7 @@
 \RequirePackage{graphicx} % Required for inserting images
 \RequirePackage{wrapfig2}
 \RequirePackage{tikz}
+\RequirePackage{robust-externalize}
 \RequirePackage{pgfplots}
 \RequirePackage{pgfplotstable}
 \RequirePackage{subcaption}
@@ -471,7 +472,7 @@
 		 \begin{spacing}{1}
 			 \opensans
 			 \newgeometry{left=6cm,bottom=2cm, top=1cm, right=1cm}
-			 \begin{tikzpicture}[remember picture, overlay]
+			 \begin{tikzpicture}<disable externalization>[remember picture, overlay]
 				 %\fill[right color=Prune, left color=white] (0,0) rectangle (2,1);
 				 \node[right color=Prune, left color=white, minimum height=\paperheight, minimum width=7.3mm, shape=rectangle, anchor=south west, inner sep=0pt] (grad) at (current page.south west) {};
 				 \node[fill=Prune, minimum height=\paperheight, minimum width=27.24mm, shape=rectangle, anchor=south west, inner sep=0pt] (rect) at ([xshift=7.26mm]current page.south west) {};
@@ -689,19 +690,19 @@
 	 \cfoot*{}
 	 %\ofoot*{\pagemark}
 	 \lefoot*{
-		\begin{tikzpicture}
+		\begin{tikzpicture}<disable externalization>
 			\node (b) [inner sep=0pt]{\pagemark};
 			\node[inner sep=0pt, right=1mm of b.east, anchor=west]{\pgfornament[height=2ex, symmetry=v]{72}};
 		\end{tikzpicture}
 	 }
 	 \rofoot*{
-		\begin{tikzpicture}
+		\begin{tikzpicture}<disable externalization>
 			\node (a) [inner sep=0pt]{\pgfornament[height=2ex]{72}};
 			\node [right=1mm of a.east, inner sep=0pt, anchor=west]{\pagemark};
 		\end{tikzpicture}
 	 }
  \else%
-	 \cfoot*{\begin{tikzpicture}
+	 \cfoot*{\begin{tikzpicture}<disable externalization>
     \node (a) [inner sep=0pt]{\pgfornament[height=2ex]{72}};
     \node (b) [right=1mm of a.east, inner sep=0pt, anchor=west]{\pagemark};
     \node[inner sep=0pt, right=1mm of b.east, anchor=west]{\pgfornament[height=2ex, symmetry=v]{72}};
