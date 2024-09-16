@@ -263,10 +263,10 @@
 
 
 \begin{table}[htbp]
-    \sisetup{separate-uncertainty-units=single, separate-uncertainty,detect-mode}
+	\sisetup{separate-uncertainty-units=single, separate-uncertainty,detect-mode}
 	\centering
 	\caption{Classification performances of the different models}\label{tab:perf_results}
-    % TODO: longtblr
+	% TODO: longtblr
 	\begin{tblr}{
 		colspec={
 				Q[l,m]
@@ -401,43 +401,51 @@
 
 \begin{table}[htbp]
 	\centering
-	\caption{Comparison of the time required to obtain predictions from the different models on the test set. }
-	\label{tab:arch_timings}
-	\begin{tabular}{llr}
-		\toprule
-		Omics                     & Model                 & Time (s) \\
-		\midrule
-		\multirow[c]{8}{*}{DNAm}  & AttOmics – Clustering & 0.006    \\
-		                          & AttOmics – Random     & 0.004    \\
-		                          & CNN1d                 & 0.078    \\
-		                          & GNN – CoExp           & 6.280    \\
-		                          & MLP                   & 0.001    \\
-		                          & RF                    & 0.046    \\
-		                          & SVM                   & 5.914    \\
-		                          & XGBoost               & 0.019    \\
-		\midrule
-		\multirow[c]{11}{*}{mRNA} & AttOmics – Clustering & 0.008    \\
-		                          & AttOmics – GO         & 0.028    \\
-		                          & AttOmics – Hallmarks  & 0.005    \\
-		                          & AttOmics – Random     & 0.008    \\
-		                          & CNN1d                 & 0.178    \\
-		                          & GNN – CoExp           & 6.623    \\
-		                          & GNN – PPI             & 2.564    \\
-		                          & MLP                   & 0.010    \\
-		                          & RF                    & 0.040    \\
-		                          & SVM                   & 12.850   \\
-		                          & XGBoost               & 0.028    \\
-		\midrule
-		\multirow[c]{8}{*}{miRNA} & AttOmics – Clustering & 0.002    \\
-		                          & AttOmics – Random     & 0.002    \\
-		                          & CNN1d                 & 0.006    \\
-		                          & GNN – CoExp           & 0.326    \\
-		                          & MLP                   & 0.001    \\
-		                          & RF                    & 0.270    \\
-		                          & SVM                   & 20.868   \\
-		                          & XGBoost               & 0.022    \\
-		\bottomrule
-	\end{tabular}
+	\caption{Comparison of the time required to obtain predictions from the different models on the test set. }\label{tab:arch_timings}
+	\begin{tblr}{
+		colspec={
+				Q[l,m]
+				Q[l,m]
+				Q[r,m]
+			},%
+		row{1} = {guard, c},%
+		row{2-Z} = {font=\small},%
+		hline{1,Z} = {2pt},%
+		hline{2} = {1pt},%
+		hline{10,21} = {1pt, dashed},
+				cell{2}{1} = {r=8,c=1}{l,m},
+				cell{10}{1} = {r=11,c=1}{l,m},
+				cell{21}{1} = {r=8,c=1}{l,m},
+			}
+		Omics & Model                 & Time (s) \\
+		DNAm  & AttOmics – Clustering & 0.006    \\
+		      & AttOmics – Random     & 0.004    \\
+		      & CNN1d                 & 0.078    \\
+		      & GNN – CoExp           & 6.280    \\
+		      & MLP                   & 0.001    \\
+		      & RF                    & 0.046    \\
+		      & SVM                   & 5.914    \\
+		      & XGBoost               & 0.019    \\
+		mRNA  & AttOmics – Clustering & 0.008    \\
+		      & AttOmics – GO         & 0.028    \\
+		      & AttOmics – Hallmarks  & 0.005    \\
+		      & AttOmics – Random     & 0.008    \\
+		      & CNN1d                 & 0.178    \\
+		      & GNN – CoExp           & 6.623    \\
+		      & GNN – PPI             & 2.564    \\
+		      & MLP                   & 0.010    \\
+		      & RF                    & 0.040    \\
+		      & SVM                   & 12.850   \\
+		      & XGBoost               & 0.028    \\
+		miRNA & AttOmics – Clustering & 0.002    \\
+		      & AttOmics – Random     & 0.002    \\
+		      & CNN1d                 & 0.006    \\
+		      & GNN – CoExp           & 0.326    \\
+		      & MLP                   & 0.001    \\
+		      & RF                    & 0.270    \\
+		      & SVM                   & 20.868   \\
+		      & XGBoost               & 0.022    \\
+	\end{tblr}
 \end{table}
 
 \begin{figure}[htbp]
