@@ -319,7 +319,7 @@
 
 \begin{sidewaystable}
 	\centering
-	\caption{P-value from the t-test on the error rate of the different models}
+	\caption{P-value from the t-test on the error rate of the different models}\label{tab:pval_error_rate}
 	\begin{tabular}{llrrrrrrrrrr}
 		\toprule
 		omics                  & Model                 & AttOmics - GO & AttOmics - Hallmarks & AttOmics - Random & CNN1d & GCN - CoExp & MLP      & RF    & SVM      & XGBoost  & GCN - PPI \\
@@ -352,7 +352,6 @@
 		                       & SVM                   & -             & -                    & -                 & -     & -           & -        & -     & -        & 0.092    & -         \\
 		\bottomrule
 	\end{tabular}
-	\label{tab:pval_error_rate}
 \end{sidewaystable}
 
 
@@ -466,8 +465,7 @@
 		\draw[gray] (mirnax1) -- (mirnazoom.north west);
 		\draw[gray] (mirnax2) -- (mirnazoom.north east);
 		\end{tikzpicture}
-	\caption{Precision on the test set according to the size of the training set.  A * indicates a p-value \(< 0.05\) with the best state-of-the-art method.}
-	\label{fig:limit_train_classif_precision}
+	\caption{Precision on the test set according to the size of the training set.  A * indicates a p-value \(< 0.05\) with the best state-of-the-art method.}\label{fig:limit_train_classif_precision}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -580,8 +578,7 @@
 		\draw[gray] (mirnax1) -- (mirnazoom.north west);
 		\draw[gray] (mirnax2) -- (mirnazoom.north east);
 		\end{tikzpicture}
-	\caption{Recall on the test set according to the size of the training set.  A * indicates a p-value \(< 0.05\) with the best state-of-the-art method.}
-	\label{fig:limit_train_classif_recall}
+	\caption{Recall on the test set according to the size of the training set.  A * indicates a p-value \(< 0.05\) with the best state-of-the-art method.}\label{fig:limit_train_classif_recall}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -694,8 +691,7 @@
 		\draw[gray] (mirnax1) -- (mirnazoom.north west);
 		\draw[gray] (mirnax2) -- (mirnazoom.north east);
 		\end{tikzpicture}
-	\caption{Specificity on the test set according to the size of the training set.  A * indicates a p-value \(< 0.05\) with the best state-of-the-art method.}
-	\label{fig:limit_train_classif_specificity}
+	\caption{Specificity on the test set according to the size of the training set.  A * indicates a p-value \(< 0.05\) with the best state-of-the-art method.}\label{fig:limit_train_classif_specificity}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -808,8 +804,7 @@
 		\draw[gray] (mirnax1) -- (mirnazoom.north west);
 		\draw[gray] (mirnax2) -- (mirnazoom.north east);
 		\end{tikzpicture}
-	\caption{F1-Score on the test set according to the size of the training set.  A * indicates a p-value \(< 0.05\) with the best state-of-the-art method.}
-	\label{fig:limit_train_classif_f1}
+	\caption{F1-Score on the test set according to the size of the training set.  A * indicates a p-value \(< 0.05\) with the best state-of-the-art method.}\label{fig:limit_train_classif_f1}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -922,15 +917,13 @@
 		\draw[gray] (mirnax1) -- (mirnazoom.north west);
 		\draw[gray] (mirnax2) -- (mirnazoom.north east);
 		\end{tikzpicture}
-	\caption{AUROC on the test set according to the size of the training set.  A * indicates a p-value \(< 0.05\) with the best state-of-the-art method.}
-	\label{fig:limit_train_classif_auroc}
+	\caption{AUROC on the test set according to the size of the training set.  A * indicates a p-value \(< 0.05\) with the best state-of-the-art method.}\label{fig:limit_train_classif_auroc}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.9\textwidth]{cancer_type_limited_training_survival.pdf}
-	\caption{Concordance Index on the test set according to the size of the training set. }
-	\label{fig:limit_train_cox}
+	\caption{Concordance Index on the test set according to the size of the training set. }\label{fig:limit_train_cox}
 \end{figure}
 
 \begin{table}[htbp]
@@ -985,8 +978,7 @@
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[scale=0.5]{memory_usage_models.pdf}
-	\caption{Comparison of the memory usage of the different deep-learning models and the peak of memory usage during inference on the test set.}
-	\label{fig:mem_uasge}
+	\caption{Comparison of the memory usage of the different deep-learning models and the peak of memory usage during inference on the test set.}\label{fig:mem_uasge}
 \end{figure}
 
 
@@ -994,29 +986,25 @@
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\textwidth]{attention_weight_overlap.pdf}
-	\caption{Attention weight and overlap index comparison for grouped based on GO\@. The dashed line correspond to the expected mean attention weight (\(\frac{1}{n_{groups}} \)). Points are colored based on the density of points.}
-	\label{fig:att_w_overlap}
+	\caption{Attention weight and overlap index comparison for grouped based on GO\@. The dashed line correspond to the expected mean attention weight (\(\frac{1}{n_{groups}} \)). Points are colored based on the density of points.}\label{fig:att_w_overlap}
 \end{figure}
 
 \begin{landscape}
 	\begin{figure}[p]
 		\centering
 		\includegraphics[width=0.9\textheight]{attention_maps_cancer_go_block1.pdf}
-		\caption{Attention map visualized per cancer for the first block when grouping with the gene ontology strategy. Attention map per cancer are obtained by taking the mean of the attention map of all patients with the corresponding cancer. }
-		\label{fig:att_map_cancer_go}
+		\caption{Attention map visualized per cancer for the first block when grouping with the gene ontology strategy. Attention map per cancer are obtained by taking the mean of the attention map of all patients with the corresponding cancer. }\label{fig:att_map_cancer_go}
 	\end{figure}
 
 	\begin{figure}[p]
 		\centering
 		\includegraphics[width=0.9\textheight]{attention_maps_cancer_hallmarks_block1.pdf}
-		\caption{Attention map visualized per cancer for the first block when grouping with the hallmarks strategy. Attention map per cancer are obtained by taking the mean of the attention map of all patients with the corresponding cancer. }
-		\label{fig:att_map_cancer_hallmarks}
+		\caption{Attention map visualized per cancer for the first block when grouping with the hallmarks strategy. Attention map per cancer are obtained by taking the mean of the attention map of all patients with the corresponding cancer. }\label{fig:att_map_cancer_hallmarks}
 	\end{figure}
 
 	\begin{figure}[p]
 		\centering
 		\includegraphics[width=0.9\textheight]{TCGA_BLCA_comparison_attention_go_hallmarks.pdf}
-		\caption{Comparison of the attention maps obtained with the gene ontology and the hallmarks grouping strategy. Both attention map highlights interaction involving an inflammatory response group. }
-		\label{fig:att_map_blca_comp}
+		\caption{Comparison of the attention maps obtained with the gene ontology and the hallmarks grouping strategy. Both attention map highlights interaction involving an inflammatory response group. }\label{fig:att_map_blca_comp}
 	\end{figure}
 \end{landscape}

@@ -1,8 +1,11 @@
 # Settings
 $ENV{'TEXINPUTS'}='./texmf//:';
 $pdf_mode = 5;
+$postscript_mode = $dvi_mode = 0;
+$allow_subdir_creation=2;
 $max_repeat=6;
 $bibtex_use = 2;
+# $out_dir, $aux_dir, $out2_dir, @out2_exts, $xdvipdfmx
 set_tex_cmds( '--shell-escape %O %S' );
 push @generated_exts, 'loe', 'lol', 'lor', 'run.xml', 'glg', 'glstex', 'aux', 'glo', 'bcf', 'fls', 'glg-abr', 'glo-abr', 'ist', 'lof', 'slg', 'slo', 'sls', 'toc', 'fdb_latexmk', 'gls', 'gls-abr', 'xdv';
 

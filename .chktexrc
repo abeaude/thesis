@@ -11,8 +11,10 @@ Silent
 		\xmark \cmark
 		\endfirsthead \endhead \endfoot \endlastfoot
 		\textbullet
-		\addplot \attomicsperfzoom \attomicsperf \Nattomicszoom \foreach \faCircle \CrossAttOmicsGateSelFreq
-		\robExtPrefixAllCompilationCommands \robExtCp
+		\addplot \attomicsperfzoom \attomicsperf \Nattomicszoom \foreach \faCircle 
+		\attomicsperfspecificity \attomicsperfspecificityzoom \attomicsperfrecall \attomicsperfrecallzoom \attomicsperfprecision \attomicsperfprecisionzoom \attomicsperffun \attomicsperffunzoom \attomicsperfauroc \attomicsperfauroczoom \LRPCrossAttOmicsSubset \CrossAttOmicsGateSelFreq
+		\robExtPrefixAllCompilationCommands \robExtCp \cacheTikz \robExtOutputDirectory \robExtCacheFolder
+		\ExplSyntaxOn \ExplSyntaxOff
 	}
 UserWarnRegex =
 {

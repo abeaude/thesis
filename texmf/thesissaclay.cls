@@ -33,6 +33,7 @@
 \WarningFilter{latexfont}{Font shape}
 \WarningFilter{hyperref}{Token not allowed in a PDF string}
 \WarningFilter{caption}{The option `hypcap=true' will be ignored for this particular}
+%\WarningFilter{robust-externalize}{The option `hypcap=true' will be ignored for this particular}
 \LoadClass[fontsize=12pt, a4paper, titlepage=firstiscover, cleardoublepage=empty, appendixprefix=true, parskip=half, DIV=11]{scrbook}
 \KOMAoption{toc}{listof, index, bibliography, graduated}
 \RequirePackage[nodisplayskipstretch]{setspace}
@@ -125,8 +126,10 @@
 \RequirePackage{pgfplotstable}
 \RequirePackage{subcaption}
 \renewcommand{\thesubfigure}{\Alph{subfigure}}
+\renewcommand{\thesubtable}{\Alph{subtable}}
 \DeclareCaptionLabelFormat{bf-parens}{(\textbf{#2})}
-\captionsetup{subrefformat=bf-parens}
+\DeclareCaptionLabelFormat{bf-sub}{\textbf{#2}}
+\captionsetup{subrefformat=bf-parens, labelformat=bf-sub, hypcap=true}
 \newcommand{\subrefrange}[2]{\subcaption@reffmt\p@subref{\ref{sub@#1}--\ref{sub@#2}}}
 %% OTHER %%
 \RequirePackage{lipsum}

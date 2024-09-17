@@ -672,6 +672,16 @@
 	% general about interpretability/explanability
 	% fix the vocabulary that is used
 	% present different methods, advantage drawbacks
+	focus on local approaches state global methods also exists give some examples
+	post hoc methods local: 
+	attribution methods 
+	perturbation methods (a specifc attribution methods)
+	instance based = prototypes 
+	counterfactuals
+
+	self explainining models 
+	attention  
+	associate neurons to a concept (introduce knowledge)
 
 	% way to introduce counterfactuals
 
@@ -681,39 +691,41 @@
 	% how to solve it: gradient descent show algo
 	% discuss lambda
 	% show some methods
+	Post hoc: lrp, lime, shap most common often used in precision medicine 
+	attribution methods 
 
 	% need to talk about adversarial examples, details in annex?
 	% how to have a model robust to adv attacks, defenses, adv training
+	defensive methods mainly developed on images, heuristics to identify adv example more geared towards an inference settings. not applicable in our case where we want to detect CFs
+	most effective way is adversarial training. 
+	min-max optimization problem. 
+	\begin{equation}
+		\min_{\theta} \E_{(x,y)}\left[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)  \right]
+	\end{equation}
+	implemented as an alternating procedure: solve the inner maximization problem (find adversarial examples) with fixed model weigths \(\theta\)
+	in a second step updates model weights: solve outer minimization problem on the computed adversarial examples.\footnote{In practice, it is more common to also include the standard training loss, \ie{}include clean examples along the adversarial ones.}
 
 	\begin{mybox}[label={box:adversarial}]{Adversarial examples}
-		Model: \(g:\symcal{X} \mapsto \symbb{R}^{C} \) a mapping from the data space to the prediction space 
-		a loss function: \(\symcal{L}\left(g\left(\symbf{x}\right), y \right)\)
-		Goal: 
-		translate into the following optimization problem: \(\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)\)
-		other formulation: 
-		\[\argmin_{\delta \leq \varepsilon} {\left\|\delta\right\|}_{p} \quad \text{s. t.} \quad f\left(x+\delta\right) = y^{\ast}\]
-		\(\Delta = \left\{\delta: \left\|\delta\right\|_{p} \leq \varepsilon \right\}\) allowed set of perturbation = ensure that the generated point is as close as possible to the original input. 
-		during optimization take the derivative of the loss with repect to the input (or delta) = how small changes to the input affect the loss function.
-		untargeted attack, attack can also be targeted 
-		How to solve this optimization problem: exact solution (difficult), lower bound (most common), upper bound 
+		An adversarial example, \(\symbf{x}^{\ast}\), is an instance \(\symbf{x}\) with the addition of a small perturbation \(\delta\) that is incorrectly predicted by a machine learning model~\cite{Szegedy2013IntriguingPO}. 
+		Lets consider a model \(g:\symcal{X} \mapsto \symbb{R}^{C} \) mapping examples from the data space \(\symcal{X}\) to the prediction space \(\symbb{R}^{C}\) and a loss function \(\symcal{L}\left(g\left(\symbf{x}\right), y \right)\) measuring how well an example is classified. 
+		Adversarial examples are obtained by finding the smallest perturbation changing the predicted class which translate into the following optimization problem: 
+		\[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)\]
+		where \(\Delta = \left\{\delta: \left\|\delta\right\|_{p} \leq \varepsilon \right\}\) is the allowed set of perturbation.
+		This constrains ensures that the generated adversarial example is as close as possible to the original input by projecting them onto the \(\ell_{p}\)-norm ball. 
+		Different approaches have been proposed to solve this problem, the most common is finding a lower bound with gradient ascent on \(\delta\): 
+		\[\delta^{t+1} = \delta^{t} + \eta \nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta^{t}\right), y \right)\]
+		For \(\ell_{\infty}\)-norm, the projection onto the corresponding ball simply corresponds to clipping the value of \(\delta\) to the range \(\left[-\varepsilon, \varepsilon\right]\).  
+		Fast gradient sign method~\cite{FGSM} has been proposed to find the perturbation in a single optimization step: \(\delta = \varepsilon \operatorname{sign}\left(\nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta^{t}\right), y \right)\right)\)\footnote{\(\delta\) is initialized as the zero vector.}.
+		On the contrary, \gls{pgd} attacks~\cite{PGDAttacks,PGDAttacks2} uses the classical iterative procedure to solve the maximization problem: \(\delta^{t+1} = \symcal{P}\left(\delta^{t} + \eta \nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta^{t}\right), y \right)\right)\), where \(\symcal{P}\) represents the projection onto the \(\ell_{p}\)-norm ball\footnote{For \(p = \infty\) this corresponds to clipping. For \(p =2\), the projection corresponds to \(\symcal{P}\left(z\right) = \varepsilon \frac{z}{\max\left(\varepsilon, \left\|z\right\|_{2}\right)}\).}
 
-		lower bound: descent gradient on\(\delta\) 
-		\[\delta = \delta + \eta \nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)\]
-		and respect the eps ball constraint by porjecting back delta by clipping values to be in the correct range -eps, eps
-		Fast gradient sign method = large step size 
-		 sign gradients only for Linf %https://davidstutz.de/lp-adversarial-examples-using-projected-gradient-descent-in-pytorch/
-		\[\delta = \varepsilon \operatorname{sign}\left(\nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)\right) \]
-		PGD attacks use smaller steps and project back onto the ball of interest with \(\symcal{P}\)
-		\[\delta^{t+1} = \delta^{t} + \eta \operatorname{sign}\left(\nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)\right)\]
+		Approaches to solve exactly the constrained optimization problem with mixed integer linear programming have also been proposed~\cite{tjeng2018evaluating} but are only applicable to small models. 
+		Other approaches proposed to find an upper-bound to the optimization problem providing garuantee of robustness of the model~\cite{pmlr-v80-wong18a}.
 
-		not on eps ball and high dim: 
-		in high dimension spaces almost all points of a compact object are located on the surface of the object. 
-
-		exact solving: combinatorial optimization.
-		mixed integer linear programming for small models 
-
-		upper bounding provide a verification that no attack is possible = garuantee of robustness
-		relaxation of the verification problem 
+		Only untargeted attacks were presented but it is possible to craft targeted attacks where the target label, \(y^{\ast}\), is predefined. 
+		The following optimization problem is then considered: 
+		\[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right) - \symcal{L}\left(g\left(\symbf{x}+\delta\right), y^{\ast} \right)\]
 	\end{mybox}
+
+	self-explainable models 
 
 \end{document}
