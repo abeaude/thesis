@@ -23,7 +23,7 @@ jobs:
         uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: "5.38.2"
-      - run: perl perl/gitinfo2.pm 
+      - run: perl scripts/gitinfo2.pm 
       - name: Restore cached Figures
         id: figures-cache-restore
         uses: actions/cache/restore@v4
