@@ -99,9 +99,12 @@
 \RequirePackage{amsfonts}
 \RequirePackage[all,warning]{onlyamsmath}
 \RequirePackage[math-style=TeX, bold-style=TeX, active-frac=small]{unicode-math}
-\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/] 
-%\setoperatorfont{\symsfup}
-\setoperatorfont{\symbfsfup}
+\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/, version=normal] 
+\setmathfontface\mathrm{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/, version=normal]
+\setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/, version=smaller]
+\setmathfontface\mathrm{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/, version=smaller]
+\setoperatorfont{\mathrm}
+% \setoperatorfont{\symbfsfup}
 \newtheorem{definition}{Definition} %TODO: language support
 \newtheorem{property}{Property}
 \newtheorem{theorem}{Theorem}
@@ -177,7 +180,7 @@
 %\renewcommand{\abbreviationsname}{Liste des abréviations et sigles}
 %% HYPERREF SETUP %%
 \AtEndPreamble{%
-	\hypersetup{linktoc=all, colorlinks=true, anchorcolor=black, citecolor=A2, filecolor=black, menucolor=black, runcolor=black, urlcolor=B3, pdftitle=\@title, pdfauthor=\@author, pdfsubject=\@subject, pdfcreator=XeLaTeX, pdfkeywords=\@keywordsfr, pdfdisplaydoctitle=true}
+	\hypersetup{linktoc=all, colorlinks=true, anchorcolor=black, citecolor=A2, filecolor=black, menucolor=black, runcolor=black, urlcolor=B3, pdftitle={[en]\@title, [fr]\@subtitle}, pdfauthor=\@author, pdfsubject=\@subject, pdfcreator=XeLaTeX, pdfkeywords=\@keywordsfr, pdfdisplaydoctitle=true}
 } %allcolors=black, hidelinks,
 %% MUST BE LOADED LAST %%
 \AtEndPreamble{%
@@ -190,12 +193,16 @@
 	\newtcolorbox[auto counter, number within=chapter, crefname={see Box}{see Boxes}]{mybox}[2][]{title=Box~\thetcbcounter: #2, fontupper=\footnotesize, fontlower=\footnotesize, #1}
 	\BeforeBeginEnvironment{mybox}{
 		\begin{singlespace}
-		\setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/]
-		\setoperatorfont\symsfup
+			\mathversion{smaller}
+		% \setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/]
+		% \setmathfontface\mathrm{latinmodern-math.otf}[Scale=1, Path = fonts/]
+		%\setoperatorfont{\mathrm}
 			}
 	\AfterEndEnvironment{mybox}{
-		\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
-    	\setoperatorfont\symsfup
+			\mathversion{normal}
+			% \setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
+			% \setmathfontface\mathrm{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
+			%\setoperatorfont{\mathrm}
 		\end{singlespace}
 		}
 }
@@ -208,6 +215,10 @@
 %\setcaptionalignment[table]{C}
 \setkomafont{captionlabel}{\bfseries\footnotesize}
 \setkomafont{caption}{\footnotesize}
+% chapterentry, chapterentrydots, chapterentrypagenumber
+% pagehead, pagefoot
+% partentry, sectionentry
+% 
 % see floatrowbytocbasic and floatrow
 %\DeclareMathSizes{10}{10}{8}{6}
 % investigate

@@ -1,3 +1,8 @@
+\DocumentMetadata{
+	pdfversion=1.7,
+	lang=en-US,
+	xmp=true,
+} %https://ctan.math.washington.edu/tex-archive/macros/latex-dev/required/latex-lab/documentmetadata-support-code.pdf
 \documentclass[web, english, gitmark, final]{thesissaclay}
 %https://tex.stackexchange.com/questions/719543/how-do-i-add-icons-in-front-of-bibliography-entries
 % https://tex.stackexchange.com/questions/563696/add-icons-to-bibliography-style-in-scrbook
@@ -47,7 +52,8 @@
 			\usepackage{fontspec}
 			\usepackage[math-style=TeX, bold-style=TeX, active-frac=small]{unicode-math}
 			\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/] 
-			\setoperatorfont{\symsfup}
+			\setmathfontface\mathrm{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
+			\setoperatorfont{\mathrm}
 			\setmainfont{OpenSans}[
 				Extension = .ttf, % chktex 26
 				Path = fonts/,

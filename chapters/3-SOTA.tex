@@ -669,9 +669,11 @@
 
 
 \section{Model interpretability}
-	% general about interpretability/explanability
-	% fix the vocabulary that is used
-	% present different methods, advantage drawbacks
+	motivate use of interpretability
+	explainability vs Interpretability
+	highlight that there is no fixed definition, highly discussed in the community/field
+	what is a good explanation
+	how to classify the different methods 
 	focus on local approaches state global methods also exists give some examples
 	post hoc methods local: 
 	attribution methods 
@@ -682,29 +684,66 @@
 	self explainining models 
 	attention  
 	associate neurons to a concept (introduce knowledge)
-
-	% way to introduce counterfactuals
-
-	% remind what are counterfactuals in plain english: what if
-	% show equation
-	% desired property of CFs + construct the optimization problem
-	% how to solve it: gradient descent show algo
-	% discuss lambda
 	% show some methods
 	Post hoc: lrp, lime, shap most common often used in precision medicine 
 	attribution methods 
-
-	% need to talk about adversarial examples, details in annex?
-	% how to have a model robust to adv attacks, defenses, adv training
-	defensive methods mainly developed on images, heuristics to identify adv example more geared towards an inference settings. not applicable in our case where we want to detect CFs
-	most effective way is adversarial training. 
-	min-max optimization problem. 
+	% way to introduce counterfactuals
+	A counterfatual explanation answers a \textit{what if} question: How would \(x\) change if \(y\) had been \(y^{\prime}\)?
+	\citeauthor{wachter2017counterfactual} provides a more formal definition of a counterfactual: 
+	\begin{displaycquote}[adapted from][]{wachter2017counterfactual}[.]
+		\(y\) was predicted because input \(x\) had values \(\left(x_{1}, x_{2}, \ldots\right)\). If \(x\) instead had values \(\left(x_{1}^{\prime}, x_{2}^{\prime}, \ldots\right)\) and all other variables had remain constant, \(y^{\prime}\) would have been predicted
+	\end{displaycquote}
+	\citeauthor{wachter2017counterfactual} formulated the search of counterfactuals as an optimization problem minimimizing the distance between the counterfactual \(x^{\text{CF}}\) and the original point \(x\) whith the constraint that the class predicted on the counterfactual is the desired class \(y^{\text{CF}}\):
 	\begin{equation}
-		\min_{\theta} \E_{(x,y)}\left[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)  \right]
+		\argmin_{x^{\text{CF}}} \symcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right)\label{eq:opt_cf}
 	\end{equation}
-	implemented as an alternating procedure: solve the inner maximization problem (find adversarial examples) with fixed model weigths \(\theta\)
-	in a second step updates model weights: solve outer minimization problem on the computed adversarial examples.\footnote{In practice, it is more common to also include the standard training loss, \ie{}include clean examples along the adversarial ones.}
-
+	where \(\symcal{L}\) is a loss measuring the closeness of the predicted class from the counterfactual to the desired class and \(d\) is a distance measure. 
+	\citeauthor{wachter2017counterfactual} used a distance in the label space for the first term, \({\left(g\left(x^{\text{CF}}\right) - y^{\text{CF}}\right)}^{2}\) and weighted Manhattan distance for the second term~\cite{wachter2017counterfactual}.
+	A common way to illustrate counterfactual explanation is a bank customer whom had its loan refused, a counterfactual explanation then represents the change that the customer needs to operate to get its loan accepted. 
+	The customer want a simpler explanation where he can focus on a few changes, and the proposed changes need to be realistic and actionable. 
+	Proposing a change that is impossible to accomplish would be of little interest. 
+	This simple example highlights the main properties required by counterfactuals explanations.
+	Those properties translate into a set of constrain in the optimization problem~(\cref{eq:opt_cf}):
+	\begin{description}[
+		style=multiline,
+		leftmargin=!,
+		labelwidth=3cm,
+	]
+		\item[Actionnability] 
+		A counterfactual should only change features that are mutable. 
+		The optimization problem describe in \cref{eq:opt_cf} is updated as follow to consider this constraint:
+		\[\argmin_{x^{\text{CF}} \in \symcal{A}} \symcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right)\]
+		where \(\symcal{A}\) is the set of actionable features.
+		\item[Sparsity]\label{item:cf_sparse}
+		A counterfactual should change a small number of features, \ie{}the proposed change should be as sparse as possible.
+		This constraints is satsified by adding a penalty \(s\) favoring sparsity on the proposed change \(x^{\text{CF}} - x\) such as L1-penalty:
+		\begin{equation*} 
+			\argmin_{x^{\text{CF}} \in \symcal{A}} \symcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right) + s\left(x^{\text{CF}}-x\right)
+			\end{equation*}
+		\item[Data manifold closeness]  
+		A good counterfactual is a point that is realistic, a point that is near the training data and respect the data distribution. 
+		This constraint is added to the optimization problem by adding a new penalty term \(l\) forcing the generated counterfactual point to adhere to the original distribution \(\symcal{X}\):
+		\begin{multline*} 
+		\argmin_{x^{\text{CF}} \in \symcal{A}} \symcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right)\\ + s\left(x^{\text{CF}}-x\right) + l\left(x^{\text{CF}}, \symcal{X}\right)
+		\end{multline*}
+	\end{description}
+	The resulting optimization problem can be solved with optimization algorithms such as gradient descent~\cite{wachter2017counterfactual}. 
+	Counterfactuals can also be generated with generative AI algorithms such as \glspl{vae}~\cite{mahajan2020preservingcausalconstraintscounterfactual} or \glspl{gan}~\cite{CounteRGAN,vanlooveren2021conditionalgenerativemodelscounterfactual,Yang2021ModelBasedCS}. 
+	The generator takes the example to explain as input and generates a perturbation that is added to the input to form the counterfactual example.
+	Another term, \(\symcal{L}_{\operatorname{Cl}}\left(\operatorname{Cl}\left(x^{\text{CF}}\right), y^{\text{CF}}\right)\) is added to the \gls{gan} training objective~(\cref{eq:wgangp_loss}) to ensure that the generated counterfactual changes the prediction made by the classifier \(\operatorname{Cl}\), usually this loss term is chosen as the cross-entropy.
+	There are some drawbacks to using this strategy. 
+	Firstly, the \gls{gan} is only trained to change the prediction to one specific class. 
+	A \gls{gan} needs to be trained for each target class. 
+	Secondly, for a specifc input the \gls{gan} will always generate the same counterfactual as there are variability in the generation process. 
+	\citeauthor{Yang2021ModelBasedCS} proposed an approache based on \glspl{cgan}~\cite{Yang2021ModelBasedCS}. 
+	The generator accept a random vector as input but is conditionned by the sample being explained. 
+	
+	Adversarial examples and counterfactual explanations are obtained by solving similar optimization problems~\cite{Pawelczyk2021ExploringCE,Freiesleben2021}. 
+	Adversarial examples are also obtained by finding the minimal perturbation changing model prediction on a given example~(\cref{box:adversarial})~\cite{Szegedy2013IntriguingPO}. 
+	While they solve similar optimization problem there are some important semantic differences. 
+	Adversarial attacks generates perturbation aimed at being imperceptible whereas counterfactual explanation encourages minimal changes~\cite{Pawelczyk2021ExploringCE}. %~\cref{item:cf_sparse}
+	semantic differences 
+	
 	\begin{mybox}[label={box:adversarial}]{Adversarial examples}
 		An adversarial example, \(\symbf{x}^{\ast}\), is an instance \(\symbf{x}\) with the addition of a small perturbation \(\delta\) that is incorrectly predicted by a machine learning model~\cite{Szegedy2013IntriguingPO}. 
 		Lets consider a model \(g:\symcal{X} \mapsto \symbb{R}^{C} \) mapping examples from the data space \(\symcal{X}\) to the prediction space \(\symbb{R}^{C}\) and a loss function \(\symcal{L}\left(g\left(\symbf{x}\right), y \right)\) measuring how well an example is classified. 
@@ -726,6 +765,20 @@
 		\[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right) - \symcal{L}\left(g\left(\symbf{x}+\delta\right), y^{\ast} \right)\]
 	\end{mybox}
 
+	Due to the close proximity between counterfactuals and adversarial examples, it is recommended to have models robust to adversarial attacks. 
+	The most effective strategy is an adversarial training of the model. 
+	Adversarial training is achieved by solving the following min-max optimization problem:
+	\begin{equation}
+		\min_{\theta} \E_{(x,y)}\left[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)  \right]
+	\end{equation}
+	It is implemented as an alternating procedure: 
+	\begin{enumerate}
+		\item solving the inner maximization problem, \ie{}finding adversarial examples, with fixed model weights,
+		\item solving the outer minimization problem, \ie{}updating model weights, on the computed adversarial examples\footnote{In practice, it is more common to also include the standard training loss, \ie{}include clean examples along the adversarial ones.}.
+	\end{enumerate}
+
+	At the time of writing counterfactual explanation have not yet been applied to omics but have already been applied in precision medicine in particular for treatment recommendation. 
+	link with adversarial already mentionned by Wachter 
 	self-explainable models 
 
 \end{document}
