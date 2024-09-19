@@ -14,6 +14,20 @@
 \usepackage{newunicodechar}
 \usepackage{morewrites}
 %\usepackage{scrwfile}
+\renewcommand{\MintedPygmentize}{/root/venv/bin/pygmentize}
+\usemintedstyle{flexoki-style}
+\makeatletter % Redefinition of Description List Items source: http://tex.stackexchange.com/a/1248/13552
+\let\orgdescriptionlabel\descriptionlabel
+\renewcommand*{\descriptionlabel}[1]{%
+  \let\orglabel\label
+  \let\label\@gobble
+  \phantomsection
+  \protected@edef\@currentlabel{#1}%
+  %\edef\@currentlabelname{#1}%
+  \let\label\orglabel
+  \orgdescriptionlabel{#1}%
+}
+\makeatother
 
 \newfontface{\dejavusans}{DejaVuSans}
 \newunicodechar{→}{{\dejavusans{→}}}

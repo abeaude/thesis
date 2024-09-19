@@ -139,12 +139,13 @@
 \RequirePackage[framemethod=tex]{mdframed}
 \RequirePackage[object=vectorian]{pgfornament}
 \RequirePackage{tcolorbox}
-\tcbuselibrary{skins}
+\PassOptionsToPackage{outputdir=PDF}{minted}
+\tcbuselibrary{skins,minted}
 \RequirePackage[]{mindflow}
 \RequirePackage[all]{nowidow}
 \RequirePackage[hyphenation, parindent]{impnattypo}
 \RequirePackage[inline]{enumitem}
-\RequirePackage{minted}
+%\RequirePackage[newfloat=true]{minted}
 \RequirePackage[algoruled, algochapter]{algorithm2e}
 \RequirePackage[l3]{csvsimple}
 \RequirePackage{lscape}
@@ -190,6 +191,18 @@
 	\crefname{appendixfigure}{Appendix figure}{Appendix figures}
 	\crefname{appendixtable}{Appendix table}{Appendix tables}
 	\crefrangelabelformat{subfigure}{#3#1--\crefstripprefix{#1}{#2}#4}
+	\newtcbinputlisting[
+		auto counter, number within=chapter, crefname={Listing}{Listings}
+		]{\pythoncode}[3][]{
+			listing file={#3},
+			listing only,
+			title=Listing~\thetcbcounter: #2, 
+			minted language=python,
+			minted options={breaklines, autogobble, numberblanklines=false, fontsize=\small, fontfamily=SourceCode},
+			colback=codebg,
+			colframe=codeframe,
+			#1
+			}
 	\newtcolorbox[auto counter, number within=chapter, crefname={see Box}{see Boxes}]{mybox}[2][]{title=Box~\thetcbcounter: #2, fontupper=\footnotesize, fontlower=\footnotesize, #1}
 	\BeforeBeginEnvironment{mybox}{
 		\begin{singlespace}
@@ -220,10 +233,8 @@
 % partentry, sectionentry
 % 
 % see floatrowbytocbasic and floatrow
-%\DeclareMathSizes{10}{10}{8}{6}
-% investigate
 %\newfontfamily{\lmm}{latinmodern-math.otf}[Scale=1, Path = fonts/]
-%\pretocmd{\tikzpicture}{\KOMAoptions{fontsize=10pt}\setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/]}{\ClassInfo{Thesis Saclay}{Patched tikzpicture to use a font size of 10pt}}{\ClassWarning{Thesis Saclay}{Cannot patch tikzpicture to have a smaller font size}}
+\newfontfamily{\sourcecode}{MonaspaceNeon.ttf}[Scale=1, Path=fonts/, Weight=200, Width=100,Slant=0, NFSSFamily=SourceCode]
 %%%%%%%%%%%%
 %% COLORS %%
 %%%%%%%%%%%%

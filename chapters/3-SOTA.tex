@@ -714,13 +714,13 @@
 		The optimization problem describe in \cref{eq:opt_cf} is updated as follow to consider this constraint:
 		\[\argmin_{x^{\text{CF}} \in \symcal{A}} \symcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right)\]
 		where \(\symcal{A}\) is the set of actionable features.
-		\item[Sparsity]\label{item:cf_sparse}
+		\item[Sparsity\label{item:cf_sparse}]
 		A counterfactual should change a small number of features, \ie{}the proposed change should be as sparse as possible.
 		This constraints is satsified by adding a penalty \(s\) favoring sparsity on the proposed change \(x^{\text{CF}} - x\) such as L1-penalty:
 		\begin{equation*} 
 			\argmin_{x^{\text{CF}} \in \symcal{A}} \symcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right) + s\left(x^{\text{CF}}-x\right)
 			\end{equation*}
-		\item[Data manifold closeness]  
+		\item[Data manifold closeness\label{item:cf_data_manifold}]  
 		A good counterfactual is a point that is realistic, a point that is near the training data and respect the data distribution. 
 		This constraint is added to the optimization problem by adding a new penalty term \(l\) forcing the generated counterfactual point to adhere to the original distribution \(\symcal{X}\):
 		\begin{multline*} 
@@ -737,12 +737,6 @@
 	Secondly, for a specifc input the \gls{gan} will always generate the same counterfactual as there are variability in the generation process. 
 	\citeauthor{Yang2021ModelBasedCS} proposed an approache based on \glspl{cgan}~\cite{Yang2021ModelBasedCS}. 
 	The generator accept a random vector as input but is conditionned by the sample being explained. 
-	
-	Adversarial examples and counterfactual explanations are obtained by solving similar optimization problems~\cite{Pawelczyk2021ExploringCE,Freiesleben2021}. 
-	Adversarial examples are also obtained by finding the minimal perturbation changing model prediction on a given example~(\cref{box:adversarial})~\cite{Szegedy2013IntriguingPO}. 
-	While they solve similar optimization problem there are some important semantic differences. 
-	Adversarial attacks generates perturbation aimed at being imperceptible whereas counterfactual explanation encourages minimal changes~\cite{Pawelczyk2021ExploringCE}. %~\cref{item:cf_sparse}
-	semantic differences 
 	
 	\begin{mybox}[label={box:adversarial}]{Adversarial examples}
 		An adversarial example, \(\symbf{x}^{\ast}\), is an instance \(\symbf{x}\) with the addition of a small perturbation \(\delta\) that is incorrectly predicted by a machine learning model~\cite{Szegedy2013IntriguingPO}. 
@@ -765,20 +759,30 @@
 		\[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right) - \symcal{L}\left(g\left(\symbf{x}+\delta\right), y^{\ast} \right)\]
 	\end{mybox}
 
+	Adversarial examples and counterfactual explanations are obtained by solving similar optimization problems~\cite{Pawelczyk2021ExploringCE,Freiesleben2021}. 
+	Adversarial examples are also obtained by finding the minimal perturbation changing model prediction on a given example~(\cref{box:adversarial})~\cite{Szegedy2013IntriguingPO}. 
+	As they solve similar optimization problem there are some discussion around their relationship. 
+	\citeauthor{wachter2017counterfactual} already identified this close relationships between the two concepts, and highlighted a difference in the distance used~\cite{wachter2017counterfactual}. 
+	Adversarial attacks generates perturbation aimed at being imperceptible whereas counterfactual explanation encourages minimal changes~(see \ref{item:cf_sparse} constraint).
+	They also stated that adversarial examples represents impossible points but counterfactuals are realistic points~(see \ref{item:cf_data_manifold} constraint). 
+	On the contrary, \citeauthor{browne2020} see counterfactuals and adversarial examples as mathematically equivalent, their main differences being in terms of semantic~\cite{browne2020}. 
+	In \cite[][8]{Freiesleben2021}, \citeauthor{Freiesleben2021} provides a detailled summary on the various opinions around the relation between counterfactuals and adversarial examples. 
+	\citeauthor{Pawelczyk2021ExploringCE} proposed a theoritical comparison of a counterfactual generation method~\cite{wachter2017counterfactual} and an adversarial one~\cite{Carlini2016TowardsET}. 
+	They identified an upper bound on the distance between the solution of the two approaches~\cite{Pawelczyk2021ExploringCE}. 
+
 	Due to the close proximity between counterfactuals and adversarial examples, it is recommended to have models robust to adversarial attacks. 
 	The most effective strategy is an adversarial training of the model. 
 	Adversarial training is achieved by solving the following min-max optimization problem:
 	\begin{equation}
 		\min_{\theta} \E_{(x,y)}\left[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)  \right]
 	\end{equation}
-	It is implemented as an alternating procedure: 
+	and it is implemented as an alternating procedure: 
 	\begin{enumerate}
 		\item solving the inner maximization problem, \ie{}finding adversarial examples, with fixed model weights,
 		\item solving the outer minimization problem, \ie{}updating model weights, on the computed adversarial examples\footnote{In practice, it is more common to also include the standard training loss, \ie{}include clean examples along the adversarial ones.}.
 	\end{enumerate}
 
 	At the time of writing counterfactual explanation have not yet been applied to omics but have already been applied in precision medicine in particular for treatment recommendation. 
-	link with adversarial already mentionned by Wachter 
-	self-explainable models 
+	
 
 \end{document}

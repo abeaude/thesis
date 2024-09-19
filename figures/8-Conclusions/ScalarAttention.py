@@ -7,14 +7,11 @@ def softmin_kernel(
     x_ptr,
     y_ptr,
     z_ptr,
-    x_row_stride,
-    output_row_stride,
     n_cols,
     BLOCK_SIZE: tl.constexpr,
 ):
-    # The rows of the softmax are independent, so we parallelize across those
+    # Parallelize across rows
     row_idx = tl.program_id(0)
-    # The stride represents how much we need to increase the pointer to advance 1 row
     x_start_ptr = x_ptr + row_idx
     y_offsets = tl.arange(0, BLOCK_SIZE)
     # Create a mask to guard memory operations against out-of-bounds accesses.
