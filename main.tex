@@ -29,6 +29,10 @@
 			\typeout{No file \robExtOutputDirectory /\robExtAddCachePathAndName{\robExtFinalHash.pdf}.}
 		}
 		},
+	set placeholder eval={__ATTOMICSHEIGHT__}{\lenToCm{0.45\textheight}},
+	set placeholder eval={__ATTOMICSWIDTH__}{\lenToCm{0.5\textwidth}},
+	set placeholder eval={__ATTOMICSVSEP__}{\lenToCm{0.05\textheight}},
+	set placeholder eval={__ATTOMICSHSEP__}{\lenToCm{0.07\textwidth}},
 	forward color=Prune,
 	set output directory=PDF,
 	add to preset={tikz}{
