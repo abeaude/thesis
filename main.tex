@@ -13,7 +13,6 @@
 \usepackage{textcomp}
 \usepackage{newunicodechar}
 \usepackage{morewrites}
-%\usepackage{scrwfile}
 \renewcommand{\MintedPygmentize}{/root/venv/bin/pygmentize}
 \usemintedstyle{flexoki-style}
 \NewCommandCopy{\orgdescriptionlabel}{\descriptionlabel}
@@ -22,6 +21,7 @@
 \newunicodechar{→}{{\dejavusans{→}}}
 \robExtConfigure{
 	enable manual mode,
+	%latexmk compatibility
 	execute after each externalization={
 		\IfFileExists{
 			\robExtOutputDirectory /\robExtAddCachePathAndName{\robExtFinalHash.pdf}
@@ -29,10 +29,6 @@
 			\typeout{No file \robExtOutputDirectory /\robExtAddCachePathAndName{\robExtFinalHash.pdf}.}
 		}
 		},
-	set placeholder eval={__ATTOMICSHEIGHT__}{\lenToCm{0.45\textheight}},
-	set placeholder eval={__ATTOMICSWIDTH__}{\lenToCm{0.5\textwidth}},
-	set placeholder eval={__ATTOMICSVSEP__}{\lenToCm{0.05\textheight}},
-	set placeholder eval={__ATTOMICSHSEP__}{\lenToCm{0.07\textwidth}},
 	forward color=Prune,
 	set output directory=PDF,
 	add to preset={tikz}{
@@ -178,12 +174,12 @@
 \printsymbols
 \makeatletter % Redefinition of Description List Items source: https://tex.stackexchange.com/questions/695120/error-when-combining-glossaries-and-label-of-description-item
 \renewcommand*{\descriptionlabel}[1]{%
-    \phantomsection
-    \begingroup\let\label\@gobble\protected@edef\x{\endgroup
-      \def\noexpand\@currentlabel{#1}%
-      \def\noexpand\@currentlabelname{#1}%
-    }\x
-    \orgdescriptionlabel{#1}%
+	\phantomsection
+	\begingroup\let\label\@gobble\protected@edef\x{\endgroup
+		\def\noexpand\@currentlabel{#1}%
+		\def\noexpand\@currentlabelname{#1}%
+	}\x
+	\orgdescriptionlabel{#1}%
 }
 \makeatother
 \mainmatter
@@ -227,8 +223,8 @@
 \crefalias{figure}{appendixfigure}
 \crefalias{table}{appendixtable}
 %\renewcommand{\figurename}{Appendix figure}
-\renewcaptionname{english}{\figurename}{Appendix figure} 
-\renewcaptionname{english}{\tablename}{Appendix table} 
+\renewcaptionname{english}{\figurename}{Appendix figure}
+\renewcaptionname{english}{\tablename}{Appendix table}
 \pagestyle{appendix}
 \include{chapters/9-Appendix}
 \backmatter

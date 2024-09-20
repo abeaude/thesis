@@ -3,6 +3,12 @@
 \WarningFilter{glossaries}{No \printglossary or \printglossaries found}
 \robExtConfigure{disable externalization}
 \begin{document}
+\robExtConfigure{
+	set placeholder eval={__ATTOMICSHEIGHT__}{\lenToCm{0.45\textheight}},
+	set placeholder eval={__ATTOMICSWIDTH__}{\lenToCm{0.5\textwidth}},
+	set placeholder eval={__ATTOMICSVSEP__}{\lenToCm{0.05\textheight}},
+	set placeholder eval={__ATTOMICSHSEP__}{\lenToCm{0.07\textwidth}},
+}
 \ifSubfilesClassLoaded{%
 	\graphicspath{{figures/4-AttOmics/}}%
 	\setcounter{chapter}{3}%
@@ -65,7 +71,7 @@
 			where \(A^{(j)}_{g_i}\) is the attention vector computed by the usual dot product attention~(\cref{fig:attomics_D})~\cite{vaswaniAttentionAllYou2017}:
 
 			\begin{align*}
-				A^{(j)}_{g_i}      & = \operatorname{softmax}\left(\left[A^{(j)}_{g_i,g_1}, \ldots,  A^{(j)}_{g_i,g_k}\right]\right) \text{,}  \\
+				A^{(j)}_{g_i}      & = \operatorname{softmax}\left(\left[A^{(j)}_{g_i,g_1}, \ldots,  A^{(j)}_{g_i,g_k}\right]\right) \text{,}    \\
 				A^{(j)}_{g_i, g_k} & =  \frac{{\left(X_{g_i}' \cdot W_j^Q\right)}^T \cdot \left(X_{g_k}' \cdot W_j^K \right)}{\sqrt{s}} \text{.}
 			\end{align*}
 

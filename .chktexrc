@@ -1,6 +1,6 @@
 CmdLine
 {
--m3 -e9
+-m3 -e9 -m8
 }
 Silent
 	{
@@ -11,7 +11,7 @@ Silent
 		\xmark \cmark
 		\endfirsthead \endhead \endfoot \endlastfoot
 		\textbullet
-		\addplot \attomicsperfzoom \attomicsperf \Nattomicszoom \foreach \faCircle 
+		\addplot \attomicsperfzoom \attomicsperf \Nattomicszoom \foreach \faCircle
 		\attomicsperfspecificity \attomicsperfspecificityzoom \attomicsperfrecall \attomicsperfrecallzoom \attomicsperfprecision \attomicsperfprecisionzoom \attomicsperffun \attomicsperffunzoom \attomicsperfauroc \attomicsperfauroczoom \LRPCrossAttOmicsSubset \CrossAttOmicsGateSelFreq
 		\robExtPrefixAllCompilationCommands \robExtCp \cacheTikz \robExtOutputDirectory \robExtCacheFolder
 		\ExplSyntaxOn \ExplSyntaxOff
@@ -37,9 +37,9 @@ UserWarnRegex =
 
 }
 UserWarn
-{
-	# Use \symcal instead of \mathcal
-	\mathcal
-	\mathbf
-	\mathbb
-}
+	{
+		# Use \symcal instead of \mathcal
+		\mathcal
+		\mathbf
+		\mathbb
+	}

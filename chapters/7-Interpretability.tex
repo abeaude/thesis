@@ -1,32 +1,81 @@
 \documentclass[../main.tex]{subfiles}
 \usepackage{silence}
 \WarningFilter{glossaries}{No \printglossary or \printglossaries found}
-
+\robExtConfigure{disable externalization}
 \begin{document}
 \ifSubfilesClassLoaded{%
-    \graphicspath{{figures/7-Interpretability/}}%
-    \setcounter{chapter}{6}%
+	\graphicspath{{figures/7-Interpretability/}}%
+	\setcounter{chapter}{6}%
 }{
-    \graphicspath{{../figures/7-Interpretability/}}%
+	\graphicspath{{../figures/7-Interpretability/}}%
 }
 \chapter{Explain with counterfactuals}\label{chap:counterfactuals}
 \minitocpage
 \section{Methods}
-\subsection{GAN}
-\subsection{Adversarial training}
-\subsection{metrics}
+	\subsection{GAN}
+		\begin{figure}[htbp]
+			\centering
+			\begin{tikzpicture}[inner sep=0pt, very thick]
+				\node at (0,0) [square, draw, minimum size=1.5cm] (xin) {\(x\)};
+				\node (gen) [right=1cm of xin.east, anchor=west, rounded rectangle, rounded rectangle west arc=none, draw, minimum height=1cm, minimum width=11mm] {\(G\)};
+				\node (delta) [right=1cm of gen.east, anchor=west,square, draw, minimum size=1.5cm] {\(\delta\)};
+				\node (add) [right=5mm of delta.east, anchor=west, draw, circle, minimum size=7.5mm] {};
+				\draw (add.north) -- (add.south);
+				\draw (add.west) -- (add.east);
+				\node (xcf) [right=5mm of add.east, anchor=west,square, draw, minimum size=1.5cm] {\(x^{\text{CF}}\)};
+				\node (cl1) [right=1cm of xcf.east, anchor=west, rounded rectangle, rounded rectangle west arc=none, draw, minimum height=1cm, minimum width=11mm] {\(\operatorname{Cl}\)};
+				\node (cly) [right=6mm of cl1.east, anchor=west] {\(\hat{y}\)};
+				\node (ycf) [right=1.5cm of cly.east, anchor=west] {\(y^{\text{CF}}\)};
+
+				\node (dis) [below=7mm of cl1.south, anchor=north, rounded rectangle, rounded rectangle west arc=none, draw, minimum height=1cm, minimum width=11mm] {\(D\)};
+				\node (realfake) at (dis.east -| cly.south)  {\(s\)};
+				\node[align=left] (labelrealfake) at (realfake.east -| ycf.south) {0 \\ 1};
+
+				\node (cl2) [above=7mm of cl1.north, anchor=south, rounded rectangle, rounded rectangle west arc=none, draw, minimum height=1cm, minimum width=11mm] {\(\operatorname{Cl}_{T}\)};
+				\node (cl2y) at (cl2.east -| cly.north)  {\(\hat{y}_{T}\)};
+				\node (ytissue) at (cl2y.east -| ycf.north) {\(y_{T}\)};
+
+				\node (xreal) at (xcf.south |- dis.east) [draw, square, minimum size=1.5cm, double copy shadow={shadow xshift=-.5ex, shadow yshift=.5ex, opacity=.5}, fill=white] {\(\symcal{X}\)};
+
+				\draw[-stealth] (xin.east) -- (gen.west);
+				\draw[-stealth] (gen.east) -- (delta.west);
+				\draw[-stealth] (delta.east) -- (add.west);
+				\draw[-stealth]  (xin.south) -- ++(0,-5mm) -| (add.south);
+				\draw[-stealth] (add.east) -- (xcf.west);
+				\draw[-stealth] (xcf.east) -- (cl1.west);
+				\draw[-stealth] (xcf.east) -- ++(4mm, 0) |- ([yshift=2mm]dis.west);
+				\draw[-stealth] ([yshift=-2mm]xreal.east) -- ([yshift=-2mm]dis.west);
+				\draw[-stealth] (xcf.east) -- ++(4mm, 0) |- (cl2.west);
+				\draw[-stealth] (cl1.east) -- (cly.west);
+				\draw[-stealth] (cl2.east) -- (cl2y.west);
+				\draw[-stealth] (dis.east) -- (realfake.west);
+				\draw[stealth-stealth, dashed] (cly.east) -- node [midway,above, yshift=0.5ex] {\(\symcal{L}_{\text{CE}}\)}  (ycf.west);
+				\draw[stealth-stealth, dashed] (cl2y.east) -- node [midway,above, yshift=0.5ex] {\(\symcal{L}_{\text{CE}}\)}  (ytissue.west);
+				\draw[stealth-stealth, dashed] (realfake.east) -- node [midway,above, yshift=0.5ex] {\(\symcal{L}_{\text{GAN}}\)}  (labelrealfake.west);
+			\end{tikzpicture}
+			\caption{Architecture of the counterfactual GAN}\label{fig:gan_cf}
+		\end{figure}
+	\subsection{Metrics}
 \section{Preliminary results}
+	\subsection{Adversarial study}
+		adversarial training used this package
+		comparison of different models, justification problem BatchNorm
+		how did we choose epsilon (distance class)
+		identify the optimal number of training steps for each model
+		compare different epsilon attacks
+		targeted vs untargeted
+		Metrics
+		neighbors characterization
+		\cite{SzegedyZSBEGF13}
 
- \cite{SzegedyZSBEGF13}
-
- 
-
- differences between ADV and CFs
+	\subsection{Counterfactuals}
 
 
 
 
 
- counterfactuals, could we compare the proposed treatments with, when available, the treatment scheme of the patient.
+
+
+		counterfactuals, could we compare the proposed treatments with, when available, the treatment scheme of the patient.
 
 \end{document}
