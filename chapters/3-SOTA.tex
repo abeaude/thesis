@@ -672,8 +672,10 @@
 	% https://www.pure.ed.ac.uk/ws/portalfiles/portal/370141683/A_Survey_of_CLINCIU_DOA01102019_VOR_CC_BY.pdf
 	% https://arxiv.org/pdf/1910.10045
 	% https://www.edps.europa.eu/system/files/2023-11/23-11-16_techdispatch_xai_en.pdf
-
-	Explainable artificial intelligence or interpretability is a growing field that developed in response to the increasing presence of \textit{black-box} models.
+% The easiest way to have interpretability is to use interpretable models such as decision tree or linear models.
+	The easiest way to have interpretability is to use \textit{white-box} or interpretable models such as decision tree or linear models.
+	The interpretability is obtained by limiting the model complexity and therefore limits the model's capacity to extract complex patterns. 
+	Explainable artificial intelligence or interpretability is a field that developed in response to the increasing presence of \textit{black-box} models.
 	The development of interpretable methods is motivated by:
 	\begin{itemize}[nosep]
 		\item ensuring models are bias free;
@@ -682,33 +684,42 @@
 	\end{itemize}
 	Interpretability can also help increase our knowledge by identifying new important features involved in the prediction.
 	In the healthcare domain such features can be considered as potential biomarkers.
-
-	, many terms used interchangeably: interpretability and explainability
-	explainability vs Interpretability
-	highlight that there is no fixed definition, highly discussed in the community/field
-	no clear consensus on the definition
-	\cite{clinciu-hastie-2019-survey} compare various definition of the terms
-	def often varies according to the researcher or the context
-
-	interpretability defined as the ability to get clear explanation supporting the decision
-	how to classify them, multiple classification are possible (cite other surveys)
-	how to classify the different methods: passive/Active (post-hoc/self explainable) local global
-	attribution/instance based/hidden semantics/rules (cite survey)
-
-	The easiest way to have interpretability is to use interpretable models such as decision tree or linear models.
-	also possible with more complex models such as deep learning ones
+	% https://arxiv.org/pdf/2201.08164
+	% https://nvlpubs.nist.gov/nistpubs/ir/2021/NIST.IR.8312.pdf
+	% https://link.springer.com/article/10.1007/s11023-023-09637-x#Sec3
+	% https://arxiv.org/pdf/1811.10154
+	% https://doi.org/10.1214/21-SS133
+	% https://academic.oup.com/bib/article/25/1/bbad453/7477798 !!!!
+	% https://arxiv.org/pdf/2003.07631
+	% https://www.edps.europa.eu/system/files/2023-11/23-11-16_techdispatch_xai_en.pdf
+	% https://www.biblio.univ-evry.fr/theses/2022/2022UPASG069.pdf
+	Terms such as interpretability or explainability are often used interchangeably. 
+	Some consider the terms as closely related but still distinguish them. 
+	Currently there are no consensus on the terms interpretability or explainability, the definition often varies and depends on the context of use or the researcher. 
+	The use of multiple definition for various terms that can overlap is discussed among researchers. 
+	\citeauthor{clinciu-hastie-2019-survey} compare the various definition used~\cite{clinciu-hastie-2019-survey}. 
+	In the rest of the manuscript no distinction between the two terms will be made and interpretability will be defined as the ability to understand the reasoning of a machine leading model supporting decision making.  
+	Many interpretability methods have been proposed and various taxonomies have been considered to classify the different approaches. 
+	% list some taxonomies and cite them 
+	There are two main approaches to interpret deep learning models: post-hoc and self-explainable approach. 
+	Post-hoc methods are applied on already trained models using a secondary approach dedicated to interpretability. 
+	Self-explainable methods use models that are able to provide a prediciton and a supporting interpretation. 
+	second level: local or global 
+	focus on local methods see for global methods 
+	
+	Present some self explaining methods 
 	self explainining models combine the modeling capacity of deep learning with a model able to explain directly its predicitons
 	how to do this
-	attention
+	attention (currently debated)
 	associate neurons to a concept (introduce knowledge)
 
-	However, it is not always possible to use interpretable models.
-	post-hoc explainability
+	However, it is not always possible to use self-explaining models %and post-hoc interpretability 
 
 	post hoc methods local:
 	attribution methods
 	perturbation methods (a specifc attribution methods)
 	instance based = prototypes
+	perturbations then counterfactuals
 	counterfactuals
 
 	% show some methods
@@ -812,5 +823,5 @@
 
 	At the time of writing counterfactual explanation have not yet been applied to omics but have already been applied in precision medicine in particular for treatment recommendation.
 
-
+	what is a clear explanation --> how to evaluate this 
 \end{document}
