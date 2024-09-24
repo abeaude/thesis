@@ -139,4 +139,5 @@
     },
     "terminal.integrated.defaultProfile.linux": "bash",
     "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
+    "latex-workshop.formatting.latex": "latexindent"
 }

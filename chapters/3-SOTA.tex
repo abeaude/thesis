@@ -672,9 +672,9 @@
 	% https://www.pure.ed.ac.uk/ws/portalfiles/portal/370141683/A_Survey_of_CLINCIU_DOA01102019_VOR_CC_BY.pdf
 	% https://arxiv.org/pdf/1910.10045
 	% https://www.edps.europa.eu/system/files/2023-11/23-11-16_techdispatch_xai_en.pdf
-% The easiest way to have interpretability is to use interpretable models such as decision tree or linear models.
+	% The easiest way to have interpretability is to use interpretable models such as decision tree or linear models.
 	The easiest way to have interpretability is to use \textit{white-box} or interpretable models such as decision tree or linear models.
-	The interpretability is obtained by limiting the model complexity and therefore limits the model's capacity to extract complex patterns. 
+	The interpretability is obtained by limiting the model complexity and therefore limits the model's capacity to extract complex patterns.
 	Explainable artificial intelligence or interpretability is a field that developed in response to the increasing presence of \textit{black-box} models.
 	The development of interpretable methods is motivated by:
 	\begin{itemize}[nosep]
@@ -693,27 +693,36 @@
 	% https://arxiv.org/pdf/2003.07631
 	% https://www.edps.europa.eu/system/files/2023-11/23-11-16_techdispatch_xai_en.pdf
 	% https://www.biblio.univ-evry.fr/theses/2022/2022UPASG069.pdf
-	Terms such as interpretability or explainability are often used interchangeably. 
-	Some consider the terms as closely related but still distinguish them. 
-	Currently there are no consensus on the terms interpretability or explainability, the definition often varies and depends on the context of use or the researcher. 
-	The use of multiple definition for various terms that can overlap is discussed among researchers. 
-	\citeauthor{clinciu-hastie-2019-survey} compare the various definition used~\cite{clinciu-hastie-2019-survey}. 
-	In the rest of the manuscript no distinction between the two terms will be made and interpretability will be defined as the ability to understand the reasoning of a machine leading model supporting decision making.  
-	Many interpretability methods have been proposed and various taxonomies have been considered to classify the different approaches. 
+	Terms such as interpretability or explainability are often used interchangeably.
+	Some consider the terms as closely related but still distinguish them.
+	Currently, there is no consensus on the terms interpretability or explainability; the definition often varies and depends on the context of use or the researcher.
+	The use of multiple definitions for various terms that may overlap is discussed among researchers.
+	\citeauthor{clinciu-hastie-2019-survey} compare the various definition used~\cite{clinciu-hastie-2019-survey}.
+	In the rest of the manuscript no distinction between the two terms will be made and interpretability will be defined as the ability to understand the reasoning of a machine leading model supporting decision making.
+	Many interpretability methods have been proposed and various taxonomies have been considered to classify the different approaches.
 	% list some taxonomies and cite them 
-	There are two main approaches to interpret deep learning models: post-hoc and self-explainable approach. 
-	Post-hoc methods are applied on already trained models using a secondary approach dedicated to interpretability. 
-	Self-explainable methods use models that are able to provide a prediciton and a supporting interpretation. 
-	second level: local or global 
-	focus on local methods see for global methods 
-	
-	Present some self explaining methods 
-	self explainining models combine the modeling capacity of deep learning with a model able to explain directly its predicitons
-	how to do this
-	attention (currently debated)
-	associate neurons to a concept (introduce knowledge)
+	There are two main approaches to interpret deep learning models: post-hoc and self-explainable approach.
+	Post-hoc methods are applied on already trained models using a secondary approach dedicated to interpretability.
+	Self-explainable methods use models that are interpretable by design, \ie{}able to provide a prediciton and a supporting interpretation.
+	The different approaches can be applied to get a local interpretation or a global one.
+	On the one hand, local interpretability methods provide interpretations of individual predictions.
+	On the other hand, global interpretability corresponds to understanding the overall decision logic of a model.
+	The rest of the manuscript will focus on local interpretability methods.
 
-	However, it is not always possible to use self-explaining models %and post-hoc interpretability 
+	Self-explaining models combine the modeling capacity of deep-learning with building blocks or training strategies favoring direct interpretability of the predictions.
+	\citeauthor{SENN} proposed \gls{senn} a generalization of a linear predictor~\cite{SENN}.
+	The model is composed of two branches, a concept encoder and a relevance parametrizer.
+	The concept encoder is used to map the raw input features to a set of interpretable concepts and the parametrizer learns the importance associated to each concept.
+	Those importance coefficients are used to aggregate the concepts, as a linear combination into a prediction.
+	Aggregating concepts with linear combination ensure interpretability of the importance coefficients.
+	The attention mechanism in its \textit{self} version is used to enrich an input representation by computing an attention score between pairs of inputs' elements~(\cref{sec:self_attention_transformer}).
+	All the paired score can be visualized through an attention map to see how each feature attends to other features.
+	Such visualization helps understand the prediction made by a model.
+	This vision of the attention as an interpretable block is currently debated~\cite{jain-wallace-2019-attention,wiegreffe-pinter-2019-attention}.
+	\citeauthor{jain-wallace-2019-attention} showed that high attention weights does not necessarily correlate with attribution scores~\cite{jain-wallace-2019-attention}.
+	\citeauthor{wiegreffe-pinter-2019-attention} highlihgted the importance of the definition of explainability to consider the attention mechanism as interpretable or not~\citeauthor{wiegreffe-pinter-2019-attention}.
+
+	While self-explaining models are the recommended way to achieve interpretability in the conctext of deep learning models~\cite{Rudin2019}, it is not always possible to use self-explaining models.
 
 	post hoc methods local:
 	attribution methods
@@ -742,7 +751,7 @@
 	The customer want a simpler explanation where he can focus on a few changes, and the proposed changes need to be realistic and actionable.
 	Proposing a change that is impossible to accomplish would be of little interest.
 	This simple example highlights the main properties required by counterfactuals explanations.
-	Those properties translate into a set of constrain in the optimization problem~(\cref{eq:opt_cf}):
+	Those properties translate into a set of constraints in the optimization problem~(\cref{eq:opt_cf}):
 	\begin{description}[
 			style=multiline,
 			leftmargin=!,
@@ -823,5 +832,5 @@
 
 	At the time of writing counterfactual explanation have not yet been applied to omics but have already been applied in precision medicine in particular for treatment recommendation.
 
-	what is a clear explanation --> how to evaluate this 
+	what is a clear explanation --> how to evaluate this
 \end{document}

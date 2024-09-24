@@ -203,7 +203,7 @@
 		colframe=codeframe,
 		#1
 	}
-	\newtcolorbox[auto counter, number within=chapter, crefname={see Box}{see Boxes}]{mybox}[2][]{title=Box~\thetcbcounter: #2, fontupper=\footnotesize, fontlower=\footnotesize, #1}
+	\newtcolorbox[auto counter, number within=chapter, crefname={see Box}{see Boxes}]{mybox}[2][]{title=Box~\thetcbcounter: #2, fontupper=\footnotesize, fontlower=\footnotesize, colframe=Prune, #1}
 	\BeforeBeginEnvironment{mybox}{
 		\begin{singlespace}
 			\mathversion{smaller}

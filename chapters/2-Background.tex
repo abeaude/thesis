@@ -117,7 +117,7 @@
 		\Glspl{gcn}, update node embeddings by aggregating information from neighboring nodes.
 		The embedding of node \(v\), \(h^{l+1}_{v} \in \symbb{R}^{d_{l+1}}\) is updated by combining its previous embedding \(h^{l}_{v} \in \symbb{R}^{d_{l}}\) with the aggregated embedding \(h^{l}_{v,\text{agg}}\) from neighboring nodes \(\symcal{N}_{v}\):
 		\begin{align}
-			h^{l+1}_{v}          & = f\left( \frac{h^{l}_{v}W^{l}}{\left|\symcal{N}_{v} \right|} + h^{l}_{v,\text{agg}}W^{l}\right)                                    \\
+			h^{l+1}_{v}          & = f\left( \frac{h^{l}_{v}W^{l}}{\left|\symcal{N}_{v} \right|} + h^{l}_{v,\text{agg}}W^{l}\right)                \\
 			h^{l}_{v,\text{agg}} & = \sum_{u \in \symcal{N}_{v}} \frac{h^{l}_{u}}{\sqrt{\left|\symcal{N}_{v} \right|\left|\symcal{N}_{u} \right|}}
 		\end{align}
 		\(W^{l} \in \symbb{R}^{d_{l}\times d_{l+1}}\) is the learnable weight matrix applied to the node embeddings, and \(f\) is a non-linear activation function, such as \(\operatorname{ReLU}\).
@@ -138,7 +138,7 @@
 			\item \textbf{Edge level}: predict the existence of an edge between two nodes.
 		\end{itemize}
 
-	\subsection{Self-attention and transformers}
+	\subsection{Self-attention and transformers}\label{sec:self_attention_transformer}
 		To correctly understand a sentence, one must relate words to the sentence's other words to augment their meaning.
 		In machine learning, this is achieved through attention mechanisms.
 		Attention mechanisms are a simple weighting of the data, and they enhance the data elements by dynamically including information about the input's context.
@@ -259,23 +259,23 @@
 		The \(\KL\) divergence measures how a probability distribution is different from another probability distribution.
 
 		\begin{mybox}[label={box:survival}]{Survial analysis}
-			Survival analysis corresponds to the analysis of the duration before an event occurs. 
+			Survival analysis corresponds to the analysis of the duration before an event occurs.
 			Survival and hazard functions are two fundamentals quantifies used in survival analysis.
-			Survival time is represented by a non-negative random variable \(T\). 
+			Survival time is represented by a non-negative random variable \(T\).
 			The survival function, \(S(t)\), represents the probability of a patient surviving past time \(t\):
 			\[S(t) = P(T > t)\]
 			The hazard function, \(\lambda(t)\), represents the probability that the event of interest will occur in the interval \(\Delta t\) knowing that it did not occur for a time \(t\):
 			\[\lambda(t) = \lim_{\Delta t \to 0} \frac{P(t \leq T < t + \Delta t | T \geq t)}{\Delta t}\]
-			A greater hazard correspond to a greater risk that the event occurs. 
+			A greater hazard correspond to a greater risk that the event occurs.
 			\tcbsubtitle{Survival data}
-			In survival analysis, for patient \(i\), \(\symbf{x}_{i}\) represents the feature or covariate vector, \(\delta_{i}\) is the event indicator taking 1 if the event occured and 0 for censored patient, and \(t_{i}\) represents the time at which the event occured or the censoring time for censored patient. 
+			In survival analysis, for patient \(i\), \(\symbf{x}_{i}\) represents the feature or covariate vector, \(\delta_{i}\) is the event indicator taking 1 if the event occured and 0 for censored patient, and \(t_{i}\) represents the time at which the event occured or the censoring time for censored patient.
 		\end{mybox}
 
-		In precision medicine a common task is to predict the time an event of interest occurs, also known as survival analysis~(\cref{box:survival}). 
-		One of the main challenge with survival analysis is censoring\footnote{only right censoring is considered here}: the event of interest is not experienced by some patient during the study. 
+		In precision medicine a common task is to predict the time an event of interest occurs, also known as survival analysis~(\cref{box:survival}).
+		One of the main challenge with survival analysis is censoring\footnote{only right censoring is considered here}: the event of interest is not experienced by some patient during the study.
 		The exact survival time is not knwon but the survival time is at least the period the patient has been followed.
-		Specific methods are needed to account for the partial information provided by censoring. 
-		Cox models or proportional hazards models are survival models to relate the time before an event occurs to one or more covariates~(\cref{box:cox}). 
+		Specific methods are needed to account for the partial information provided by censoring.
+		Cox models or proportional hazards models are survival models to relate the time before an event occurs to one or more covariates~(\cref{box:cox}).
 		Cox models have been adapted to deep learning architectures by replacing the relative risk score by an estimation from a neural network in the partial log-likelihood loss:
 		\begin{equation}
 			\symcal{L}_{Cox}\left(\theta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\hat{y}_i - \log \sum_{j \in \mathcal{R}(T_i)}\phi_j \right)\; \text{,} \label{eq:cox_loss}
@@ -286,13 +286,13 @@
 		Other approaches discretize the survival times and compute the survival function on those intervals or directly estimates the probability mass function with a neural network~\cite{Lee2018}.
 
 		\begin{mybox}[label={box:cox}]{Cox models}
-			The Cox proportional hazards model\footnote{The hazard ratio of two patients is idependant of time: \(\frac{\lambda(t | \symbf{x}_{i})}{\lambda(t | \symbf{x}_{j})} = e^{\beta\cdot \left(\symbf{x}_{i} - \symbf{x}_{j}\right)}\)} is a method used to estimate a patient survival from its covariates \(\symbf{x}\). 
-			The hazard function has two components, a baseline hazard \(\lambda_0(t)\) and a relative risk score \(e^{\beta \symbf{x}}\): 
+			The Cox proportional hazards model\footnote{The hazard ratio of two patients is idependant of time: \(\frac{\lambda(t | \symbf{x}_{i})}{\lambda(t | \symbf{x}_{j})} = e^{\beta\cdot \left(\symbf{x}_{i} - \symbf{x}_{j}\right)}\)} is a method used to estimate a patient survival from its covariates \(\symbf{x}\).
+			The hazard function has two components, a baseline hazard \(\lambda_0(t)\) and a relative risk score \(e^{\beta \symbf{x}}\):
 			\[\lambda(t | \symbf{x}) = \lambda_0(t) e^{\beta \symbf{x}}\]
-			The relative risk is estimated as a linear transformation of the covariates. 
+			The relative risk is estimated as a linear transformation of the covariates.
 			The model is estimated in two steps, in the first step the partial log-likelihood is maximized to estimate the parameters \(\beta\):
 			\[\ell\left(\beta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\beta \symbf{x} - \log \sum_{j \in \symcal{R}(T_i)}e^{\beta \symbf{x}} \right)\]
-			in a second step the baseline hazard is estimated. 
+			in a second step the baseline hazard is estimated.
 		\end{mybox}
 
 		There is no closed form to the optimization problem described in \cref{eq:dl_opt} to find the optimal parameters \(\theta^{*}\).
@@ -348,8 +348,8 @@
 			\min_{G} \max_{D} \symcal{L}_{GAN}\left(G,D\right) = \E_{x\sim p_{d}}\left[ \log\left(D\left(x\right)\right)\right] + \E_{z\sim p_{z}}\left[ \log\left( 1 - D\left(G\left(z\right)\right)\right)\right] \label{eq:gan_loss}
 		\end{equation}
 
-		In practice \gls{gan} training is implemented as an iterative process alternatin between \(k\) steps of optimizing \(D\) and one step optimizing \(G\). 
-		The complete training procedure is presented in \cref{alg:gan}. 
+		In practice \gls{gan} training is implemented as an iterative process alternatin between \(k\) steps of optimizing \(D\) and one step optimizing \(G\).
+		The complete training procedure is presented in \cref{alg:gan}.
 		\begin{algorithm}[htbp]
 			\DontPrintSemicolon
 			\KwIn{\(G\), \(D\), their respective parameters \(\theta_{G}\) and \(\theta_{D}\)}
@@ -372,21 +372,21 @@
 			}
 			\caption{\glsfmtshort{gan} training algorithm}\label{alg:gan}
 		\end{algorithm}
-		In practice, \glspl{gan} suffers from unstable training. 
-		Optimization of the \gls{gan} loss function \cref{eq:gan_loss} corresponds to the minimization of the \gls{js} divergence between \(p_{d}\) and \(p_{g}\). 
-		When the two distributions \(p_d\) and \(p_g\) do not overlap significantly, the discriminator will be perfect and have no difficulty distinguishing between the two distributions. 
+		In practice, \glspl{gan} suffers from unstable training.
+		Optimization of the \gls{gan} loss function \cref{eq:gan_loss} corresponds to the minimization of the \gls{js} divergence between \(p_{d}\) and \(p_{g}\).
+		When the two distributions \(p_d\) and \(p_g\) do not overlap significantly, the discriminator will be perfect and have no difficulty distinguishing between the two distributions.
 		It has been shown that a perfect discriminator leads to vanishing gradients on the generator~\cite{Arjovsky2017TowardsPM}.
-		The joint training of the two components corresponds to finding the Nash-equilibrium in a non-cooperative two-player game~\cite{Salimans2016ImprovedTF}. 
-		Each players aims at minimizing its cost function, \(\symcal{L}_{G}\left(\theta_{G}, \theta_{D}\right)\) for the generator and \(\symcal{L}_{D}\left(\theta_{G}, \theta_{D}\right)\) for the discriminator. 
+		The joint training of the two components corresponds to finding the Nash-equilibrium in a non-cooperative two-player game~\cite{Salimans2016ImprovedTF}.
+		Each players aims at minimizing its cost function, \(\symcal{L}_{G}\left(\theta_{G}, \theta_{D}\right)\) for the generator and \(\symcal{L}_{D}\left(\theta_{G}, \theta_{D}\right)\) for the discriminator.
 		As each component updates its weight concurrently, no convergence can be guaranteed.
-		\Glspl{gan} also suffers from model collapse, the generator ends always producing the same outputs that easily fools the discriminator. 
-		However, it fails to correctly capture the true data distribution \(p_{d}\) and produces samples with low diversity. 
+		\Glspl{gan} also suffers from model collapse, the generator ends always producing the same outputs that easily fools the discriminator.
+		However, it fails to correctly capture the true data distribution \(p_{d}\) and produces samples with low diversity.
 
-		\Gls{wgan}~\cite{WGAN} was proposed to address issues in the original \gls{gan} formulation. 
-		\citeauthor{WGAN} replaced the Jensen-shannon divergence with \(L^{1}\)-Wasserstein distance metric. 
-		Wasserstein distance is another way of comparing two distributions, it measures the minimum cost of transforming one probability distribution into another, and provide a meaningful distance even if distributions do not overlap. 
+		\Gls{wgan}~\cite{WGAN} was proposed to address issues in the original \gls{gan} formulation.
+		\citeauthor{WGAN} replaced the Jensen-shannon divergence with \(L^{1}\)-Wasserstein distance metric.
+		Wasserstein distance is another way of comparing two distributions, it measures the minimum cost of transforming one probability distribution into another, and provide a meaningful distance even if distributions do not overlap.
 		The discriminator is now called a critc that instead of classifying samples as real or fake provide a realness score\footnote{There are no more sigmoid activation at its output}.
-		The computation of the Wasserstein distance is complex and can be simplified by forcing the critic to be a K-Lipschitz function. 
+		The computation of the Wasserstein distance is complex and can be simplified by forcing the critic to be a K-Lipschitz function.
 		They add constraints on the critic \(D\), \(D\) must belongs to the set \( \symcal{D}\) of K-Lipschitz function:
 		\begin{equation}
 			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{WGAN}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \label{eq:wgan_loss}
@@ -396,7 +396,7 @@
 		\begin{multline}
 			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{WGAN}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \\ + \lambda \E_{\tilde{x}\sim p_{g}}\left[ {\left( {\left\|\nabla_{\tilde{x}}D\left(\tilde{x}\right) \right\|}_{2} -1 \right)}^{2}\right]  \label{eq:wgangp_loss}
 		\end{multline}
-		where \(\tilde{x}\) is a linearly interpolated sample between a true sample \(x\) and a generated one \(G\left(z\right)\). 
+		where \(\tilde{x}\) is a linearly interpolated sample between a true sample \(x\) and a generated one \(G\left(z\right)\).
 
 \section{Cancer biology}
 	%https://www.cell.com/fulltext/S0092-8674(11)00127-9
