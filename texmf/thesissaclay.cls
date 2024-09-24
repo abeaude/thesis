@@ -267,6 +267,7 @@
 	\renewcommand{\figurename}{Figure}%
 	\renewcommand{\tablename}{Tableau}%
 }
+\renewcommand*{\captionformat}{\ --\ }
 %%%%%%%%%%%%%%%%%%%%%
 %% CUSTOM COMMANDS %%
 %%%%%%%%%%%%%%%%%%%%%
@@ -279,7 +280,7 @@
 	\usekomafont{captionlabel}{\tablename\hspace{0.25em}\thetable}
 }
 \DefTblrTemplate{caption-sep}{default}{%
-	\usekomafont{captionlabel}{:}\enskip
+	\usekomafont{captionlabel}{\captionformat}\enskip
 }
 \DefTblrTemplate{caption-text}{default}{%
 	\usekomafont{caption}{\InsertTblrText{caption}}

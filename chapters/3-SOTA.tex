@@ -722,8 +722,18 @@
 	\citeauthor{jain-wallace-2019-attention} showed that high attention weights does not necessarily correlate with attribution scores~\cite{jain-wallace-2019-attention}.
 	\citeauthor{wiegreffe-pinter-2019-attention} highlihgted the importance of the definition of explainability to consider the attention mechanism as interpretable or not~\citeauthor{wiegreffe-pinter-2019-attention}.
 
-	While self-explaining models are the recommended way to achieve interpretability in the conctext of deep learning models~\cite{Rudin2019}, it is not always possible to use self-explaining models.
+	While self-explaining models are the recommended way to achieve interpretability in the context of deep learning models~\cite{Rudin2019}, it is not always possible to use self-explaining models.
+	Various post-hoc methods can be applied to explain individual predictions: attribution methods, prototypes or counterfactuals.
+	Prototypes based approaches return a set of instances from the training set supporting the instance to interpret.
+	Attribution methods aims at assigning scores to input features highlighting their impact on the model's output.
+	many methods:gradient based (integrated gradients, grad cam PathCNN ), lrp, deeplift shap lime sensitivity (perturbation)
+	using gradients, what represent gradients ? guided backprop --> Gradcam
+	saturating gradients --> deep lift reference inputs
 
+	backpropagate attribution signal decomposition of the signal LRP
+
+	LIME/SHAP
+	% add reference of papers using this in the precision medicine field. 
 	post hoc methods local:
 	attribution methods
 	perturbation methods (a specifc attribution methods)
@@ -731,11 +741,6 @@
 	perturbations then counterfactuals
 	counterfactuals
 
-	% show some methods
-	Post hoc: lrp, lime, shap most common often used in precision medicine
-	attribution methods
-
-	% way to introduce counterfactuals
 	A counterfatual explanation answers a \textit{what if} question: How would \(x\) change if \(y\) had been \(y^{\prime}\)?
 	\citeauthor{wachter2017counterfactual} provides a more formal definition of a counterfactual:
 	\begin{displaycquote}[adapted from][]{wachter2017counterfactual}[.]
@@ -749,7 +754,7 @@
 	\citeauthor{wachter2017counterfactual} used a distance in the label space for the first term, \({\left(g\left(x^{\text{CF}}\right) - y^{\text{CF}}\right)}^{2}\) and weighted Manhattan distance for the second term~\cite{wachter2017counterfactual}.
 	A common way to illustrate counterfactual explanation is a bank customer whom had its loan refused, a counterfactual explanation then represents the change that the customer needs to operate to get its loan accepted.
 	The customer want a simpler explanation where he can focus on a few changes, and the proposed changes need to be realistic and actionable.
-	Proposing a change that is impossible to accomplish would be of little interest.
+	Suggesting a change that is impossible to accomplish would be of little interest to the customer.
 	This simple example highlights the main properties required by counterfactuals explanations.
 	Those properties translate into a set of constraints in the optimization problem~(\cref{eq:opt_cf}):
 	\begin{description}[
@@ -830,7 +835,7 @@
 		\item solving the outer minimization problem, \ie{}updating model weights, on the computed adversarial examples\footnote{In practice, it is more common to also include the standard training loss, \ie{}include clean examples along the adversarial ones.}.
 	\end{enumerate}
 
-	At the time of writing counterfactual explanation have not yet been applied to omics but have already been applied in precision medicine in particular for treatment recommendation.
+	At the time of writing counterfactual explanation have not yet been applied to omics data but have already been applied in precision medicine to produce recommendations for type 2 diabetes patients~\cite{Lenatti2022}, or on radiography images to highlight problematic regions~\cite{Thiagarajan2022,Mertes2022}.
 
-	what is a clear explanation --> how to evaluate this
+	% what is a clear explanation --> how to evaluate this
 \end{document}
