@@ -11,3 +11,12 @@ https://github.com/FlamingTempura/bibtex-tidy
    \begin{mybox}[label=box:wgcna]{WGCNA}
 	This is a numbered box.
    \end{mybox}
+
+   include pdfx package 
+   replace section chapter with \namecref
+
+   https://tex.stackexchange.com/questions/118021/how-to-replace-all-by
+   latexdiff style = CCHANGEBAR or PDFCOMMENT (small diff only)CCHANGEBAR
+   FLOATENV
+   --packages=amsmath,hyperref,biblatex,cleveref,glossaries
+   --driver=xelatex

@@ -721,25 +721,34 @@
 	This vision of the attention as an interpretable block is currently debated~\cite{jain-wallace-2019-attention,wiegreffe-pinter-2019-attention}.
 	\citeauthor{jain-wallace-2019-attention} showed that high attention weights does not necessarily correlate with attribution scores~\cite{jain-wallace-2019-attention}.
 	\citeauthor{wiegreffe-pinter-2019-attention} highlihgted the importance of the definition of explainability to consider the attention mechanism as interpretable or not~\citeauthor{wiegreffe-pinter-2019-attention}.
+	In~\cite{DeepMOCCA}, authors used the attention weights from the self-attention graph pooling to identify driver genes of different cancer types.
 
 	While self-explaining models are the recommended way to achieve interpretability in the context of deep learning models~\cite{Rudin2019}, it is not always possible to use self-explaining models.
 	Various post-hoc methods can be applied to explain individual predictions: attribution methods, prototypes or counterfactuals.
 	Prototypes based approaches return a set of instances from the training set supporting the instance to interpret.
-	Attribution methods aims at assigning scores to input features highlighting their impact on the model's output.
-	many methods:gradient based (integrated gradients, grad cam PathCNN ), lrp, deeplift shap lime sensitivity (perturbation)
-	using gradients, what represent gradients ? guided backprop --> Gradcam
-	saturating gradients --> deep lift reference inputs
+	Attribution methods aims at assigning scores to input features (or individual neurons) highlighting their impact on the model's output.
+	As gradients of the loss function with respect to the input represents the impact of a small change in the input on the loss, they can be used as a proxy to estimate feature importance.
+	This idea have been used to create saliency maps highlighting important parts of the inputs~\cite{intGrad}.
+	Grad-CAM is another gradient-based approach designed to interpret images, the gradienu is backpropagated only up to the last convolutional layer~\cite{GradCAM}.
+	In PathCNN~\cite{PathCNN}, authors used Grad-CAM to identify important pathways in their pathway images.
+	With gradient based approaches, feature importance can be underestimated because of saturation,\ie{}perturbing the feature will not change the output and therefore the corresponding gradient will be null.
+	To circumvent this limitation, DeepLIFT proposed to use a baseline, the explanation is expressed relative to the choosen reference~\cite{DeepLIFT}.
+	\citeauthor{PNet}~\cite{PNet} scored neurons in a knowledge-based architecture with DeepLIFT to detect the most relevant biological functions.
+	\Gls{lrp} is another gradient-based attribution method backpropagating the output signal through the network according to a propagation rule~\cite{LRP}.
+	In DeepGONet~\cite{bourgeaisDeepGONetSelfexplainable2021}, \cite{bourgeaisDeepGONetSelfexplainable2021} explain prediction from a knowledge-based architecture with \gls{lrp} to identify import biological function (GO terms)
+	supporting the prediciton.
 
-	backpropagate attribution signal decomposition of the signal LRP
-
-	LIME/SHAP
-	% add reference of papers using this in the precision medicine field. 
-	post hoc methods local:
-	attribution methods
-	perturbation methods (a specifc attribution methods)
-	instance based = prototypes
-	perturbations then counterfactuals
-	counterfactuals
+	In~\cite{MOGONET}, a perturbation based approach was used to identify potential biomarkers.
+	Each feature is replaced by a 0, and the resulting decrease in classification performance is used as an importance score.
+	Enrichment analysis was then used to check for biological relevance of the identified important features.
+	LIME and SHAP also use a perturbation approach to estimate feature importance.
+	LIME~\cite{LIME} explains individual instances by finding an interpretable model, such as a linear model, that locally reproduces the original \textit{black-box} model predictions.
+	The interpretable model is obtained by fitting the linear model to generated points in the neighborhood of the point to explain.
+	The predictions of the \textit{black-box} model on the generated points are used as ground truth.
+	Such appraoch are costly as for each instance being explained a new local model needs to be constructed.
+	SHAP~\cite{SHAP} is a method estimating feature importance based on Shapley values from game theory.
+	The Shapley value of a feature represents its contribution to the prediciton, and the contribution can be interpreted as the importance of this feature.
+	A version of SHAP specifically designed for neural networks, DeepSHAP~\cite{DeepSHAP}, has been used in different works to identify important pathways and modality contributions~\cite{Liu2024}, the most important genes across multiple omics~\cite{Withnell2021,customics}, to identify most important CpGs site~\cite{levyMethylNetAutomatedModular2020a}.
 
 	A counterfatual explanation answers a \textit{what if} question: How would \(x\) change if \(y\) had been \(y^{\prime}\)?
 	\citeauthor{wachter2017counterfactual} provides a more formal definition of a counterfactual:

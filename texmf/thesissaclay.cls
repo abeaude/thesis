@@ -267,7 +267,9 @@
 	\renewcommand{\figurename}{Figure}%
 	\renewcommand{\tablename}{Tableau}%
 }
-\renewcommand*{\captionformat}{\ --\ }
+\renewcommand*{\captionformat}{\ ---\ }
+\renewcommand*{\figureformat}{\figurename~\thefigure}
+\renewcommand*{\tableformat}{\tablename~\thetable}
 %%%%%%%%%%%%%%%%%%%%%
 %% CUSTOM COMMANDS %%
 %%%%%%%%%%%%%%%%%%%%%
