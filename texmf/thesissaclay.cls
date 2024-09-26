@@ -198,7 +198,7 @@
 		listing only,
 		title=Listing~\thetcbcounter: #2,
 		minted language=python,
-		minted options={breaklines, autogobble, numberblanklines=false, fontsize=\small, fontfamily=SourceCode},
+		minted options={breaklines, autogobble, numberblanklines=false, fontsize=\footnotesize, fontfamily=SourceCode},
 		colback=codebg,
 		colframe=codeframe,
 		#1
@@ -234,7 +234,11 @@
 % 
 % see floatrowbytocbasic and floatrow
 %\newfontfamily{\lmm}{latinmodern-math.otf}[Scale=1, Path = fonts/]
-\newfontfamily{\sourcecode}{MonaspaceNeon.ttf}[Scale=1, Path=fonts/, Weight=200, Width=100,Slant=0, NFSSFamily=SourceCode]
+\newfontfamily{\sourcecode}{MonaspaceNeon.ttf}[
+	Scale=1,
+	Path=fonts/,
+	FontFace={bx}{n}{Font=MonaspaceNeon.ttf, Weight=400, Width=100, Slant=0},
+	Weight=200, Width=100,Slant=0, NFSSFamily=SourceCode]
 %%%%%%%%%%%%
 %% COLORS %%
 %%%%%%%%%%%%

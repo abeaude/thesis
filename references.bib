@@ -495,7 +495,6 @@
   eprint        = {2112.05682},
   eprinttype    = {arxiv},
   primaryclass  = {cs},
-  abstract      = {We present a very simple algorithm for attention that requires \$O(1)\$ memory with respect to sequence length and an extension to self-attention that requires \$O(\textbackslash log n)\$ memory. This is in contrast with the frequently stated belief that self-attention requires \$O(n\^2)\$ memory. While the time complexity is still \$O(n\^2)\$, device memory rather than compute capability is often the limiting factor on modern accelerators. Thus, reducing the memory requirements of attention allows processing of longer sequences than might otherwise be feasible. We provide a practical implementation for accelerators that requires \$O(\textbackslash sqrt\{n\})\$ memory, is numerically stable, and is within a few percent of the runtime of the standard implementation of attention. We also demonstrate how to differentiate the function while remaining memory-efficient. For sequence length 16384, the memory overhead of self-attention is reduced by 59X for inference and by 32X for differentiation.},
   archiveprefix = {arXiv},
   keywords      = {Computer Science - Machine Learning}
 }
@@ -512,7 +511,6 @@
   eprint        = {2209.07484},
   eprinttype    = {arxiv},
   primaryclass  = {cs},
-  abstract      = {While transformers have begun to dominate many tasks in vision, applying them to large images is still computationally difficult. A large reason for this is that self-attention scales quadratically with the number of tokens, which in turn, scales quadratically with the image size. On larger images (e.g., 1080p), over 60\% of the total computation in the network is spent solely on creating and applying attention matrices. We take a step toward solving this issue by introducing Hydra Attention, an extremely efficient attention operation for Vision Transformers (ViTs). Paradoxically, this efficiency comes from taking multi-head attention to its extreme: by using as many attention heads as there are features, Hydra Attention is computationally linear in both tokens and features with no hidden constants, making it significantly faster than standard self-attention in an off-the-shelf ViT-B/16 by a factor of the token count. Moreover, Hydra Attention retains high accuracy on ImageNet and, in some cases, actually improves it.},
   archiveprefix = {arXiv},
   keywords      = {/unread,Computer Science - Computer Vision and Pattern Recognition}
 }
@@ -2867,4 +2865,81 @@
   author    = {Withnell,  Eloise and Zhang,  Xiaoyu and Sun,  Kai and Guo,  Yike},
   year      = {2021},
   month     = aug
+}
+@inproceedings{TritonLang,
+  author    = {Tillet, Philippe and Kung, H. T. and Cox, David},
+  title     = {Triton: an intermediate language and compiler for tiled neural network computations},
+  year      = {2019},
+  isbn      = {9781450367196},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/3315508.3329973},
+  doi       = {10.1145/3315508.3329973},
+  booktitle = {Proceedings of the 3rd ACM SIGPLAN International Workshop on Machine Learning and Programming Languages},
+  pages     = {10–19},
+  numpages  = {10},
+  keywords  = {GPU, compiler, neural networks},
+  location  = {Phoenix, AZ, USA},
+  series    = {MAPL 2019}
+}
+@article{Lacan2023,
+  title     = {GAN-based data augmentation for transcriptomics: survey and comparative assessment},
+  volume    = {39},
+  issn      = {1367-4811},
+  url       = {http://dx.doi.org/10.1093/bioinformatics/btad239},
+  doi       = {10.1093/bioinformatics/btad239},
+  number    = {Supplement_1},
+  journal   = {Bioinformatics},
+  publisher = {Oxford University Press (OUP)},
+  author    = {Lacan,  Alice and Sebag,  Michèle and Hanczar,  Blaise},
+  year      = {2023},
+  month     = jun,
+  pages     = {i111–i120}
+}
+@inproceedings{FlashAttention,
+  author    = {Dao, Tri and Fu, Dan and Ermon, Stefano and Rudra, Atri and R\'{e}, Christopher},
+  booktitle = {Advances in Neural Information Processing Systems},
+  editor    = {S. Koyejo and S. Mohamed and A. Agarwal and D. Belgrave and K. Cho and A. Oh},
+  pages     = {16344--16359},
+  publisher = {Curran Associates, Inc.},
+  title     = {FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness},
+  url       = {https://proceedings.neurips.cc/paper_files/paper/2022/file/67d57c32e20fd0a7a302cb81d36e40d5-Paper-Conference.pdf},
+  volume    = {35},
+  year      = {2022}
+}
+@misc{Linformer,
+  title         = {Linformer: Self-Attention with Linear Complexity},
+  author        = {Sinong Wang and Belinda Z. Li and Madian Khabsa and Han Fang and Hao Ma},
+  year          = {2020},
+  eprint        = {2006.04768},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2006.04768}
+}
+@article{EfficientTransformers,
+  author     = {Tay, Yi and Dehghani, Mostafa and Bahri, Dara and Metzler, Donald},
+  title      = {Efficient Transformers: A Survey},
+  year       = {2022},
+  issue_date = {June 2023},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {55},
+  number     = {6},
+  issn       = {0360-0300},
+  url        = {https://doi.org/10.1145/3530811},
+  doi        = {10.1145/3530811},
+  journal    = {ACM Comput. Surv.},
+  month      = dec,
+  articleno  = {109},
+  numpages   = {28},
+  keywords   = {Transformers, attention, deep learning, neural networks}
+}
+@misc{wang2024comprehensivesurveycontinuallearning,
+  title         = {A Comprehensive Survey of Continual Learning: Theory, Method and Application},
+  author        = {Liyuan Wang and Xingxing Zhang and Hang Su and Jun Zhu},
+  year          = {2024},
+  eprint        = {2302.00487},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2302.00487}
 }

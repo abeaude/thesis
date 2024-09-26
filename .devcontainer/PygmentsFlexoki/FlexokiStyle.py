@@ -24,7 +24,7 @@ class FlexokiStyle(Style):
         
         
         Keyword: "#66800B",
-        Keyword.Namespace: "#AF3029",
+        Keyword.Namespace: "bold #AF3029",
         Keyword.Constant: "#AD8301",
         Keyword.Reserved: "#A02F6F",
         # Keyword.Type: "",

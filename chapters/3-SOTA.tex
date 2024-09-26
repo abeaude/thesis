@@ -673,17 +673,17 @@
 	% https://arxiv.org/pdf/1910.10045
 	% https://www.edps.europa.eu/system/files/2023-11/23-11-16_techdispatch_xai_en.pdf
 	% The easiest way to have interpretability is to use interpretable models such as decision tree or linear models.
-	The easiest way to have interpretability is to use \textit{white-box} or interpretable models such as decision tree or linear models.
-	The interpretability is obtained by limiting the model complexity and therefore limits the model's capacity to extract complex patterns.
+	The easiest way to have interpretability is to use \textit{white-box} or interpretable models such as decision trees or linear models.
+	Interpretability is obtained by limiting the model's complexity, which hinders the model's capacity to extract complex patterns.
 	Explainable artificial intelligence or interpretability is a field that developed in response to the increasing presence of \textit{black-box} models.
-	The development of interpretable methods is motivated by:
+	The development of interpretable methods is motivated by the following:
 	\begin{itemize}[nosep]
-		\item ensuring models are bias free;
+		\item ensuring models are bias-free;
 		\item better understanding models and ensuring they are working correctly and basing their prediction on relevant features;
 		\item legal aspect such as the right to explanation introduced with the GDPR.
 	\end{itemize}
-	Interpretability can also help increase our knowledge by identifying new important features involved in the prediction.
-	In the healthcare domain such features can be considered as potential biomarkers.
+	Interpretability can also increase our knowledge by identifying new important features involved in the prediction.
+	In the healthcare domain, such features can be considered as potential biomarkers.
 	% https://arxiv.org/pdf/2201.08164
 	% https://nvlpubs.nist.gov/nistpubs/ir/2021/NIST.IR.8312.pdf
 	% https://link.springer.com/article/10.1007/s11023-023-09637-x#Sec3
@@ -695,76 +695,76 @@
 	% https://www.biblio.univ-evry.fr/theses/2022/2022UPASG069.pdf
 	Terms such as interpretability or explainability are often used interchangeably.
 	Some consider the terms as closely related but still distinguish them.
-	Currently, there is no consensus on the terms interpretability or explainability; the definition often varies and depends on the context of use or the researcher.
+	There is yet to be a consensus on the terms interpretability or explainability; the definition often varies and depends on the context of use or the researcher.
 	The use of multiple definitions for various terms that may overlap is discussed among researchers.
 	\citeauthor{clinciu-hastie-2019-survey} compare the various definition used~\cite{clinciu-hastie-2019-survey}.
-	In the rest of the manuscript no distinction between the two terms will be made and interpretability will be defined as the ability to understand the reasoning of a machine leading model supporting decision making.
-	Many interpretability methods have been proposed and various taxonomies have been considered to classify the different approaches.
+	In the rest of the manuscript, no distinction between the two terms will be made, and interpretability will be defined as the ability to understand the reasoning of a machine learning model supporting decision-making.
+	Many interpretability methods have been proposed, and various taxonomies have been considered to classify the different approaches.
 	% list some taxonomies and cite them 
-	There are two main approaches to interpret deep learning models: post-hoc and self-explainable approach.
-	Post-hoc methods are applied on already trained models using a secondary approach dedicated to interpretability.
-	Self-explainable methods use models that are interpretable by design, \ie{}able to provide a prediciton and a supporting interpretation.
+	There are two main approaches to interpreting deep learning models: post-hoc and self-explainable approaches.
+	Post-hoc methods are applied to already trained models using a secondary approach dedicated to interpretability.
+	Self-explainable methods use models that are interpretable by design, \ie{}able to provide a prediction and a supporting interpretation.
 	The different approaches can be applied to get a local interpretation or a global one.
 	On the one hand, local interpretability methods provide interpretations of individual predictions.
 	On the other hand, global interpretability corresponds to understanding the overall decision logic of a model.
 	The rest of the manuscript will focus on local interpretability methods.
 
-	Self-explaining models combine the modeling capacity of deep-learning with building blocks or training strategies favoring direct interpretability of the predictions.
+	Self-explaining models combine the modeling capacity of deep learning with building blocks or training strategies favoring direct interpretability of the predictions.
 	\citeauthor{SENN} proposed \gls{senn} a generalization of a linear predictor~\cite{SENN}.
-	The model is composed of two branches, a concept encoder and a relevance parametrizer.
-	The concept encoder is used to map the raw input features to a set of interpretable concepts and the parametrizer learns the importance associated to each concept.
-	Those importance coefficients are used to aggregate the concepts, as a linear combination into a prediction.
-	Aggregating concepts with linear combination ensure interpretability of the importance coefficients.
+	The model comprises two branches: a concept encoder and a relevance parametrizer.
+	The concept encoder maps the raw input features to a set of interpretable concepts, and the parametrizer learns the importance associated with each concept.
+	Those importance coefficients aggregate the concepts as a linear combination into a prediction.
+	Aggregating concepts with linear combination ensure the interpretability of the importance coefficients.
 	The attention mechanism in its \textit{self} version is used to enrich an input representation by computing an attention score between pairs of inputs' elements~(\cref{sec:self_attention_transformer}).
-	All the paired score can be visualized through an attention map to see how each feature attends to other features.
+	All the paired scores can be visualized through an attention map to see how each feature attends to other features.
 	Such visualization helps understand the prediction made by a model.
 	This vision of the attention as an interpretable block is currently debated~\cite{jain-wallace-2019-attention,wiegreffe-pinter-2019-attention}.
-	\citeauthor{jain-wallace-2019-attention} showed that high attention weights does not necessarily correlate with attribution scores~\cite{jain-wallace-2019-attention}.
-	\citeauthor{wiegreffe-pinter-2019-attention} highlihgted the importance of the definition of explainability to consider the attention mechanism as interpretable or not~\citeauthor{wiegreffe-pinter-2019-attention}.
+	\citeauthor{jain-wallace-2019-attention} showed that high attention weights do not necessarily correlate with attribution scores~\cite{jain-wallace-2019-attention}.
+	\citeauthor{wiegreffe-pinter-2019-attention} highlighted the importance of the definition of explainability to consider the attention mechanism as interpretable or not~\citeauthor{wiegreffe-pinter-2019-attention}.
 	In~\cite{DeepMOCCA}, authors used the attention weights from the self-attention graph pooling to identify driver genes of different cancer types.
 
 	While self-explaining models are the recommended way to achieve interpretability in the context of deep learning models~\cite{Rudin2019}, it is not always possible to use self-explaining models.
-	Various post-hoc methods can be applied to explain individual predictions: attribution methods, prototypes or counterfactuals.
-	Prototypes based approaches return a set of instances from the training set supporting the instance to interpret.
-	Attribution methods aims at assigning scores to input features (or individual neurons) highlighting their impact on the model's output.
-	As gradients of the loss function with respect to the input represents the impact of a small change in the input on the loss, they can be used as a proxy to estimate feature importance.
-	This idea have been used to create saliency maps highlighting important parts of the inputs~\cite{intGrad}.
-	Grad-CAM is another gradient-based approach designed to interpret images, the gradienu is backpropagated only up to the last convolutional layer~\cite{GradCAM}.
+	Various post-hoc methods can be applied to explain individual predictions: attribution methods, prototypes, or counterfactuals.
+	Prototype-based approaches return a set of instances from the training set that supports the instance to be interpreted.
+	Attribution methods aim at assigning scores to input features (or individual neurons), highlighting their impact on the model's output.
+	As gradients of the loss function with respect to the input represent the impact of a small change in the input on the loss, they can be used as a proxy to estimate feature importance.
+	This idea has been used to create saliency maps highlighting important parts of the inputs~\cite{intGrad}.
+	Grad-CAM is another gradient-based approach designed to interpret images, and the gradient is backpropagated only up to the last convolutional layer~\cite{GradCAM}.
 	In PathCNN~\cite{PathCNN}, authors used Grad-CAM to identify important pathways in their pathway images.
-	With gradient based approaches, feature importance can be underestimated because of saturation,\ie{}perturbing the feature will not change the output and therefore the corresponding gradient will be null.
-	To circumvent this limitation, DeepLIFT proposed to use a baseline, the explanation is expressed relative to the choosen reference~\cite{DeepLIFT}.
+	With gradient-based approaches, feature importance can be underestimated because of saturation,\ie{}perturbing the feature will not change the output, and therefore the corresponding gradient will be null.
+	To circumvent this limitation, DeepLIFT proposed to use a baseline; the explanation is expressed relative to the chosen reference~\cite{DeepLIFT}.
 	\citeauthor{PNet}~\cite{PNet} scored neurons in a knowledge-based architecture with DeepLIFT to detect the most relevant biological functions.
 	\Gls{lrp} is another gradient-based attribution method backpropagating the output signal through the network according to a propagation rule~\cite{LRP}.
 	In DeepGONet~\cite{bourgeaisDeepGONetSelfexplainable2021}, \cite{bourgeaisDeepGONetSelfexplainable2021} explain prediction from a knowledge-based architecture with \gls{lrp} to identify import biological function (GO terms)
-	supporting the prediciton.
+	supporting the prediction.
 
-	In~\cite{MOGONET}, a perturbation based approach was used to identify potential biomarkers.
+	In~\cite{MOGONET}, a perturbation-based approach was used to identify potential biomarkers.
 	Each feature is replaced by a 0, and the resulting decrease in classification performance is used as an importance score.
-	Enrichment analysis was then used to check for biological relevance of the identified important features.
+	Enrichment analysis was then used to check for the biological relevance of the identified important features.
 	LIME and SHAP also use a perturbation approach to estimate feature importance.
 	LIME~\cite{LIME} explains individual instances by finding an interpretable model, such as a linear model, that locally reproduces the original \textit{black-box} model predictions.
 	The interpretable model is obtained by fitting the linear model to generated points in the neighborhood of the point to explain.
 	The predictions of the \textit{black-box} model on the generated points are used as ground truth.
-	Such appraoch are costly as for each instance being explained a new local model needs to be constructed.
+	Such an approach is costly as a new local model needs to be constructed for each instance being explained.
 	SHAP~\cite{SHAP} is a method estimating feature importance based on Shapley values from game theory.
-	The Shapley value of a feature represents its contribution to the prediciton, and the contribution can be interpreted as the importance of this feature.
-	A version of SHAP specifically designed for neural networks, DeepSHAP~\cite{DeepSHAP}, has been used in different works to identify important pathways and modality contributions~\cite{Liu2024}, the most important genes across multiple omics~\cite{Withnell2021,customics}, to identify most important CpGs site~\cite{levyMethylNetAutomatedModular2020a}.
+	The Shapley value of a feature represents its contribution to the prediction, and the contribution can be interpreted as the importance of this feature.
+	A version of SHAP designed explicitly for neural networks, DeepSHAP~\cite{DeepSHAP}, has been used in different works to identify important pathways and modality contributions~\cite{Liu2024}, the most important genes across multiple omics~\cite{Withnell2021,customics}, to identify most important CpGs site~\cite{levyMethylNetAutomatedModular2020a}.
 
 	A counterfatual explanation answers a \textit{what if} question: How would \(x\) change if \(y\) had been \(y^{\prime}\)?
 	\citeauthor{wachter2017counterfactual} provides a more formal definition of a counterfactual:
 	\begin{displaycquote}[adapted from][]{wachter2017counterfactual}[.]
 		\(y\) was predicted because input \(x\) had values \(\left(x_{1}, x_{2}, \ldots\right)\). If \(x\) instead had values \(\left(x_{1}^{\prime}, x_{2}^{\prime}, \ldots\right)\) and all other variables had remain constant, \(y^{\prime}\) would have been predicted
 	\end{displaycquote}
-	\citeauthor{wachter2017counterfactual} formulated the search of counterfactuals as an optimization problem minimimizing the distance between the counterfactual \(x^{\text{CF}}\) and the original point \(x\) whith the constraint that the class predicted on the counterfactual is the desired class \(y^{\text{CF}}\):
+	\citeauthor{wachter2017counterfactual} formulated the search of counterfactuals as an optimization problem minimizing the distance between the counterfactual \(x^{\text{CF}}\) and the original point \(x\) with the constraint that the class predicted on the counterfactual is the desired class \(y^{\text{CF}}\):
 	\begin{equation}
 		\argmin_{x^{\text{CF}}} \symcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right)\label{eq:opt_cf}
 	\end{equation}
-	where \(\symcal{L}\) is a loss measuring the closeness of the predicted class from the counterfactual to the desired class and \(d\) is a distance measure.
+	where \(\symcal{L}\) is a loss measuring the closeness of the predicted class from the counterfactual to the desired class, and \(d\) is a distance measure.
 	\citeauthor{wachter2017counterfactual} used a distance in the label space for the first term, \({\left(g\left(x^{\text{CF}}\right) - y^{\text{CF}}\right)}^{2}\) and weighted Manhattan distance for the second term~\cite{wachter2017counterfactual}.
-	A common way to illustrate counterfactual explanation is a bank customer whom had its loan refused, a counterfactual explanation then represents the change that the customer needs to operate to get its loan accepted.
-	The customer want a simpler explanation where he can focus on a few changes, and the proposed changes need to be realistic and actionable.
+	A common way to illustrate a counterfactual explanation is a bank customer who had their loan refused; a counterfactual explanation represents the change the customer needs to operate to get their loan accepted.
+	The customer wants a more straightforward explanation where he can focus on a few changes, and the proposed changes need to be realistic and actionable.
 	Suggesting a change that is impossible to accomplish would be of little interest to the customer.
-	This simple example highlights the main properties required by counterfactuals explanations.
+	This simple example highlights the main properties required by counterfactual explanations.
 	Those properties translate into a set of constraints in the optimization problem~(\cref{eq:opt_cf}):
 	\begin{description}[
 			style=multiline,
@@ -772,8 +772,8 @@
 			labelwidth=3cm,
 		]
 		\item[Actionnability]
-			A counterfactual should only change features that are mutable.
-			The optimization problem describe in \cref{eq:opt_cf} is updated as follow to consider this constraint:
+			A counterfactual should only change mutable features.
+			The optimization problem described in \cref{eq:opt_cf} is updated as follows to consider this constraint:
 			\[\argmin_{x^{\text{CF}} \in \symcal{A}} \symcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right)\]
 			where \(\symcal{A}\) is the set of actionable features.
 		\item[Sparsity\label{item:cf_sparse}]
@@ -783,8 +783,8 @@
 				\argmin_{x^{\text{CF}} \in \symcal{A}} \symcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right) + s\left(x^{\text{CF}}-x\right)
 			\end{equation*}
 		\item[Data manifold closeness\label{item:cf_data_manifold}]
-			A good counterfactual is a point that is realistic, a point that is near the training data and respect the data distribution.
-			This constraint is added to the optimization problem by adding a new penalty term \(l\) forcing the generated counterfactual point to adhere to the original distribution \(\symcal{X}\):
+			A good counterfactual is a realistic point, a point that is near the training data and respects the data distribution.
+			This constraint is added to the optimization problem by adding a new penalty term \(l\), forcing the generated counterfactual point to adhere to the original distribution \(\symcal{X}\):
 			\begin{multline*}
 				\argmin_{x^{\text{CF}} \in \symcal{A}} \symcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right)\\ + s\left(x^{\text{CF}}-x\right) + l\left(x^{\text{CF}}, \symcal{X}\right)
 			\end{multline*}
@@ -795,44 +795,44 @@
 	Another term, \(\symcal{L}_{\operatorname{Cl}}\left(\operatorname{Cl}\left(x^{\text{CF}}\right), y^{\text{CF}}\right)\) is added to the \gls{gan} training objective~(\cref{eq:wgangp_loss}) to ensure that the generated counterfactual changes the prediction made by the classifier \(\operatorname{Cl}\), usually this loss term is chosen as the cross-entropy.
 	There are some drawbacks to using this strategy.
 	Firstly, the \gls{gan} is only trained to change the prediction to one specific class.
-	A \gls{gan} needs to be trained for each target class.
-	Secondly, for a specifc input the \gls{gan} will always generate the same counterfactual as there are no variability in the generation process.
+	A \gls{gan} must be trained for each target class.
+	Secondly, for a specific input, the \gls{gan} will always generate the same counterfactual as there is no variability in the generation process.
 	\citeauthor{Yang2021ModelBasedCS} proposed an approache based on \glspl{cgan}~\cite{Yang2021ModelBasedCS}.
-	The generator accept a random vector as input but is conditionned by the sample being explained, allowing the generation of a diverse set of counterfactuals explanation.
+	The generator accepts a random vector as input but is conditioned by the sample being explained, allowing the generation of a diverse set of counterfactual explanations.
 
 	\begin{mybox}[label={box:adversarial}]{Adversarial examples}
 		An adversarial example, \(\symbf{x}^{\ast}\), is an instance \(\symbf{x}\) with the addition of a small perturbation \(\delta\) that is incorrectly predicted by a machine learning model~\cite{Szegedy2013IntriguingPO}.
 		Lets consider a model \(g:\symcal{X} \mapsto \symbb{R}^{C} \) mapping examples from the data space \(\symcal{X}\) to the prediction space \(\symbb{R}^{C}\) and a loss function \(\symcal{L}\left(g\left(\symbf{x}\right), y \right)\) measuring how well an example is classified.
-		Adversarial examples are obtained by finding the smallest perturbation changing the predicted class which translate into the following optimization problem:
+		Adversarial examples are obtained by finding the smallest perturbation changing the predicted class, which translates into the following optimization problem:
 		\[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)\]
 		where \(\Delta = \left\{\delta: \left\|\delta\right\|_{p} \leq \varepsilon \right\}\) is the allowed set of perturbation.
-		This constrains ensures that the generated adversarial example is as close as possible to the original input by projecting them onto the \(\ell_{p}\)-norm ball.
-		Different approaches have been proposed to solve this problem, the most common is finding a lower bound with gradient ascent on \(\delta\):
+		This constraint ensures that the generated adversarial example is as close as possible to the original input by projecting them onto the \(\ell_{p}\)-norm ball.
+		Different approaches have been proposed to solve this problem, and the most common is finding a lower bound with gradient ascent on \(\delta\):
 		\[\delta^{t+1} = \delta^{t} + \eta \nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta^{t}\right), y \right)\]
-		For \(\ell_{\infty}\)-norm, the projection onto the corresponding ball simply corresponds to clipping the value of \(\delta\) to the range \(\left[-\varepsilon, \varepsilon\right]\).
+		For \(\ell_{\infty}\)-norm, the projection onto the corresponding ball corresponds to clipping the value of \(\delta\) to the range \(\left[-\varepsilon, \varepsilon\right]\).
 		Fast gradient sign method~\cite{FGSM} has been proposed to find the perturbation in a single optimization step: \(\delta = \varepsilon \operatorname{sign}\left(\nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta^{t}\right), y \right)\right)\)\footnote{\(\delta\) is initialized as the zero vector.}.
 		On the contrary, \gls{pgd} attacks~\cite{PGDAttacks,PGDAttacks2} uses the classical iterative procedure to solve the maximization problem: \(\delta^{t+1} = \symcal{P}\left(\delta^{t} + \eta \nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta^{t}\right), y \right)\right)\), where \(\symcal{P}\) represents the projection onto the \(\ell_{p}\)-norm ball\footnote{For \(p = \infty\) this corresponds to clipping. For \(p =2\), the projection corresponds to \(\symcal{P}\left(z\right) = \varepsilon \frac{z}{\max\left(\varepsilon, \left\|z\right\|_{2}\right)}\).}
 
-		Approaches to solve exactly the constrained optimization problem with mixed integer linear programming have also been proposed~\cite{tjeng2018evaluating} but are only applicable to small models.
-		Other approaches proposed to find an upper-bound to the optimization problem providing garuantee of robustness of the model~\cite{pmlr-v80-wong18a}.
+		Approaches to solving exactly the constrained optimization problem with mixed integer linear programming have also been proposed~\cite{tjeng2018evaluating} but are only applicable to small models.
+		Other approaches have been proposed to find an upper bound to the optimization problem, providing a guarantee of the robustness of the model~\cite{pmlr-v80-wong18a}.
 
-		Only untargeted attacks were presented but it is possible to craft targeted attacks where the target label, \(y^{\ast}\), is predefined.
+		Only untargeted attacks were presented, but it is possible to craft targeted attacks where the target label, \(y^{\ast}\), is predefined.
 		The following optimization problem is then considered:
 		\[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right) - \symcal{L}\left(g\left(\symbf{x}+\delta\right), y^{\ast} \right)\]
 	\end{mybox}
 
 	Adversarial examples and counterfactual explanations are obtained by solving similar optimization problems~\cite{Pawelczyk2021ExploringCE,Freiesleben2021}.
 	Adversarial examples are also obtained by finding the minimal perturbation changing model prediction on a given example~(\cref{box:adversarial})~\cite{Szegedy2013IntriguingPO}.
-	As they solve similar optimization problem there are some discussion around their relationship.
-	\citeauthor{wachter2017counterfactual} already identified this close relationships between the two concepts, and highlighted a difference in the distance used~\cite{wachter2017counterfactual}.
-	Adversarial attacks generates perturbation aimed at being imperceptible whereas counterfactual explanation encourages minimal changes~(see \ref{item:cf_sparse} constraint).
-	They also stated that adversarial examples represents impossible points but counterfactuals are realistic points~(see \ref{item:cf_data_manifold} constraint).
+	As they solve similar optimization problems, there are some discussions around their relationship.
+	\citeauthor{wachter2017counterfactual} already identified this close relationship between the two concepts and highlighted a difference in the distance used~\cite{wachter2017counterfactual}.
+	Adversarial attacks generate perturbation aimed at being imperceptible, whereas counterfactual explanation encourages minimal changes~(see \ref{item:cf_sparse} constraint).
+	They also stated that adversarial examples represent impossible points, but counterfactuals are realistic points~(see \ref{item:cf_data_manifold} constraint).
 	On the contrary, \citeauthor{browne2020} see counterfactuals and adversarial examples as mathematically equivalent, their main differences being in terms of semantic~\cite{browne2020}.
-	In \cite[][8]{Freiesleben2021}, \citeauthor{Freiesleben2021} provides a detailled summary on the various opinions around the relation between counterfactuals and adversarial examples.
+	In \cite[][8]{Freiesleben2021}, \citeauthor{Freiesleben2021} provides a detailed summary of the various opinions around the relation between counterfactuals and adversarial examples.
 	\citeauthor{Pawelczyk2021ExploringCE} proposed a theoritical comparison of a counterfactual generation method~\cite{wachter2017counterfactual} and an adversarial one~\cite{Carlini2016TowardsET}.
 	They identified an upper bound on the distance between the solution of the two approaches~\cite{Pawelczyk2021ExploringCE}.
 
-	Due to the close proximity between counterfactuals and adversarial examples, it is recommended to have models robust to adversarial attacks.
+	Due to the close proximity between counterfactuals and adversarial examples, it is recommended that models be robust to adversarial attacks.
 	The most effective strategy is an adversarial training of the model.
 	Adversarial training is achieved by solving the following min-max optimization problem:
 	\begin{equation}
@@ -844,7 +844,7 @@
 		\item solving the outer minimization problem, \ie{}updating model weights, on the computed adversarial examples\footnote{In practice, it is more common to also include the standard training loss, \ie{}include clean examples along the adversarial ones.}.
 	\end{enumerate}
 
-	At the time of writing counterfactual explanation have not yet been applied to omics data but have already been applied in precision medicine to produce recommendations for type 2 diabetes patients~\cite{Lenatti2022}, or on radiography images to highlight problematic regions~\cite{Thiagarajan2022,Mertes2022}.
+	At the time of writing, counterfactual explanations have not yet been applied to omics data but have already been applied in precision medicine to produce recommendations for type 2 diabetes patients~\cite{Lenatti2022}, or on radiography images to highlight problematic regions~\cite{Thiagarajan2022,Mertes2022}.
 
 	% what is a clear explanation --> how to evaluate this
 \end{document}
