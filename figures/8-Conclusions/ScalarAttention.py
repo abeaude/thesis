@@ -3,16 +3,12 @@ import triton.language as tl
 
 @triton.jit
 def scalar_attention_kernel(
-    output_ptr,
-    q_ptr, k_ptr, v_ptr,
-    n_cols,
-    BLOCK_SIZE: tl.constexpr,
+    output_ptr, q_ptr, k_ptr, v_ptr,
+    n_cols, BLOCK_SIZE: tl.constexpr,
 ):
-    # Parallelize across rows
     row_idx = tl.program_id(0)
     q_start_ptr = q_ptr + row_idx
     k_offsets = tl.arange(0, BLOCK_SIZE)
-    # Mask to guard memory ops against out-of-bounds accesses.
     mask = k_offsets < n_cols
     q = tl.load(q_start_ptr)
     k = tl.load(k_ptr + k_offsets, mask=mask, other=float('inf'))

@@ -1,7 +1,7 @@
 \documentclass[../main.tex]{subfiles}
 \usepackage{silence}
 \WarningFilter{glossaries}{No \printglossary or \printglossaries found}
-
+\robExtConfigure{disable externalization}
 \begin{document}
 \ifSubfilesClassLoaded{%
 	\graphicspath{{figures/8-Conclusions/}}%
@@ -12,6 +12,7 @@
 \chapter{Conclusions and Perspectives}
 \minitocpage
 \section{Conclusions}
+
 \section{Perspectives}
 	This section aims to expand on the work described in this manuscript and discuss broader perspectives related to the precision medicine field.
 	\subsection{Removing groups in AttOmics}\label{sec:scalar_attention}
@@ -41,15 +42,13 @@
 		\begin{figure}[htbp]
 			\centering
 			\begin{subcaptiongroup}
-				%\includegraphics{}
+				\includegraphics{ScalarAttentionBenchmark.pdf}
 				\phantomcaption\label{fig:lin_attention_benchA}
 				\phantomcaption\label{fig:lin_attention_benchB}
 			\end{subcaptiongroup}
 			\caption{Comparison of the memory usage~\subref{fig:lin_attention_benchA} and the computation time~\subref{fig:lin_attention_benchB} of a \textcolor[HTML]{3969AC}{PyTorch} and a \textcolor[HTML]{F2B701}{Triton} implementation of the ScalarAttention}
 			\label{fig:lin_attention_bench}
 		\end{figure}
-
-		Considering direct features interactions in omics profiles would open up the possibility to regularize the attention map with known interactions.
 
 	\subsection{Extending CrossAttOmics to other type of modalities}
 		In \cref{chap:crossattomics}, we introduced CrossAttOmics a deep learning architecture to integrate multi-omics data.
@@ -60,18 +59,14 @@
 		A modality interaction graph would define on which modality pairs the cross-attention is computed and the cross-attention matrix could then be masked or regularized\footnote{see discussion on knowledge integration in \cref{sec:persp_knwoledged}.} to focus on direct relation ships.
 		For instance an \gls{mirna} is expected to only interact with its \gls{mrna} targets\footnote{some \gls{mrna} targets are experimentally verified and other are putative targets based on the sequence complementarity.}.
 
-		% TODO: FIGURE to show masked attention map
-	\subsection{Role of interpretability in precision medicine}
-		consider a model that is able to find a drug that is working in a group of patients
-		do we need to know why to treat patient, adverse effect have a model that can accurately predict adverse effects
-		but from a research standpoint it is interesting to how the drug works but more importantly why the drug is not working is other patients.
-
 	\subsection{Biological knowledge}\label{sec:persp_knwoledged}
 		Biolgically-informed architectures are common when applying deep learning to biological problems as they provide a strong inductive bias.
 		However, adding knowledge into the deep learning architectures is challenging as they are things that are still unknown\footnote{This is probably more a philosophical question to know whether we have a complete understanding of the biological mechanism or if there is still some to be discovered.}.
 		For instance, annotations mainly cover coding genes, but noncoding genes are known to be involved in gene expression regulation.
 		Focusing only on annotated genes would leave out many features\footnote{For instance in \gls{go} only XX \gls{ncrna} are annotated} and limits model capacity to consider all interactions, which at the end might limit the predictive performances.
 		Moreover, excluding unannotated features prevents researchers from discovering new biomarkers that could be detected by training models on all available features.
+		Instead of excluding unannotated features, a regularization favoring knwon relationships could be added to the training objective.
+		This kind of approach allow to exploit knowledge while allowing the network to use unannotated features and potentially discover new features interactions.
 
 		Another aspect of knowledge integration is the continual construction of our understanding of biological mechanisms; some things we consider true become invalid, and newly discovered things enrich our knowledge.
 		This means that a model constructed at time \(T\) might become invalid at time \(T+1\) because our knowledge has evolved.
@@ -79,16 +74,33 @@
 		Continual learning might provide opportunities to develop AI systems that can continually acquire and update their knowledge\cite{wang2024comprehensivesurveycontinuallearning}.
 
 	\subsection{Omics data challenges}
-		processing, batch effect
-		availability missingness
-		weakly paired data
-		consider longitudinal studies
-		evolution towards single cell
-		labeling issue missing labels(semisupervised) low quality labels
-		subtype redefine labels ?
+		Omics data are generated with various methods, various sequencing platform, at different places and time by different people.
+		Those variations leads to non-biological variation in the data, also knwon as \textit{batch effect}.
+		Deep learning models are sensitive to batch effects as they might capture and amplify those artifacts.
+		Model interpretability can help to detect such cases, but there is still a need to better consider batch effect by correcting it or adding domain adaptation tasks to ensure the same representation of all samples.
+		Moreover, various tools have been developped to extract gene counts from sequencing reads and might leads to different outputs.
+		The generated gene counts can also be impacted by the choice of the reference genome.
+		It is important to ensure that all samples have been analyzed in an identical way with fixed references.
+		There is a need of more initiative like \Gls{tcga} or ARCHS4~\cite{Lachmann2018} to provide data that have been analyzed with a common pipeline.
+
+		The \gls{tcga} is an ongoing project regularly updated with new releases\footnote{\url{https://docs.gdc.cancer.gov/Data/Release_Notes/Data_Release_Notes/}} that add new data or correct erroneous information, which makes it more difficult to fairly compare various approaches since they are likely using different versions with various subset of included cancers.
+		This highlights\footnote{along with the non sharing of model weights, and in worst cases the absence of source codes} the need for a standardized benchmark to fairly compare multiple approaches.
+
+		While the development of high-throughput sequencing methods increased the availability of omics data, the number of available samples remains limited compared to other deep learning fields.
+		Moreover, when analyzing multi-omics data, gold standard datasets where all modalities are available for all samples are rare.
+		Datasets where some modalities are available for some patients are more common as generating all modalities will increase the cost or the patient did not accept some analysis.
+		This results in datasets with various missingness patterns where two different samples have different set of available omics.
+		Such datasets are challenging to use with deep learning multimodal architectures.
+		In \cref{chap:crossattomics}, we proposed to simulate the various missingness pattern during the training which increased the robustness to missing modalities.
+		Although this approach was effective, it increased the training time and supposed that all missingness pattern are generated during the training phase.
+		Another way would be to generate the missing modalities from the other modalities using a generative or modality translation task.
+		Generating large molecular profile is still a difficult task as such network are difficult to train.
+		Other methods handling missing modalities project the available ones in a common latent space before combining\footnote{linear combination, product of experts, \dots} them; such model are trainined with self-supervised learning~\cite{Lee2021AVI}.
+		%TODO: Figure how to handle missing modalities 
 
 	\subsection{single-cell}
 		applied on bulk-experiments
+		diagonal integration
 
 	\subsection{Foundation models}
 
@@ -101,15 +113,5 @@
 		how are obtained the attention weight ??
 		from latent representation, predict the subtype (first loss component)
 		how they handle missing omics: GAN based on the combination of the available modalities
-
-		missingness
-		A Variational Information Bottleneck Approach to Multi-Omics Data Integration
-		\cite{Lee2021AVI}
-		mRNA, DNAm, miRNA, Protein
-		learning from incomplete multi-view observations
-		omics = views handle missingness patterns
-		IF, view specific encoders = obtain a latent representation
-		product of experts get a joint representation
-		predictor from the joint repr and one predictor for each encoder
 
 \end{document}
