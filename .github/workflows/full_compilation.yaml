@@ -47,7 +47,7 @@ jobs:
           work_in_root_file_dir: false
           args: -outdir=${{ github.workspace }}/PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
           docker_image: ghcr.io/xu-cheng/texlive-full:20240605
-          pre_compile: mkdir -p PDF/{chapters,appendix,frontmatter,preamble} && python -m venv /root/venv/ && cd .devcontainer/PygmentsFlexoki && /root/venv/bin/pip install . && cd -
+          pre_compile: mkdir -p PDF/{chapters,appendix,frontmatter,preamble} && python -m venv /root/venv/ && cd .devcontainer/PygmentsFlexoki && /root/venv/bin/pip install . && cd - && echo "main_memory = 7999999" >> /usr/local/texlive/2024/texmf.cnf && fmtutil-sys --all
       # - uses: actions/setup-python@v5
       #   with:
       #     python-version: '3.10' 

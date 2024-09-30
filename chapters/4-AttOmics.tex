@@ -186,14 +186,6 @@
 
 	\subsection{Hyper-parameters choice}
 
-		We investigate the impact of the main hyper-parameters on the model error rate by applying a random search procedure.
-		For each hyper-parameter, a random value is drawn from a set of predefined possible values.
-		A model is trained with selected hyper-parameters on the training dataset.
-		For each grouping strategy, 1500 models are trained.
-		The performance metrics reported here are estimated on the validation set.
-		The results for the main hyper-parameters of this experiment are presented in \cref{fig:hparams_search}.
-		The performance obtained for each tested value is represented with a boxplot.
-
 		\begin{figure}[htbp]
 			\centering
 			\begin{subcaptiongroup}
@@ -204,8 +196,16 @@
 				\phantomcaption\label{fig:attomics_hparams_search_D}
 				\phantomcaption\label{fig:attomics_hparams_search_E}
 			\end{subcaptiongroup}
-			\caption{Results of the random search for \gls{mrna} data with the clustering grouping strategy}\label{fig:hparams_search}
+			\caption[Attomics hyperparameters search results]{Results of the random search for \glsfmtshort{mrna} data with the clustering grouping strategy}\label{fig:hparams_search}
 		\end{figure}
+
+		We investigate the impact of the main hyper-parameters on the model error rate by applying a random search procedure.
+		For each hyper-parameter, a random value is drawn from a set of predefined possible values.
+		A model is trained with selected hyper-parameters on the training dataset.
+		For each grouping strategy, 1500 models are trained.
+		The performance metrics reported here are estimated on the validation set.
+		The results for the main hyper-parameters of this experiment are presented in \cref{fig:hparams_search}.
+		The performance obtained for each tested value is represented with a boxplot.
 
 		The encoder's residual connection and the choice of normalization type greatly impact the performances.
 		Adding a residual connection in an encoder block significantly impacts the model's performance.
@@ -332,7 +332,7 @@
 		\begin{figure}[htbp]
 			\centering
 			\includegraphics[width=\linewidth]{Beaude.168.fig.4.pdf}
-			\caption{Attention map visualisation for the TCGA-CESC class obtained after applying the hallmarks grouping on \gls{mrna}.}\label{fig:att_map_viz}
+			\caption{Attention map visualisation for the TCGA-CESC class obtained after applying the hallmarks grouping on \glsfmtshort{mrna}.}\label{fig:att_map_viz}
 		\end{figure}
 
 		One advantage of using self-attention in the model is the ability to visualize the learned interactions~(\cref{fig:att_map_viz}).

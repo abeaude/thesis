@@ -2,107 +2,11 @@
 	pdfversion=1.7,
 	lang=en-US,
 	xmp=true,
-	pdfstandard=A-1b,
+	pdfstandard=A-2b, % try A-2u
 } %https://ctan.math.washington.edu/tex-archive/macros/latex-dev/required/latex-lab/documentmetadata-support-code.pdf
 \documentclass[web, english, gitmark, final]{thesissaclay}
-%https://tex.stackexchange.com/questions/719543/how-do-i-add-icons-in-front-of-bibliography-entries
-% https://tex.stackexchange.com/questions/563696/add-icons-to-bibliography-style-in-scrbook
 
-\usepackage{subfiles}
-\usepackage{nicefrac} 
-\usepackage{functional}
-\usepackage{textcomp}
-\usepackage{newunicodechar}
-\usepackage{morewrites}
-\renewcommand{\MintedPygmentize}{/root/venv/bin/pygmentize}
-\usemintedstyle{flexoki-style}
-\NewCommandCopy{\orgdescriptionlabel}{\descriptionlabel}
-
-\newfontface{\dejavusans}{DejaVuSans}
-\newunicodechar{→}{{\dejavusans{→}}}
-\robExtConfigure{
-	enable manual mode,
-	%latexmk compatibility
-	execute after each externalization={
-		\IfFileExists{
-			\robExtOutputDirectory /\robExtAddCachePathAndName{\robExtFinalHash.pdf}
-		}{}{
-			\typeout{No file \robExtOutputDirectory /\robExtAddCachePathAndName{\robExtFinalHash.pdf}.}
-		}
-		},
-	set placeholder eval={__ATTOMICSHEIGHT__}{\lenToCm{0.45\textheight}},
-	set placeholder eval={__ATTOMICSWIDTH__}{\lenToCm{0.5\textwidth}},
-	set placeholder eval={__ATTOMICSVSEP__}{\lenToCm{0.05\textheight}},
-	set placeholder eval={__ATTOMICSHSEP__}{\lenToCm{0.07\textwidth}},
-	forward color=Prune,
-	set output directory=PDF,
-	add to preset={tikz}{
-		auto forward,
-		add to preamble={
-			\usepackage{pgfplots}
-			\usepackage{pgfplotstable}
-			\usepackage{xstring}
-			\usepackage{functional}
-			\usepackage{etoolbox}
-			\usepackage{tcolorbox}
-			\tcbuselibrary{skins}
-			},
-	},
-	add to preset={latex}{
-		use xelatex,
-		add to latex options={12pt},
-		set preamble hyperref={\usepackage{hyperref}},
-		add to preamble={
-			\usepackage{fontspec}
-			\usepackage[math-style=TeX, bold-style=TeX, active-frac=small]{unicode-math}
-			\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/] 
-			\setmathfontface\mathrm{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
-			\setoperatorfont{\mathrm}
-			\setmainfont{OpenSans}[
-				Extension = .ttf, % chktex 26
-				Path = fonts/,
-				UprightFont = *-Regular,
-				BoldFont = *-Bold,
-				ItalicFont = *-Italic,
-				BoldItalicFont = *-BoldItalic
-			]
-			\usepackage{amsmath, amsfonts}
-			\usepackage[all,warning]{onlyamsmath}
-			},
-	},
-}
-\configIfMacroPresent{\relscale}{forward=\usepackage{relsize}}
-\ExplSyntaxOn
-\NewDocumentCommand{\MyrobExtCopyFileToCache}{mm}{
-  \robExtCheckIfPrefixFolderExists%
-  \file_if_exist:xTF {#1}{}{
-    \msg_error:nnx{robExt}{file does not exist}{#1~(to~copy~to~cache)}
-  }
-  \file_if_exist:xTF {\robExtAddCachePath{#2}}{
-    \robExtDebugInfo{The~file~\robExtAddCachePath{#2}~already~exists,~let~us~compare~md5~sum.}
-    \str_set:Nx \l_tmpa_str {\file_mdfive_hash:n{#1}}
-    \str_set:Nx \l_tmpb_str {\file_mdfive_hash:n{\robExtAddCachePath{#2}}}
-    \str_compare:eNeTF {\l_tmpa_str} = {\l_tmpb_str} {
-      \robExtDebugInfo{The~file~\robExtAddCachePath{#2}~has~the~good~md5~hash.}
-    }{
-      \robExtDebugInfo{The~md5~hashes~of~#1~and~\robExtAddCachePath{#2}~are~different(\l_tmpa_str \space vs \space \l_tmpb_str),~let~us~copy~the~file.}%
-	  \sys_shell_now:x {\robExtPrefixAllCompilationCommands \robExtCp \space "#1"~"\robExtAddCachePath{#2}"}% 
-    }
-  }{
-    \robExtDebugInfo{The~file~\robExtAddCachePath{#2}~does~not~exist,~let~us~copy~it:}
-    \sys_shell_now:x {\robExtPrefixAllCompilationCommands \robExtCp \space "#1"~"\robExtAddCachePath{#2}"}%    
-  }
-}
-\sys_shell_now:x {mkdir ~ -p ~ \robExtOutputDirectory / \robExtCacheFolder /fonts}
-\ExplSyntaxOff
-
-\MyrobExtCopyFileToCache{../fonts/latinmodern-math.otf}{fonts/latinmodern-math.otf}
-\MyrobExtCopyFileToCache{../fonts/OpenSans-Bold.ttf}{fonts/OpenSans-Bold.ttf}
-\MyrobExtCopyFileToCache{../fonts/OpenSans-BoldItalic.ttf}{fonts/OpenSans-BoldItalic.ttf}
-\MyrobExtCopyFileToCache{../fonts/OpenSans-Italic.ttf}{fonts/OpenSans-Italic.ttf}
-\MyrobExtCopyFileToCache{../fonts/OpenSans-Regular.ttf}{fonts/OpenSans-Regular.ttf}
-\cacheTikz
-
+\input{preamble/robust_externalize_conf.tex}
 \input{preamble/information.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %% BIBLIOGRAPHY SOURCES %%
@@ -133,18 +37,12 @@
 \input{preamble/hyphenation}
 \input{preamble/extra_commands.tex}
 
-%https://stackoverflow.com/questions/40768426/tikz-externalize-issue-when-using-pdflatex-with-output-directory
-%\tikzexternalize[prefix=tikz/] 
-% , system call/.append = {; pdfcrop --margins 1 "\image.pdf" "\image.pdf"}
-
 \begin{document}
 %%%%%%%%%%%%%%%%
 %% TITLE PAGE %%
 %%%%%%%%%%%%%%%%
 \maketitle
-
 \frontmatter
-
 %%%%%%%%%%%%%%%%
 %% ED SUMMARY %%
 %%%%%%%%%%%%%%%%
@@ -177,26 +75,11 @@
 \listoffigures
 \printabbreviations
 \printsymbols
-\makeatletter % Redefinition of Description List Items source: https://tex.stackexchange.com/questions/695120/error-when-combining-glossaries-and-label-of-description-item
-\renewcommand*{\descriptionlabel}[1]{%
-	\phantomsection
-	\begingroup\let\label\@gobble\protected@edef\x{\endgroup
-		\def\noexpand\@currentlabel{#1}%
-		\def\noexpand\@currentlabelname{#1}%
-	}\x
-	\orgdescriptionlabel{#1}%
-}
-\makeatother
 \mainmatter
 %%%%%%%%%%%%%%
 %% CONTENTS %%
 %%%%%%%%%%%%%%
 
-%% Each chapter file must contain the following
-%% \chapter{}
-%% \graphicspath{{path/of/chapters_figures/}} % relative to main.tex
-%% \dictum[author][citation] % to include a small quote at the begining of each chapter
-%% \minitocpage % or \minitoc to display the content of the chapter
 \subfileinclude{chapters/1-Introduction}
 \subfileinclude{chapters/2-Background}
 \subfileinclude{chapters/3-SOTA}
@@ -206,32 +89,11 @@
 \subfileinclude{chapters/7-Interpretability}
 \subfileinclude{chapters/8-Conclusions}
 
-\KOMAoption{parskip}{false}
-\begin{singlespace}
-	%%%%%%%%%%%%%%%%%%
-	%% PUBLICATIONS %%
-	%%%%%%%%%%%%%%%%%%
-	\mypublications
-
-	%%%%%%%%%%%%%%%%%
-	%% BIBLIOGRAPY %%
-	%%%%%%%%%%%%%%%%%
-	\printbibheading
-	\bibbysection[heading=subbibliography]
-	\printglossary[title=Glossary]
-\end{singlespace}
-\KOMAoption{parskip}{half}
+\PrintChapterBiblioAndPubli
 %%%%%%%%%%%%%%
 %% APPENDIX %%
 %%%%%%%%%%%%%%
 \appendix
-\captionsetup[figure]{list=no}
-\captionsetup[table]{list=no}
-\crefalias{figure}{appendixfigure}
-\crefalias{table}{appendixtable}
-\renewcaptionname{english}{\figurename}{Appendix figure}
-\renewcaptionname{english}{\tablename}{Appendix table}
-\pagestyle{appendix}
 \include{chapters/9-Appendix}
 \backmatter
 \end{document}

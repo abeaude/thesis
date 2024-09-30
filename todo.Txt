@@ -11,6 +11,8 @@ https://github.com/FlamingTempura/bibtex-tidy
    \begin{mybox}[label=box:wgcna]{WGCNA}
 	This is a numbered box.
    \end{mybox}
+   texlogfilter --no-box main.log
+   https://texlive.mycozy.space/support/texlogsieve/texlogsieve.pdf
 
    include pdfx package 
    replace section chapter with \namecref

@@ -26,4 +26,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf monaspace-v1.101 monaspace-v1.101.zip \
     && python -m venv /root/venv/ \
     && cd /workdir/PygmentsFlexoki \
-    && /root/venv/bin/pip install .
+    && /root/venv/bin/pip install . \
+    && echo "main_memory = 7999999" >> /usr/local/texlive/2024/texmf.cnf \
+    && fmtutil-sys --all

@@ -78,6 +78,10 @@
 	\setmainlanguage{french}
 	\setotherlanguage{english}
 }
+\RequirePackage{textcomp}
+\RequirePackage{newunicodechar}
+\newfontface{\dejavusans}{DejaVuSans}
+\newunicodechar{→}{{\dejavusans{→}}}
 
 %% TABLES %%
 \RequirePackage{tabularray}
@@ -97,6 +101,7 @@
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
 \RequirePackage{amsfonts}
+\RequirePackage{nicefrac}
 \RequirePackage[all,warning]{onlyamsmath}
 \RequirePackage[math-style=TeX, bold-style=TeX, active-frac=small]{unicode-math}
 \setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/, version=normal]
@@ -118,6 +123,8 @@
 \RequirePackage{nameref} % Access name of a reference
 \RequirePackage{etoc} % Multiple and cusomize table of contents
 \RequirePackage[inline]{showlabels} % Show label keys when writing the document, do not work with subcaption
+\RequirePackage{functional}
+\RequirePackage{morewrites}
 \AtBeginEnvironment{table}{\small}
 \AtBeginEnvironment{longtable}{\scriptsize}
 %% GRAPHICS %%
@@ -146,6 +153,8 @@
 \RequirePackage[hyphenation, parindent]{impnattypo}
 \RequirePackage[inline]{enumitem}
 %\RequirePackage[newfloat=true]{minted}
+\renewcommand{\MintedPygmentize}{/root/venv/bin/pygmentize}
+\usemintedstyle{flexoki-style}
 \RequirePackage[algoruled, algochapter]{algorithm2e}
 \RequirePackage[l3]{csvsimple}
 \RequirePackage{lscape}
@@ -237,8 +246,8 @@
 \newfontfamily{\sourcecode}{MonaspaceNeon.ttf}[
 	Scale=1,
 	Path=fonts/,
-	FontFace={bx}{n}{Font=MonaspaceNeon.ttf, Weight=400, Width=100, Slant=0},
-	Weight=200, Width=100,Slant=0, NFSSFamily=SourceCode]
+	FontFace={b}{n}{Font=MonaspaceNeon.ttf, Weight=800, Width=105, Slant=0},
+	NFSSFamily=SourceCode]
 %%%%%%%%%%%%
 %% COLORS %%
 %%%%%%%%%%%%
@@ -297,11 +306,10 @@
 
 \DefTblrTemplate{firsthead}{default}{%
 	\addtocounter{table}{-1}%
+	\captionsetup{type=table}%
 	\IfTokenListEmpty{\InsertTblrText{entry}}{%
-		\captionsetup{type=table}%
 		\caption{\InsertTblrText{caption}}%
-	}{%
-		\captionsetup{type=table}%       
+	}{%    
 		\caption[\InsertTblrText{entry}]{\InsertTblrText{caption}}%
 	}%
 }
@@ -310,9 +318,12 @@
 	\UseTblrTemplate{caption-tag}{default}%
 	\UseTblrTemplate{conthead-text}{default}%
 }
+\DefTblrTemplate{middlehead,lasthead}{default}{
+	\UseTblrTemplate{capcont}{default}
+}
 \SetTblrStyle{contfoot-text}{font=\small}
 \SetTblrStyle{note-text}{font=\footnotesize}
-
+\SetTblrTemplate{caption-lot}{empty}
 %\ProvideTotalTColorBox{}{}{}{}
 \ProvideTotalTColorBox{\chapterpubli}{ v }{%
 	title=Publication, %
@@ -617,6 +628,8 @@
 	{\item}
 
 	\newcommand{\mypublications}{
+		\renewbibmacro*{begentry}{\iffieldundef{usera}{}{%
+				\llap{\printicon{\thefield{usera}}}\quad}}
 		\addchap{Publications}
 		\newrefsection[mypubli]
 		\nocite{*}
@@ -751,4 +764,76 @@
 		\automark[chapter]{part}
 		\ohead{\leftmark}
 		\ihead{\rightmark}
+	}
+	\ExplSyntaxOn
+	\NewDocumentCommand{\MyrobExtCopyFileToCache}{mm}{
+	\robExtCheckIfPrefixFolderExists%
+	\file_if_exist:xTF {#1}{}{
+		\msg_error:nnx{robExt}{file does not exist}{#1~(to~copy~to~cache)}
+	}
+	\file_if_exist:xTF {\robExtAddCachePath{#2}}{
+	\robExtDebugInfo{The~file~\robExtAddCachePath{#2}~already~exists,~let~us~compare~md5~sum.}
+	\str_set:Nx \l_tmpa_str {\file_mdfive_hash:n{#1}}
+	\str_set:Nx \l_tmpb_str {\file_mdfive_hash:n{\robExtAddCachePath{#2}}}
+	\str_compare:eNeTF {\l_tmpa_str} = {\l_tmpb_str} {
+	\robExtDebugInfo{The~file~\robExtAddCachePath{#2}~has~the~good~md5~hash.}
+	}{
+	\robExtDebugInfo{The~md5~hashes~of~#1~and~\robExtAddCachePath{#2}~are~different(\l_tmpa_str \space vs \space \l_tmpb_str),~let~us~copy~the~file.}%
+	\sys_shell_now:x {\robExtPrefixAllCompilationCommands \robExtCp \space "#1"~"\robExtAddCachePath{#2}"}% 
+	}
+	}{
+	\robExtDebugInfo{The~file~\robExtAddCachePath{#2}~does~not~exist,~let~us~copy~it:}
+	\sys_shell_now:x {\robExtPrefixAllCompilationCommands \robExtCp \space "#1"~"\robExtAddCachePath{#2}"}%    
+	}
+	}
+	\NewDocumentCommand{\CreateCacheDirs}{}{\sys_shell_now:x {mkdir ~ -p ~ \robExtOutputDirectory / \robExtCacheFolder /fonts}}
+	\prop_new:N \l_answerin_icons_prop
+	\prop_set_from_keyval:Nn \l_answerin_icons_prop {
+		book = {\faBook},
+		article = {\faFile*},
+		pres = {\faSlideshare}
+	}
+
+	\NewDocumentCommand{\printicon}{m}{
+		\prop_item:Ne \l_answerin_icons_prop {#1}
+	}
+	\ExplSyntaxOff
+	\NewCommandCopy{\orgdescriptionlabel}{\descriptionlabel}
+	\NewDocumentCommand{\PrintChapterBiblioAndPubli}{}{
+		\KOMAoption{parskip}{false}
+		\begin{singlespace}
+			%%%%%%%%%%%%%%%%%%
+			%% PUBLICATIONS %%
+			%%%%%%%%%%%%%%%%%%
+			\mypublications
+
+			%%%%%%%%%%%%%%%%%
+			%% BIBLIOGRAPY %%
+			%%%%%%%%%%%%%%%%%
+			\renewbibmacro*{begentry}{}
+			\printbibheading
+			\bibbysection[heading=subbibliography]
+			\printglossary[title=Glossary]
+		\end{singlespace}
+		\KOMAoption{parskip}{half}
+	}
+	\gappto\appendix{%
+		\captionsetup[figure]{list=no}%
+		\captionsetup[table]{list=no}%
+		\crefalias{figure}{appendixfigure}%
+		\crefalias{table}{appendixtable}%
+		\renewcaptionname{english}{\figurename}{Appendix figure}%
+		\renewcaptionname{english}{\tablename}{Appendix table}%
+		\pagestyle{appendix}%
+	}
+	\gappto\mainmatter{%
+		% Redefinition of Description List Items source: https://tex.stackexchange.com/questions/695120/error-when-combining-glossaries-and-label-of-description-item
+		\renewcommand*{\descriptionlabel}[1]{%
+			\phantomsection
+			\begingroup\let\label\@gobble\protected@edef\x{\endgroup
+				\def\noexpand\@currentlabel{#1}%
+				\def\noexpand\@currentlabelname{#1}%
+			}\x
+			\orgdescriptionlabel{#1}%
+		}
 	}
