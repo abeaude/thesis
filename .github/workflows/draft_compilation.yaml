@@ -9,6 +9,7 @@ on:
       - "**.bib"
       - "**.pdf"
       - "**.csv"
+      - "**.py"
 permissions:
   contents: write
 jobs:
@@ -35,19 +36,11 @@ jobs:
         with:
           root_file: |
             ${{ github.workspace }}/main.tex
-            ./chapters/1-Introduction.tex
-            ./chapters/2-Background.tex
-            ./chapters/3-SOTA.tex
-            ./chapters/4-AttOmics.tex
-            ./chapters/5-CrossAttOmics.tex
-            ./chapters/6-CrossAttOmicsGate.tex
-            ./chapters/7-Interpretability.tex
-            ./chapters/8-Conclusions.tex
           latexmk_use_xelatex: true
           work_in_root_file_dir: false
           args: -outdir=${{ github.workspace }}/PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
           docker_image: ghcr.io/xu-cheng/texlive-full:20240605
-          pre_compile: mkdir -p PDF/{chapters,appendix,frontmatter,preamble} && python -m venv /root/venv/ && cd .devcontainer/PygmentsFlexoki && /root/venv/bin/pip install . && cd - && echo "main_memory = 7999999" >> /usr/local/texlive/2024/texmf.cnf && fmtutil-sys --all
+          pre_compile: mkdir -p PDF/{chapters,appendix,frontmatter,preamble} && python -m venv /root/venv/ && cd .devcontainer/PygmentsFlexoki && /root/venv/bin/pip install . && cd - && echo "main_memory = 7999999" >> /opt/texlive/texdir/texmf.cnf && fmtutil-sys --all
       # - uses: actions/setup-python@v5
       #   with:
       #     python-version: '3.10' 
@@ -64,13 +57,5 @@ jobs:
         with:
           files: |
             ${{ github.workspace }}/PDF/main.pdf
-            ${{ github.workspace }}/PDF/1-Introduction.pdf
-            ${{ github.workspace }}/PDF/2-Background.pdf
-            ${{ github.workspace }}/PDF/3-SOTA.pdf
-            ${{ github.workspace }}/PDF/4-AttOmics.pdf
-            ${{ github.workspace }}/PDF/5-CrossAttOmics.pdf
-            ${{ github.workspace }}/PDF/6-CrossAttOmicsGate.pdf
-            ${{ github.workspace }}/PDF/7-Interpretability.pdf
-            ${{ github.workspace }}/PDF/8-Conclusions.pdf
           draft: true
           name: Writing Drafts

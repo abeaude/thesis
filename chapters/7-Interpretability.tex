@@ -1,24 +1,38 @@
 \documentclass[../main.tex]{subfiles}
 \usepackage{silence}
+\usepackage{xr}
+\NewDocumentCommand{\ExternalDocument}{m}{
+	\externaldocument{#1}
+	\typeout{No file chapters/#1.aux.}
+}
+\ExternalDocument{3-SOTA}
+\ExternalDocument{2-Background}
 \WarningFilter{glossaries}{No \printglossary or \printglossaries found}
 \robExtConfigure{disable externalization}
 \begin{document}
 \ifSubfilesClassLoaded{%
 	\graphicspath{{figures/7-Interpretability/}}%
 	\setcounter{chapter}{6}%
+	\mainmatter%
 }{
 	\graphicspath{{../figures/7-Interpretability/}}%
 }
-\chapter{Explain with counterfactuals}\label{chap:counterfactuals}
+\chapter{Explaining with counterfactuals}\label{chap:counterfactuals}
 \minitocpage
 \section{Methods}
-	main introduction to our arch
-	robust model = adversarial training
+	We propose to use \glspl{gan} to generate counterfactuals points
+	robustness
 	\subsection{\glsfmtshortpl{gan} to generate counterfactuals}
+		Counterfactual explanations aims to explain a prediction of a sample \(\symbf{x}\) by finding a minimal perturbation \(\delta\) in the data space that will change the prediction.
+		The search of a counterfactual explanation can be formulated as an optimization problem (see \cref{eq:opt_cf})~\cite{wachter2017counterfactual}.
+		A valid counterfactual is a counterfactual with added properties: \ref{item:cf_actionability}, \ref{item:cf_sparse}, and \ref{item:cf_data_manifold}.
+		\Glspl{gan} are a deep learning architecture for generating new samples, it relies on two components a Generator \(G\) capturing the data distribution and a discriminator \(D\) estimating the realness of a sample~(see~\cref{sec:gan})~\cite{Goodfellow2014GAN}.
+		As \glspl{gan} are good in capturing data distribution they can be used to generate counterfactuals respecting the \ref{item:cf_data_manifold} constraint.
+
 		\begin{figure}[htbp]
 			\centering
 			\begin{tikzpicture}[inner sep=0pt, very thick]
-				\node at (0,0) [square, draw, minimum size=1.5cm] (xin) {\(x\)};
+				\node at (0,0) [square, draw, minimum size=1.5cm] (xin) {\(\symbf{x}\)};
 				\node (gen) [right=1cm of xin.east, anchor=west, rounded rectangle, rounded rectangle west arc=none, draw, minimum height=1cm, minimum width=11mm] {\(G\)};
 				\node (delta) [right=1.5cm of gen.east, anchor=west,square, draw, minimum size=1.5cm] {\(\delta\)};
 				\node (add) [right=5mm of delta.east, anchor=west, draw, circle, minimum size=7.5mm] {};
@@ -40,7 +54,7 @@
 				\node (xreal) at (xcf.south |- dis.east) [draw, square, minimum size=1.5cm, double copy shadow={shadow xshift=-.5ex, shadow yshift=.5ex, opacity=.5}, fill=white] {\(\symcal{X}\)};
 
 				\draw[-stealth] (xin.east) -- (gen.west);
-				\draw[-stealth] (gen.east) -- node [midway, matrix, draw=none, anchor=center, yshift=0.7em] {
+				\draw[-stealth] (gen.east) -- node [midway, matrix, draw=none, anchor=center, yshift=0.6em] {
 					\node[draw=none,minimum size=1.2em] {\(\symcal{M}\)}; \\
 					\node[draw,fill=black,minimum size=1.2em] {};  \\
 					\node[draw,fill=white,minimum size=1.2em] {};  \\
@@ -59,18 +73,37 @@
 				\draw[-stealth] (cl1.east) -- (cly.west);
 				\draw[-stealth] (cl2.east) -- (cl2y.west);
 				\draw[-stealth] (dis.east) -- (realfake.west);
-				\draw[stealth-stealth, dashed] (cly.east) -- node [midway,above, yshift=0.5ex] {\(\symcal{L}_{\text{CE}}\)}  (ycf.west);
-				\draw[stealth-stealth, dashed] (cl2y.east) -- node [midway,above, yshift=0.5ex] {\(\symcal{L}_{\text{CE}}\)}  (ytissue.west);
+				\draw[stealth-stealth, dashed] (cly.east) -- node [midway,above, yshift=0.5ex] {\(\symcal{L}_{\operatorname{Cl}}\)}  (ycf.west);
+				\draw[stealth-stealth, dashed] (cl2y.east) -- node [midway,above, yshift=0.5ex] {\(\symcal{L}_{\operatorname{Cl}_{T}}\)}  (ytissue.west);
 				\draw[stealth-stealth, dashed] (realfake.east) -- node [midway,above, yshift=0.5ex] {\(\symcal{L}_{\text{GAN}}\)}  (labelrealfake.west);
 			\end{tikzpicture}
 			\caption[Architecture of the counterfactual \glsfmtshort{gan}]{Architecture of the counterfactual \glsfmtshort{gan}. The example \(x\), for which a counterfactual is searched, is passed through the generator \(G\) to obtain the optimal perturbation \(\delta\). This perturbation is added to the input to obtain the counterfactual point \(x^{\text{CF}}\). During the training phase, the counterfactual point is evaluated with two classifiers to ensure the point is classified to the desired class (\(\operatorname{Cl}\)) and belongs to the same tissue as the original point (\(\operatorname{Cl}_{T}\)). A critic \(D\) is used to ensure the generated point belongs to the original data distribution. }\label{fig:gan_cf}
 		\end{figure}
-		remind the three main properties of counterfactual point
-		Sparsity: \(\left\|\delta\right\|_{1}\)
-		Actionnability: masking the output of \(G\) with \(\symcal{M}\)
-		Data manifold closeness: \(G\)
 
-		Details on the training strategy WGAN-GP
+		\Cref{fig:gan_cf} presents the overall architecture of the \gls{gan} used for generating counterfactual explanations.
+		To obtain a counterfactual, the point \(\symbf{x}\) to explain is passed through the generator \(G\), a \gls{fcn} of \(l\) layers with \gls{relu} intermediate activation and no final activation, to obtain the perturbation \(\delta\).
+		To ensure the \ref{item:cf_actionability} property a binary mask \(\symcal{M}\) is applied element-wise on the generated perturbation to specify which features can be changed.
+		\begin{equation}
+			\delta = G\left(\symbf{x}\right) \odot \symcal{M}
+		\end{equation}
+		The counterfactual point or explanation is obtained by adding this perturbation \(\delta\) to the original point: \(\symbf{x}^{\text{CF}} = \symbf{x} + \delta\).
+
+		As \glspl{gan} are known for their training instabilities~\cite{Salimans2016ImprovedTF,Arjovsky2017TowardsPM}, we used a \gls{wgan} with gradient penalty (see~\cref{sec:gan})~\cite{WGANGP}.
+		The WGAN-GP is trained by solving the following optimization problem:
+		\begin{multline}
+			\min_{G} \max_{D} \symcal{L}_{\text{WGAN}}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{x^{\text{CF}}\sim p_{g}}\left[ D\left(x^{\text{CF}}\right)\right] \\ + \lambda \E_{\tilde{x}\sim p_{g}}\left[ {\left( {\left\|\nabla_{\tilde{x}}D\left(\tilde{x}\right) \right\|}_{2} -1 \right)}^{2}\right] \label{eq:wgan_opt_cf}
+		\end{multline}
+		where \(p_{d}\) is the true data distribution, \(p_{g}\) is the distribution learned by the generator \(G\), \(\lambda\) is the penalty weight forcing the discriminator \(D\) to be a K-Lipschitz function, and \(\tilde{x}\) is a linearly interpolated point between \(x\) and \(x^{\text{CF}}\).
+		The main desirata of a counterfactual is to change the predicted class of \(\symbf{x}\) from \(\hat{y}\) to \(y^{\text{CF}}\).
+		The fullfilment of this constraint is achieved by adding a term \(\symcal{L}_{\operatorname{Cl}}\left(G,\operatorname{Cl}, y^{\text{CF}} \right) = \symcal{L}_{\text{CE}}\left(\operatorname{Cl}\left(x^{\text{CF}}\right),y^{\text{CF}}\right) \) to the optimization problem~(\cref{eq:wgan_opt_cf}), where \(\operatorname{Cl}\) is a pretrained classifier and \(\symcal{L}_{\text{CE}}\) the cross-entropy loss~(see~\cref{eq:ce_loss}).
+		The \ref{item:cf_sparse} constraint of a counterfactual is obtained by adding a \(L_{1}\) regularization on the generated perturbation \(\delta\) to the optimization problem~(\cref{eq:wgan_opt_cf}): \(\symcal{L}_{\text{Reg}}\left(G\right) = \left\|G\left(x\right) \odot \symcal{M}\right\|_{1}\).
+		More constraints can be added onto the generator by adding other loss terms to the optimization problem.
+		For instance, in our scenario we added a loss term \(\symcal{L}_{\operatorname{Cl}_{T}}\left(G,\operatorname{Cl}_{T}, y_{T} \right) = \symcal{L}_{\text{CE}}\left(\operatorname{Cl}_{T}\left(x^{\text{CF}}\right),y_{T}\right)\) to ensure that the generated counterfactual belongs to the correct tissue type, where \(\operatorname{Cl}_{T}\) is a pretrained tissue classifier.
+		Finally, the counterfactual \gls{wgan} is trained by solving the following optimization problem:
+		\begin{multline}
+			\min_{G} \max_{D} \symcal{L}_{\text{WGAN}}\left(G,D\right) + \symcal{L}_{\operatorname{Cl}}\left(G,\operatorname{Cl}, y^{\text{CF}}\right)\\ + \symcal{L}_{\operatorname{Cl}_{T}}\left(G,\operatorname{Cl}_{T}, y_{T}\right) + \symcal{L}_{\text{Reg}}\left(G\right)
+		\end{multline}
+
 	\subsection{Counterfactuals evaluation}
 		distance, L0 to check the sparsity
 		A realistic counterfactual should have points in its neighborhood that are classified the same.

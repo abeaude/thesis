@@ -4,9 +4,11 @@
 \WarningFilter{glossaries}{No \printglossary or \printglossaries found}
 \robExtConfigure{disable externalization}
 \begin{document}
+
 \ifSubfilesClassLoaded{%
 	\graphicspath{{figures/3-SOTA/}}%
 	\setcounter{chapter}{2}%
+	\mainmatter%
 }{
 	\graphicspath{{../figures/3-SOTA/}}%
 }

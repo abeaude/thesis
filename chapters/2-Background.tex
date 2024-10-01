@@ -6,6 +6,7 @@
 \ifSubfilesClassLoaded{%
 	\graphicspath{{figures/2-Background/}}%
 	\setcounter{chapter}{1}%
+	\mainmatter%
 }{
 	\graphicspath{{../figures/2-Background/}}%
 }
@@ -39,7 +40,6 @@
 		Each one of the hidden layers \(l\) has a defined number of neurons \(N_{l}\).
 		Each neuron \(j\) in a layer \(l\) is connected to all neurons in the layer \(l-1\).
 		Connection between a neuron \(i\) in layer \(l-1\) and neuron \(j\) in layer \(l\) is weighted by \(w^{l}_{ij}\).
-		This type of layer is called a \glsxtrfull{fcn} or dense layer.
 
 		The activation of a neuron \(j\) in layer \(l\) is the non-linear activation \(f\) of the weighted-sum of neurons in layer \(l-1\) and some bias \(b_{j}^{l}\)~(\cref{eq:mlp_neuron}).
 		\begin{align}
@@ -50,9 +50,11 @@
 		\begin{equation}
 			\symbf{a}^{l} = f\left( \symbf{a}^{l-1} \cdot W^l + \symbf{b}^{l} \right) \label{eq:mlp_matrix}
 		\end{equation}
-		\(W^l \in \symbb{R}^{N_{l-1} \times N_{l}}\) is the weight matrix of general element: \(w_{ij}\), and \(\symbf{b}^{l}\) is the bias vector of layer \(l\).
+		where \(W^l \in \symbb{R}^{N_{l-1} \times N_{l}}\) is the weight matrix of general element: \(w_{ij}\), and \(\symbf{b}^{l}\) is the bias vector of layer \(l\).
 		The non-linear activation \(f\) is usually a \glsxtrfull{relu}, \(f\left(x\right) = \max\left(0, x\right)\).
 		The activation of neurons in layers \(l\)~(\cref{eq:mlp_matrix}) defines a mapping \(g^{l}\) that computes the activation of layer \(l\) from the activation of layer \(l-1\): \( \symbf{a}^{l} = g^{l}\left(\symbf{a}^{l-1}; \theta^{l}\right)\), where \(\theta^{l}\) are the parameters of the layer \(l\): \(W^l\) and \( \symbf{b}^{l}\).
+		This type of layer is called a \glsxtrfull{fcl} or dense layer.
+		The composition of multiple \glspl{fcl} is called a \glsxtrfull{fcn}.
 		The activation function of the last layer, layer \(L+1\), depends on the type of task:
 		\begin{itemize}
 			\item for binary classification, the unique output neuron has a sigmoid activation: \(a^{L+1} = \cfrac{1}{1-\exp\left(z^{L+1}\right)}\) and yields the probability of the positive class,
@@ -236,7 +238,7 @@
 		In the self-supervised case~(\gls{ae} and \gls{vae}), \(y\) is the training example itself.
 		For a multiclass classification problem, the cross-entropy loss is used as a cost function \(\symcal{L}\).
 		\begin{equation}
-			\symcal{L}_{CE}\left(\theta\right) = \frac{-1}{N}\sum_{i=1}^{N}\sum_{c=1}^{C} w_c y_{i,c}\log\left(\hat{y}_{i,c}\right)
+			\symcal{L}_{\text{CE}}\left(\hat{y}, y\right) = \frac{-1}{N}\sum_{i=1}^{N}\sum_{c=1}^{C} w_c y_{i,c}\log\left(\hat{y}_{i,c}\right)\label{eq:ce_loss}
 		\end{equation}
 		where \(w_c\) denotes the weight, inversely proportional to the class size, of class \(c\) and \(N\) is the number of training examples.
 		\(\hat{y}_{i,c}\) is the probability predicted by the model that the example \(i\) belongs to the class \(c\).
@@ -333,7 +335,7 @@
 		\end{equation}
 		A \(\operatorname{C-Index} = 0.5\) represents a random prediction and \(\operatorname{C-Index} = 1\) corresponds to a perfect ranking.
 
-	\subsection{\Glsfmtfull{gan}}
+	\subsection{\Glsfmtfull{gan}}\label{sec:gan}
 		Previously, we mainly describe models used for \textbf{discriminative} tasks, which learn a mapping between data and labels.
 		Deep learning models are suitable for capturing data characteristics, opening possibilities for \textbf{generative} tasks where the model generates new samples indistinguishable from the real samples.
 		Let \(p_{d}\) be the true data distribution, generative models learn a distribution \(p_{g}\) as close as possible to the true distribution \(p_{d}\).
@@ -345,7 +347,7 @@
 		\(G\) and \(D\) are jointly trained at generating a distribution \(p_{g}\) such that \(D\) cannot distinguish between \(p_{d}\) and \(p_{g}\), \ie{}\(D\left(\symbf{x}\right) = \tfrac12\).
 		A \gls{gan} is trained by solving the following min-max problem:
 		\begin{equation}
-			\min_{G} \max_{D} \symcal{L}_{GAN}\left(G,D\right) = \E_{x\sim p_{d}}\left[ \log\left(D\left(x\right)\right)\right] + \E_{z\sim p_{z}}\left[ \log\left( 1 - D\left(G\left(z\right)\right)\right)\right] \label{eq:gan_loss}
+			\min_{G} \max_{D} \symcal{L}_{\text{GAN}}\left(G,D\right) = \E_{x\sim p_{d}}\left[ \log\left(D\left(x\right)\right)\right] + \E_{z\sim p_{z}}\left[ \log\left( 1 - D\left(G\left(z\right)\right)\right)\right] \label{eq:gan_loss}
 		\end{equation}
 
 		In practice \gls{gan} training is implemented as an iterative process alternatin between \(k\) steps of optimizing \(D\) and one step optimizing \(G\).
@@ -387,14 +389,14 @@
 		Wasserstein distance is another way of comparing two distributions, it measures the minimum cost of transforming one probability distribution into another, and provide a meaningful distance even if distributions do not overlap.
 		The discriminator is now called a critc that instead of classifying samples as real or fake provide a realness score\footnote{There are no more sigmoid activation at its output}.
 		The computation of the Wasserstein distance is complex and can be simplified by forcing the critic to be a K-Lipschitz function.
-		They add constraints on the critic \(D\), \(D\) must belongs to the set \( \symcal{D}\) of K-Lipschitz function:
+		Which translates into constraints on the critic \(D\), \(D\) must belongs to the set \( \symcal{D}\) of K-Lipschitz function:
 		\begin{equation}
-			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{WGAN}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \label{eq:wgan_loss}
+			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{\text{WGAN}}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \label{eq:wgan_loss}
 		\end{equation}
 		To satisfy the Lipschitz constraint on the critic, \citeauthor{WGAN} proposed to clip critic weigths to maintain them in a fixed interval while acknowledging that is not a good way to ensure the Lipschitz constraint~\cite{WGAN}.
 		\citeauthor{WGANGP} replaced the weight clipping with a gradient penalty to ensure the Lipschitz constraint~\cite{WGANGP}:
 		\begin{multline}
-			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{WGAN}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \\ + \lambda \E_{\tilde{x}\sim p_{g}}\left[ {\left( {\left\|\nabla_{\tilde{x}}D\left(\tilde{x}\right) \right\|}_{2} -1 \right)}^{2}\right]  \label{eq:wgangp_loss}
+			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{\text{WGAN}}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \\ + \lambda \E_{\tilde{x}\sim p_{g}}\left[ {\left( {\left\|\nabla_{\tilde{x}}D\left(\tilde{x}\right) \right\|}_{2} -1 \right)}^{2}\right]  \label{eq:wgangp_loss}
 		\end{multline}
 		where \(\tilde{x}\) is a linearly interpolated sample between a true sample \(x\) and a generated one \(G\left(z\right)\).
 

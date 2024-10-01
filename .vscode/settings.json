@@ -34,7 +34,6 @@
     "latex-workshop.latex.build.forceRecipeUsage": false,
     "latex-workshop.synctex.afterBuild.enabled": true,
     "latex-workshop.latex.clean.fileTypes": [
-        "%OUTDIR%/%DOCFILE%.aux",
         "%OUTDIR%/%DOCFILE%.bbl",
         "%OUTDIR%/%DOCFILE%.blg",
         "%OUTDIR%/%DOCFILE%.bcf",

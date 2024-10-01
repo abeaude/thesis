@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
       - run: echo "CLASS_LINE=$(grep -n '\documentclass' ${{ github.workspace }}/main.tex  | cut -d ':' -f 1)" >> $GITHUB_ENV
       - run: sed -i "${{ env.CLASS_LINE }}s/.*/\\\documentclass\[print,english,final\]\{thesissaclay\}/" ${{ github.workspace }}/main.tex 
-      - name: Compile document
+      - name: Compile print version
         uses: xu-cheng/latex-action@v3
         with:
           root_file: ${{ github.workspace }}/main.tex
@@ -28,10 +28,10 @@ jobs:
           work_in_root_file_dir: false
           args: -outdir=${{ github.workspace }}/PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
           docker_image: ghcr.io/xu-cheng/texlive-full:20240605
-          pre_compile: mkdir -p PDF/chapters PDF/appendix PDF/frontmatter PDF/preamble
+          pre_compile: mkdir -p PDF/{chapters,appendix,frontmatter,preamble} && python -m venv /root/venv/ && cd .devcontainer/PygmentsFlexoki && /root/venv/bin/pip install . && cd - && echo "main_memory = 7999999" >> /opt/texlive/texdir/texmf.cnf && fmtutil-sys --all
       - run: mv PDF/main.pdf PDF/thesis_print.pdf
       - run: sed -i "${{ env.CLASS_LINE }}s/.*/\\\documentclass\[web,english,final\]\{thesissaclay\}/" ${{ github.workspace }}/main.tex 
-      - name: Compile document
+      - name: Compile web version
         uses: xu-cheng/latex-action@v3
         with:
           root_file: ${{ github.workspace }}/main.tex
@@ -39,7 +39,7 @@ jobs:
           work_in_root_file_dir: false
           args: -outdir=${{ github.workspace }}/PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
           docker_image: ghcr.io/xu-cheng/texlive-full:20240605
-          pre_compile: mkdir -p PDF/chapters PDF/appendix PDF/frontmatter PDF/preamble
+          pre_compile: mkdir -p PDF/{chapters,appendix,frontmatter,preamble} && python -m venv /root/venv/ && cd .devcontainer/PygmentsFlexoki && /root/venv/bin/pip install . && cd - && echo "main_memory = 7999999" >> /opt/texlive/texdir/texmf.cnf && fmtutil-sys --all
       - run: mv PDF/main.pdf PDF/thesis_web.pdf
       - name: Release Documents
         uses: softprops/action-gh-release@v2
