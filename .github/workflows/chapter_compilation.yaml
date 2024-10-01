@@ -1,0 +1,47 @@
+on:
+  workflow_dispatch:
+    inputs:
+      file:
+        description: 'Chapter to compile'
+        required: true
+        default: '1-Introduction'
+        type: choice
+        options:
+        - 1-Introduction
+        - 2-Background
+        - 3-SOTA
+        - 4-AttOmics
+        - 5-CrossAttOmics
+        - 6-CrossAttOmicsGate
+        - 7-Interpretability
+        - 8-Conclusions
+jobs:
+  compile_chapter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Setup Perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: "5.38.2"
+      - run: perl scripts/gitinfo2.pm 
+      - name: Compile ${{ inputs.file }}
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: |
+            ${{ github.workspace }}/chapters/${{ inputs.file }}.tex
+          latexmk_use_xelatex: true
+          work_in_root_file_dir: false
+          args: -outdir=${{ github.workspace }}/PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
+          docker_image: ghcr.io/xu-cheng/texlive-full:20240605
+          pre_compile: mkdir -p PDF/{chapters,appendix,frontmatter,preamble} && python -m venv /root/venv/ && cd .devcontainer/PygmentsFlexoki && /root/venv/bin/pip install . 
+      - name: Save generated PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.ref }}-${{ inputs.file }}
+          path: ${{ github.workspace }}/PDF/${{ inputs.file }}.pdf
+          retention-days: 1
+          overwrite: true
