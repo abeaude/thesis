@@ -1,3 +1,4 @@
+name: Chapter compilation
 on:
   workflow_dispatch:
     inputs:
@@ -32,7 +33,7 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: |
-            ${{ github.workspace }}/chapters/${{ inputs.file }}.tex
+            ./chapters/${{ inputs.file }}.tex
           latexmk_use_xelatex: true
           work_in_root_file_dir: false
           args: -outdir=${{ github.workspace }}/PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
