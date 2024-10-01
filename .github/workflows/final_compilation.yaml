@@ -1,0 +1,53 @@
+name: Compile Thesis manuscript
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**.tex"
+      - "**.cls"
+      - "**.bib"
+      - "**.pdf"
+      - "**.csv"
+permissions:
+  contents: write
+jobs:
+  compile:
+    name: Printed version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v4
+      - run: echo "CLASS_LINE=$(grep -n '\documentclass' ${{ github.workspace }}/main.tex  | cut -d ':' -f 1)" >> $GITHUB_ENV
+      - run: sed -i "${{ env.CLASS_LINE }}s/.*/\\\documentclass\[print,english,final\]\{thesissaclay\}/" ${{ github.workspace }}/main.tex 
+      - name: Compile print version
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: ${{ github.workspace }}/main.tex
+          latexmk_use_xelatex: true
+          work_in_root_file_dir: false
+          args: -outdir=${{ github.workspace }}/PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
+          docker_image: ghcr.io/xu-cheng/texlive-full:20240605
+          pre_compile: mkdir -p PDF/{chapters,appendix,frontmatter,preamble} && python -m venv /root/venv/ && cd .devcontainer/PygmentsFlexoki && /root/venv/bin/pip install . && cd - && echo "main_memory = 7999999" >> /opt/texlive/texdir/texmf.cnf && fmtutil-sys --all
+      - run: mv PDF/main.pdf PDF/thesis_print.pdf
+      - run: sed -i "${{ env.CLASS_LINE }}s/.*/\\\documentclass\[web,english,final\]\{thesissaclay\}/" ${{ github.workspace }}/main.tex 
+      - name: Compile web version
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: ${{ github.workspace }}/main.tex
+          latexmk_use_xelatex: true
+          work_in_root_file_dir: false
+          args: -outdir=${{ github.workspace }}/PDF/ -interaction=nonstopmode -file-line-error -halt-on-error
+          docker_image: ghcr.io/xu-cheng/texlive-full:20240605
+          pre_compile: mkdir -p PDF/{chapters,appendix,frontmatter,preamble} && python -m venv /root/venv/ && cd .devcontainer/PygmentsFlexoki && /root/venv/bin/pip install . && cd - && echo "main_memory = 7999999" >> /opt/texlive/texdir/texmf.cnf && fmtutil-sys --all
+      - run: mv PDF/main.pdf PDF/thesis_web.pdf
+      - name: Release Documents
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ github.workspace }}/PDF/thesis_web.pdf
+            ${{ github.workspace }}/PDF/thesis_print.pdf
+          draft: false
+          body: TEMP
+          make_latest: true
+          name: Compiled PDFs
