@@ -42,7 +42,7 @@ jobs:
       - name: Save generated PDF
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.ref }}-${{ inputs.file }}
+          name: ${{ github.ref_name }}-${{ inputs.file }}
           path: ${{ github.workspace }}/PDF/${{ inputs.file }}.pdf
           retention-days: 1
           overwrite: true
