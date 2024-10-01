@@ -1,4 +1,4 @@
-name: Compile Thesis manuscript
+name: Draft compilation
 on:
   push:
     branches:
