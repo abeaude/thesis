@@ -33,7 +33,8 @@
 \WarningFilter{latexfont}{Font shape}
 \WarningFilter{hyperref}{Token not allowed in a PDF string}
 \WarningFilter{caption}{The option `hypcap=true' will be ignored for this particular}
-%\WarningFilter{robust-externalize}{The option `hypcap=true' will be ignored for this particular}
+\WarningFilter{latex}{Writing or overwriting file}
+\WarningFilter{fvextra}{csquotes should be loaded after}
 \LoadClass[fontsize=12pt, a4paper, titlepage=firstiscover, cleardoublepage=empty, appendixprefix=true, parskip=half, DIV=11]{scrbook}
 \KOMAoption{toc}{listof, index, bibliography, graduated}
 \RequirePackage[nodisplayskipstretch]{setspace}
@@ -175,7 +176,7 @@
 \RequirePackage[pass]{geometry}
 \RequirePackage[headsepline]{scrlayer-scrpage}
 %% HYPERLINKS %%
-\RequirePackage[hyperindex=true, bookmarks=true, breaklinks=true]{hyperref}
+\RequirePackage[hyperindex=true, bookmarks=true, breaklinks=true,bookmarksnumbered=true]{hyperref}
 \RequirePackage[ocgcolorlinks]{ocgx2}
 %% GLOSSARIES %%
 \RequirePackage[symbols, abbreviations, automake, indexcrossrefs=true]{glossaries-extra}
@@ -190,7 +191,7 @@
 %\renewcommand{\abbreviationsname}{Liste des abréviations et sigles}
 %% HYPERREF SETUP %%
 \AtEndPreamble{%
-	\hypersetup{linktoc=all, colorlinks=true, anchorcolor=black, citecolor=A2, filecolor=black, menucolor=black, runcolor=black, urlcolor=B3, pdftitle={[en]\@title, [fr]\@subtitle}, pdfauthor=\@author, pdfsubject=\@subject, pdfcreator=XeLaTeX, pdfkeywords=\@keywordsfr, pdfdisplaydoctitle=true}
+	\hypersetup{linktoc=all, colorlinks=true, citecolor=A2, filecolor=black, menucolor=black, runcolor=black, urlcolor=B3, pdftitle={[en]\@title, [fr]\@subtitle}, pdfauthor=\@author, pdfsubject=\@subject, pdfcreator=XeLaTeX, pdfkeywords=\@keywordsfr, pdfdisplaydoctitle=true}%linkcolor = internal links
 } %allcolors=black, hidelinks,
 %% MUST BE LOADED LAST %%
 \AtEndPreamble{%

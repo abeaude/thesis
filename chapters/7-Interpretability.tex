@@ -105,18 +105,46 @@
 		\end{multline}
 
 	\subsection{Counterfactuals evaluation}
-		distance, L0 to check the sparsity
-		A realistic counterfactual should have points in its neighborhood that are classified the same.
-		yNN proportion of point in the k nearest neighbors classified the same accuracy based on the kNN neighbors characterization \cite{Carla_CF}
-		can also be visualized by projecting counterfactuals points onto the UMAP space obtained from the training data.
-		Sucess rate / Accuracy are we able to change the label for all points
-		UMAP evaluation + neighbors characterization
+		To evaluate the generated counterfactual examples, we used metrics to evaluate the different counterfactual properties.
+		The effectiveness of our approach, \ie{}the capacity of the method to generate counterfactuals that do change the prediction, was measured using counterfactual accuracy: \(\symcal{A}_{\text{CF}}\).
+		The counterfactual accuracy compares the prediction obtained by the classifier \(\operatorname{Cl}\) from the counterfactual \(\symbf{x}^{\text{CF}}\) to the desired class \(y^{\text{CF}}\).
+		The closeness of the counterfactual to the original point was determined using various measure distances based on \(L_{1}\), \(L_{2}\), or \(L_{\infty}\) norms.
+		The sparsity of the perturbation was evaluated with the \(L_{0}\)-\textit{norm}\footnote{Here, norm is in italics as this is not a proper norm. The \(L_{0}\)-\textit{norm} is not homogeneous: \(\left\|\lambda x \right\|_{0} \neq \left|\lambda\right| \left\| x \right\|_{0}\)}, measuring the number of nonzeros elements in a vector, defined as\footnote{This \textit{norm} can also be seen as the hamming distance of a vector \(x\) with the zero vector \(\symbb{0}_{n}\): \(\sum_{i=1}^{n} \symbb{1}\left(x \neq \symbb{0}_{n}\right)_{i}\)}: \(\sum_{i=1}^{n} \left|x_{i}\right|^{0}\) with defining that \(\left|0\right|=0\).
+		The realism of counterfactuals was evaluated by measuring how much training data supports the generated counterfactual, \ie{} justify the counterfactual by connecting it to real data~\cite{JustifyCF}.
+		A realistic counterfactual should have points in its neighborhood that have the same label \( y^{\text{kNN}}\) as the desired class \(y^{\text{CF}}\), this can be computed as the proportion of point in the k-neighbors agreeing with the counterfactual class: \(\symcal{A}_{\text{kNN}} = \frac{1}{k}\sum_{i=1}^{k}\symbb{1}\left(y^{\text{CF}},  y^{\text{kNN}}_{i}\right)\)~\cite{Carla_CF}.
+		This metric is only considered for correct or effective counterfactual, generated point \(\symbf{x}^{\text{CF}}\) that are predicted as \(y^{\text{CF}}\).
+		Another way of checking the realism of counterfactuals is by vizualizing the position of the counterfactual projected into the UMAP space generated from training data.
+
+		For real case scenario, an important characteristic is the time required to get a counterfactual from an example.
+		This characteristic is evaluated by measuring the latency, the time to get a prediction for a single example.
 
 	\subsection{Getting a robust model: adversarial training}
-		adversarial and counterfactuals close proximity (solve similar optimization problem).
-		Prevent the GAN from finding adversarial --> make the classifier robust to adversarial examples
-		achieved with adversarial training: opt problem
-		algo
+		Adversarial examples are inputs specifically designed to fool a neural network but are crafted to be \textit{indistinguishable}\footnote{This term origniates from the development of adversarial examples in the computer field where the meaning of \textit{indistinguishable} is clear. For other application field, the meaning needs to be adapted, usually a notion of minimal distance is introduced.} from a real input~(\cref{box:adversarial})~\cite{Szegedy2013IntriguingPO}.
+		Those examples are generated with adversarial attacks such as \gls{pgd}~\cite{PGDAttacks2} or Carlini and Wagner attack~\cite{Carlini2016TowardsET}.
+		As those attacks solve similairity optimization problems as counterfactuals generation methods~\cite{Pawelczyk2021ExploringCE,Freiesleben2021}, it is important to prevent the \gls{gan} from generating adversarial examples instead of counterfactuals.
+		In the proposed architecture, the classifier \(\operatorname{Cl}\) is the component sensitive to adversarial examples as it is used to classify the generated points.
+		The classifier can be made robust to adversarial examples with adversarial training~\cite{AdvTrainingMinMax}, which is achieved by solving the following min-max optimization problem:
+		\begin{equation}
+			\min_{\operatorname{Cl}} \E_{(x,y)}\left[\max_{\delta^{\star} \in \Delta} \symcal{L}_{\text{CE}}\left(\operatorname{Cl}\left(x+\delta^{\star}\right), y \right)  \right]
+		\end{equation}
+		where \(\symcal{L}_{\text{CE}}\) is the cross-entropy loss, \(\delta^{\star}\) the minimal adversarial perturbation changing the prediction and \(\Delta\) is the allowed set of perturbation.
+		The algorithm used to have a robust classifier \(\operatorname{Cl}\) is presented in \cref{alg:adv_training}.
+		\begin{algorithm}[htbp]
+			\DontPrintSemicolon
+			\KwIn{\(Cl\), its parameters \(\theta_{\operatorname{Cl}}\) and \(\epsilon\) the size of the attack}
+			\For{\(T\) training steps}{
+			\For{\(B\) mini-batches}{
+			Sample a batch \(x,y\) from the training data\;
+			Perfrom an adversarial attack:\;
+			\(\delta^{\star} = \operatorname{AdvAttack}\left(x,y,\epsilon\right)\)\;
+			Update classifier weights:\;
+			\( \theta_{\operatorname{Cl}} \leftarrow \theta_{\operatorname{Cl}} - \eta \nabla_{\theta_{\operatorname{Cl}}}\symcal{L}_{\text{CE}}\left(\operatorname{Cl}\left(x+\delta^{\star}\right), y\right) \)\;
+			}
+			}
+			\caption{Adversarial training of the classifier \(\operatorname{Cl}\)}\label{alg:adv_training}
+		\end{algorithm}
+
+
 
 	\subsection{Adversarial Metrics}
 		To evaluate model robustness, we used three metrics: model smoothness, margin decision~\cite{MarginDecision} and boundary thickness.
@@ -180,11 +208,17 @@
 
 		\cite{SzegedyZSBEGF13}
 		\begin{table}[htbp]
+			\centering
 			\sisetup{round-mode=places,round-precision=2}
 			\caption[Adversarial metrics]{Some LEGEND, a robust model corresponds to a model that have been adversarially trained.}\label{tab:metrics_adv}
 			\csvreader[
 				no head,
-				centered tabularray={%
+				after table={
+						\TextArrow{bt1}{bt2}{5pt}
+						\TextArrow{md1}{md2}{5pt}
+						\TextArrow{ms2}{ms1}{5pt}
+					},
+				tabularray={%
 						colspec={%
 								Q[c,m]
 								Q[si={table-format=2.2,table-number-alignment=center}, wd=1.4cm]%
@@ -216,6 +250,7 @@
 				}%
 			}{}{\csvlinetotablerow}
 		\end{table}
+		%\TextArrow{bt1}{bt2}{5pt}
 	\subsection{Counterfactuals}
 
 

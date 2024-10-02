@@ -835,8 +835,8 @@
 	They identified an upper bound on the distance between the solution of the two approaches~\cite{Pawelczyk2021ExploringCE}.
 
 	Due to the close proximity between counterfactuals and adversarial examples, it is recommended that models be robust to adversarial attacks.
-	The most effective strategy is an adversarial training of the model.
-	Adversarial training is achieved by solving the following min-max optimization problem:
+	The most effective strategy is an adversarial training of the model~\cite{huang2016learningstrongadversary}.
+	Adversarial training is achieved by solving the following min-max optimization problem~\cite{AdvTrainingMinMax}:
 	\begin{equation}
 		\min_{\theta} \E_{(x,y)}\left[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)  \right]
 	\end{equation}
@@ -845,6 +845,7 @@
 		\item solving the inner maximization problem, \ie{}finding adversarial examples, with fixed model weights,
 		\item solving the outer minimization problem, \ie{}updating model weights, on the computed adversarial examples\footnote{In practice, it is more common to also include the standard training loss, \ie{}include clean examples along the adversarial ones.}.
 	\end{enumerate}
+	See~\cite{AdvTrainSurvey} for a detailled overview of the different adversarial training variants.
 
 	At the time of writing, counterfactual explanations have not yet been applied to omics data but have already been applied in precision medicine to produce recommendations for type 2 diabetes patients~\cite{Lenatti2022}, or on radiography images to highlight problematic regions~\cite{Thiagarajan2022,Mertes2022}.
 

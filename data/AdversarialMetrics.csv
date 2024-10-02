@@ -1,4 +1,4 @@
-,Boundary thickness \( \uparrow\),Boundary thickness \( \uparrow\),Margin decision \( \uparrow\),Margin decision \( \uparrow\),Model smoothness \( \downarrow\),Model smoothness \( \downarrow\)
+,Boundary\tikzmark{bt1} thickness\tikzmark{bt2},Boundary thickness,Margin\tikzmark{md1} decision\tikzmark{md2},Margin decision,Model\tikzmark{ms1} smoothness\tikzmark{ms2},Model smoothness
 \diagbox{Models}{Robust},\xmark,\cmark,\xmark,\cmark,\xmark,\cmark
 MLP\_BN,0.3520947396755218,0.8144395351409912,0.9420821666717528,0.9188560247421264,15.65235710144043,1.4320313930511477
 MLP\_FN,0.308147519826889,1.312692403793335,0.9355136156082152,0.8987318277359009,15.3411226272583,1.588475465774536
