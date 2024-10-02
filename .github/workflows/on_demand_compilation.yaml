@@ -23,7 +23,7 @@ on:
         required: true
         type: boolean
 env:
-  DOC_OPTIONS: ${{ inputs.version }},${{ inputs.type }},${{ inputs.gitmark && 'gitmark' || ""}}
+  DOC_OPTIONS: ${{ inputs.version }},${{ inputs.type }},${{ inputs.gitmark && 'gitmark' || ''}}
 jobs:
   compile_chapter:
     runs-on: ubuntu-latest
