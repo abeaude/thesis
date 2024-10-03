@@ -7,7 +7,7 @@ $max_repeat=6;
 $bibtex_use = 2;
 $success_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log";
 $failure_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log";
-$silent = 1;
+# $silent = 1;
 # $out_dir, $aux_dir, $out2_dir, @out2_exts, $xdvipdfmx
 set_tex_cmds( '--shell-escape %O %S' );
 push @generated_exts, 'loe', 'lol', 'lor', 'run.xml', 'glg', 'glstex', 'glo', 'bcf', 'fls', 'glg-abr', 'glo-abr', 'ist', 'lof', 'slg', 'slo', 'sls', 'toc', 'fdb_latexmk', 'gls', 'gls-abr', 'xdv';
@@ -60,16 +60,14 @@ sub makerobustexternalize {
 add_cus_dep( 'tex', 'aux', 0, 'makeexternaldocument' );
 sub makeexternaldocument {
     system "pwd";
-    if ( $root_filename ne $_[0] )  {
+    if ( $root_filename ne $_[0] && $root_filename ne "main" )  {
         print "Compiling external document ", $_[0], "\n";
         my ($base_name, $path) = fileparse( $_[0] );
         system "xelatex --shell-escape -no-pdf -synctex=1 -interaction=nonstopmode -file-line-error -recorder -output-directory='chapters/PDF' $_[0].tex && biber $path/PDF/$base_name.bcf && xelatex --shell-escape -no-pdf -synctex=1 -interaction=nonstopmode -file-line-error -recorder -output-directory='chapters/PDF' $_[0].tex && xelatex --shell-escape -no-pdf -synctex=1 -interaction=nonstopmode -file-line-error -recorder -output-directory='chapters/PDF' $_[0].tex";
         rdb_add_generated( "$path/PDF/$base_name.aux" );
         copy "$path/PDF/$base_name.aux", "chapters/";
         popd();
-    } else {
-        print "Not running on main file";
-    }
+    } 
 }
 
 if( ($ENV{GITHUB_ACTIONS} // "false") eq "true" ){
