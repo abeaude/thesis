@@ -131,7 +131,8 @@
 		The algorithm used to have a robust classifier \(\operatorname{Cl}\) is presented in \cref{alg:adv_training}.
 		\begin{algorithm}[htbp]
 			\DontPrintSemicolon
-			\KwIn{\(Cl\), its parameters \(\theta_{\operatorname{Cl}}\) and \(\epsilon\) the size of the attack}
+			\KwIn{\(\operatorname{Cl}\), its parameters \(\theta_{\operatorname{Cl}}\) and \(\epsilon\) the size of the attack}
+			\KwOut{Robust classifier \(\operatorname{Cl}\)}
 			\For{\(T\) training steps}{
 			\For{\(B\) mini-batches}{
 			Sample a batch \(x,y\) from the training data\;
@@ -147,7 +148,7 @@
 
 
 	\subsection{Adversarial Metrics}
-		To evaluate model robustness, we used three metrics: model smoothness, margin decision~\cite{MarginDecision} and boundary thickness.
+		To evaluate model robustness, we used three metrics: model smoothness~\cite{MarginDecision}, margin decision~\cite{MarginDecision} and boundary thickness~\cite{AdvBoundaryThick}.
 		The details of each metric is given below:
 		\begin{description}[
 				style=multiline,
@@ -155,22 +156,25 @@
 				labelwidth=2.5cm
 			]
 			\item[Model smoothness]
-				insensitiveness of the output to the input perturbation~\cite{MarginDecision}
-				KL divergence
-				smaller smoothness is better
+				This metric measure the insensitiveness of the output to the input perturbation~\cite{MarginDecision}, \ie{} the decision boundary is further away from samples and small perturbation does not affect the output.
+				This metric is defined as the Kullback-Leibler divergence between the predicted probability of a clean sample \(g\left(\symbf{x}\right)\) and the predicted probability of an adversarial example \(g\left(\symbf{x}^{\star}\right)\):
+				\begin{equation}
+					\operatorname{KL}\left(g\left(\symbf{x}\right) \| g\left(\symbf{x}^{\star}\right)\right)
+				\end{equation}
+				A smaller smoothness indicates a more robust model.
 			\item[Margin decision]
 				This metric measure the distance of an example to the decision boundary~\cite{MarginDecision}.
-				text version of the metric
+				This is measured as the difference between the probability of the true label \(g\left(\symbf{x}\right)_{y}\) and the probability of the other most probable class \(\max_{i \neq y} g\left(\symbf{x}\right)_{i}\):
 				\begin{equation}
 					g\left(\symbf{x}\right)_{y} - \max_{i \neq y} g\left(\symbf{x}\right)_{i}
 				\end{equation}
 				A higher margin decision is better.
 			\item[Boundary thickness]
-				Thick decision boundaries lead to improved performance
-				thicker boundary helps improve robustness against adversarial examples
+				The boundaries thickness measure ~\cite{AdvBoundaryThick}.
 				\begin{equation}
 					\left\|x - x^{\star}\right\|_{2} \int_{0}^{1} \symbb{1}\left\{ \alpha < g_{ij}\left(tx + \left(1-t\right)x^{\star} \right) < \beta\right\}
 				\end{equation}
+				Thicker boundary helps improve robustness against adversarial examples.
 		\end{description}
 
 

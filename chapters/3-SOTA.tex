@@ -838,14 +838,16 @@
 	The most effective strategy is an adversarial training of the model~\cite{huang2016learningstrongadversary}.
 	Adversarial training is achieved by solving the following min-max optimization problem~\cite{AdvTrainingMinMax}:
 	\begin{equation}
-		\min_{\theta} \E_{(x,y)}\left[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)  \right]
+		\min_{\theta} \E_{(x,y)}\left[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)  \right] \label{eq:adv_train}
 	\end{equation}
 	and it is implemented as an alternating procedure:
-	\begin{enumerate}
+	\begin{enumerate}[nosep]
 		\item solving the inner maximization problem, \ie{}finding adversarial examples, with fixed model weights,
 		\item solving the outer minimization problem, \ie{}updating model weights, on the computed adversarial examples\footnote{In practice, it is more common to also include the standard training loss, \ie{}include clean examples along the adversarial ones.}.
 	\end{enumerate}
-	See~\cite{AdvTrainSurvey} for a detailled overview of the different adversarial training variants.
+	In~\cite{TRADES}, \citeauthor{TRADES} studied the tradeoff between robustness and accuracy and based on their theoritical analysis proposed an improved adversarial training strategy known as TRADES.
+	TRADES adds a regularization term to the loss \(\symcal{L}\) in \cref{eq:adv_train} pushing the decision boundary away from the data when solving the outer minimization problem, \ie{}increasing the robustness of the model.
+	See~\cite{AdvTrainSurvey} for a detailled overview of the various adversarial training strategies.
 
 	At the time of writing, counterfactual explanations have not yet been applied to omics data but have already been applied in precision medicine to produce recommendations for type 2 diabetes patients~\cite{Lenatti2022}, or on radiography images to highlight problematic regions~\cite{Thiagarajan2022,Mertes2022}.
 
