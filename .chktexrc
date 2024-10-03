@@ -10,7 +10,7 @@ Silent
 		\minitocpage \minitoc \minitocpagecentered
 		\xmark \cmark
 		\endfirsthead \endhead \endfoot \endlastfoot
-		\textbullet
+		\textbullet \textemdash
 		\addplot \attomicsperfzoom \attomicsperf \Nattomicszoom \foreach \faCircle
 		\attomicsperfspecificity \attomicsperfspecificityzoom \attomicsperfrecall \attomicsperfrecallzoom \attomicsperfprecision \attomicsperfprecisionzoom \attomicsperffun \attomicsperffunzoom \attomicsperfauroc \attomicsperfauroczoom \LRPCrossAttOmicsSubset \CrossAttOmicsGateSelFreq
 		\robExtPrefixAllCompilationCommands \robExtCp \cacheTikz \robExtOutputDirectory \robExtCacheFolder

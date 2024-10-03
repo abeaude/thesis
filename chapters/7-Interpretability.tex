@@ -123,7 +123,7 @@
 		Those examples are generated with adversarial attacks such as \gls{pgd}~\cite{PGDAttacks2} or Carlini and Wagner attack~\cite{Carlini2016TowardsET}.
 		As those attacks solve similairity optimization problems as counterfactuals generation methods~\cite{Pawelczyk2021ExploringCE,Freiesleben2021}, it is important to prevent the \gls{gan} from generating adversarial examples instead of counterfactuals.
 		In the proposed architecture, the classifier \(\operatorname{Cl}\) is the component sensitive to adversarial examples as it is used to classify the generated points.
-		The classifier can be made robust to adversarial examples with adversarial training~\cite{AdvTrainingMinMax}, which is achieved by solving the following min-max optimization problem:
+		The classifier can be made robust to adversarial examples with untargeted adversarial training~\cite{AdvTrainingMinMax}, which is achieved by solving the following min-max optimization problem:
 		\begin{equation}
 			\min_{\operatorname{Cl}} \E_{(x,y)}\left[\max_{\delta^{\star} \in \Delta} \symcal{L}_{\text{CE}}\left(\operatorname{Cl}\left(x+\delta^{\star}\right), y \right)  \right]
 		\end{equation}
@@ -144,11 +144,11 @@
 			}
 			\caption{Adversarial training of the classifier \(\operatorname{Cl}\)}\label{alg:adv_training}
 		\end{algorithm}
-
+		%TODO: present targeted version randomly
 
 
 	\subsection{Adversarial Metrics}
-		To evaluate model robustness, we used three metrics: model smoothness~\cite{MarginDecision}, margin decision~\cite{MarginDecision} and boundary thickness~\cite{AdvBoundaryThick}.
+		To evaluate the robustness of the classifier \(\operatorname{Cl}\), we used three metrics: model smoothness~\cite{MarginDecision}, margin decision~\cite{MarginDecision} and boundary thickness~\cite{AdvBoundaryThick}.
 		The details of each metric is given below:
 		\begin{description}[
 				style=multiline,
@@ -157,22 +157,22 @@
 			]
 			\item[Model smoothness]
 				This metric measure the insensitiveness of the output to the input perturbation~\cite{MarginDecision}, \ie{} the decision boundary is further away from samples and small perturbation does not affect the output.
-				This metric is defined as the Kullback-Leibler divergence between the predicted probability of a clean sample \(g\left(\symbf{x}\right)\) and the predicted probability of an adversarial example \(g\left(\symbf{x}^{\star}\right)\):
+				This metric is defined as the Kullback-Leibler divergence between the predicted probability of a clean sample \(\operatorname{Cl}\left(\symbf{x}\right)\) and the predicted probability of the corresponding adversarial example \(\operatorname{Cl}\left(\symbf{x}^{\star}\right)\):
 				\begin{equation}
-					\operatorname{KL}\left(g\left(\symbf{x}\right) \| g\left(\symbf{x}^{\star}\right)\right)
+					\operatorname{KL}\left(\operatorname{Cl}\left(\symbf{x}\right) \| \operatorname{Cl}\left(\symbf{x}^{\star}\right)\right)
 				\end{equation}
 				A smaller smoothness indicates a more robust model.
 			\item[Margin decision]
 				This metric measure the distance of an example to the decision boundary~\cite{MarginDecision}.
-				This is measured as the difference between the probability of the true label \(g\left(\symbf{x}\right)_{y}\) and the probability of the other most probable class \(\max_{i \neq y} g\left(\symbf{x}\right)_{i}\):
+				This is measured as the difference between the probability of the true label \(\operatorname{Cl}\left(\symbf{x}\right)_{y}\) and the probability of the other most probable class \(\max_{i \neq y} \operatorname{Cl}\left(\symbf{x}\right)_{i}\):
 				\begin{equation}
-					g\left(\symbf{x}\right)_{y} - \max_{i \neq y} g\left(\symbf{x}\right)_{i}
+					\operatorname{Cl}\left(\symbf{x}\right)_{y} - \max_{i \neq y} \operatorname{Cl}\left(\symbf{x}\right)_{i}
 				\end{equation}
 				A higher margin decision is better.
 			\item[Boundary thickness]
-				The boundaries thickness measure ~\cite{AdvBoundaryThick}.
+				The boundaries thickness measure the margin of the region where the probability difference \(D_{ij}\left(\cdot\right) = \operatorname{Cl}\left(\cdot\right)_{i} - \operatorname{Cl}\left(\cdot\right)_{j}\), where \(i\) and \(j\) are the predicted labels of a clean sample \(\symbf{x}\) and its adversarial example \(\symbf{x}^{\star}\), lies between two values \(\alpha\) and \(\beta\)~\cite{AdvBoundaryThick}:
 				\begin{equation}
-					\left\|x - x^{\star}\right\|_{2} \int_{0}^{1} \symbb{1}\left\{ \alpha < g_{ij}\left(tx + \left(1-t\right)x^{\star} \right) < \beta\right\}
+					\left\|x - x^{\star}\right\|_{2} \int_{0}^{1} \symbb{1}\left\{ \alpha < D_{ij}\left(tx + \left(1-t\right)x^{\star} \right) < \beta\right\}
 				\end{equation}
 				Thicker boundary helps improve robustness against adversarial examples.
 		\end{description}
@@ -180,6 +180,11 @@
 
 \section{Preliminary results}
 	\subsection{Adversarial study}
+		Presents the problem of BatchNorm and adversarial training. Considered multiple models and compare their robustness and performances.
+		How did we searched for adversarial examples PGD, briefly (see Box) used this package
+		choose the norm (mention the relationships between the norm)
+		how did we choose the epsilon refer to supplementary and introduce the notion of class distance.
+		AT change the training dynamics (cv speed, two tasks), we searched for each model the optimal number of training steps.
 		what attacks we used PGD Linf cite package
 		how did we choose epsilon (distance class)
 		BN problems, consider models without batch normalization
