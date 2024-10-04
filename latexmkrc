@@ -5,12 +5,13 @@ $postscript_mode = $dvi_mode = 0;
 $allow_subdir_creation=2;
 $max_repeat=6;
 $bibtex_use = 2;
-$success_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log";
-$failure_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log";
-# $silent = 1;
+# $success_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log | sed -r 's/\x1B\[(;?[0-9]{1,3})+[mGK]//g' | grep -vE 'LaTeX2e|Document Class|Output written|Package silence' && if [ '%A' = 'main' ]; then rm -f '%Y/%A.log'; fi";
+# $failure_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log | sed -r 's/\x1B\[(;?[0-9]{1,3})+[mGK]//g' | grep -vE 'LaTeX2e|Document Class|Output written|Package silence'";
+$silent = 1;
+# $makeindex = "makeindex %O -o %D %S";
 # $out_dir, $aux_dir, $out2_dir, @out2_exts, $xdvipdfmx
 set_tex_cmds( '--shell-escape %O %S' );
-push @generated_exts, 'loe', 'lol', 'lor', 'run.xml', 'glg', 'glstex', 'glo', 'bcf', 'fls', 'glg-abr', 'glo-abr', 'ist', 'lof', 'slg', 'slo', 'sls', 'toc', 'fdb_latexmk', 'gls', 'gls-abr', 'xdv';
+push @generated_exts, 'loe', 'lol', 'lor', 'run.xml', 'glg', 'glstex', 'glo', 'bcf', 'fls', 'glg-abr', 'glo-abr', 'ist', 'lof', 'slg', 'slo', 'sls', 'toc', 'fdb_latexmk', 'gls', 'gls-abr', 'xdv', 'aux';
 
 ##############
 # Glossaries #

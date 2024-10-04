@@ -350,7 +350,7 @@
 			\min_{G} \max_{D} \symcal{L}_{\text{GAN}}\left(G,D\right) = \E_{x\sim p_{d}}\left[ \log\left(D\left(x\right)\right)\right] + \E_{z\sim p_{z}}\left[ \log\left( 1 - D\left(G\left(z\right)\right)\right)\right] \label{eq:gan_loss}
 		\end{equation}
 
-		In practice \gls{gan} training is implemented as an iterative process alternatin between \(k\) steps of optimizing \(D\) and one step optimizing \(G\).
+		In practice \gls{gan} training is implemented as an iterative process alternating between \(k\) steps of optimizing \(D\) and one step optimizing \(G\).
 		The complete training procedure is presented in \cref{alg:gan}.
 		\begin{algorithm}[htbp]
 			\DontPrintSemicolon
