@@ -179,7 +179,7 @@
 \RequirePackage[hyperindex=true, bookmarks=true, breaklinks=true,bookmarksnumbered=true]{hyperref}
 \RequirePackage[ocgcolorlinks]{ocgx2}
 %% GLOSSARIES %%
-\RequirePackage[symbols, abbreviations, automake, indexcrossrefs=true]{glossaries-extra}
+\RequirePackage[symbols, abbreviations, indexcrossrefs=true]{glossaries-extra}%automake
 \renewcommand{\glossarypreamble}{\footnotesize}
 %% MULTIPLE DOCS %%
 \RequirePackage{subfiles}

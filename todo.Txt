@@ -8,13 +8,6 @@ https://www.yegor256.com/2023/09/05/style-checker-for-bibtex-files.html
 https://github.com/pezmc/biblatex-check
 https://github.com/FlamingTempura/bibtex-tidy
 
-   \begin{mybox}[label=box:wgcna]{WGCNA}
-	This is a numbered box.
-   \end{mybox}
-   texlogfilter --no-box main.log
-   https://texlive.mycozy.space/support/texlogsieve/texlogsieve.pdf
-
-   include pdfx package 
    replace section chapter with \namecref
 
    https://tex.stackexchange.com/questions/118021/how-to-replace-all-by
@@ -24,3 +17,7 @@ https://github.com/FlamingTempura/bibtex-tidy
    --driver=xelatex
 
    https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_dispatch
+
+   In work chapters, update the Data paragraph to link to the one in Background. 
+   vérifier mise en page : quelle figure sont à refaire... 
+   faire la quatrième de couverture : titre, résumé, auteur, copyright, qrcode to the online version ? 

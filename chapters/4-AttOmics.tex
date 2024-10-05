@@ -330,22 +330,20 @@
 
 	\subsection{Attention map interpretation}
 
-		\begin{figure}[htbp]
-			\centering
-			\includegraphics[width=\linewidth]{Beaude.168.fig.4.pdf}
-			\caption{Attention map visualisation for the TCGA-CESC class obtained after applying the hallmarks grouping on \glsfmtshort{mrna}.}\label{fig:att_map_viz}
-		\end{figure}
-
 		One advantage of using self-attention in the model is the ability to visualize the learned interactions~(\cref{fig:att_map_viz}).
 		The attention map corresponds to the attention weights average across patients with the same phenotype.
 		The learned interactions are different across cancer~(\cref{fig:att_map_cancer_go,fig:att_map_cancer_hallmarks}), suggesting that the model learns interactions specific to each cancer.
-
 		The self-attention mechanism used in the architecture was not designed to be an interpretability tool.
 		However, it can provide information on the interaction learned by the model depending on the grouping strategy.
 		We used GO slim or MSigDB hallmarks as a biological knowledge-aware grouping strategy.
 		The terms used in GO slim represent general biological processes; the high level of the terms makes it difficult to link the detected interaction with the phenotype.
 		On the contrary, MSigDB hallmarks focuses on important and specific biological processes and  are, therefore, easier to interpret.
 
+		\begin{figure}[htbp]
+			\centering
+			\includegraphics[width=\linewidth]{Beaude.168.fig.4.pdf}
+			\caption{Attention map visualisation for the TCGA-CESC class obtained after applying the hallmarks grouping on \glsfmtshort{mrna}.}\label{fig:att_map_viz}
+		\end{figure}
 
 		With the hallmarks grouping, we identified interactions between well-known pathways in cervical cancer: Wnt signaling, HedgeHog signaling, and JAK/STAT signaling~(\cref{fig:att_map_viz}).
 		STAT proteins play a role in the development of cervical cancer~\cite{gutierrez-hoyaRoleJAKSTAT2020}.
@@ -353,13 +351,10 @@
 		It has been shown that HedgeHog pathway components are expressed in cervical cancer cells and are involved in cell proliferation~\cite{samarzijaHedgehogPathwayRegulators2012}.
 		It has also been shown that there is a crosstalk between Wnt and HedgeHog pathways, which are known to be involved in chemo-resistance in cervical cancer~\cite{kumarRoleNotchHedgehog2021}.
 
-
 		Interestingly, we identified similar interactions learned by the model between the GO slim and hallmarks grouping strategies.
 		For BLCA cancer, a model based on GO slim identified multiple interactions involved in the inflammatory response (GO:0006954).
 		In the model based on hallmarks, the inflammatory response group is also identified as involved in different interactions~(\cref{fig:att_map_blca_comp}).
 		The group composition between the two strategies is different, with an overlap of 29\%.
-
-
 		The model can handle any grouping, handcrafted groups, or based on a different knowledge source that could be used to improve the information contained in an attention map.
 
 \end{document}
