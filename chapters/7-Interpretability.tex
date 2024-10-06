@@ -203,7 +203,7 @@
 		Adversarial training introduces an implicit task: the model robustness, which changes the training dynamics as the adversarial distributions evolve during training.
 		We noticed that with a very large number of training steps\footnote{four times more than \gls{mlp} NF.} the \gls{mlp} BN was able to benefit from adversarial training.
 		After identifying the optimal number of training steps for each model, we compared the robustness accuracy tradeoff of the models to \gls{pgd} attacks of various sizes~(\cref{fig:mlp_bn_adv_tradeoff,fig:mlp_ln_adv_tradeoff,fig:mlp_nonorm_adv_tradeoff,fig:mlp_fn_adv_tradeoff,fig:mlp_fnagcadv_tradeoff}) after a clean training (\(\epsilon = 0\)) or an adversarial training (\(\epsilon > 0\)).
-		Results for the \gls{mlp} BN model are describe here~(\cref{fig:mlp_bn_adv_tradeoff}), results for the other models  are available in~ \cref{chapinterpretability_appendix} \crefrange{fig:mlp_ln_adv_tradeoff}{fig:mlp_fnagcadv_tradeoff}.
+		Results for the \gls{mlp} BN model are describe here~(\cref{fig:mlp_bn_adv_tradeoff}), results for the other models  are available in~\cref{chap:interpretability_appendix} \crefrange{fig:mlp_ln_adv_tradeoff}{fig:mlp_fnagcadv_tradeoff}.
 		We noticed that adversarial training with a fixed \(\epsilon\) leads to robustness to attacks of the same size.
 		Intuitively, adversarial training with large \(\epsilon\) would provide robustness to attacks with smaller \(\epsilon\).
 		From our experiments, we observed that was not the case.

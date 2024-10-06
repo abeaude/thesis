@@ -36,7 +36,6 @@
     "latex-workshop.latex.clean.fileTypes": [
         "%OUTDIR%/%DOCFILE%.bbl",
         "%OUTDIR%/%DOCFILE%.blg",
-        "%OUTDIR%/%DOCFILE%.bcf",
         "%OUTDIR%/%DOCFILE%.idx",
         "%OUTDIR%/%DOCFILE%.ind",
         "%OUTDIR%/%DOCFILE%.lof",

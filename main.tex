@@ -77,8 +77,12 @@
 \tableofcontents
 \listoftables
 \listoffigures
-\printabbreviations
-\printsymbols
+\begin{singlespace}
+	\KOMAoption{parskip}{false}
+	\printabbreviations
+	\printsymbols
+	\KOMAoption{parskip}{half}
+\end{singlespace}
 \mainmatter
 %%%%%%%%%%%%%%
 %% CONTENTS %%

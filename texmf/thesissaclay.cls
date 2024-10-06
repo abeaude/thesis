@@ -588,33 +588,34 @@
 	\newcommand{\makesummary}[2]{
 		\KOMAoption{parskip}{false}
 		\thispagestyle{empty}
-		\newgeometry{left=2cm, right=2cm, top=1.5cm, bottom=1.25cm}
+		\newgeometry{left=2cm, right=2cm, top=0.5cm, bottom=1.25cm}
 		\begin{spacing}{1}
 			\begin{footnotesize}
 				\noindent\includegraphics{\@logoed}
-				\vspace{1cm}
+				\vfill
 
 				\begin{mdframed}[linecolor=Prune, linewidth=1, innertopmargin=2mm, innerbottommargin=2mm, innerrightmargin=3mm, innerleftmargin=3mm, subtitleinnerbelowskip=1mm, subtitleaboveskip=0mm, subtitlebelowskip=0mm, subtitleinneraboveskip=0mm, skipabove=0mm, skipbelow=0mm]
-					\mdfsubtitle{Titre: \@title}
-					\noindent\textbf{Mots clés: \@keywordsfr}
-					\vspace{-5mm}
-					\begin{multicols}{2}
-						\noindent\textbf{\abstractname}: \input{#1}
-					\end{multicols}
-
-				\end{mdframed}
-				\vspace{8mm}
-				\begin{mdframed}[linecolor=Prune, linewidth=1, innertopmargin=2mm, innerbottommargin=2mm, innerrightmargin=3mm, innerleftmargin=3mm, subtitleinnerbelowskip=1mm, subtitleaboveskip=0mm, subtitlebelowskip=0mm, subtitleinneraboveskip=0mm, skipabove=0mm, skipbelow=0mm]
-					\mdfsubtitle{Title: \@subtitle}
-					\noindent\textbf{Keywords: \@keywordsen}
+					\mdfsubtitle{\textcolor{Prune}{Titre}: \@subtitle}
+					\noindent\textbf{\textcolor{Prune}{Mots clés}: \@keywordsfr}
 					\vspace{-5mm}
 					\begin{french}
 						\begin{multicols}{2}
-							\noindent\textbf{\abstractname}: \input{#2}
+							\noindent\textbf{\textcolor{Prune}{\abstractname}}: \input{#1}
 						\end{multicols}
 					\end{french}
+
+				\end{mdframed}
+				\vfill
+				\begin{mdframed}[linecolor=Prune, linewidth=1, innertopmargin=2mm, innerbottommargin=2mm, innerrightmargin=3mm, innerleftmargin=3mm, subtitleinnerbelowskip=1mm, subtitleaboveskip=0mm, subtitlebelowskip=0mm, subtitleinneraboveskip=0mm, skipabove=0mm, skipbelow=0mm]
+					\mdfsubtitle{\textcolor{Prune}{Title}: \@title}
+					\noindent\textbf{\textcolor{Prune}{Keywords}: \@keywordsen}
+					\vspace{-5mm}
+					\begin{multicols}{2}
+						\noindent\textbf{\textcolor{Prune}{\abstractname}}: \input{#2}
+					\end{multicols}
 				\end{mdframed}
 			\end{footnotesize}
+			\vfill
 		\end{spacing}
 		\KOMAoption{parskip}{half}
 		\cleardoublepage

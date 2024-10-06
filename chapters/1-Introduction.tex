@@ -9,12 +9,6 @@
 	\graphicspath{{figures/1-Introduction/}}%
 	\setcounter{chapter}{0}%
 	\mainmatter%
-	% \externaldocument{chapters/2-Background}%
-	% \externaldocument{chapters/3-SOTA}%
-	% \externaldocument{chapters/4-AttOmics}%
-	% \externaldocument{chapters/5-CrossAttOmics}%
-	% \externaldocument{chapters/6-Interpretability}%
-	% \externaldocument{chapters/7-Conclusions}%
 }{
 	\graphicspath{{../figures/1-Introduction/}}%
 }
@@ -63,7 +57,7 @@
 	The DNA molecule, located in the cell nucleus, holds the genetic information of an organism.
 	This molecule is transcribed into various RNA products.
 	After a maturation step, a pool of these RNAs becomes \glspl{mrna_mol}.
-	\Glspl{mrna_mol} are exported into the cell cytoplasm, where ribosomes will start the translation of the \gls{mrna_mol} into a protein.
+	\glspl{mrna_mol} are exported into the cell cytoplasm, where ribosomes will start the translation of the \gls{mrna_mol} into a protein.
 	RNAs producing proteins correspond to coding sequences, or genes,  in the DNA sequence, the non-coding sequences are still transcribed and are involved in regulating gene expression.
 	Quantifying all molecular components involved in the correct functioning of a cell generates high-dimensional data.
 	Indeed, there are more than 20,000 known coding genes and more than 30,000 known non-coding genes; each nucleotide position in the DNA sequence can vary between individuals, and there are three billion nucleotides in the human genome.
@@ -133,10 +127,11 @@
 			The model learns a score for each interaction, and this interaction score provides a first explainability level in understanding how the predictions are obtained.
 			We have also proposed a method based on counterfactuals to identify potential biomarkers by finding the minimal realistic change in the prediction.
 	\end{description}
-	\clearpage
+	% \clearpage
 
 \section{Thesis overview}
 	\begin{center}
+		\vspace{-3\baselineskip}
 		\ifSubfilesClassLoaded{%
 			\input{figures/1-Introduction/thesis_overview.tex}%
 		}{

@@ -1,7 +1,15 @@
-Eius populus ab incunabulis primis ad usque pueritiae tempus extremum, quod annis circumcluditur fere trecentis, circummurana pertulit bella, deinde aetatem ingressus adultam post multiplices bellorum aerumnas Alpes transcendit et fretum, in iuvenem erectus et virum ex omni plaga quam orbis ambit inmensus, reportavit laureas et triumphos, iamque vergens in senium et nomine solo aliquotiens vincens ad tranquilliora vitae discessit.
-Eius populus ab incunabulis primis ad usque pueritiae tempus extremum, quod annis circumcluditur fere trecentis, circummurana pertulit bella, deinde aetatem ingressus adultam post multiplices bellorum aerumnas Alpes transcendit et fretum, in iuvenem erectus et virum ex omni plaga quam orbis ambit inmensus, reportavit laureas et triumphos, iamque vergens in senium et nomine solo aliquotiens vincens ad tranquilliora vitae discessit.
-Hoc inmaturo interitu ipse quoque sui pertaesus excessit e vita aetatis nono anno atque vicensimo cum quadriennio imperasset.
-natus apud Tuscos in Massa Veternensi, patre Constantio Constantini fratre imperatoris, matreque Galla.
-Thalassius vero ea tempestate praefectus praetorio praesens ipse quoque adrogantis ingenii, considerans incitationem eius ad multorum augeri discrimina, non maturitate vel consiliis mitigabat, ut aliquotiens celsae potestates iras principum molliverunt, sed adversando iurgandoque cum parum congrueret, eum ad rabiem potius evibrabat, Augustum actus eius exaggerando creberrime docens, idque, incertum qua mente, ne lateret adfectans.
-quibus mox Caesar acrius efferatus, velut contumaciae quoddam vexillum altius erigens, sine respectu salutis alienae vel suae ad vertenda opposita instar rapidi fluminis irrevocabili impetu ferebatur.
-Hae duae provinciae bello quondam piratico catervis mixtae praedonum.
+Precision medicine has been a transformative approach to healthcare, tailoring decisions to each patient.
+The rise of this medicine has been made possible by the development of high-throughput sequencing methods, enabling large patient data collection, and the development of deep learning methods to make the most out of this data.
+The high dimensionality of omics data leads to very large deep learning models, and while data availability is increasing, it remains limited for such large architectures.
+Current deep learning architectures use fixed weights during inference that are the same for all patients, restricting the potential for truly personalized medicine.
+Diseases like cancer result from perturbations in biological processes at multiple levels.
+Current acquisition methods collect the information at all levels; analytical methods combining this multilevel information are needed to improve predictions and the understanding of these diseases.
+Understanding predictions is critical in high-stakes domains such as healthcare, but deep learning models are considered \textit{black-boxes}.
+To address those limitations, we proposed new methods, which are listed below.
+Firstly, we developed AttOmics, a deep learning architecture based on the self-attention mechanism for omics data.
+We applied it to groups of related features to cope with attention memory requirements.
+Secondly, we proposed CrossAttOmics, an architecture based on the cross-attention mechanism.
+We only considered known regulatory interactions of modalities.
+Thirdly, we modified CrossAttOmics in CrossAttOmicsGate to score each modality interaction.
+Finally, we developed a generative model to obtain counterfactual explanations, allowing the identification of the required change in the molecular profile for a patient to be healthy.
+We compared our methods with the current state-of-the-art methods for molecular data.

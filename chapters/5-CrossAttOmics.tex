@@ -253,7 +253,7 @@
 		\begin{figure*}[htbp]
 			\centering
 			\includegraphics{limited_training_6_omics.pdf}
-			\caption{Accuracy on the TCGA test set according to the size of the training set for various multi-omics deep learning models when trained on 6 omics.}
+			\caption[CrossAttOmics and other architectures accuracy on the TCGA test set according to the size of the training set]{Accuracy on the TCGA test set according to the size of the training set for various multi-omics deep learning models when trained on 6 omics.}
 			\label{fig:lim_train_6_omics}
 		\end{figure*}
 		Despite the broad adoption of high throughput methods in personalized medicine, the availability of paired multi-omics data from cancer patients remains limited.
@@ -373,7 +373,7 @@
 				\node[anchor=north, yshift=1ex] at (current axis.below south) {\pgfplotslegendfromname{LRPsubset}};
 			\end{tikzpicture}
 			%\includegraphics[width=\linewidth]{LRP_crossattomics_subset.pdf}
-			\caption{Comparison of the \glsfmtshort{lrp} relevance score for the different modelled modality interactions for three cancer.}\label{fig:LRP_CrossAttOmics_subset}
+			\caption[Comparison of the \glsfmtshort{lrp} relevance scores]{Comparison of the \glsfmtshort{lrp} relevance score for the different modelled modality interactions for three cancer.}\label{fig:LRP_CrossAttOmics_subset}
 		\end{wrapfigure}
 		\Cref{fig:LRP_CrossAttOmics_subset} presents the \gls{lrp} attribution score for each considered interaction by cancer.
 		Each cancer is characterized by a specific set of important interactions, suggesting that the cross-attention can learn interactions specific to each cancer~(\cref{fig:LRP_CrossAttOmics}).
