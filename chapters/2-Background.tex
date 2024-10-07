@@ -193,7 +193,6 @@
 		\begin{equation}
 			\operatorname{CA}\left(X_1, X_2 \right) = \operatorname{Attention} \left(X_1W^Q, X_2W^K, X_2W^V\right) \label{eq:cross_attention}
 		\end{equation}
-		\(\log \symsfup{log}\)
 		One limitation of the scaled-dot product attention is its quadratic complexity in time and space.
 		This quadratic complexity limits the number of elements \(L\) in the inputs to a few thousand.
 		New approaches have been proposed to have more efficient transformer architectures to circumvent this limitation.
@@ -288,7 +287,7 @@
 		Other approaches discretize the survival times and compute the survival function on those intervals or directly estimates the probability mass function with a neural network~\cite{Lee2018}.
 
 		\begin{mybox}[label={box:cox}]{Cox models}
-			The Cox proportional hazards model\footnote{The hazard ratio of two patients is idependant of time: \(\frac{\lambda(t | \symbf{x}_{i})}{\lambda(t | \symbf{x}_{j})} = e^{\beta\cdot \left(\symbf{x}_{i} - \symbf{x}_{j}\right)}\)} is a method used to estimate a patient survival from its covariates \(\symbf{x}\).
+			The Cox proportional hazards model\footnote{The hazard ratio of two patients is independant of time: \(\frac{\lambda(t | \symbf{x}_{i})}{\lambda(t | \symbf{x}_{j})} = e^{\beta\cdot \left(\symbf{x}_{i} - \symbf{x}_{j}\right)}\)} is a method used to estimate a patient survival from its covariates \(\symbf{x}\).
 			The hazard function has two components, a baseline hazard \(\lambda_0(t)\) and a relative risk score \(e^{\beta \symbf{x}}\):
 			\[\lambda(t | \symbf{x}) = \lambda_0(t) e^{\beta \symbf{x}}\]
 			The relative risk is estimated as a linear transformation of the covariates.
@@ -305,8 +304,8 @@
 		This is called \gls{sgd}.
 		There are algorithmic variations to this gradient descent strategy.
 		It has been proposed to add a momentum term; it remembers the update \(\delta_{\theta}\) at each iteration and updates the weights as a linear combination of the gradient and the previous update.
-		RMSprop ensures that the learning rate is adapted for each model weight by normalizing the gradients with the moving average of the squares of gradients.
-		Adam combines the previous algorithm and keeps an exponential moving average estimate of the second-order moments of the gradients.
+		RMSprop~\cite{OptimRMSProp} ensures that the learning rate is adapted for each model weight by normalizing the gradients with the moving average of the squares of gradients.
+		Adam~\cite{OptimAdam} combines the previous algorithm and keeps an exponential moving average estimate of the second-order moments of the gradients.
 		The processing of all mini-batches corresponds to one epoch, and the training is repeated for multiple epochs until convergence.
 
 		Deep learning models are sensitive to overfitting.
@@ -387,7 +386,7 @@
 		\Gls{wgan}~\cite{WGAN} was proposed to address issues in the original \gls{gan} formulation.
 		\citeauthor{WGAN} replaced the Jensen-shannon divergence with \(L^{1}\)-Wasserstein distance metric.
 		Wasserstein distance is another way of comparing two distributions, it measures the minimum cost of transforming one probability distribution into another, and provide a meaningful distance even if distributions do not overlap.
-		The discriminator is now called a critc that instead of classifying samples as real or fake provide a realness score\footnote{There are no more sigmoid activation at its output}.
+		The discriminator is now called a critic that instead of classifying samples as real or fake provide a realness score\footnote{There are no more sigmoid activation at its output}.
 		The computation of the Wasserstein distance is complex and can be simplified by forcing the critic to be a K-Lipschitz function.
 		Which translates into constraints on the critic \(D\), \(D\) must belongs to the set \( \symcal{D}\) of K-Lipschitz function:
 		\begin{equation}
@@ -459,6 +458,7 @@
 		Despite being a group of more than a hundred different diseases, cancers share similar characteristics.
 		These shared properties are known as the hallmarks of cancer.
 		Hallmarks define eight capabilities and two enabling capabilities, and they present an organizing principle to approach the complexity of cancers.
+		%TODO enumerate the capabilities and add figures + citation
 
 \section{Omics data}
 	The omics field corresponds to the characterization and quantification of pools of biological molecules.
@@ -499,7 +499,7 @@
 		After fragmentation of the RNA molecule, a reverse transcriptase is used to convert the transcript into its \gls{cdna} sequence.
 		The \gls{cdna} fragment is then sequenced as described in the \cref{subsec:genomics}.
 		The reads are aligned to a reference genome; an annotation file is used to count the number of reads that map to a region known as a coding gene.
-		The resulting counts are expressed in \gls{fpkm}, accounting for the sequencing depth and the length of the gene.
+		The resulting count matrix can later be normalized to account for the sequencing depth and the length of the gene in \gls{fpkm}, \gls{tpm}, or any other normalization depending on the study needs.
 
 	\subsection{Epigenomics}
 		Epigenomics is the study of the epigenome, the epigenetic modification of the genetic material.
@@ -511,7 +511,7 @@
 			\item \glsxtrfull{mirna},
 			\item \glsxtrfull{lncrna}.
 		\end{itemize}
-		\Gls{mirna} and \gls{lncrna} quantification is obtained similarly to mRNAs quantification~(\cref{subsec:transcriptomics}).
+		\gls{mirna} and \gls{lncrna} quantification is obtained similarly to mRNAs quantification~(\cref{subsec:transcriptomics}).
 		Histone modifications are quantified with a mass-spectrometry-based approach, see \cref{subsec:proteomics}.
 		\Gls{dnam} is quantified with bead-chip-based methylation assay or bisulfite sequencing.
 		The bisulfite treatment converts unmethylated cytosine into uracil.
@@ -536,6 +536,7 @@
 		One antibody-free approach is based on mass-spectrometry; it is used to determine the amino acid sequence of a protein.
 		Proteins are digested into smaller peptides; mass-to-charge ratios are measured with mass-spectrometry.
 		The signal intensities reflect the quantity of peptides.
+		Peptides mass-to-charge ratios are compared to theoritical ratios databases to identify the proteins.
 
 \section{Datasets}
 	Large multi-omics datasets are limited, and although the cost of high-throughput technologies has decreased, many difficulties remain in the acquisition of multi-omics data.
@@ -548,7 +549,7 @@
 		For all selected patients we collected, when available, \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna} expression, \glsxtrfull{cnv}, and proteomics.
 		Clinical annotations are also available for each patient.
 		In \gls{tcga}, cancerous samples encompass primary solid tumor, recurrent solid tumor, and metastasis.
-		The normal samples correspond to solid tissue normal; a portion of tissue is sampled at a certain distance from the tumor or are blood-derived.
+		The normal samples correspond to solid tissue; a portion of tissue is sampled at a certain distance from the tumor or are blood-derived.
 		Multiple predictive endpoints are available in \gls{tcga}:
 		\begin{itemize}[nosep]
 			\item type of sample (binary classification),

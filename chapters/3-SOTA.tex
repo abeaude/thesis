@@ -66,7 +66,7 @@
 	For such transformation, a zero-padding of the 1D vector is required for the transformation to be applied.
 	The simplest transformation often corresponds to a naive reshaping~\cite{Wang2021,deGuia2019,Elbashir2019,Chatterjee2018}\@. \citeauthor{deGuia2019}, transform the gene expression vector to a \(102\times 102\) image after a feature selection process~\cite{deGuia2019}.
 	Similarly, \citeauthor{Elbashir2019} reshape the gene expression vector to a \(127 \times 114\) image~\cite{Elbashir2019}.
-	Some approaches hypothetize that chromosical adjacent genes are more likely to interact.
+	Some approaches hypothetize that chromosomal adjacent genes are more likely to interact.
 	Based on that assumptions, features are reordered based on their poistion in the genome before reshaping the expression to a 2D image~\cite{Mostavi2020,Lyu2018,Yin2022}.
 	Instead of naive reshaping, knowledge-based transformation have been depicted.
 	Hierarchical tree structure such KEGG BRITE are used to transform features, then the tree structure is represented as treemap with a tiling algorithm~\cite{LpezGarca2020,maOmicsMapNetTransformingOmics2019}.
@@ -124,7 +124,7 @@
 	This standard model has been extended to consider non-linear survival data with deep learning models~\cite{katzmanDeepSurvPersonalizedTreatment2018,Ching2018}.
 	Cox-nnet~\cite{Ching2018} uses a log-likelihood loss (\cref{eq:cox_loss}) to predict prognosis from gene expression data.
 	Deep-surv~\cite{katzmanDeepSurvPersonalizedTreatment2018} uses the same principles to recommend the best treatment option for a patient by computing the risk ratio.
-	\citeauthor{Lee2022} model the survival task as a regression on the survival days; this approach does not consider the particular structure of survival data and completely ignores censoring data.
+	\citeauthor{Lee2022}~\cite{Lee2022} model the survival task as a regression on the survival days; this approach does not consider the particular structure of survival data and completely ignores censoring data.
 
 \section{Prediction from multi-omics data}
 	In the previous section, we saw that cancer types can be predicted from single omics; going to multi-omics data allows for a holistic view, which is necessary for a better understanding of the roles played by the various omics layers.
@@ -309,7 +309,7 @@
 		\begin{equation}
 			X \approx WH
 		\end{equation}
-		where \(X \in \symbb{R}^{N\times d}\) is a data matrix,\(W \in \symbb{R}^{N\times k}\) a factor matrix and \(H \in \symbb{R}^{k\times d}\) a loading matrix, \(k < d\) reprsents the number of dimensions used to construct the low dimensional space.
+		where \(X \in \symbb{R}^{N\times d}\) is a data matrix,\(W \in \symbb{R}^{N\times k}\) a factor matrix and \(H \in \symbb{R}^{k\times d}\) a loading matrix, \(k < d\) represents the number of dimensions used to construct the low dimensional space.
 		As there are more than one data matrix in multi-omics studies, \(X_i\quad i \in \left\{1, \cdots, m\right\}\), different strategies have been depicted to perform the integration:
 		\begin{itemize}[nosep]
 			\item Each data matrix is decomposed individually, \(X_i \approx W_iH_i\) and one of the factor matrix \(W_i\) is used for downstream analyses. The cost function used to find the optimal factor and loading matrix should be designed to allow multi-omics information to be shared across factor matrices.
@@ -320,7 +320,7 @@
 			\min_{W,H} {\left\| X - WH \right\|}_{F} \label{eq:matrix_fact_opt}
 		\end{equation}
 		To find the matrices \(W\) and \(H\), \gls{nmf} is a common approach to solve the \cref{eq:matrix_fact_opt} by adding a non negativity constraint: \(W \geq 0\) and \(H \geq 0\).
-		An extension have been proposed to handle mulitple omics, \gls{intnmf}, that adds a parameter \(\phi_{i}\) controlling the weight of each modality:
+		An extension have been proposed to handle multiple omics, \gls{intnmf}, that adds a parameter \(\phi_{i}\) controlling the weight of each modality:
 		\begin{equation}
 			\min_{W,H_i} \sum_{i=1}^{m} \phi_{i}{\left\| X_i - WH_i \right\|}_{F} \quad \text{s.t} \quad W \geq 0 \;\text{and}\; H_i \geq 0
 		\end{equation}
@@ -330,10 +330,13 @@
 		\end{equation}
 		Parameters are estimated by minimimizing \({\left\|E\right\|}^2 = {\left\|\left[E_1, \cdots, E_m \right]^T\right\|}^2\), where \(E_i = X_i - W_iZ + W_i^sZ_i^s\) and adding an orthogonality constraints between the joint, \(W_iZ\), and individual terms, \( W_i^sZ_i^s\).
 		iCluster is another approach to integrate multi-omics data where the factor matrix, \(H\) is shared across all modalities.
-		By assuming that the factor matrix and the residuals, \(E_i = X_i - W_iH\) are norammly distributed, a multivariate normal log-likelihood can be derived before applying the expectation-maximization algorithm to solve this problem.
+		By assuming that the factor matrix and the residuals, \(E_i = X_i - W_iH\) are normaly distributed, a multivariate normal log-likelihood can be derived before applying the expectation-maximization algorithm to solve this problem.
 		The variational Bayesian framework can also be used for the estimation of the matrix \(W\) and \(H\) by adding prior assumptions on their distributions~\cite{MOFA}.
 		Bayesian consensus clustering is another bayesian approach used to perform multi-omics data integration.
 		Each omics has its own clustering loosely adhering to a consensus clustering, making the individual clustering connected and sharing information.
+		% TODO: add NTF: https://accscience.com/journal/AIH/1/3/10.36922/aih.3427
+		% generalization to higher order tensors\footnote{matrices can be seen as second-orders tensors}
+		% https://www.plus.ac.at/wp-content/uploads/2021/02/2013-05_Flatz.pdf
 
 		Previsouly, we showed that the coordination of multiple representation is a way to perform data integration.
 		\Gls{cca} is a method whose objective is to finding linear combinations of variables in each set that are maximally correlated with each other.
@@ -523,7 +526,7 @@
 			\Glspl{hgcn} are used to extract evidences from each omics.
 			The evidences are then parameterized with a
 			Each network provide evidences Dirichlet distribution for uncertainty estimation.
-			This uncertainty estimation us used to weight the reliability of each omics.
+			This uncertainty estimation is used to weight the reliability of each omics.
 			The different evidences are combined using an evidential reasoning approach, the fusion is done considering the uncertainty of each evidence.
 			The combined evidence is used to make the final classification.
 
@@ -634,7 +637,7 @@
 			The latent representations are combined with an attention mechanism, attention weights are estimated by a linear projection of the graph representation and structure.
 			The training objective was to reconstruct the original graph structure from the multimodal embedding.
 			After the training this embedding was used as input to clustering algorithm to identify cancer subtypes.
-			Instead of representing each patient by its full expression profile, \citeauthor{Zhang2022}~\cite{Zhang2022} used \glspl{ae} to embedded each expression profile.
+			Instead of representing each patient by its full expression profile, \citeauthor{Zhang2022}~\cite{Zhang2022} used \glspl{ae} to embed each expression profile.
 			They used a densely connected \gls{gcn}, a layer is connected to all subsequent layers.
 			In SUPREME~\cite{Kesimoglu2022}, \citeauthor{Kesimoglu2022} used a supervised training strategy to identify cancer subtypes.
 			They also used a patient similairity graph and to reduced the node embeddings dimension they appllied a prior feature selection based on a \gls{rf} algorithm.
@@ -656,7 +659,7 @@
 			In \cite{Lan2024}, each expression profile is transformed into a pathway representation.
 			The pathway representation is obtained by concatenating scalar pathway representation which corresponds to the sum of features belonging to this pathway.
 			Then, for each omics, self-attention is used to infer patient-interactions and the resulting representations are concatenated and passed to task-specifc classifier.
-			In \cite{Yao_2024}, pretrained \glspl{ae} are used to embedded each omics profile, the concatenated representation is used as the input of a self-attention layer, computing patient interactions.
+			In \cite{Yao_2024}, pretrained \glspl{ae} are used to embed each omics profile, the concatenated representation is used as the input of a self-attention layer, computing patient interactions.
 			Such uses of the self-attention to compute patient interactions can be seen as the application of a \gls{gat} on a complete patient graph\footnote{A graph where every pair of nodes is connected.}.
 
 			\ifSubfilesClassLoaded{%
@@ -685,7 +688,7 @@
 		\item legal aspect such as the right to explanation introduced with the GDPR.
 	\end{itemize}
 	Interpretability can also increase our knowledge by identifying new important features involved in the prediction.
-	In the healthcare domain, such features can be considered as potential biomarkers.
+	In the healthcare domain, such features can be considered as potential new targets or biomarkers.
 	% https://arxiv.org/pdf/2201.08164
 	% https://nvlpubs.nist.gov/nistpubs/ir/2021/NIST.IR.8312.pdf
 	% https://link.springer.com/article/10.1007/s11023-023-09637-x#Sec3
@@ -716,10 +719,10 @@
 	The model comprises two branches: a concept encoder and a relevance parametrizer.
 	The concept encoder maps the raw input features to a set of interpretable concepts, and the parametrizer learns the importance associated with each concept.
 	Those importance coefficients aggregate the concepts as a linear combination into a prediction.
-	Aggregating concepts with linear combination ensure the interpretability of the importance coefficients.
+	Aggregating concepts with linear combination ensure the interpretability of the coefficients.
 	The attention mechanism in its \emph{self} version is used to enrich an input representation by computing an attention score between pairs of inputs' elements~(\cref{sec:self_attention_transformer}).
 	All the paired scores can be visualized through an attention map to see how each feature attends to other features.
-	Such visualization helps understand the prediction made by a model.
+	Such visualization helps to understand the prediction made by a model.
 	This vision of the attention as an interpretable block is currently debated~\cite{jain-wallace-2019-attention,wiegreffe-pinter-2019-attention}.
 	\citeauthor{jain-wallace-2019-attention} showed that high attention weights do not necessarily correlate with attribution scores~\cite{jain-wallace-2019-attention}.
 	\citeauthor{wiegreffe-pinter-2019-attention} highlighted the importance of the definition of explainability to consider the attention mechanism as interpretable or not~\citeauthor{wiegreffe-pinter-2019-attention}.
