@@ -54,7 +54,7 @@ sub makerobustexternalize {
     if ( $root_filename ne $_[0] )  {
         print "Compiling external document ", $_[0], "\n";
         my ($base_name, $path) = fileparse( $_[0] );
-        system "cd $path && xelatex -halt-on-error $base_name.tex";
+        system "cd $path && xelatex -interaction=batchmode -halt-on-error $base_name.tex";
     } else {
         print "Not running on main file", "\n";
     }

@@ -21,3 +21,4 @@ https://github.com/FlamingTempura/bibtex-tidy
    In work chapters, update the Data paragraph to link to the one in Background. 
    vérifier mise en page : quelle figure sont à refaire... 
    faire la quatrième de couverture : titre, résumé, auteur, copyright, qrcode to the online version ? 
+   CrossAttOmics LRP missing arrow in legend
