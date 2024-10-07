@@ -37,7 +37,7 @@
 			\item for binary classification, \(C=2\), it has only one neuron,
 			\item for multiclass classification \(C > 2 \), it has one neuron per class.
 		\end{itemize}
-		Each one of the hidden layers \(l\) has a defined number of neurons \(N_{l}\).
+		Each hidden layer \(l\) has a defined number of neurons \(N_{l}\).
 		Each neuron \(j\) in a layer \(l\) is connected to all neurons in the layer \(l-1\).
 		Connection between a neuron \(i\) in layer \(l-1\) and neuron \(j\) in layer \(l\) is weighted by \(w^{l}_{ij}\).
 
@@ -51,7 +51,7 @@
 			\symbf{a}^{l} = f\left( \symbf{a}^{l-1} \cdot W^l + \symbf{b}^{l} \right) \label{eq:mlp_matrix}
 		\end{equation}
 		where \(W^l \in \symbb{R}^{N_{l-1} \times N_{l}}\) is the weight matrix of general element: \(w_{ij}\), and \(\symbf{b}^{l}\) is the bias vector of layer \(l\).
-		The non-linear activation \(f\) is usually a \glsxtrfull{relu}, \(f\left(x\right) = \max\left(0, x\right)\).
+		The non-linear activation \(f\) is usually a \glsxtrfull{relu}, \(f\left(x\right) = \max\left(0, x\right)\)~\cite{ReluRef}.
 		The activation of neurons in layers \(l\)~(\cref{eq:mlp_matrix}) defines a mapping \(g^{l}\) that computes the activation of layer \(l\) from the activation of layer \(l-1\): \( \symbf{a}^{l} = g^{l}\left(\symbf{a}^{l-1}; \theta^{l}\right)\), where \(\theta^{l}\) are the parameters of the layer \(l\): \(W^l\) and \( \symbf{b}^{l}\).
 		This type of layer is called a \glsxtrfull{fcl} or dense layer.
 		The composition of multiple \glspl{fcl} is called a \glsxtrfull{fcn}.
@@ -95,7 +95,7 @@
 		It should be noted that using the convolution operator implies spatial dependencies between input features.
 
 	\subsection{\Glsfmtfull{gnn}}
-		\Gls{gnn} is an architecture that processes graphs.
+		\Gls{gnn} is an architecture that processes graphs~\cite{GNNRefs}.
 		A graph \(\symcal{G}\) is a structure that consists of vertices \(\symcal{V}\) and edges \(\symcal{E}\).
 		An edge \(\left(u,v\right) \in \symcal{V}^2,\, u\neq v\) connects two vertices \(u\) and \(v\), this link represents a relationship between the two vertices.
 		The relationship between two nodes can be directed or undirected.
@@ -129,7 +129,7 @@
 			H_{l+1} = \tilde{D}^{-\tfrac12}\tilde{A}\tilde{D}^{-\tfrac12}H_{l}W^{l}
 		\end{equation}
 		where, \(\tilde{A} = A + I_{\left|\symcal{V}\right|}\) is the adjacency matrix with self loops added, \(\tilde{D}\) is the corresponding degree matrix, and \(H_{l} \in \symbb{R}^{\left|\symcal{V}\right| \times d_{l}}\) is the node embedding matrix at layer \(l\).
-		Variations of the aggregation step have been proposed; for instance, graph attention network weight the neighborhood based on attention mechanism or spectral approaches where the aggregation is done in the Fourier space.
+		Variations of the aggregation step have been proposed; for instance, graph attention network~\cite{velickovic2018graph} weight the neighborhood based on attention mechanism or spectral approaches where the aggregation is done in the Fourier space~\cite{ChebConv}.
 
 		With \glspl{gnn}, predictions can be made at different levels:
 		\begin{itemize}[nosep]
@@ -144,7 +144,7 @@
 		To correctly understand a sentence, one must relate words to the sentence's other words to augment their meaning.
 		In machine learning, this is achieved through attention mechanisms.
 		Attention mechanisms are a simple weighting of the data, and they enhance the data elements by dynamically including information about the input's context.
-		There are multiple flavors of attention; the most well-known one is the scaled-dot product attention.
+		There are multiple flavors of attention; the most well-known one is the scaled-dot product attention~\cite{AttentionAllYouNeed}.
 		The self-attention, based on the scaled-dot product attention, takes a two-dimensional input, \(\symbf{x} \in \symbb{R}^{L\times s}\), where \(L\) is the number of input elements and \(s\) the embedding dimension.
 		The input \(\symbf{x}\) is projected by three independent trainable linear projections into the query \(Q \in \symbb{R}^{L \times d}\), the key \(K \in \symbb{R}^{L \times d}\) and the value \(V \in \symbb{R}^{L \times d}\):
 		\begin{align}
@@ -186,7 +186,7 @@
 		Usually, the input is first projected in a higher dimension, \(4d\), and projected back to its original dimension, \(d\).
 		In addition to these two elements, the encoder blocks include a layer normalization known to speed up the training and skip connections to prevent vanishing gradients.
 
-		While the transformer and, in particular, the self-attention was primarily designed to study text sequences, it can be applied to various data types that can be represented in a format compatible with the attention mechanism, such as images, videos, time series, etc.
+		While the transformer and, in particular, the self-attention was primarily designed to study text sequences, it can be applied to various data types that can be represented in a format compatible with the attention mechanism, such as images~\cite{dosovitskiy2021an}, videos~\cite{ViVIT,Liu2022CVPR}, time series~\cite{ijcai2023p759}, etc.
 		This section mainly describes self-attention, where the query, key, and value are generated from the same input.
 		The query can be obtained from one input, and the key and value can be obtained from another.
 		In this case, we talk about cross-attention:
@@ -213,7 +213,7 @@
 
 		Variations of the \gls{ae} add different regularizations to improve the latent representation.
 		A commonly used strategy is the \gls{dae}, where a random noise, usually gaussian, is added to the input, and the model aims to reconstruct the denoised input.
-		The \gls{vae} adds regularization on the latent space by constraining the latent representation to follow a multivariate gaussian distribution, and each latent feature is represented by a gaussian distribution of parameters \(\mu\) and \(\sigma\).
+		The \gls{vae} adds regularization on the latent space by constraining the latent representation to follow a multivariate gaussian distribution, and each latent feature is represented by a gaussian distribution of parameters \(\mu\) and \(\sigma\)~\cite{VAEref}.
 		The encoder does not anymore learn the latent representation but learns the parameters \(\mu_{\symbf{x}}\) and \(\sigma_{\symbf{x}}\) of the distribution: \(E\left(\symbf{x}\right) = \left(\mu_{\symbf{x}},\sigma_{\symbf{x}}\right) \).
 		The latent representation, \(\symbf{z}\), is then sampled from this distribution and fed to the decoder.
 
@@ -312,8 +312,8 @@
 		Models are complex with numerous parameters; they might learn how to perfectly solve a task on the training set without generalizing to new data.
 		The risk of overfitting is increased when number of training samples is limited.
 		Different regularization techniques have been designed to prevent this overfitting.
-		Batch normalization normalizes the signal \(z^{l}\) by re-centering and re-scaling it before applying the activation function \(f\).
-		Dropout randomly ignores some neurons during training.
+		Batch normalization normalizes the signal \(z^{l}\) by re-centering and re-scaling it before applying the activation function \(f\)~\cite{BatchNorm}.
+		Dropout randomly ignores some neurons during training~\cite{Dropout}.
 		The ignored neurons are sampled independently from a Bernoulli distribution.
 		Regularization terms can be added to the loss such as L1 regularization \({\|\theta\|}_{1}\) which forces model weights to be sparse or L2 regularization \({\|\theta\|}_{2}\) favoring smaller and evenly distributed weights.
 		Early stopping monitors a validation metric; the training is stopped to prevent overfitting when it no longer improves.
@@ -455,10 +455,15 @@
 		These alterations can be hereditary and transmitted or acquired by environmental exposure to carcinogenic substances.
 		It is important to consider all the cell's molecular constituents to characterize cancer better, as cancers result from multiscale alterations.
 
+		\begin{figure}[htbp]
+			\centering
+			\includegraphics{CancerHallmarks.pdf}
+			\caption[Cancer hallmarks]{The cancer hallmarks adapted from~\cite{Hanahan2011}}\label{fig:cancer_hallmarks}
+		\end{figure}
 		Despite being a group of more than a hundred different diseases, cancers share similar characteristics.
-		These shared properties are known as the hallmarks of cancer.
-		Hallmarks define eight capabilities and two enabling capabilities, and they present an organizing principle to approach the complexity of cancers.
-		%TODO enumerate the capabilities and add figures + citation
+		These shared properties are known as the hallmarks of cancer and defined as \textcquote{Hanahan2000,Hanahan2011}{acquired functional capabilities that allow cancer cells to survive, proliferate, and disseminate.}.
+		They present an organizing principle to approach the complexity of cancers.
+		The hallmarks define six capabilities: sustaining proliferative signaling, evading growth suppressors, activating evasion and metastasis, enabling replicative immortality, inducing angionesis and resisting cell death, two enabling capabilities: genome instability and mutation, and tumor-promoting inflammation, and two emerging hallmarks:deregulating cellular energetics and avoiding immune destruction.
 
 \section{Omics data}
 	The omics field corresponds to the characterization and quantification of pools of biological molecules.
@@ -468,7 +473,6 @@
 
 	The development of high-throughput technologies and the cost decline associated with those technologies helped foster a wide adoption of those methods.
 	This adoption enabled a large availability of omics data, particularly multi-omics data, which helped revolutionize the field of precision medicine.
-
 	There are multiple platforms to study omics data with different protocols, multiple references and annotations files, and various tools to perform the final quantification.
 	This variability leads to highly heterogeneous data.
 	Furthermore, omics data are complex data with many variables; for instance, transcriptomics has around 60K variables, and genomics and methylation data can exceed the hundreds of thousands of variables.
@@ -484,7 +488,7 @@
 		Then, adapters are added to the fragments; the adapters contain a barcode to identify the sample, the binding site for the sequencing primer, and the complementary sequence to the oligonucleotides on the flow cell.
 		The complementary sequence allows the fragment to attach to the flow cell during the sequencing.
 		Each fragment is then amplified into distinct clonal clusters by bridge amplification.
-		Sequencing is then performed using a cyclic process that adds fluorescently labeled nucleotides one at a time.
+		Sequencing is then performed using a cyclic process that adds fluorescent labeled nucleotides one at a time.
 		A camera that captures the emitted fluorescence identifies the incorporated base at each position.
 		The cycle is repeated numerous times to obtain completed DNA sequences: reads.
 		After the sequencing, a set of reads is obtained, and those reads are aligned to a reference genome with an aligner.
@@ -545,7 +549,7 @@
 
 	\subsection{\Glsfmtfull{tcga}}\label{sec:data_tcga}
 		Among the 33 cancer types available in the \gls{tcga} project, we selected 19 cancers with more than a hundred patients.
-		We collected a total of 8777 samples, 8416 were cancerous samples and 361 normal samples from the GDC Data Portal\footnote{\url{https://portal.gdc.cancer.gov/}} with the \textsf{TCGABiolinks} R package.
+		We collected a total of 8777 samples, 8416 were cancer samples and 361 normal samples from the GDC Data Portal\footnote{\url{https://portal.gdc.cancer.gov/}} with the \textsf{TCGABiolinks} R package.
 		For all selected patients we collected, when available, \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna} expression, \glsxtrfull{cnv}, and proteomics.
 		Clinical annotations are also available for each patient.
 		In \gls{tcga}, cancerous samples encompass primary solid tumor, recurrent solid tumor, and metastasis.
