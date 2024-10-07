@@ -84,7 +84,6 @@
 \RequirePackage{textcomp}
 \RequirePackage{newunicodechar}
 \newfontface{\dejavusans}{DejaVuSans}
-\newunicodechar{→}{{\dejavusans{→}}}
 
 %% TABLES %%
 \RequirePackage{tabularray}
