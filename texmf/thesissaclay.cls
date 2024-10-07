@@ -53,6 +53,8 @@
 \setmainfont{OpenSans}[
 	Extension = .ttf,
 	Path = fonts/,
+	StylisticSet={1,2,3,4},
+	Ligatures=Common,
 	UprightFont = *-Regular,
 	BoldFont = *-Bold,
 	ItalicFont = *-Italic,
@@ -238,6 +240,7 @@
 %\setcaptionalignment[table]{C}
 \setkomafont{captionlabel}{\bfseries\footnotesize}
 \setkomafont{caption}{\footnotesize}
+\setkomafont{pageheadfoot}{\small\normalcolor}
 % chapterentry, chapterentrydots, chapterentrypagenumber
 % pagehead, pagefoot
 % partentry, sectionentry
@@ -248,6 +251,8 @@
 	Extension=.otf,
 	Scale=1,
 	Path=fonts/,
+	StylisticSet={1,2,3,4,5,6,7,8,9},
+	Ligatures=Common,
 	UprightFont = *-Regular,
 	BoldFont = *-Bold,
 	FontFace={b}{n}{*-Bold},

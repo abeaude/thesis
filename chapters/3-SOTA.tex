@@ -132,7 +132,7 @@
 	However, there is insufficient information to infer the 3D shape correctly; more information is needed to select from the possible hypothesis.
 	Each view of a 3D object carries different information; they can be complementary or redundant and help improve predictions regarding performance and robustness.
 	This is precisely what multimodal machine learning is: combining multiple views or modalities to make better predictions.
-	In precision medicine and the realm of omics, without prior knowledge, a mutation's impact cannot be known without \textit{looking} at the protein.
+	In precision medicine and the realm of omics, without prior knowledge, a mutation's impact cannot be known without \emph{looking} at the protein.
 	Furthermore, gene expression is a highly regulated phenomenon involving various molecular actors~(\cref{subsec:gene_regulation}).
 
 	The following subsection will present multimodal machine learning, its properties, challenges, and methods to fuse multiple modalities.
@@ -500,17 +500,17 @@
 
 			\citeauthor{Sun2019} proposed a late fusion of mRNA, CNV, and clinical data defined as a weighted combination of the predictions obtained from an \gls{mlp} trained on each modality~\cite{Sun2019}.
 			The optimal weights are obtained after a grid search.
-			Instead of \textit{manually} searching for the set of optimal weights, they can be learned with gradient descent~\cite{CarrilloPerez2022}.
+			Instead of \emph{manually} searching for the set of optimal weights, they can be learned with gradient descent~\cite{CarrilloPerez2022}.
 
 			MOGONET~\cite{MOGONET} developed a late fusion strategy combining \glspl{gnn} with \gls{vcdn} module~\cite{VCDN}.
 			In the first phase, for each omics, a patient similarity graph is constructed and used to train a \gls{gcn} predicting cancer subtypes.
 			In the second phase, the \gls{vcdn} module is trained, and the \gls{gnn} are fine-tuned.
-			The \gls{vcdn} module takes as input the \textit{cross-omics discovery tensor} \(C^{o}\), an \(M\)-dimensional tensor, obtained by applying a generalized outer-product of predictions \(\hat{y}^{m} \in \symbb{R}^{C}\) obtained from each omics:
+			The \gls{vcdn} module takes as input the \emph{cross-omics discovery tensor} \(C^{o}\), an \(M\)-dimensional tensor, obtained by applying a generalized outer-product of predictions \(\hat{y}^{m} \in \symbb{R}^{C}\) obtained from each omics:
 			\begin{align}
 				C^{o}                     & = \left(C^{o}_{a_{1}\cdots a_{M}}\right)_{\substack{1 \leq a_{i} \leq C \\ 1 \leq i \leq M}} \\
 				C^{o}_{a_{1}\cdots a_{M}} & = \prod_{m=1}^{M}\hat{y}_{a_{m}}^{m}
 			\end{align}
-			The \textit{cross-omics discovery tensor} is reshaped into a \(C^{M}\)-dimensional vector.
+			The \emph{cross-omics discovery tensor} is reshaped into a \(C^{M}\)-dimensional vector.
 			The resulting vector is passed to the \gls{vcdn} module, a \gls{fcn} that maps the tensor to a space of the same dimension before projecting to the label space.
 			The first projection requires \(C^{2M}\) parameters; this can easily represent billions of parameters for multiclass problems with multiple modalities.
 			This integration strategy cannot be considered in some scenarios as the memory requirements are too high.
@@ -652,7 +652,7 @@
 			The resulting matrix is passed into a \gls{fcn} with hyperbolic tangent activation.
 			A \(\softmax\) is then applied to normalize the attention weights.
 			Approaches based on the self-attention mechanism have also been explored for intermediate fusion of multi-omics data~\cite{Yao_2024,Lan2024}.
-			Both methods proposed to use a \textit{row self-attention}, self-attention is used to compute interactions between patients.
+			Both methods proposed to use a \emph{row self-attention}, self-attention is used to compute interactions between patients.
 			In \cite{Lan2024}, each expression profile is transformed into a pathway representation.
 			The pathway representation is obtained by concatenating scalar pathway representation which corresponds to the sum of features belonging to this pathway.
 			Then, for each omics, self-attention is used to infer patient-interactions and the resulting representations are concatenated and passed to task-specifc classifier.
@@ -675,9 +675,9 @@
 	% https://arxiv.org/pdf/1910.10045
 	% https://www.edps.europa.eu/system/files/2023-11/23-11-16_techdispatch_xai_en.pdf
 	% The easiest way to have interpretability is to use interpretable models such as decision tree or linear models.
-	The easiest way to have interpretability is to use \textit{white-box} or interpretable models such as decision trees or linear models.
+	The easiest way to have interpretability is to use \emph{white-box} or interpretable models such as decision trees or linear models.
 	Interpretability is obtained by limiting the model's complexity, which hinders the model's capacity to extract complex patterns.
-	Explainable artificial intelligence or interpretability is a field that developed in response to the increasing presence of \textit{black-box} models.
+	Explainable artificial intelligence or interpretability is a field that developed in response to the increasing presence of \emph{black-box} models.
 	The development of interpretable methods is motivated by the following:
 	\begin{itemize}[nosep]
 		\item ensuring models are bias-free;
@@ -717,7 +717,7 @@
 	The concept encoder maps the raw input features to a set of interpretable concepts, and the parametrizer learns the importance associated with each concept.
 	Those importance coefficients aggregate the concepts as a linear combination into a prediction.
 	Aggregating concepts with linear combination ensure the interpretability of the importance coefficients.
-	The attention mechanism in its \textit{self} version is used to enrich an input representation by computing an attention score between pairs of inputs' elements~(\cref{sec:self_attention_transformer}).
+	The attention mechanism in its \emph{self} version is used to enrich an input representation by computing an attention score between pairs of inputs' elements~(\cref{sec:self_attention_transformer}).
 	All the paired scores can be visualized through an attention map to see how each feature attends to other features.
 	Such visualization helps understand the prediction made by a model.
 	This vision of the attention as an interpretable block is currently debated~\cite{jain-wallace-2019-attention,wiegreffe-pinter-2019-attention}.
@@ -744,15 +744,15 @@
 	Each feature is replaced by a 0, and the resulting decrease in classification performance is used as an importance score.
 	Enrichment analysis was then used to check for the biological relevance of the identified important features.
 	LIME and SHAP also use a perturbation approach to estimate feature importance.
-	LIME~\cite{LIME} explains individual instances by finding an interpretable model, such as a linear model, that locally reproduces the original \textit{black-box} model predictions.
+	LIME~\cite{LIME} explains individual instances by finding an interpretable model, such as a linear model, that locally reproduces the original \emph{black-box} model predictions.
 	The interpretable model is obtained by fitting the linear model to generated points in the neighborhood of the point to explain.
-	The predictions of the \textit{black-box} model on the generated points are used as ground truth.
+	The predictions of the \emph{black-box} model on the generated points are used as ground truth.
 	Such an approach is costly as a new local model needs to be constructed for each instance being explained.
 	SHAP~\cite{SHAP} is a method estimating feature importance based on Shapley values from game theory.
 	The Shapley value of a feature represents its contribution to the prediction, and the contribution can be interpreted as the importance of this feature.
 	A version of SHAP designed explicitly for neural networks, DeepSHAP~\cite{DeepSHAP}, has been used in different works to identify important pathways and modality contributions~\cite{Liu2024}, the most important genes across multiple omics~\cite{Withnell2021,customics}, to identify most important CpGs site~\cite{levyMethylNetAutomatedModular2020a}.
 
-	A counterfatual explanation answers a \textit{what if} question: How would \(x\) change if \(y\) had been \(y^{\prime}\)?
+	A counterfatual explanation answers a \emph{what if} question: How would \(x\) change if \(y\) had been \(y^{\prime}\)?
 	\citeauthor{wachter2017counterfactual} provides a more formal definition of a counterfactual:
 	\begin{displaycquote}[adapted from][]{wachter2017counterfactual}[.]
 		\(y\) was predicted because input \(x\) had values \(\left(x_{1}, x_{2}, \ldots\right)\). If \(x\) instead had values \(\left(x_{1}^{\prime}, x_{2}^{\prime}, \ldots\right)\) and all other variables had remain constant, \(y^{\prime}\) would have been predicted

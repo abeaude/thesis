@@ -1,237 +1,235 @@
 \begin{spacing}{1}
     \fontsize{10}{10}\selectfont
-    \setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/]
-    \setoperatorfont\mathsf
+    \mathversion{smaller}
     \begin{tikzpicture}<disable externalization>
-    \node (a_lgd) [inner sep=0pt, anchor=south west] at (-1.3,0.4) {\textbf{A}};
-    \node (b_lgd) [right=13.1cm of a_lgd.east, anchor=west, inner sep=0pt] {\textbf{B}};
-    \node (c_lgd) [below=5.3cm of a_lgd.south, anchor=north, inner sep=0pt] {\textbf{C}};
-    \node (d_lgd) [right=7.5cm of c_lgd.east, anchor=west, inner sep=0pt ] {\textbf{D}};
-    \node (in_A) at (-1,0) [inner sep=1pt, text=mod1] {\(X^A\)};
-    \node (in_C) [below=1.25cm of in_A.south, anchor=north, inner sep=1pt, text=mod3] {\(X^C\)};
-    \node (in_B) [below=1.25cm of in_C.south, anchor=north, inner sep=1pt, text=mod2] {\(X^B\)};
+        \node (a_lgd) [inner sep=0pt, anchor=south west] at (-1.3,0.4) {\textbf{A}};
+        \node (b_lgd) [right=13.1cm of a_lgd.east, anchor=west, inner sep=0pt] {\textbf{B}};
+        \node (c_lgd) [below=5.3cm of a_lgd.south, anchor=north, inner sep=0pt] {\textbf{C}};
+        \node (d_lgd) [right=7.5cm of c_lgd.east, anchor=west, inner sep=0pt ] {\textbf{D}};
+        \node (in_A) at (-1,0) [inner sep=1pt, text=mod1] {\(X^A\)};
+        \node (in_C) [below=1.25cm of in_A.south, anchor=north, inner sep=1pt, text=mod3] {\(X^C\)};
+        \node (in_B) [below=1.25cm of in_C.south, anchor=north, inner sep=1pt, text=mod2] {\(X^B\)};
 
-    \foreach \lab/\c in {A/mod1, B/mod2, C/mod3}
-        {
-            \node (enc_\lab) [draw=\c, text=\c, thick, rounded rectangle, rounded rectangle west arc=none, right=3mm of in_\lab.east, anchor=west] {$\enc^{\lab}$};
-            \node [text=\c, right=4mm of enc_\lab.north east, anchor=north west, inner sep=0pt, yshift=1mm] {\(U^{\lab}\)};
-            \draw[thick, -stealth, color=\c] (in_\lab.east) -- (enc_\lab.west);
-        }
-
-    \begin{scope}[yshift=-6.2cm, scale=0.9, transform shape, every node/.style={font=\tiny, thick}]
-        % \tikzstyle{every node}=[font=\tiny]
-        \node (g1) [draw=mod2, square, inner sep=0pt, fill=mod2!10, text=mod2D] at (0,0) {$X^{B}_{g_1}$};
-        \node (gi) [draw=mod2, square, below=0.5 cm of g1.south, anchor=north, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^{B}_{g_j}$};
-        \node (gk) [draw=mod2, square, below=0.5 cm of gi.south, anchor=north, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^{B}_{g_k}$};
-
-        \path (g1.south) -- (gi.north) node[midway, inner sep=0pt, yshift=1mm] () {$\vdots$};
-        \path (gi.south) -- (gk.north) node[midway, inner sep=0pt, yshift=1mm] (dots) {$\vdots$};
-        % \node (dots) [below=2mm of gi.south, anchor=center] {$\vdots$};
-
-        \node (in_vec) [draw=mod2, rectangle, fit={(g1) (gi) (gk)}, left=3mm of g1.north west, anchor=north east, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^B$};
-
-        \draw [-stealth, color=mod2] (g1-|in_vec.east) -- (g1.west);
-        \draw [-stealth, color=mod2] (gi-|in_vec.east) -- (gi.west);
-        \draw [-stealth, color=mod2] (gk-|in_vec.east) -- (gk.west);
-
-        \node (fcn1) [draw=mod2, rounded corners=3, right=3mm of g1.east, anchor=west, fill=mod2!10, text=mod2D, minimum height=4mm] {\hyperref[eq:attomics_groups_proj]{FCN}};
-        \node (fcni) [draw=mod2, rounded corners=3, right=3mm of gi.east, anchor=west, fill=mod2!10, text=mod2D, minimum height=4mm] {\hyperref[eq:attomics_groups_proj]{FCN}};
-        \node (fcnk) [draw=mod2, rounded corners=3, right=3mm of gk.east, anchor=west, fill=mod2!10, text=mod2D, minimum height=4mm] {\hyperref[eq:attomics_groups_proj]{FCN}};
-
-        \draw [-stealth, color=mod2] (g1.east) -- (fcn1.west);
-        \draw [-stealth, color=mod2] (gi.east) -- (fcni.west);
-        \draw [-stealth, color=mod2] (gk.east) -- (fcnk.west);
-
-        \node (g1p) [draw=mod2, square, right=0.3 cm of fcn1.east, anchor=west, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^{'B}_{g_1}$};
-        \node (gip) [draw=mod2, square, right=0.3 cm of fcni.east, anchor=west, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^{'B}_{g_j}$};
-        \node (gkp) [draw=mod2, square, right=0.3 cm of fcnk.east, anchor=west, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^{'B}_{g_k}$};
-
-        \draw [-stealth, color=mod2] (fcn1.east) -- (g1p.west);
-        \draw [-stealth, color=mod2] (fcni.east) -- (gip.west);
-        \draw [-stealth, color=mod2] (fcnk.east) -- (gkp.west);
-
-        \path (g1p.south) -- (gip.north) node[midway, draw=mod2, square, inner sep=0pt, xshift=8mm, anchor=west, fill=mod2!10, text=mod2D] (mhsa_gj) {$X^{'B}_{g_j}$};
-        \path (gip.south) -- (gkp.north) node[midway, draw=mod2, square, inner sep=0pt, xshift=8mm, anchor=west, fill=mod2!10, text=mod2D] (mhsa_G) {\hyperref[eq:attomics_groups_proj]{$X^{'B}_{G}$}};
-
-        \node (Q) [draw=mod2, square, right=15mm of g1p.east, anchor=west, inner sep=0pt, fill=mod2!10, text=mod2D] {$Q_{g_j}$};
-        \node (K) [draw=mod2, square, right=15mm of gip.east, anchor=west, fill=mod2!10, text=mod2D] {K};
-        \node (V) [draw=mod2, square, right=15mm of gkp.east, anchor=west, fill=mod2!10, text=mod2D] {V};
-
-        \draw[-stealth, color=mod2, rounded corners=3] (mhsa_gj) |- (Q);
-        \draw[-stealth, color=mod2, rounded corners=3] (mhsa_G) |- (K);
-        \draw[-stealth, color=mod2, rounded corners=3] (mhsa_G) |- (V);
-
-        \node (A) [draw=mod2, rectangle, fit={(Q) (K)}, right=4mm of K.south east, anchor=south west, inner sep=0pt, fill=mod2!10, text=mod2D] {$A^{B}_{g_j}$};
-        \node (out) [draw=mod2, square, right=1.2cm of V.east, anchor=west, fill=mod2!10, text=mod2D] {};
-        \draw[-stealth, color=mod2] (Q) -- (Q-|A.west);
-        \draw[-stealth, color=mod2] (K) -- (K-|A.west);
-        \draw[-stealth, color=mod2] (V) -- (out);
-        \draw[-stealth, color=mod2, rounded corners=3] (A) -| (out);
-        \node (mhsa) [draw, fit={(Q) (K) (V) (out) (mhsa_gj) (mhsa_G)}, dashed, rounded corners=5, inner xsep=2pt, inner ysep=3mm] {};
-        \node [left=1mm of mhsa.north east, anchor=north east, inner sep=1pt, yshift=-0.5mm] {MHSA};
-        \node [right=1mm of mhsa.north west, anchor=north west, inner sep=1pt, yshift=-0.5mm] {\cref{eq:enc_mhsa}};
-        % \draw[-stealth] (out) -- (out-|mhsa.east);
-        \draw[-stealth, color=mod2] (g1p) -- (g1p-|mhsa.west);
-        \draw[-stealth, color=mod2] (gip) -- (gip-|mhsa.west);
-        \draw[-stealth, color=mod2] (gkp) -- (gkp-|mhsa.west);
-        \node (outk) [draw=mod2, square, right=4cm of gkp.east, anchor=west, inner sep=0pt, fill=mod2!10, text=mod2D] {$U^B_{g_k}$};
-        \node (outi) [draw=mod2, square, inner sep=0pt, fill=mod2!10, text=mod2D] at (gip -| outk) {$U^B_{g_j}$};
-        \node (out1) [draw=mod2, square, inner sep=0pt, fill=mod2!10, text=mod2D] at (g1p -| outk) {$U^B_{g_1}$};
-
-        \draw[-stealth, color=mod2] (outk-|mhsa.east) -- (outk);
-        \draw[-stealth, color=mod2] (outi-|mhsa.east) -- (outi);
-        \draw[-stealth, color=mod2] (out1-|mhsa.east) -- (out1);
-    \end{scope}
-
-    \begin{scope}[xshift=6.8cm, yshift=-5.7cm, scale=0.9, transform shape, every node/.style={font=\tiny, thick}]
-        \node (b1) [draw=mod1, fill=mod1!10, square, inner sep=0pt, minimum size=10mm] at (0,0) {};
-        \node (b2) [draw=mod1, fill=mod1!10, square, right=0mm of b1.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
-        \node (b3) [draw=mod1, fill=mod1!10, square, right=0mm of b2.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
-        \node [text=mod1D] at (b2.center) {\(U^{j}_{g_p}\)};
-
-        \node (a1) [draw=mod2, fill=mod2!10, square, below=5mm of b2.south, anchor=north, inner sep=0pt, minimum size=10mm] {};
-        \node (a2) [draw=mod2, fill=mod2!10, square, below=0mm of a1.south, anchor=north, inner sep=0pt, minimum size=10mm, yshift=0.8pt] {};
-        \node (a3) [draw=mod2, fill=mod2!10, square, below=0mm of a2.south, anchor=north, inner sep=0pt, minimum size=10mm, yshift=0.8pt] {};
-        \node (a4) [draw=mod2, fill=mod2!10, square, below=0mm of a3.south, anchor=north, inner sep=0pt, minimum size=10mm, yshift=0.8pt] {};
-        \node [text=mod2D] at (a4.center) {\(U^{i}_{g_{k^i}}\)};
-
-        \node (q1) [draw=mod1, fill=mod1!10, square, right=6mm of b3.east, anchor=west, inner sep=0pt, minimum size=10mm] {};
-        \node (q2) [draw=mod1, fill=mod1!10, square, right=0mm of q1.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
-        \node (q3) [draw=mod1, fill=mod1!10, square, right=0mm of q2.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
-        \node [text=mod1D] at (q2.center) {\(Q^{j}_{g_p}\)};
-
-        \node (k3) [draw=mod2, fill=mod2!10, square, inner sep=0pt, minimum size=10mm, anchor=west] at (a1.east-|q2) {};
-        \node (k2) [draw=mod2, fill=mod2!10, square, left=0mm of k3.west, anchor=east, inner sep=0pt, minimum size=10mm, xshift=0.8pt] {};
-        \node (k1) [draw=mod2, fill=mod2!10, square, left=0mm of k2.west, anchor=east, inner sep=0pt, minimum size=10mm, xshift=0.8pt] {};
-        \node (k4) [draw=mod2, fill=mod2!10, square, right=0mm of k3.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
-        \node [text=mod2D] at (k4.center) {\(K^{i}_{g_{k^i}}\)};
-
-        \node (v3) [draw=mod2, fill=mod2!10, square, inner sep=0pt, minimum size=10mm, anchor=west] at (a4.east-|q2) {};
-        \node (v2) [draw=mod2, fill=mod2!10, square, left=0mm of v3.west, anchor=east, inner sep=0pt, minimum size=10mm, xshift=0.8pt] {};
-        \node (v1) [draw=mod2, fill=mod2!10, square, left=0mm of v2.west, anchor=east, inner sep=0pt, minimum size=10mm, xshift=0.8pt] {};
-        \node (v4) [draw=mod2, fill=mod2!10, square, right=0mm of v3.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
-        \node [text=mod2D] at (v4.center) {\(V^{i}_{g_{k^i}}\)};
-
-        % Attention matrix
-        \path (q3.south) -- (k3.north) coordinate [midway, draw=black!50, square, anchor=west,minimum size=7mm, xshift=12mm, inner color=mod2!60, outer color=mod1!80] (a21);
-        \node (a11) [draw=black!50, yshift=-0.8pt, square, above=0mm of a21.north, anchor=south,minimum size=7mm, inner color=mod2!60, outer color=mod1!80] {};
-        \node (a31) [draw=black!50, yshift=0.8pt, square, below=0mm of a21.south, anchor=north,minimum size=7mm, inner color=mod2!60, outer color=mod1!80] {};
-        \foreach \col/\yi in {2/1,3/2,4/3}{
-                \node (a1\col) [draw=black!50, xshift=-0.8pt, square, right=0mm of a1\yi.east, anchor=west,minimum size=7mm, inner color=mod2!60, outer color=mod1!80] {};
-                \node (a2\col) [draw=black!50, xshift=-0.8pt, square, right=0mm of a2\yi.east, anchor=west,minimum size=7mm, inner color=mod2!60, outer color=mod1!80] {};
-                \node (a3\col) [draw=black!50, xshift=-0.8pt, square, right=0mm of a3\yi.east, anchor=west,minimum size=7mm, inner color=mod2!60, outer color=mod1!80] {};
+        \foreach \lab/\c in {A/mod1, B/mod2, C/mod3}
+            {
+                \node (enc_\lab) [draw=\c, text=\c, thick, rounded rectangle, rounded rectangle west arc=none, right=3mm of in_\lab.east, anchor=west] {$\enc^{\lab}$};
+                \node [text=\c, right=4mm of enc_\lab.north east, anchor=north west, inner sep=0pt, yshift=1mm] {\(U^{\lab}\)};
+                \draw[thick, -stealth, color=\c] (in_\lab.east) -- (enc_\lab.west);
             }
 
-        \node (Aij) [draw=H, fit={(a21) (a22) (a23) (a24)}, dashed, rounded corners=5] {};
-        \node [right=0mm of Aij.east, anchor=south west, inner sep=1pt, text=H] {\hyperref[eq:cross_att_weights]{\(A^{i\rightarrow j}_{g_p}\)}};
-        \node [left=0mm of Aij.west, anchor=east, inner sep=1pt, text=H] {\cref{eq:cross_att_weights}};
+        \begin{scope}[yshift=-6.2cm, scale=0.9, transform shape, every node/.style={font=\tiny, thick}]
+            % \tikzstyle{every node}=[font=\tiny]
+            \node (g1) [draw=mod2, square, inner sep=0pt, fill=mod2!10, text=mod2D] at (0,0) {$X^{B}_{g_1}$};
+            \node (gi) [draw=mod2, square, below=0.5 cm of g1.south, anchor=north, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^{B}_{g_j}$};
+            \node (gk) [draw=mod2, square, below=0.5 cm of gi.south, anchor=north, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^{B}_{g_k}$};
 
-        \node (o3) [draw=mod1, fill=mod1!10, square, inner sep=0pt, minimum size=10mm] at (v4-|a34.south) {};
-        \node (o2) [draw=mod1, fill=mod1!10, square, above=0cm of o3.north, anchor=south, inner sep=0pt, minimum size=10mm, yshift=-0.8pt] {};
-        \node (o1) [draw=mod1, fill=mod1!10, square, above=0mm of o2.north, anchor=south, inner sep=0pt, minimum size=10mm, yshift=-0.8pt] {};
-        \node [inner sep=0pt, text=mod1D] at (o2.center) {\hyperref[eq:cross_att]{\(Z^{i\rightarrow j}_{g_p}\)}};
+            \path (g1.south) -- (gi.north) node[midway, inner sep=0pt, yshift=1mm] () {$\vdots$};
+            \path (gi.south) -- (gk.north) node[midway, inner sep=0pt, yshift=1mm] (dots) {$\vdots$};
+            % \node (dots) [below=2mm of gi.south, anchor=center] {$\vdots$};
 
-        \draw[-stealth, color=mod1] (b3) to ["\(W^{Q}\)"] (q1);
-        \path (a1.east) -- (k1.west) coordinate [midway, inner sep=0pt, xshift=-3mm] (midk2);
-        \node [above=0mm of midk2.north, anchor=south west, text=mod2] {\(W^{K}\)};
-        \node (midk1) at (a2.south east -| midk2) {};
-        \draw[-stealth, rounded corners=5, color=mod2] (a2.south east) -- (midk1.center) -- (midk2.center) -- (k1.west);
+            \node (in_vec) [draw=mod2, rectangle, fit={(g1) (gi) (gk)}, left=3mm of g1.north west, anchor=north east, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^B$};
 
-        \path (a4.east) -- (v1.west) coordinate [midway, inner sep=0pt, xshift=-3mm] (midv2);
-        \node [below=0mm of midv2.north, anchor=north west, text=mod2] {\(W^{V}\)};
-        \node (midv1) at (a2.south east -| midv2) {};
-        \draw[-stealth, rounded corners=5, color=mod2] (a2.south east) -- (midv1.center) -- (midv2.center) -- (v1.west);
+            \draw [-stealth, color=mod2] (g1-|in_vec.east) -- (g1.west);
+            \draw [-stealth, color=mod2] (gi-|in_vec.east) -- (gi.west);
+            \draw [-stealth, color=mod2] (gk-|in_vec.east) -- (gk.west);
 
-        \path (v4.east) -- (o3.west) coordinate [midway] (mido3);
-        \node (mido2) at (mido3 |- o2) {};
-        \draw[-stealth, rounded corners=5, color=mod2] (v4) -- (mido3.center) -- (mido2.center) -- (o2);
-        \node (midAo3) at (a32.south east |- o2) {};
-        \node [left=0mm of midAo3.west, anchor=south east, inner sep=1pt] {\cref{eq:cross_att}};
-        \draw[-stealth, rounded corners=5, color=mod1] (a32.south east) -- ([yshift=2mm]midAo3.center) -- ([yshift=2mm]o2.west);
+            \node (fcn1) [draw=mod2, rounded corners=3, right=3mm of g1.east, anchor=west, fill=mod2!10, text=mod2D, minimum height=4mm] {\hyperref[eq:attomics_groups_proj]{FCN}};
+            \node (fcni) [draw=mod2, rounded corners=3, right=3mm of gi.east, anchor=west, fill=mod2!10, text=mod2D, minimum height=4mm] {\hyperref[eq:attomics_groups_proj]{FCN}};
+            \node (fcnk) [draw=mod2, rounded corners=3, right=3mm of gk.east, anchor=west, fill=mod2!10, text=mod2D, minimum height=4mm] {\hyperref[eq:attomics_groups_proj]{FCN}};
 
-        \draw [-stealth, color=mod1] (q3.east |- a11) -- (a11);
-        \draw [-stealth, color=mod2] (k4.east |- a31) -- (a31);
+            \draw [-stealth, color=mod2] (g1.east) -- (fcn1.west);
+            \draw [-stealth, color=mod2] (gi.east) -- (fcni.west);
+            \draw [-stealth, color=mod2] (gk.east) -- (fcnk.west);
 
-        \node (AijW) [above=1mm of a13.north east, anchor=south east, inner sep=0pt] {\hyperref[eq:cross_att_weight]{\( a^{i\rightarrow j}_{g_p,g_{k^i}}\)}};
-        \draw[-stealth] (AijW.east) to[bend left] (a24.center);
-    \end{scope}
+            \node (g1p) [draw=mod2, square, right=0.3 cm of fcn1.east, anchor=west, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^{'B}_{g_1}$};
+            \node (gip) [draw=mod2, square, right=0.3 cm of fcni.east, anchor=west, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^{'B}_{g_j}$};
+            \node (gkp) [draw=mod2, square, right=0.3 cm of fcnk.east, anchor=west, inner sep=0pt, fill=mod2!10, text=mod2D] {$X^{'B}_{g_k}$};
 
-    \path (enc_A.south) -- (enc_C.north) node[midway, rounded corners=5, anchor=center, xshift=2.7cm,top color=mod1,bottom color=mod3,text=white, font=\footnotesize] (cross_AC) {CrossAttention};
-    \path (enc_C.south) -- (enc_B.north) node[midway, rounded corners=5, anchor=center, xshift=2.7cm,top color=mod3,bottom color=mod2,text=white, font=\footnotesize] (cross_BC) {CrossAttention};
-    \path let \p1=(cross_AC.center), \p2=(cross_BC.center), \n1={veclen(\x2-\x1,\y2-\y1)} in node[below=\n1 of cross_BC.center, anchor=center, rounded corners=5,top color=mod2,bottom color=mod1,text=white, font=\footnotesize] (cross_AB) {CrossAttention};
+            \draw [-stealth, color=mod2] (fcn1.east) -- (g1p.west);
+            \draw [-stealth, color=mod2] (fcni.east) -- (gip.west);
+            \draw [-stealth, color=mod2] (fcnk.east) -- (gkp.west);
 
-    \draw [-stealth, thick, rounded corners=5, color=mod3] (enc_C.east) -| (cross_BC.north);
-    \draw [-stealth, thick, rounded corners=5, color=mod3] (enc_C.east) -| (cross_AC.south);
-    \draw [-stealth, thick, rounded corners=5, color=mod2] (enc_B.east) -| (cross_BC.south);
-    \draw [-stealth, thick, rounded corners=5, color=mod2] (enc_B.east) -| (cross_AB.north);
-    \draw [-stealth, thick, rounded corners=5, color=mod1] (enc_A.east) -| (cross_AC.north);
-    \coordinate (xx1) at (enc_A.east -| cross_AC.west);
-    \path (enc_A.east) -- (xx1) coordinate [midway, xshift=3mm] (mid1);
-    \path let \p1=(enc_A.east), \p2=(cross_AB.south west), \p3=(cross_AC.north), \n1={veclen(\x1-\x1,\y2-\y1)}, \n2={4mm}, \n3={\n1 + \n2} in coordinate [below=\n3 of mid1] (mid2) coordinate [below=\n2 of cross_AB.south] (mid3);
-    \draw [-stealth, thick, rounded corners=5, color=mod1] (enc_A.east) -- (mid1) -- (mid2) -- (mid3) -- (cross_AB.south);
+            \path (g1p.south) -- (gip.north) node[midway, draw=mod2, square, inner sep=0pt, xshift=8mm, anchor=west, fill=mod2!10, text=mod2D] (mhsa_gj) {$X^{'B}_{g_j}$};
+            \path (gip.south) -- (gkp.north) node[midway, draw=mod2, square, inner sep=0pt, xshift=8mm, anchor=west, fill=mod2!10, text=mod2D] (mhsa_G) {\hyperref[eq:attomics_groups_proj]{$X^{'B}_{G}$}};
 
-    \foreach \t/\l/\c in {AC/A\rightarrow C/mod3, BC/B\rightarrow C/mod3, AB/A\rightarrow B/mod2} {
-            \node (Z_\t) [inner sep=1pt, right=3mm of cross_\t.east, text=\c] {\(Z^{\l}\)};
-            \draw[thick, -stealth, color=\c] (cross_\t.east) -- (Z_\t.west);
-            \node at ([xshift=0.5ex, yshift=0.5em]cross_\t.north) [right, inner sep=0pt] {\tiny\ifthenelse{\equal{\t}{AC}}{\(K,V\)}{\(Q\)}};
-            \node at ([xshift=0.5ex, yshift=-0.5em]cross_\t.south) [right, inner sep=0pt] {\tiny\ifthenelse{\equal{\t}{AC}}{\(Q\)}{\(K,V\)}};
-        }
+            \node (Q) [draw=mod2, square, right=15mm of g1p.east, anchor=west, inner sep=0pt, fill=mod2!10, text=mod2D] {$Q_{g_j}$};
+            \node (K) [draw=mod2, square, right=15mm of gip.east, anchor=west, fill=mod2!10, text=mod2D] {K};
+            \node (V) [draw=mod2, square, right=15mm of gkp.east, anchor=west, fill=mod2!10, text=mod2D] {V};
 
-    \node (cat_C) [draw=mod3, thick, signal, right=5.35cm of enc_C.east, anchor=west, text height=0.5cm, text width=0.25cm] {};
-    \node (cat_B) [draw=mod2, thick, signal, right=5.35cm of enc_B.east, anchor=west, text height=0.5cm, text width=0.25cm] {};
-    \draw[thick, -stealth, color=mod3] (enc_C.east) -- (cat_C.west);
-    \draw[thick, -stealth, color=mod2] (enc_B.east) -- (cat_B.west);
+            \draw[-stealth, color=mod2, rounded corners=3] (mhsa_gj) |- (Q);
+            \draw[-stealth, color=mod2, rounded corners=3] (mhsa_G) |- (K);
+            \draw[-stealth, color=mod2, rounded corners=3] (mhsa_G) |- (V);
 
-    \path let \p1=(Z_AC.east), \p2=(cat_C.west), \n1={veclen(\x2-\x1,\y1-\y1)/2} in coordinate [right=\n1 of Z_AC.east] (cat_ac) coordinate [right=\n1 of Z_BC.east] (cat_bc) coordinate [left=\n1 of cat_C.west, yshift=2mm] (cat_ac2) coordinate [left=\n1 of cat_C.west, yshift=-2mm] (cat_bc2) coordinate [right=\n1 of Z_AB.east] (cat_ab) coordinate [left=\n1 of cat_B.west, yshift=-2mm] (cat_ab2);
-    \draw[thick, -stealth, rounded corners=5pt, color=mod3] (Z_AC.east) -- (cat_ac) -- (cat_ac2) -- ([yshift=2mm]cat_C.west);
-    \draw[thick, -stealth, rounded corners=5pt, color=mod3] (Z_BC.east) -- (cat_bc) -- (cat_bc2) -- ([yshift=-2mm]cat_C.west);
-    \draw[thick, -stealth, rounded corners=5pt, color=mod2] (Z_AB.east) -- (cat_ab) -- (cat_ab2) -- ([yshift=-2mm]cat_B.west);
+            \node (A) [draw=mod2, rectangle, fit={(Q) (K)}, right=4mm of K.south east, anchor=south west, inner sep=0pt, fill=mod2!10, text=mod2D] {$A^{B}_{g_j}$};
+            \node (out) [draw=mod2, square, right=1.2cm of V.east, anchor=west, fill=mod2!10, text=mod2D] {};
+            \draw[-stealth, color=mod2] (Q) -- (Q-|A.west);
+            \draw[-stealth, color=mod2] (K) -- (K-|A.west);
+            \draw[-stealth, color=mod2] (V) -- (out);
+            \draw[-stealth, color=mod2, rounded corners=3] (A) -| (out);
+            \node (mhsa) [draw, fit={(Q) (K) (V) (out) (mhsa_gj) (mhsa_G)}, dashed, rounded corners=5, inner xsep=2pt, inner ysep=3mm] {};
+            \node [left=1mm of mhsa.north east, anchor=north east, inner sep=1pt, yshift=-0.5mm] {MHSA};
+            \node [right=1mm of mhsa.north west, anchor=north west, inner sep=1pt, yshift=-0.5mm] {\cref{eq:enc_mhsa}};
+            % \draw[-stealth] (out) -- (out-|mhsa.east);
+            \draw[-stealth, color=mod2] (g1p) -- (g1p-|mhsa.west);
+            \draw[-stealth, color=mod2] (gip) -- (gip-|mhsa.west);
+            \draw[-stealth, color=mod2] (gkp) -- (gkp-|mhsa.west);
+            \node (outk) [draw=mod2, square, right=4cm of gkp.east, anchor=west, inner sep=0pt, fill=mod2!10, text=mod2D] {$U^B_{g_k}$};
+            \node (outi) [draw=mod2, square, inner sep=0pt, fill=mod2!10, text=mod2D] at (gip -| outk) {$U^B_{g_j}$};
+            \node (out1) [draw=mod2, square, inner sep=0pt, fill=mod2!10, text=mod2D] at (g1p -| outk) {$U^B_{g_1}$};
 
-    \foreach \t/\c in {B/mod2, C/mod3} {
-            \node (Z_\t) [inner sep=1pt, right=2mm of cat_\t.east, text=\c] {\(Z^{\t}\)};
-            \node (sa_\t) [right=2mm of Z_\t.east, draw=\c, thick, rounded corners=5, font=\footnotesize] {MHSA};
-            \node (Z_\t2) [inner sep=1pt, right=2mm of sa_\t.east, text=\c] {\(Z^{\t}\)};
-            \draw[thick, -stealth, color=\c] (cat_\t.east) -- (Z_\t.west) ;
-            \draw[thick, -stealth, color=\c] (Z_\t.east) -- (sa_\t.west) ;
-            \draw[thick, -stealth, color=\c] (sa_\t.east) -- (Z_\t2.west) ;
-        }
-    \path[name path=ac] (in_A.east)--([xshift=14cm]in_A.east);
-    \path[name path=bd] (Z_C2.north)--([yshift=2.5cm]Z_C2.north);
-    \path [name intersections={of=ac and bd,by=E}];
-    \node (Z_A) at (E) [inner sep=1pt, text=mod1] {\(Z^A\)};
-    \draw[thick, -stealth, color=mod1] (enc_A.east) -- (Z_A.west) ;
+            \draw[-stealth, color=mod2] (outk-|mhsa.east) -- (outk);
+            \draw[-stealth, color=mod2] (outi-|mhsa.east) -- (outi);
+            \draw[-stealth, color=mod2] (out1-|mhsa.east) -- (out1);
+        \end{scope}
 
-    \node (cat) [draw, thick, signal, right=.6cm of Z_C2.east, anchor=west, text height=0.5cm, text width=0.25cm] {};
-    \draw[thick, -stealth, color=mod3] (Z_C2.east) -- (cat.west) ;
-    \path let \p1=(Z_A.east), \p2=(cat.west), \n1={veclen(\x2-\x1,\y1-\y1)/2} in coordinate [right=\n1 of Z_A.east] (cat_za) coordinate [right=\n1 of Z_B2.east] (cat_zb) coordinate [left=\n1 of cat.west, yshift=2mm] (cat_za2) coordinate [left=\n1 of cat.west, yshift=-2mm] (cat_zb2);
-    \draw[thick, -stealth, rounded corners=5, color=mod1] (Z_A.east) -- (cat_za) -- (cat_za2) -- ([yshift=2mm]cat.west) ;
-    \draw[thick, -stealth, rounded corners=5, color=mod2] (Z_B2.east) -- (cat_zb) -- (cat_zb2) -- ([yshift=-2mm]cat.west) ;
+        \begin{scope}[xshift=6.8cm, yshift=-5.7cm, scale=0.9, transform shape, every node/.style={font=\tiny, thick}]
+            \node (b1) [draw=mod1, fill=mod1!10, square, inner sep=0pt, minimum size=10mm] at (0,0) {};
+            \node (b2) [draw=mod1, fill=mod1!10, square, right=0mm of b1.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
+            \node (b3) [draw=mod1, fill=mod1!10, square, right=0mm of b2.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
+            \node [text=mod1D] at (b2.center) {\(U^{j}_{g_p}\)};
 
-    \node (Z) [right=3mm of cat.east, inner sep=1pt] {\(Z\)};
-    \node (FCN) [draw, thick, rounded corners=5, right=3mm of Z.east, anchor=west, font=\footnotesize] {FCN};
-    \node (out) [inner sep=1pt, right=3mm of FCN.east, anchor=west] {\(\hat{Y}\)};
-    \draw [thick, -stealth] (cat.east) -- (Z.west);
-    \draw [thick, -stealth] (Z.east) -- (FCN.west);
-    \draw [thick, -stealth] (FCN.east) -- (out.west);
+            \node (a1) [draw=mod2, fill=mod2!10, square, below=5mm of b2.south, anchor=north, inner sep=0pt, minimum size=10mm] {};
+            \node (a2) [draw=mod2, fill=mod2!10, square, below=0mm of a1.south, anchor=north, inner sep=0pt, minimum size=10mm, yshift=0.8pt] {};
+            \node (a3) [draw=mod2, fill=mod2!10, square, below=0mm of a2.south, anchor=north, inner sep=0pt, minimum size=10mm, yshift=0.8pt] {};
+            \node (a4) [draw=mod2, fill=mod2!10, square, below=0mm of a3.south, anchor=north, inner sep=0pt, minimum size=10mm, yshift=0.8pt] {};
+            \node [text=mod2D] at (a4.center) {\(U^{i}_{g_{k^i}}\)};
 
-    \node (A) [inner sep=1pt, right=2.5cm of Z_A.east, anchor=west, text=mod1, yshift=2mm] {A};
-    \node (B) [inner sep=1pt, right=6mm of A.east, anchor=west, text=mod2] {B};
-    \node (C) [inner sep=1pt, below=6mm of B.south, anchor=north, text=mod3] {C};
-    \draw[thick, -stealth] (A.east) -- (B.west) ;
-    \draw[thick, -stealth] (B.south) -- (C.north) ;
-    \draw[thick, -stealth, rounded corners=5] (A.south) |- (C.west) ;
+            \node (q1) [draw=mod1, fill=mod1!10, square, right=6mm of b3.east, anchor=west, inner sep=0pt, minimum size=10mm] {};
+            \node (q2) [draw=mod1, fill=mod1!10, square, right=0mm of q1.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
+            \node (q3) [draw=mod1, fill=mod1!10, square, right=0mm of q2.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
+            \node [text=mod1D] at (q2.center) {\(Q^{j}_{g_p}\)};
 
-    \node (cat_lgd) [draw, thick, signal, below=3mm of cat.south west, anchor=north west, text height=0.5cm, text width=0.25cm] {};
-    %\path let \p1=(cat_lgd.east), \p2=(cat_lgd.west), \n1={veclen(\x2-\x1,\y2-\y1)} in node (opt_lgd) [draw, thick, rounded corners=5, dashed, below=5mm of cat_lgd.south west, anchor=north west, text height=0.2cm, minimum width=\n1] {};
-    \node [right=1mm of cat_lgd.east, anchor=west] {Concatenate};
-    %\node [right=1mm of opt_lgd.east, anchor=west] {Optionnal};
+            \node (k3) [draw=mod2, fill=mod2!10, square, inner sep=0pt, minimum size=10mm, anchor=west] at (a1.east-|q2) {};
+            \node (k2) [draw=mod2, fill=mod2!10, square, left=0mm of k3.west, anchor=east, inner sep=0pt, minimum size=10mm, xshift=0.8pt] {};
+            \node (k1) [draw=mod2, fill=mod2!10, square, left=0mm of k2.west, anchor=east, inner sep=0pt, minimum size=10mm, xshift=0.8pt] {};
+            \node (k4) [draw=mod2, fill=mod2!10, square, right=0mm of k3.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
+            \node [text=mod2D] at (k4.center) {\(K^{i}_{g_{k^i}}\)};
 
-    \begin{scope}[on background layer={color=black!8}]
-        \node [fill, fit={(A) (B) (C) (b_lgd)}] {}; %fit margins={bottom=10pt,top=0pt},
-    \end{scope}
+            \node (v3) [draw=mod2, fill=mod2!10, square, inner sep=0pt, minimum size=10mm, anchor=west] at (a4.east-|q2) {};
+            \node (v2) [draw=mod2, fill=mod2!10, square, left=0mm of v3.west, anchor=east, inner sep=0pt, minimum size=10mm, xshift=0.8pt] {};
+            \node (v1) [draw=mod2, fill=mod2!10, square, left=0mm of v2.west, anchor=east, inner sep=0pt, minimum size=10mm, xshift=0.8pt] {};
+            \node (v4) [draw=mod2, fill=mod2!10, square, right=0mm of v3.east, anchor=west, inner sep=0pt, minimum size=10mm, xshift=-0.8pt] {};
+            \node [text=mod2D] at (v4.center) {\(V^{i}_{g_{k^i}}\)};
 
-\end{tikzpicture}
-    \setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
-    \setoperatorfont\mathsf
+            % Attention matrix
+            \path (q3.south) -- (k3.north) coordinate [midway, draw=black!50, square, anchor=west,minimum size=7mm, xshift=12mm, inner color=mod2!60, outer color=mod1!80] (a21);
+            \node (a11) [draw=black!50, yshift=-0.8pt, square, above=0mm of a21.north, anchor=south,minimum size=7mm, inner color=mod2!60, outer color=mod1!80] {};
+            \node (a31) [draw=black!50, yshift=0.8pt, square, below=0mm of a21.south, anchor=north,minimum size=7mm, inner color=mod2!60, outer color=mod1!80] {};
+            \foreach \col/\yi in {2/1,3/2,4/3}{
+                    \node (a1\col) [draw=black!50, xshift=-0.8pt, square, right=0mm of a1\yi.east, anchor=west,minimum size=7mm, inner color=mod2!60, outer color=mod1!80] {};
+                    \node (a2\col) [draw=black!50, xshift=-0.8pt, square, right=0mm of a2\yi.east, anchor=west,minimum size=7mm, inner color=mod2!60, outer color=mod1!80] {};
+                    \node (a3\col) [draw=black!50, xshift=-0.8pt, square, right=0mm of a3\yi.east, anchor=west,minimum size=7mm, inner color=mod2!60, outer color=mod1!80] {};
+                }
+
+            \node (Aij) [draw=H, fit={(a21) (a22) (a23) (a24)}, dashed, rounded corners=5] {};
+            \node [right=0mm of Aij.east, anchor=south west, inner sep=1pt, text=H] {\hyperref[eq:cross_att_weights]{\(A^{i\rightarrow j}_{g_p}\)}};
+            \node [left=0mm of Aij.west, anchor=east, inner sep=1pt, text=H] {\cref{eq:cross_att_weights}};
+
+            \node (o3) [draw=mod1, fill=mod1!10, square, inner sep=0pt, minimum size=10mm] at (v4-|a34.south) {};
+            \node (o2) [draw=mod1, fill=mod1!10, square, above=0cm of o3.north, anchor=south, inner sep=0pt, minimum size=10mm, yshift=-0.8pt] {};
+            \node (o1) [draw=mod1, fill=mod1!10, square, above=0mm of o2.north, anchor=south, inner sep=0pt, minimum size=10mm, yshift=-0.8pt] {};
+            \node [inner sep=0pt, text=mod1D] at (o2.center) {\hyperref[eq:cross_att]{\(Z^{i\rightarrow j}_{g_p}\)}};
+
+            \draw[-stealth, color=mod1] (b3) to ["\(W^{Q}\)"] (q1);
+            \path (a1.east) -- (k1.west) coordinate [midway, inner sep=0pt, xshift=-3mm] (midk2);
+            \node [above=0mm of midk2.north, anchor=south west, text=mod2] {\(W^{K}\)};
+            \node (midk1) at (a2.south east -| midk2) {};
+            \draw[-stealth, rounded corners=5, color=mod2] (a2.south east) -- (midk1.center) -- (midk2.center) -- (k1.west);
+
+            \path (a4.east) -- (v1.west) coordinate [midway, inner sep=0pt, xshift=-3mm] (midv2);
+            \node [below=0mm of midv2.north, anchor=north west, text=mod2] {\(W^{V}\)};
+            \node (midv1) at (a2.south east -| midv2) {};
+            \draw[-stealth, rounded corners=5, color=mod2] (a2.south east) -- (midv1.center) -- (midv2.center) -- (v1.west);
+
+            \path (v4.east) -- (o3.west) coordinate [midway] (mido3);
+            \node (mido2) at (mido3 |- o2) {};
+            \draw[-stealth, rounded corners=5, color=mod2] (v4) -- (mido3.center) -- (mido2.center) -- (o2);
+            \node (midAo3) at (a32.south east |- o2) {};
+            \node [left=0mm of midAo3.west, anchor=south east, inner sep=1pt] {\cref{eq:cross_att}};
+            \draw[-stealth, rounded corners=5, color=mod1] (a32.south east) -- ([yshift=2mm]midAo3.center) -- ([yshift=2mm]o2.west);
+
+            \draw [-stealth, color=mod1] (q3.east |- a11) -- (a11);
+            \draw [-stealth, color=mod2] (k4.east |- a31) -- (a31);
+
+            \node (AijW) [above=1mm of a13.north east, anchor=south east, inner sep=0pt] {\hyperref[eq:cross_att_weight]{\( a^{i\rightarrow j}_{g_p,g_{k^i}}\)}};
+            \draw[-stealth] (AijW.east) to[bend left] (a24.center);
+        \end{scope}
+
+        \path (enc_A.south) -- (enc_C.north) node[midway, rounded corners=5, anchor=center, xshift=2.7cm,top color=mod1,bottom color=mod3,text=white, font=\footnotesize] (cross_AC) {CrossAttention};
+        \path (enc_C.south) -- (enc_B.north) node[midway, rounded corners=5, anchor=center, xshift=2.7cm,top color=mod3,bottom color=mod2,text=white, font=\footnotesize] (cross_BC) {CrossAttention};
+        \path let \p1=(cross_AC.center), \p2=(cross_BC.center), \n1={veclen(\x2-\x1,\y2-\y1)} in node[below=\n1 of cross_BC.center, anchor=center, rounded corners=5,top color=mod2,bottom color=mod1,text=white, font=\footnotesize] (cross_AB) {CrossAttention};
+
+        \draw [-stealth, thick, rounded corners=5, color=mod3] (enc_C.east) -| (cross_BC.north);
+        \draw [-stealth, thick, rounded corners=5, color=mod3] (enc_C.east) -| (cross_AC.south);
+        \draw [-stealth, thick, rounded corners=5, color=mod2] (enc_B.east) -| (cross_BC.south);
+        \draw [-stealth, thick, rounded corners=5, color=mod2] (enc_B.east) -| (cross_AB.north);
+        \draw [-stealth, thick, rounded corners=5, color=mod1] (enc_A.east) -| (cross_AC.north);
+        \coordinate (xx1) at (enc_A.east -| cross_AC.west);
+        \path (enc_A.east) -- (xx1) coordinate [midway, xshift=3mm] (mid1);
+        \path let \p1=(enc_A.east), \p2=(cross_AB.south west), \p3=(cross_AC.north), \n1={veclen(\x1-\x1,\y2-\y1)}, \n2={4mm}, \n3={\n1 + \n2} in coordinate [below=\n3 of mid1] (mid2) coordinate [below=\n2 of cross_AB.south] (mid3);
+        \draw [-stealth, thick, rounded corners=5, color=mod1] (enc_A.east) -- (mid1) -- (mid2) -- (mid3) -- (cross_AB.south);
+
+        \foreach \t/\l/\c in {AC/A\rightarrow C/mod3, BC/B\rightarrow C/mod3, AB/A\rightarrow B/mod2} {
+                \node (Z_\t) [inner sep=1pt, right=3mm of cross_\t.east, text=\c] {\(Z^{\l}\)};
+                \draw[thick, -stealth, color=\c] (cross_\t.east) -- (Z_\t.west);
+                \node at ([xshift=0.5ex, yshift=0.5em]cross_\t.north) [right, inner sep=0pt] {\tiny\ifthenelse{\equal{\t}{AC}}{\(K,V\)}{\(Q\)}};
+                \node at ([xshift=0.5ex, yshift=-0.5em]cross_\t.south) [right, inner sep=0pt] {\tiny\ifthenelse{\equal{\t}{AC}}{\(Q\)}{\(K,V\)}};
+            }
+
+        \node (cat_C) [draw=mod3, thick, signal, right=5.35cm of enc_C.east, anchor=west, text height=0.5cm, text width=0.25cm] {};
+        \node (cat_B) [draw=mod2, thick, signal, right=5.35cm of enc_B.east, anchor=west, text height=0.5cm, text width=0.25cm] {};
+        \draw[thick, -stealth, color=mod3] (enc_C.east) -- (cat_C.west);
+        \draw[thick, -stealth, color=mod2] (enc_B.east) -- (cat_B.west);
+
+        \path let \p1=(Z_AC.east), \p2=(cat_C.west), \n1={veclen(\x2-\x1,\y1-\y1)/2} in coordinate [right=\n1 of Z_AC.east] (cat_ac) coordinate [right=\n1 of Z_BC.east] (cat_bc) coordinate [left=\n1 of cat_C.west, yshift=2mm] (cat_ac2) coordinate [left=\n1 of cat_C.west, yshift=-2mm] (cat_bc2) coordinate [right=\n1 of Z_AB.east] (cat_ab) coordinate [left=\n1 of cat_B.west, yshift=-2mm] (cat_ab2);
+        \draw[thick, -stealth, rounded corners=5pt, color=mod3] (Z_AC.east) -- (cat_ac) -- (cat_ac2) -- ([yshift=2mm]cat_C.west);
+        \draw[thick, -stealth, rounded corners=5pt, color=mod3] (Z_BC.east) -- (cat_bc) -- (cat_bc2) -- ([yshift=-2mm]cat_C.west);
+        \draw[thick, -stealth, rounded corners=5pt, color=mod2] (Z_AB.east) -- (cat_ab) -- (cat_ab2) -- ([yshift=-2mm]cat_B.west);
+
+        \foreach \t/\c in {B/mod2, C/mod3} {
+                \node (Z_\t) [inner sep=1pt, right=2mm of cat_\t.east, text=\c] {\(Z^{\t}\)};
+                \node (sa_\t) [right=2mm of Z_\t.east, draw=\c, thick, rounded corners=5, font=\footnotesize] {MHSA};
+                \node (Z_\t2) [inner sep=1pt, right=2mm of sa_\t.east, text=\c] {\(Z^{\t}\)};
+                \draw[thick, -stealth, color=\c] (cat_\t.east) -- (Z_\t.west) ;
+                \draw[thick, -stealth, color=\c] (Z_\t.east) -- (sa_\t.west) ;
+                \draw[thick, -stealth, color=\c] (sa_\t.east) -- (Z_\t2.west) ;
+            }
+        \path[name path=ac] (in_A.east)--([xshift=14cm]in_A.east);
+        \path[name path=bd] (Z_C2.north)--([yshift=2.5cm]Z_C2.north);
+        \path [name intersections={of=ac and bd,by=E}];
+        \node (Z_A) at (E) [inner sep=1pt, text=mod1] {\(Z^A\)};
+        \draw[thick, -stealth, color=mod1] (enc_A.east) -- (Z_A.west) ;
+
+        \node (cat) [draw, thick, signal, right=.6cm of Z_C2.east, anchor=west, text height=0.5cm, text width=0.25cm] {};
+        \draw[thick, -stealth, color=mod3] (Z_C2.east) -- (cat.west) ;
+        \path let \p1=(Z_A.east), \p2=(cat.west), \n1={veclen(\x2-\x1,\y1-\y1)/2} in coordinate [right=\n1 of Z_A.east] (cat_za) coordinate [right=\n1 of Z_B2.east] (cat_zb) coordinate [left=\n1 of cat.west, yshift=2mm] (cat_za2) coordinate [left=\n1 of cat.west, yshift=-2mm] (cat_zb2);
+        \draw[thick, -stealth, rounded corners=5, color=mod1] (Z_A.east) -- (cat_za) -- (cat_za2) -- ([yshift=2mm]cat.west) ;
+        \draw[thick, -stealth, rounded corners=5, color=mod2] (Z_B2.east) -- (cat_zb) -- (cat_zb2) -- ([yshift=-2mm]cat.west) ;
+
+        \node (Z) [right=3mm of cat.east, inner sep=1pt] {\(Z\)};
+        \node (FCN) [draw, thick, rounded corners=5, right=3mm of Z.east, anchor=west, font=\footnotesize] {FCN};
+        \node (out) [inner sep=1pt, right=3mm of FCN.east, anchor=west] {\(\hat{Y}\)};
+        \draw [thick, -stealth] (cat.east) -- (Z.west);
+        \draw [thick, -stealth] (Z.east) -- (FCN.west);
+        \draw [thick, -stealth] (FCN.east) -- (out.west);
+
+        \node (A) [inner sep=1pt, right=2.5cm of Z_A.east, anchor=west, text=mod1, yshift=2mm] {A};
+        \node (B) [inner sep=1pt, right=6mm of A.east, anchor=west, text=mod2] {B};
+        \node (C) [inner sep=1pt, below=6mm of B.south, anchor=north, text=mod3] {C};
+        \draw[thick, -stealth] (A.east) -- (B.west) ;
+        \draw[thick, -stealth] (B.south) -- (C.north) ;
+        \draw[thick, -stealth, rounded corners=5] (A.south) |- (C.west) ;
+
+        \node (cat_lgd) [draw, thick, signal, below=3mm of cat.south west, anchor=north west, text height=0.5cm, text width=0.25cm] {};
+        %\path let \p1=(cat_lgd.east), \p2=(cat_lgd.west), \n1={veclen(\x2-\x1,\y2-\y1)} in node (opt_lgd) [draw, thick, rounded corners=5, dashed, below=5mm of cat_lgd.south west, anchor=north west, text height=0.2cm, minimum width=\n1] {};
+        \node [right=1mm of cat_lgd.east, anchor=west] {Concatenate};
+        %\node [right=1mm of opt_lgd.east, anchor=west] {Optionnal};
+
+        \begin{scope}[on background layer={color=black!8}]
+            \node [fill, fit={(A) (B) (C) (b_lgd)}] {}; %fit margins={bottom=10pt,top=0pt},
+        \end{scope}
+
+    \end{tikzpicture}
+    \mathversion{normal}
 \end{spacing}
 

@@ -13,6 +13,36 @@
 \chapter{Conclusions and Perspectives}
 \minitocpage
 \section{Conclusions}
+	During this PhD,
+	context precision medicine, focus on omics data, high dimensional
+	task diagnosis/prognosis
+	fully recap biological process use all information, multi level
+	explored the interest of attention on omics data
+	In~\cref{chap:attomics}, interest of attention
+	groups, memory requirments, introduce knowledge to construct the groups
+	AttOmics leverages self-attention to capture feature interactions specific to each patient.
+	less parameters but still project in high dim, avoid large compression of the info
+	The self-attention also allows the visualization of the learned interactions to understand the model better.
+	\textcolor{red}{AttOmics is the only architecture consistently performing well on different omics data.}
+	In~\cref{chap:crossattomics}, multi-omics based on the known regulatory interactions at the modality level.
+	architecture briefly
+	For instance, DNAm impact the level of
+	pretrained encoders, boost perf, exchange information in very limited data settings
+	CrossAttOmics harnesses cross-attention to build a multimodal representation that explicitly considers interactions between modalities.
+	CrossAttOmics outperforms other deep learning architectures when there are very few paired training examples.
+	This is achieved by allowing information to flow between the different omics through the cross-attention layers.
+	By explicitly modeling the interactions between different omics, attribution methods such as \gls{lrp} can help in identifying the most important interactions.
+	Instead of scoring the interactions with post-hoc methods, let the network directly score with a gating mechanism.
+	interpretable model !
+	CrossAttOmicsGate, score the interaction --> let the network focus on the important interactions
+	Gate importance scores must be sparse to ensure correct interpretability and diversity to reflect the diversity that exists between samples.
+	To ensure these two properties are met, we added four regularization terms to our training process.
+	Our ablation study showed that the four terms are essential to ensure both sparsity and diversity while improving accuracy.
+
+	interpretability important, high-stakes domain such as healthcare, understand why/how a prediction was made, ie what were the important features.
+	knowing what are the important features helps knowing what we should change to have a different prediction.
+	counterfactuals, use them to know which needs to be made on the expression profile for the patient to be healthy, by linking this perturbation to drug database, provide treatment recommendation.
+	consider robust model, adversarial
 
 \section{Perspectives}
 	This section aims to expand on the work described in this manuscript and discuss broader perspectives related to the precision medicine field.
@@ -21,7 +51,7 @@
 		To avoid self-attention limitations on high-dimensional vectors, we proposed to group features and apply the attention mechanism to these groups.
 		While this approach was shown to be effective~(\cref{chap:attomics}), groups are an architectural constraint; removing them would allow for directly considering feature interactions.
 		However, the self-attention operation requires elements with an embedding dimension strictly greater than one, since elements of omics profiles are scalar values with no embedding dimension an intermediate transformation is required.
-		The direct idea would be to project scalar values into a higher dimensional space and use the recent self-attention approximation~\cite{xiongNystrOmformerNystr2021,Linformer} or new efficient implementation~\cite{FlashAttention,rabeSelfattentionDoesNot2021,bolyaHydraAttentionEfficient2022a} that allows for scaling up to large inputs\footnote{see~\cite{EfficientTransformers} for a larger overview of the possible methods}.
+		The direct idea would be to project scalar values into a higher dimensional space and use the recent self-attention approximation~\cite{xiongNystrOmformerNystr2021,Linformer} or new efficient implementation~\cite{FlashAttention,rabeSelfattentionDoesNot2021,bolyaHydraAttentionEfficient2022a} that allows for scaling up to large inputs\footnote{see~\cite{EfficientTransformers} for an extensive overview of the possible methods}.
 		Nevertheless, there is no justification for projecting scalar values into a higher space, and more importantly, it is unclear what would represent each dimension of the newly obtained vector.
 
 		The attention matrix is obtained by measuring the similarity between pairs of inputs, for vectors this measure is the scalar product.
@@ -37,7 +67,7 @@
 		\begin{equation}
 			Z_{i} = \left| Q - K_{i} \right| \cdot V
 		\end{equation}
-		This formulation can be implemented in an optimized triton kernel~\cite{TritonLang}, see~\cref{code:triton_att}, with a lower memory footprint withtout significantly increase the computation time~(\cref{fig:lin_attention_bench}).
+		This formulation can be implemented in an optimized triton kernel~\cite{TritonLang} as proposed in~\cref{code:triton_att}, with a lower memory footprint withtout significantly increase the computation time~(\cref{fig:lin_attention_bench}).
 		\pythoncode[label={code:triton_att}]{Triton implementation of the ScalarAttention}{figures/8-Conclusions/ScalarAttention.py}
 
 		\begin{figure}[htbp]
@@ -76,15 +106,15 @@
 
 	\subsection{Omics data challenges}
 		Omics data are generated with various methods, various sequencing platform, at different places and time by different people.
-		Those variations leads to non-biological variation in the data, also knwon as \textit{batch effect}.
+		Those variations leads to non-biological variation in the data, also knwon as \emph{batch effect}~\cite{Leek2010}.
 		Deep learning models are sensitive to batch effects as they might capture and amplify those artifacts.
 		Model interpretability can help to detect such cases, but there is still a need to better consider batch effect by correcting it or adding domain adaptation tasks to ensure the same representation of all samples.
 		Moreover, various tools have been developped to extract gene counts from sequencing reads and might leads to different outputs.
 		The generated gene counts can also be impacted by the choice of the reference genome.
 		It is important to ensure that all samples have been analyzed in an identical way with fixed references.
-		There is a need of more initiative like \Gls{tcga} or ARCHS4~\cite{Lachmann2018} to provide data that have been analyzed with a common pipeline.
+		There is a need of more initiative like \glsxtrshort{tcga} or ARCHS4~\cite{Lachmann2018} to provide data that have been analyzed with a common pipeline.
 
-		The \gls{tcga} is an ongoing project regularly updated with new releases\footnote{\url{https://docs.gdc.cancer.gov/Data/Release_Notes/Data_Release_Notes/}} that add new data or correct erroneous information, which makes it more difficult to fairly compare various approaches since they are likely using different versions with various subset of included cancers.
+		\Gls{tcga} is an ongoing project regularly updated with new releases\footnote{\url{https://docs.gdc.cancer.gov/Data/Release_Notes/Data_Release_Notes/}} that add new data or correct erroneous information, which makes it more difficult to fairly compare various approaches since they are likely using different versions with various subset of included cancers.
 		This highlights\footnote{along with the non sharing of model weights, and in worst cases the absence of source codes} the need for a standardized benchmark to fairly compare multiple approaches.
 
 		While the development of high-throughput sequencing methods increased the availability of omics data, the number of available samples remains limited compared to other deep learning fields.
@@ -96,15 +126,12 @@
 		Although this approach was effective, it increased the training time and supposed that all missingness pattern are generated during the training phase.
 		Another way would be to generate the missing modalities from the other modalities using a generative or modality translation task.
 		Generating large molecular profile is still a difficult task as such network are difficult to train.
-		Other methods handling missing modalities project the available ones in a common latent space before combining\footnote{linear combination, product of experts, \dots} them; such model are trainined with self-supervised learning~\cite{Lee2021AVI}.
+		Other methods handling missing modalities project the available ones in a common latent space before combining\footnote{linear combination, product of experts, \dots} them; such model are trained in a self-supervised fashion~\cite{Lee2021AVI}.
 		%TODO: Figure how to handle missing modalities 
 
 	\subsection{single-cell}
 		applied on bulk-experiments
 		diagonal integration
-		\the\textwidth
-
-		\the\textheight
 
 	\subsection{Foundation models}
 

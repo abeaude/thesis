@@ -462,8 +462,8 @@
 
 \section{Omics data}
 	The omics field corresponds to the characterization and quantification of pools of biological molecules.
-	Each omics field studies an \textit{ome}.
-	The \textit{ome} suffix refers to all constituents.
+	Each omics field studies an \emph{ome}.
+	The \emph{ome} suffix refers to all constituents.
 	For instance, the genome refers to all the genetic information of an organism, and genomics corresponds to the study of the genome.
 
 	The development of high-throughput technologies and the cost decline associated with those technologies helped foster a wide adoption of those methods.
@@ -542,7 +542,7 @@
 	\Gls{tcga} is the main dataset with high-quality patient data, \gls{ccle} is another multi-omics dataset on cell-lines.
 	Those datasets present uniformly processed data, ensuring that samples were analyzed the same way.
 
-	\subsection{\Glsfmtfull{tcga}}
+	\subsection{\Glsfmtfull{tcga}}\label{sec:data_tcga}
 		Among the 33 cancer types available in the \gls{tcga} project, we selected 19 cancers with more than a hundred patients.
 		We collected a total of 8777 samples, 8416 were cancerous samples and 361 normal samples from the GDC Data Portal\footnote{\url{https://portal.gdc.cancer.gov/}} with the \textsf{TCGABiolinks} R package.
 		For all selected patients we collected, when available, \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna} expression, \glsxtrfull{cnv}, and proteomics.
@@ -573,12 +573,13 @@
 		All samples in \gls{tcga} are processed in an harmonized way\footnote{\url{https://gdc.cancer.gov/about-data/gdc-data-processing}} against common reference files\footnote{\url{https://gdc.cancer.gov/about-data/gdc-data-processing/gdc-reference-files}}.
 		According to the \gls{tcga} consortium recommendation, we removed FFPE samples as they are not suitable for molecular analysis\footnote{\href{https://web.archive.org/web/20150919082952/https://gdac.broadinstitute.org/runs/sampleReports/latest/FPPP_FFPE_Cases.html}{https://gdac.broadinstitute.org/runs/sampleReports/latest/FPPP\_FFPE\_Cases.html}}.
 		We also followed their recommendation to select the best replicate\footnote{\href{https://web.archive.org/web/20150919044554/http://gdac.broadinstitute.org/runs/sampleReports/latest/READ_Replicate_Samples.html}{https://gdac.broadinstitute.org/runs/sampleReports/latest/READ\_Replicate\_Samples.html}}.
-		In \gls{tcga}, \gls{dnam} data is analyzed with two different methods: Illumina Human Methylation 450 and Human Methylation 27.
+		In \gls{tcga}, \gls{dnam} data is collected with two different methods: Illumina Human Methylation 450 and Human Methylation 27.
 		The methylation 450 platform contains more CpG sites but contains 94\% of the CpG sites detected by the methylation 27 method.
 		\Gls{dnam} data was restricted to the probes common to both HumanMethylation27 and HumanMethylation450 platforms.
-		Features with more than 10\% of NA values were removed, remaining NA were imputed using \gls{knn} imputation.
+		A total of 8416 patients of 19 different cancers and 361 normal samples were collected.
+		Features with more than 10\% of NaN values were removed, remaining NaN were imputed using \gls{knn} imputation.
 		No feature selection was applied, and data were standardized to a zero mean and unit variance.
-		Patients with incorrect survival information were removed.
+		Patients with incorrect survival information were removed, leaving 8349 patients for survival prediction.
 
 		For the multi-omics study, we restricted the dataset to patients having all modalities present, which led us to select 5862 patients of 18 different cancers.
 		This selection process ensures that the dataset only contains paired data.
@@ -587,7 +588,7 @@
 		70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
 		The training set is used to train the different models, the validation set is used to select the best model hyperparameters, and the test set is used to assess the model performances.
 
-	\subsection{\Glsfmtfull{ccle}}
+	\subsection{\Glsfmtfull{ccle}}\label{sec:data_ccle}
 		This second dataset, available on the DepMap portal\footnote{\url{https://depmap.org/portal/data_page/?tab=allData}}, is composed of \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna} expression, \glsxtrfull{cnv}, metabolomics, and proteomics for 536 cells of 16 different cancers.
 		No feature selection was applied, and data were standardized to a zero mean and unit variance.
 		70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.

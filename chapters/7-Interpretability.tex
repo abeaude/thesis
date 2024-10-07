@@ -110,7 +110,7 @@
 		The effectiveness of our approach, \ie{}the capacity of the method to generate counterfactuals that do change the prediction, was measured using counterfactual accuracy: \(\symcal{A}_{\text{CF}}\).
 		The counterfactual accuracy compares the prediction obtained by the classifier \(\operatorname{Cl}\) from the counterfactual \(\symbf{x}^{\text{CF}}\) to the desired class \(y^{\text{CF}}\).
 		The closeness of the counterfactual to the original point was determined using various measure distances based on \(L_{1}\), \(L_{2}\), or \(L_{\infty}\) norms.
-		The sparsity of the perturbation was evaluated with the \(L_{0}\)-\textit{norm}\footnote{Here, norm is in italics as this is not a proper norm. The \(L_{0}\)-\textit{norm} is not homogeneous: \(\left\|\lambda x \right\|_{0} \neq \left|\lambda\right| \left\| x \right\|_{0}\)}, measuring the number of nonzeros elements in a vector, defined as\footnote{This \textit{norm} can also be seen as the hamming distance of a vector \(x\) with the zero vector \(\symbb{0}_{n}\): \(\sum_{i=1}^{n} \symbb{1}\left(x \neq \symbb{0}_{n}\right)_{i}\)}: \(\sum_{i=1}^{n} \left|x_{i}\right|^{0}\) with defining that \(\left|0\right|^{0}=0\).
+		The sparsity of the perturbation was evaluated with the \(L_{0}\)-\emph{norm}\footnote{Here, norm is in italics as this is not a proper norm. The \(L_{0}\)-\emph{norm} is not homogeneous: \(\left\|\lambda x \right\|_{0} \neq \left|\lambda\right| \left\| x \right\|_{0}\)}, measuring the number of nonzeros elements in a vector, defined as\footnote{This \emph{norm} can also be seen as the hamming distance of a vector \(x\) with the zero vector \(\symbb{0}_{n}\): \(\sum_{i=1}^{n} \symbb{1}\left(x \neq \symbb{0}_{n}\right)_{i}\)}: \(\sum_{i=1}^{n} \left|x_{i}\right|^{0}\) with defining that \(\left|0\right|^{0}=0\).
 		The realism of counterfactuals was evaluated by measuring how much training data supports the generated counterfactual, \ie{} justify the counterfactual by connecting it to real data~\cite{JustifyCF}.
 		A realistic counterfactual should have points in its neighborhood that have the same label \( y^{\text{kNN}}\) as the desired class \(y^{\text{CF}}\), this can be computed as the proportion of point in the k-neighbors agreeing with the counterfactual class: \(\symcal{A}_{\text{kNN}} = \frac{1}{k}\sum_{i=1}^{k}\symbb{1}\left(y^{\text{CF}},  y^{\text{kNN}}_{i}\right)\)~\cite{Carla_CF}.
 		This metric is only considered for correct or effective counterfactual, generated point \(\symbf{x}^{\text{CF}}\) that are predicted as \(y^{\text{CF}}\).
@@ -120,7 +120,7 @@
 		This characteristic is evaluated by measuring the latency, the time to get a prediction for a single example.
 
 	\subsection{Getting a robust model: adversarial training}
-		Adversarial examples are inputs specifically designed to fool a neural network but are crafted to be \textit{indistinguishable}\footnote{This term originates from the development of adversarial examples in the computer field where the meaning of \textit{indistinguishable} is clear. For other application fields, the meaning needs to be adapted.
+		Adversarial examples are inputs specifically designed to fool a neural network but are crafted to be \emph{indistinguishable}\footnote{This term originates from the development of adversarial examples in the computer field where the meaning of \emph{indistinguishable} is clear. For other application fields, the meaning needs to be adapted.
 			Usually, a notion of minimal distance is introduced.} from a real input~(\cref{box:adversarial})~\cite{Szegedy2013IntriguingPO}.
 		Those examples are generated with adversarial attacks such as \gls{pgd}~\cite{PGDAttacks2} or Carlini and Wagner attack~\cite{Carlini2016TowardsET}.
 		As those attacks solve similar optimization problems as counterfactuals generation methods~\cite{Pawelczyk2021ExploringCE,Freiesleben2021}, it is important to prevent the \gls{gan} from generating adversarial examples instead of counterfactuals.
@@ -196,7 +196,7 @@
 
 		To identify the most robust classifier \(\operatorname{Cl}\), we compared the tradeoff accuracy robustness of five models: an \gls{mlp} with batch normalization (\glsxtrshort{mlp} BN), an \gls{mlp} with layer normalization (\glsxtrshort{mlp} LN), an \gls{mlp} without any normalization layer (\glsxtrshort{mlp} NoNorm), a norm-free \gls{mlp} where weights are standardized (\glsxtrshort{mlp} NF) and an \glsxtrshort{mlp} NF where \gls{agc} is used during training (\glsxtrshort{mlp} NF \glsxtrshort{agc}).
 		\Gls{agc} was introduced in~\cite{NoNormApplied} to improve training stability on larger batches by controlling the magnitude of the gradients according to the ratio of gradient norms to parameter norms and ensuring balanced updates.
-		Adversarial training benefits from \textit{showing} adversarial examples to the models, and there are various ways of finding adversarial examples~(\cref{box:adversarial}).
+		Adversarial training benefits from \emph{showing} adversarial examples to the models, and there are various ways of finding adversarial examples~(\cref{box:adversarial}).
 		We selected a 10-step \gls{pgd} attack with an \(L_{\infty}\)-norm implemented with the {\sourcecode rai-toolbox}~\cite{soklaski2022toolspracticesresponsibleai}.
 		An important parameter of \gls{pgd} attacks is the set allowed perturbation \(\Delta\) defined by \(\epsilon\).
 		The maximum allowed \(\epsilon\) value was set to the minimal \(L_{\infty}\) distance between points of two different classes\footnote{choosing a higher epsilon will guarantee the existence of an adversarial example, \ie{} a point of another class.}~(\cref{fig:dist_cls_distibutionLinf}).
@@ -253,20 +253,20 @@
 			\caption[Adversarial metrics comparison]{Comparison of boundary thickness, margin decision, and model smoothness of adversarially trained (Robust \cmark), or not (Robust \xmark), models with different normalization strategies.}\label{tab:metrics_adv}
 			\csvreader[
 				no head,
-				after table={
-						\TextArrow{bt1}{bt2}{5pt}
-						\TextArrow{md1}{md2}{5pt}
-						\TextArrow{ms2}{ms1}{5pt}
-					},
+				% after table={
+				% 		\TextArrow{bt1}{bt2}{5pt}
+				% 		\TextArrow{md1}{md2}{5pt}
+				% 		\TextArrow{ms2}{ms1}{5pt}
+				% 	},
 				tabularray={%
 						colspec={%
 								Q[r,m]
-								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.3cm]%
-								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.3cm]%
-								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.3cm]%
-								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.3cm]%
-								Q[si={table-format=2.2,table-number-alignment=center},c , wd=1.5cm]%
-								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.5cm]%
+								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.4cm]%
+								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.4cm]%
+								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.4cm]%
+								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.4cm]%
+								Q[si={table-format=2.2,table-number-alignment=center},c , wd=1.6cm]%
+								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.6cm]%
 							},%
 						row{1-2} = {guard},
 						row{2} = {c,m, font=\small},
@@ -274,9 +274,9 @@
 						row{4-Z} = {abovesep=1pt},
 						row{3-Y} = {belowsep=1pt},
 						row{1} = {font=\small\bfseries},
-						cell{1}{2} = {r=1,c=2}{c, wd=2.6cm},
-						cell{1}{4} = {r=1,c=2}{c, wd=2.6cm},
-						cell{1}{6} = {r=1,c=2}{c, wd=3cm},
+						cell{1}{2} = {r=1,c=2}{c, wd=2.8cm},
+						cell{1}{4} = {r=1,c=2}{c, wd=2.8cm},
+						cell{1}{6} = {r=1,c=2}{c, wd=3.2cm},
 						%cell{7}{3} = {font=\bfseries},
 						hline{1} = {2-Z}{2pt},%
 						hline{Z} = {2pt},%

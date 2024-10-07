@@ -5,8 +5,9 @@ $postscript_mode = $dvi_mode = 0;
 $allow_subdir_creation=2;
 $max_repeat=6;
 $bibtex_use = 2;
+$xdvipdfmx_silent_switch = ""; # -q
 $success_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log | sed -r 's/\\x1B\\\[(;?[0-9]{1,3})+[mGK]//g' | grep -vE 'LaTeX2e|Document Class|Output written|Package silence' && if [ %A = 'main' ]; then rm -f %Y/%A.log %Y/%A.aux; fi";
-$failure_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log | sed -r 's/\\x1B\\\[(;?[0-9]{1,3})+[mGK]//g' | grep -vE 'LaTeX2e|Document Class|Output written|Package silence'";
+$failure_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log | sed -r 's/\\x1B\\\[(;?[0-9]{1,3})+[mGK]//g' | grep -vE 'LaTeX2e|Document Class|Output written|Package silence' ";
 $silent = 1;
 # $makeindex = "makeindex %O -o %D %S";
 # $out_dir, $aux_dir, $out2_dir, @out2_exts, $xdvipdfmx
@@ -64,7 +65,7 @@ sub makeexternaldocument {
     if ( $root_filename ne $_[0] && $root_filename ne "main" )  {
         print "Compiling external document ", $_[0], "\n";
         my ($base_name, $path) = fileparse( $_[0] );
-        system "xelatex --shell-escape -no-pdf -synctex=1 -interaction=nonstopmode -file-line-error -recorder -output-directory='chapters/PDF' $_[0].tex && biber $path/PDF/$base_name.bcf && xelatex --shell-escape -no-pdf -synctex=1 -interaction=nonstopmode -file-line-error -recorder -output-directory='chapters/PDF' $_[0].tex && xelatex --shell-escape -no-pdf -synctex=1 -interaction=nonstopmode -file-line-error -recorder -output-directory='chapters/PDF' $_[0].tex";
+        system "xelatex --shell-escape -no-pdf -synctex=1 -interaction=batchmode -file-line-error -recorder -output-directory='chapters/PDF' $_[0].tex && biber --quiet $path/PDF/$base_name.bcf && xelatex --shell-escape -no-pdf -synctex=1 -interaction=batchmode -file-line-error -recorder -output-directory='chapters/PDF' $_[0].tex && xelatex --shell-escape -no-pdf -synctex=1 -interaction=batchmode -file-line-error -recorder -output-directory='chapters/PDF' $_[0].tex";
         rdb_add_generated( "$path/PDF/$base_name.aux" );
         copy "$path/PDF/$base_name.aux", "chapters/";
         popd();
