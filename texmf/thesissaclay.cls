@@ -171,6 +171,7 @@
 \newcommand{\xmark}{\ding{55}\xspace}%
 %\RequirePackage[french, backgroundcolor=B5, textcolor=white, linecolor=B5, bordercolor=A5]{todonotes}
 \RequirePackage{multicol}
+\RequirePackage[shortcuts]{extdash}
 %% BIBLIOGRAPHY %%
 \RequirePackage[backend=biber, bibstyle=alphabetic, citestyle=alphabetic, sorting=nty,backref=true, refsection=chapter, arxiv=abs, url=false, isbn=false, date=year, eprint=false, maxbibnames=5, maxcitenames=1]{biblatex}
 \renewcommand{\bibfont}{\small}

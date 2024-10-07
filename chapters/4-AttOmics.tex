@@ -118,7 +118,7 @@
 				Traditional clustering methods, like K-Means or hierarchical clustering, can return sets of highly unbalanced clusters that may negatively affect the efficiency of our model.
 				Large groups would require many parameters to be projected into a space with a dimension lower than the smallest group.
 				Group unbalances would also imply a high compression of larger groups and almost no compression for the smallest group.
-				To prevent this, we used constrained K-means clustering to ensure comparable group sizes~\cite{bradleyConstrainedKMeansClustering}.
+				To prevent this, we used constrained K-means clustering~\cite{bradleyConstrainedKMeansClustering} to ensure comparable group sizes.
 		\end{description}
 
 
@@ -136,11 +136,10 @@
 
 \section{Experiments}
 	\subsection{Data}
-
 		To evaluate our proposed approach AttOmics, \gls{dnam}, \gls{mrna}, and \gls{mirna} from \gls{tcga} were used~(\cref{sec:data_tcga})
-		This dataset is used to perform two predicting tasks: phenotype prediction, 19 different cancers and normal (healthy), and survival risk prediction.
+		Those data are used to perform two predicting tasks: phenotype prediction, 19 different cancers and normal (healthy), and survival risk prediction.
 		A total of 8777 patients were available for the phenotype prediction and 8349 patients for the survival risk prediction.
-		We used a train/validation/test (70/15/15\%) splits strategy preserving the cancer proportion to evaluate the different considered models.
+		We used a train/validation/test (70/15/15\%) strategy preserving the cancer proportion to train and evaluate the considered models.
 
 	\subsection{Comparative study}
 		For a comprehensive and comparative evaluation, we choose three deep learning architectures for comparison: \gls{cnn}, \gls{gnn}, and \gls{mlp}.

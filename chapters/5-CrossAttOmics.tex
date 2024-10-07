@@ -52,7 +52,7 @@
 		\end{equation}
 
 		Each group  \(X^{i}_{g_j}\) is projected into an \(s^i\)-dimensional space with an \(\operatorname{FCN}^i\), a succession of \glspl{fcl}, to compute \(X^{i'}_{g_j}\) (\cref{eq:attomics_groups_proj}).
-		Each \gls{fcl} is the composition of an affine transformation of its inputs with a \gls{relu} activation function: \({\operatorname{FCL}\left(x\right) = \operatorname{ReLU}\left(Wx+b \right) = \max\left(0, Wx+b\right)}\).
+		Each \gls{fcl} is the composition of an affine transformation of its inputs with a \gls{relu} activation function: \(\operatorname{FCL}\left(x\right) = \operatorname{ReLU}\left(Wx+b \right) = \max\left(0, Wx+b\right)\).
 		\begin{equation}
 			X^{'i}_{G} = \left\{\operatorname{FCN}^i\left(X^{i}_{g_j} \right) \right\}_{1\leq j\leq k^i}\label{eq:attomics_groups_proj}
 		\end{equation}
@@ -127,17 +127,13 @@
 
 \section{Experiments}
 	\subsection{Data}
-		TCGA~\cite{TCGA} and CCLE~\cite{CCLE} data were used to evaluate our proposed approach CrossAttOmics.
-		For TCGA, we collected DNA methylation (DNAm), gene expression (mRNA), miRNA expression data, copy number variation (CNV), and proteomics for 5862 patients of 18 different cancers from the GDC Data Portal\footnote{\url{https://portal.gdc.cancer.gov/}}.
-		FFPE samples and bad replicates were removed according to the TCGA consortium recommendation.
-		Methylation data was restricted to the probes shared between HumanMethylation27 and HumanMethylation450 platforms.
-		We considered the average of all probes located within 1500 bp of a gene transcription start site as the methylation features.
-		No feature selection was applied, and data were standardized to a zero mean and unit variance.
-		We considered coding and non-coding mRNA (nc mRNA) as two different modalities, as nc mRNAs can affect cancer cell fate through various mechanisms~\cite{Grillone2020} and are involved in the oncogenesis~\cite{Toden2021}.
-
-		For CCLE, we collected DNA methylation (DNAm), gene expression (mRNA), miRNA expression data, copy number variation (CNV), metabolomics, and proteomics for 536 cells of 16 different cancers from the DepMap portal\footnote{\url{https://depmap.org/portal/ccle/}}.
-
-		70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
+		To evaluate our proposed approach AttOmics two datasets were considered: \gls{tcga} and \gls{ccle}~(\cref{sec:data_tcga,sec:data_ccle}).
+		For \gls{tcga}, \Gls{dnam}, \gls{mrna}, \gls{mirna}, \gls{cnv} and proteomics were used and for \gls{ccle} \gls{dnam}, \gls{mrna}, \gls{mirna}, \gls{cnv}, metabolomics and proteomics were used.
+		For \gls{dnam}, we considered the average of all probes located within 1500 bp of a gene transcription start site as methylation features.
+		Coding (\glsxtrshort{mrna}) and \glsxtrfull{ncrna} were considered as two different modalities.
+		Those dataset are used to perform a classification task: phenotype prediction, 18 classes for \gls{tcga} and 16 for \gls{ccle}.
+		For \gls{tcga}, a total of 5862 patients were available and \gls{ccle} a total of 536 cells for the survival risk prediction.
+		For each dataset, 70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
 
 	\subsection{Comparative study}
 		For a comprehensive and comparative evaluation, we chose various deep learning architectures with different integration strategies: \gls{mlp} early fusion (MLP EF), \gls{mlp} intermediate fusion (MLP IF), AttOmics early fusion (AttOmics EF), AttOmics intermediate fusion (AttOmics IF), \gls{gnn} early fusion (GNN EF), P-NET~\cite{PNet} and MOGONET~\cite{MOGONET}.
@@ -166,10 +162,10 @@
 				\draw [->] (CNV) to (nc mRNA);
 
 			\end{tikzpicture}
-			\caption{Interaction graph between modalities used for TCGA}\label{fig:tcga_graph}
+			\caption{Interaction graph between modalities used for CrossAttOmics with \glsfmtshort{tcga} data.}\label{fig:tcga_graph}
 		\end{wrapfigure}
 		We used the modality interaction graph described in~\cref{fig:tcga_graph} to train CrossAttOmics on TCGA data.
-		The details of the different architectures and training hyperparameters is available in~\cref{chap:crossattomics_appendix} \cref{sec:crossattomics_training_details}.
+		The details of the different architectures and training hyperparameters is available in~\cref{sec:crossattomics_training_details}.
 		Attention based architectures, AttOmics EF, AttOmics IF and CrossAttOmics are impacted by the number of groups.
 		We used similar numbers of groups as used in~\cite{AttOmics}.
 		All models were trained on an Nvidia GeForce RTX 3090.
@@ -232,16 +228,21 @@
 		When training on the six available omics, AttOmics IF outperforms CrossAttOmics.
 		In this case, AttOmics IF has fewer multimodal parameters than CrossAttOmics and is easier to train.
 
-		\begin{figure*}
+		\begin{figure}
 			\centering
-			\includegraphics{umap_mRNA.pdf}
-			\caption[UMAP comparison of pan-cancer samples]{UMAP comparison of pan-cancer samples in the data space (\textbf{A}), after passing through the modality encoder (\textbf{B}) and after applying the cross-attention (\textbf{C}). Each color represent one of the 18 cancer. }
+			\begin{subcaptiongroup}
+				\includegraphics{umap_mRNA.pdf}
+				\phantomcaption\label{fig:umap_mrna_A}
+				\phantomcaption\label{fig:umap_mrna_B}
+				\phantomcaption\label{fig:umap_mrna_C}
+			\end{subcaptiongroup}
+			\caption[UMAP comparison of pan-cancer samples]{UMAP comparison of pan-cancer samples in the data space~\subref{fig:umap_mrna_A}, after passing through the modality encoder~\subref{fig:umap_mrna_B} and after applying the cross-attention~\subref{fig:umap_mrna_C}. Each color represent one of the 18 cancer. }
 			\label{fig:umap_mrna}
-		\end{figure*}
+		\end{figure}
 
 		To visualize the segregation capabilities in the raw data space, after encoding individual modalities and after enriching individual representation with multi-omics information, we reduce the dimension of each patient representation to a 2D space using a UMAP reduction~(\cref{fig:umap_mrna}).
-		Embedding modalities in a latent space with modalities-specific encoders allow for clear identification of cancer clusters, but the separation between some clusters is still unclear (\cref{fig:umap_mrna}A-B).
-		The addition of multi-omics information through cross-attention allows better distinguishing the different cancer type-associated clusters (\cref{fig:umap_mrna}C).
+		Embedding modalities in a latent space with modalities-specific encoders allow for clear identification of cancer clusters, but the separation between some clusters is still unclear (\cref{fig:umap_mrna_A,fig:umap_mrna_B}).
+		The addition of multi-omics information through cross-attention allows better distinguishing the different cancer type-associated clusters (\cref{fig:umap_mrna_C}).
 		The multi-omics embedding can better represent samples from distinct cancers.
 
 
@@ -250,12 +251,17 @@
 		The CrossAttOmics architecture exhibited the highest latency, which can be attributed to its extensive use of attention mechanisms. Nevertheless, the latency remained reasonable,  a few dozen milliseconds.
 
 	\subsection{Training with small sample sizes}
-		\begin{figure*}[htbp]
+		\begin{figure}[htbp]
 			\centering
-			\includegraphics{limited_training_6_omics.pdf}
-			\caption[CrossAttOmics and other architectures accuracy on the TCGA test set according to the size of the training set]{Accuracy on the TCGA test set according to the size of the training set for various multi-omics deep learning models when trained on 6 omics.}
+			\begin{subcaptiongroup}
+				\includegraphics{limited_training_6_omics.pdf}
+				\phantomcaption\label{fig:lim_train_6_omics_A}
+				\phantomcaption\label{fig:lim_train_6_omics_B}
+				\phantomcaption\label{fig:lim_train_6_omics_C}
+			\end{subcaptiongroup}
+			\caption[CrossAttOmics and other architectures accuracy on the TCGA test set according to the size of the training set]{Accuracy on the TCGA test set according to the size of the training set for various multi-omics deep learning models when trained on 6 omics~\subref{fig:lim_train_6_omics_A}. Panel~\subref{fig:lim_train_6_omics_B} corresponds to a zoom on the low data regime. Panel~\subref{fig:lim_train_6_omics_C} is a zoom on larger training sizes.}
 			\label{fig:lim_train_6_omics}
-		\end{figure*}
+		\end{figure}
 		Despite the broad adoption of high throughput methods in personalized medicine, the availability of paired multi-omics data from cancer patients remains limited.
 		Many datasets contain partial multi-omics data, where some modalities are entirely missing.
 		Modalities missingness is often the result of economic constraints, experimental limitations, or patient refusal~\cite{Kang2021}.
@@ -272,7 +278,7 @@
 		The MLP EF and AttOmics EF are models sensitive to the size of the training set.
 		Despite being easy to implement, early fusion approaches are size-sensitive.
 		On the contrary, the intermediate fusion approach is more resistant to small training sets.
-		Models' accuracy is lower than those trained on the complete datasets but outperforms early fusion models when trained with less than 600 training examples~(\cref{fig:lim_train_6_omics}B).
+		Models' accuracy is lower than those trained on the complete datasets but outperforms early fusion models when trained with less than 600 training examples~(\cref{fig:lim_train_6_omics_B}).
 		When trained with less than 300 training examples, CrossAttOmics achieves the best accuracy.
 		Despite CrossAttOmics and AttOmics IF sharing the same encoder, when trained with only 39 examples, CrossAttOmics outperforms AttOmics IF by more than 0.1 points of accuracy.
 		Under limited training settings, cross-attention can improve multimodal representation by allowing modalities to interact and exchange information\footnote{We ran the same experiment using the three best omics for each architecture (\cref{fig:lim_train_3_omics})}.
@@ -365,7 +371,7 @@
 									{1}{\addplot[draw=none,fill=lrp9] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
 							}{}
 							\verbtocs{\myarrow}|→|
-							\StrSubstitute{\col}{---}{→}[\lgdentry]%\textrightarrow
+							\StrSubstitute{\col}{---}{\textrightarrow}[\lgdentry]%→
 							\addlegendentryexpanded{\lgdentry}
 						}
 					}
