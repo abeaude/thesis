@@ -34,7 +34,7 @@
 	This is achieved by allowing information to flow between the different omics through the cross-attention layers.
 	By explicitly modeling the interactions between different omics, attribution methods such as \gls{lrp} helped identify the most important interactions.
 
-	In~\cref{chap:crossattomics_gate}, instead of scoring the interactions with post-hoc methods, we proposed in CrossAttOmicsGate to let the network score each interaction with a gating mechanism.
+	In~\cref{chap:crossattomicsgate}, instead of scoring the interactions with post-hoc methods, we proposed in CrossAttOmicsGate to let the network score each interaction with a gating mechanism.
 	The interaction score is used to weight the interaction embedding.
 	This score is obtained by passing the cross-attention embedding of a pair of modalities to a small neural network with a single sigmoid-activated neuron.
 	Gate importance scores must be sparse to ensure correct interpretability. They must also be diverse to reflect the diversity between samples, as they are patient-specific and result from complex mechanisms that differ between individuals.
@@ -148,11 +148,11 @@
 
 	\subsection{Foundations models}
 		Foundations models are large deep learning models trained on broad data that can be adapted to a wide range od downstream tasks~\cite{bommasani2022opportunitiesrisksfoundationmodels}.
-		~\cite{Cui2024}~\cite{Moor2023}
-		human cell atlas 62M cells~\cite{Regev2017} how to do with transformer
-		CELLxGENE 95M cells % https://cellxgene.cziscience.com/
-		AlphaFold ? finetuned https://www.pnas.org/doi/10.1073/pnas.2216697120
-		RoboRx (predicts drug prescription interactions), DeepNovo (peptide sequencing from mass spectrometry),
-		%https://dl.acm.org/doi/10.1145/3583780.3615061 
-		%https://academic.oup.com/bioinformatics/article/40/9/btae518/7738782
+		Large \glsxtrshort{scrna} datasets are becoming widespread: the human cell atlas~\cite{Regev2017} encompass 62 millions of cells.
+		Such large datasets open new possibilities to train large models that can potentially be considered as foundations models~\cite{Moor2023}.
+		In \citeyear{Cui2024}, \citeauthor{Cui2024} proposed scGPT a foundation model for single-cell biology~\cite{Cui2024}.
+		Their model, based on a \gls{gpt} and trained on over 33 millions of cells performed well in a number of downstream tasks after fine-tuning: cell-type annotation, multi-batch integration, genetic perturbation prediction, etc\@.
+		In their architecture, self-attention was applied on the expression of each cell, \ie{}on the genes features of each cell.
+		To cope with the requirements of the self-attention they defined a maximum number of features, 1200, that are randomly selected at each iteration, binned and embed to higher dimensional space~\cite{Cui2024}.
+		Their architecture is not able to handle complete expression profiles, and this limitations highlights the need of carefully designed architecture that are adapted to the specificity on data encountered in the biomedical field.
 \end{document}
