@@ -279,7 +279,7 @@
 		Cox models or proportional hazards models are survival models to relate the time before an event occurs to one or more covariates~(\cref{box:cox}).
 		Cox models have been adapted to deep learning architectures by replacing the relative risk score by an estimation from a neural network in the partial log-likelihood loss:
 		\begin{equation}
-			\symcal{L}_{Cox}\left(\theta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\hat{y}_i - \log \sum_{j \in \mathcal{R}(T_i)}\phi_j \right)\; \text{,} \label{eq:cox_loss}
+			\symcal{L}_{Cox}\left(\theta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\hat{y}_i - \log \sum_{j \in \symcal{R}(T_i)}\phi_j \right)\; \text{,} \label{eq:cox_loss}
 		\end{equation}
 		where \(\delta_i\) specifies if the event occurred for patient \(i\), \(T_i\) represents the time associated with the event, and \(N_{\delta_i = 1}\) is the number of patients for which the event occurred (\(\delta_i = 1\)).
 		\(\phi_i = e^{\hat{y}_i}\) is the predicted risk for patient \(i\).

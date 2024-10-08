@@ -172,7 +172,7 @@
 \RequirePackage{multicol}
 \RequirePackage[shortcuts]{extdash}
 %% BIBLIOGRAPHY %%
-\RequirePackage[backend=biber, bibstyle=alphabetic, citestyle=alphabetic, sorting=nty,backref=true, refsection=chapter, arxiv=abs, url=false, isbn=false, date=year, eprint=false, maxbibnames=5, maxcitenames=1]{biblatex}
+\RequirePackage[backend=biber, bibstyle=alphabetic, citestyle=alphabetic, sorting=nty,backref=true, refsection=chapter, arxiv=abs, url=false, isbn=false, date=year, eprint=false, maxbibnames=5, maxcitenames=1,minbibnames=3]{biblatex}%block=space/par/nbpar/ragged
 \renewcommand{\bibfont}{\small}
 %% LAYOUT %%
 \RequirePackage[pass]{geometry}
@@ -193,7 +193,7 @@
 %\renewcommand{\abbreviationsname}{Liste des abréviations et sigles}
 %% HYPERREF SETUP %%
 \AtEndPreamble{%
-	\hypersetup{linktoc=all, colorlinks=true, citecolor=A2, filecolor=black, menucolor=black, runcolor=black, urlcolor=B3, pdftitle={[en]\@title, [fr]\@subtitle}, pdfauthor=\@author, pdfsubject=\@subject, pdfcreator=XeLaTeX, pdfkeywords=\@keywordsfr, pdfdisplaydoctitle=true}%linkcolor = internal links
+	\hypersetup{linktoc=all, colorlinks=true, citecolor=A2, filecolor=black, menucolor=black, runcolor=black, urlcolor=B3, pdftitle={[en]\@title, [fr]\@subtitle}, pdfauthor=\@author, pdfsubject=\@subject, pdfcreator=XeLaTeX, pdfproducer={xetex (TeX Live 2024)},pdfkeywords=\@keywordsfr, pdfdisplaydoctitle=true}%linkcolor = internal links
 } %allcolors=black, hidelinks,
 %% MUST BE LOADED LAST %%
 \AtEndPreamble{%
@@ -208,7 +208,10 @@
 	]{\pythoncode}[3][]{
 		listing file={#3},
 		listing only,
-		title=Listing~\thetcbcounter: #2,
+		top=1mm, bottom=1mm,
+		right=2mm, left=2mm,
+		fonttitle=\small,
+		title=\textbf{Listing~\thetcbcounter\ ---}\ #2,
 		minted language=python,
 		minted options={breaklines, autogobble, numberblanklines=false, fontsize=\footnotesize, fontfamily=SourceCode},
 		colback=codebg,

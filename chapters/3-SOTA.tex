@@ -310,9 +310,9 @@
 			X \approx WH
 		\end{equation}
 		where \(X \in \symbb{R}^{N\times d}\) is a data matrix,\(W \in \symbb{R}^{N\times k}\) a factor matrix and \(H \in \symbb{R}^{k\times d}\) a loading matrix, \(k < d\) represents the number of dimensions used to construct the low dimensional space.
-		As there are more than one data matrix in multi-omics studies, \(X_i\quad i \in \left\{1, \cdots, m\right\}\), different strategies have been depicted to perform the integration:
+		As there are more than one data matrix in multi-omics studies, \(X_i\quad i \in \left\{1, \ldots, m\right\}\), different strategies have been depicted to perform the integration:
 		\begin{itemize}[nosep]
-			\item Each data matrix is decomposed individually, \(X_i \approx W_iH_i\) and one of the factor matrix \(W_i\) is used for downstream analyses. The cost function used to find the optimal factor and loading matrix should be designed to allow multi-omics information to be shared across factor matrices.
+			\item Each data matrix is decomposed individually, \(X_i \approx W_i H_i\) and one of the factor matrix \(W_i\) is used for downstream analyses. The cost function used to find the optimal factor and loading matrix should be designed to allow multi-omics information to be shared across factor matrices.
 			\item A common factor matrix is used across the different modalities, \(X_i \approx WH_i\) and the shared factor matrix is used for downstream analyses.
 		\end{itemize}
 		Finding the optimal factor and loadings matrix is achieved by solving the following optimization problem:
@@ -326,11 +326,11 @@
 		\end{equation}
 		\Gls{jive} adds an omics specific term to the decomposition:
 		\begin{equation}
-			X_i \approx W_iZ + W_i^sZ_i^s
+			X_i \approx W_i Z + W_i^s Z_i^s
 		\end{equation}
-		Parameters are estimated by minimimizing \({\left\|E\right\|}^2 = {\left\|\left[E_1, \cdots, E_m \right]^T\right\|}^2\), where \(E_i = X_i - W_iZ + W_i^sZ_i^s\) and adding an orthogonality constraints between the joint, \(W_iZ\), and individual terms, \( W_i^sZ_i^s\).
+		Parameters are estimated by minimimizing \({\left\|E\right\|}^2 = {\left\|{\left[E_1, \ldots, E_m \right]}^T\right\|}^2\), where \(E_i = X_i - W_i Z + W_i^s Z_i^s\) and adding an orthogonality constraints between the joint, \(W_i Z\), and individual terms, \( W_i^s Z_i^s\).
 		iCluster is another approach to integrate multi-omics data where the factor matrix, \(H\) is shared across all modalities.
-		By assuming that the factor matrix and the residuals, \(E_i = X_i - W_iH\) are normaly distributed, a multivariate normal log-likelihood can be derived before applying the expectation-maximization algorithm to solve this problem.
+		By assuming that the factor matrix and the residuals, \(E_i = X_i - W_i H\) are normaly distributed, a multivariate normal log-likelihood can be derived before applying the expectation-maximization algorithm to solve this problem.
 		The variational Bayesian framework can also be used for the estimation of the matrix \(W\) and \(H\) by adding prior assumptions on their distributions~\cite{MOFA}.
 		Bayesian consensus clustering is another bayesian approach used to perform multi-omics data integration.
 		Each omics has its own clustering loosely adhering to a consensus clustering, making the individual clustering connected and sharing information.
@@ -343,7 +343,7 @@
 		The idea is to construct \(W=X_1u_1\) and \(Z=X_2u_2\) such that the correlation between \(W\) and \(Z\) is maximal.
 		This methods only works for the integration of two modalities but has been generalized to work with any number of modalities:
 		\begin{equation}
-			\max_{u_k} \sum_{\substack{i=1 \\ j=1 \\ i\neq k}}^{m} c_{ij}\operatorname{Cov}\left(X_iu_i,X_ju_j\right)
+			\max_{u_k} \sum_{\substack{i=1 \\ j=1 \\ i\neq k}}^{m} c_{ij}\operatorname{Cov}\left(X_i u_i,X_j u_j\right)
 		\end{equation}
 		the term \(c_{ij}\) indicates if the modality \(i\) and \(j\) are connected.
 		Solving this minimization problem implies the inversion of the covariance matrix, which in the case of omics data is often not invertible therefore regularization terms are added.
@@ -454,7 +454,7 @@
 				\end{bmatrix}
 				}^T
 			\end{equation}
-			where \(\symbf{x}_{\text{mRNA}}\odot \symbf{x}_{\text{CNV}}\) models the regulatory effect of CNV on mRNA.
+			where \(\symbf{x}_{\text{mRNA}}\odot \symbf{x}_{\text{CNV}}\) models the regulatory effect of CNV on mRNA\@.
 			The multi-omics feature vector is then transformed to a functional representation by projection: \(\tilde{\symbf{x}} = f\left(\symbf{x}W\right)\).
 			The resulting functional gene representation is fed to a network based on the PasNet architecture.
 
@@ -510,7 +510,7 @@
 			In the second phase, the \gls{vcdn} module is trained, and the \gls{gnn} are fine-tuned.
 			The \gls{vcdn} module takes as input the \emph{cross-omics discovery tensor} \(C^{o}\), an \(M\)-dimensional tensor, obtained by applying a generalized outer-product of predictions \(\hat{y}^{m} \in \symbb{R}^{C}\) obtained from each omics:
 			\begin{align}
-				C^{o}                     & = \left(C^{o}_{a_{1}\cdots a_{M}}\right)_{\substack{1 \leq a_{i} \leq C \\ 1 \leq i \leq M}} \\
+				C^{o}                     & = {\left(C^{o}_{a_{1}\cdots a_{M}}\right)}_{\substack{1 \leq a_{i} \leq C \\ 1 \leq i \leq M}} \\
 				C^{o}_{a_{1}\cdots a_{M}} & = \prod_{m=1}^{M}\hat{y}_{a_{m}}^{m}
 			\end{align}
 			The \emph{cross-omics discovery tensor} is reshaped into a \(C^{M}\)-dimensional vector.
@@ -587,7 +587,7 @@
 			\Glspl{fcn} are used to encode the different omics profile into a latent representation, then representations are combined and passed to task-specifc network.
 			These approaches are exclusively trained in a supervised fashion, even though modalities encoders can be pretrained.
 			MultiSurv~\cite{MultiSurv} is a method that has been proposed to integrate mRNA, CNV, miRNA, DNAm, clinical information and \gls{wsi} to estimate patient survival time.
-			Omics data and clinical information are encoded with an \gls{fcn}, \gls{wsi} is encoded with a CNN.
+			Omics data and clinical information are encoded with an \gls{fcn}, \gls{wsi} is encoded with a \gls{cnn}.
 			Each modality encoders is used to project its input into a 512-dimensional space.
 			Modalities representation are fused into a single representation by taking the maxima of each latent features over the different modalities.
 			In their study, authors compared various combination of modalities and their impact on the predictive performances\footnote{Concordance-index, as they perform a survival-time prediction}.
@@ -622,12 +622,12 @@
 			More complex graphs ave also been explored.
 			\citeauthor{Li2024} constructed an heterogeneous multigraph~\cite{Li2024}:
 			\begin{itemize}[nosep]
-				\item there are two types of nodes: genes and miRNA;
+				\item there are two types of nodes: genes and \gls{mirna};
 				\item there are three different types of edges:
 					\begin{itemize}[nosep]
 						\item edges extracted from BioGRID\cite{biogrid} connecting two genes nodes,
-						\item edges extracted from miRDB\cite{mirdb} connecting a miRNA node and its target gene node,
-						\item edges connecting miRNA nodes targetting the same gene.
+						\item edges extracted from miRDB\cite{mirdb} connecting a \gls{mirna} node and its target gene node,
+						\item edges connecting \gls{mirna} nodes targetting the same gene.
 					\end{itemize}
 			\end{itemize}
 			They proposed a mixed integration scheme, mRNA and CNV are fused early to construct the gene-node embeddings and miRNA is incorporated into the final representation later through the graph convolutions.
@@ -656,10 +656,10 @@
 			A \(\softmax\) is then applied to normalize the attention weights.
 			Approaches based on the self-attention mechanism have also been explored for intermediate fusion of multi-omics data~\cite{Yao_2024,Lan2024}.
 			Both methods proposed to use a \emph{row self-attention}, self-attention is used to compute interactions between patients.
-			In \cite{Lan2024}, each expression profile is transformed into a pathway representation.
+			In~\cite{Lan2024}, each expression profile is transformed into a pathway representation.
 			The pathway representation is obtained by concatenating scalar pathway representation which corresponds to the sum of features belonging to this pathway.
 			Then, for each omics, self-attention is used to infer patient-interactions and the resulting representations are concatenated and passed to task-specifc classifier.
-			In \cite{Yao_2024}, pretrained \glspl{ae} are used to embed each omics profile, the concatenated representation is used as the input of a self-attention layer, computing patient interactions.
+			In~\cite{Yao_2024}, pretrained \glspl{ae} are used to embed each omics profile, the concatenated representation is used as the input of a self-attention layer, computing patient interactions.
 			Such uses of the self-attention to compute patient interactions can be seen as the application of a \gls{gat} on a complete patient graph\footnote{A graph where every pair of nodes is connected.}.
 
 			\ifSubfilesClassLoaded{%
@@ -685,7 +685,7 @@
 	\begin{itemize}[nosep]
 		\item ensuring models are bias-free;
 		\item better understanding models and ensuring they are working correctly and basing their prediction on relevant features;
-		\item legal aspect such as the right to explanation introduced with the GDPR.
+		\item legal aspect such as the right to explanation introduced with the GDPR\@.
 	\end{itemize}
 	Interpretability can also increase our knowledge by identifying new important features involved in the prediction.
 	In the healthcare domain, such features can be considered as potential new targets or biomarkers.
@@ -740,7 +740,7 @@
 	To circumvent this limitation, DeepLIFT proposed to use a baseline; the explanation is expressed relative to the chosen reference~\cite{DeepLIFT}.
 	\citeauthor{PNet}~\cite{PNet} scored neurons in a knowledge-based architecture with DeepLIFT to detect the most relevant biological functions.
 	\Gls{lrp} is another gradient-based attribution method backpropagating the output signal through the network according to a propagation rule~\cite{LRP}.
-	In DeepGONet~\cite{bourgeaisDeepGONetSelfexplainable2021}, \cite{bourgeaisDeepGONetSelfexplainable2021} explain prediction from a knowledge-based architecture with \gls{lrp} to identify import biological function (GO terms)
+	In DeepGONet~\cite{bourgeaisDeepGONetSelfexplainable2021}, \citeauthor{bourgeaisDeepGONetSelfexplainable2021} explain prediction from a knowledge-based architecture with \gls{lrp} to identify import biological function (GO terms)
 	supporting the prediction.
 
 	In~\cite{MOGONET}, a perturbation-based approach was used to identify potential biomarkers.
@@ -833,7 +833,7 @@
 	Adversarial attacks generate perturbation aimed at being imperceptible, whereas counterfactual explanation encourages minimal changes~(see \ref{item:cf_sparse} constraint).
 	They also stated that adversarial examples represent impossible points, but counterfactuals are realistic points~(see \ref{item:cf_data_manifold} constraint).
 	On the contrary, \citeauthor{browne2020} see counterfactuals and adversarial examples as mathematically equivalent, their main differences being in terms of semantic~\cite{browne2020}.
-	In \cite[][8]{Freiesleben2021}, \citeauthor{Freiesleben2021} provides a detailed summary of the various opinions around the relation between counterfactuals and adversarial examples.
+	In~\cite[][8]{Freiesleben2021}, \citeauthor{Freiesleben2021} provides a detailed summary of the various opinions around the relation between counterfactuals and adversarial examples.
 	\citeauthor{Pawelczyk2021ExploringCE} proposed a theoritical comparison of a counterfactual generation method~\cite{wachter2017counterfactual} and an adversarial one~\cite{Carlini2016TowardsET}.
 	They identified an upper bound on the distance between the solution of the two approaches~\cite{Pawelczyk2021ExploringCE}.
 
@@ -848,7 +848,7 @@
 		\item solving the inner maximization problem, \ie{}finding adversarial examples, with fixed model weights,
 		\item solving the outer minimization problem, \ie{}updating model weights, on the computed adversarial examples\footnote{In practice, it is more common to also include the standard training loss, \ie{}include clean examples along the adversarial ones.}.
 	\end{enumerate}
-	In~\cite{TRADES}, \citeauthor{TRADES} studied the tradeoff between robustness and accuracy and based on their theoritical analysis proposed an improved adversarial training strategy known as TRADES.
+	In~\cite{TRADES}, \citeauthor{TRADES} studied the tradeoff between robustness and accuracy and based on their theoritical analysis proposed an improved adversarial training strategy known as TRADES\@.
 	TRADES adds a regularization term to the loss \(\symcal{L}\) in \cref{eq:adv_train} pushing the decision boundary away from the data when solving the outer minimization problem, \ie{}increasing the robustness of the model.
 	See~\cite{AdvTrainSurvey} for a detailled overview of the various adversarial training strategies.
 

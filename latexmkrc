@@ -37,7 +37,7 @@ if (scalar(@ist) > 0) {
 #######
 # svg #
 #######
-add_cus_dep('svg', 'pdf', 0, 'svg2pdf');
+# add_cus_dep('svg', 'pdf', 0, 'svg2pdf');
 sub svg2pdf {
     system("inkscape --export-area-drawing --export-pdf=\"$_[0].pdf\" \"$_[0].svg\"");
 }
