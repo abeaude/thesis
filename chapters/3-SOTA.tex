@@ -329,14 +329,24 @@
 			X_i \approx W_i Z + W_i^s Z_i^s
 		\end{equation}
 		Parameters are estimated by minimimizing \({\left\|E\right\|}^2 = {\left\|{\left[E_1, \ldots, E_m \right]}^T\right\|}^2\), where \(E_i = X_i - W_i Z + W_i^s Z_i^s\) and adding an orthogonality constraints between the joint, \(W_i Z\), and individual terms, \( W_i^s Z_i^s\).
+		\Gls{nmf} can be generalized to higher-order tensors\footnote{matrices can be seen as second-orders tensors}: \gls{ntf}~\cite{Cichocki2009}.
+		With multi-omics, the tensor is of order three, where the first dimension represents the cell or patient, the second the genes or embeddings, and the third the different modalities.
+		A 3rd-order tensor is decomposed into three non-negative components matrices\footnote{\(N\)th-order tensor are decomposed into \(N\) components matrices.}:
+		\begin{equation}
+			\symcal{A} \approx W^{\star}\otimes H^{\star} \otimes Q^{\star}
+		\end{equation}
+		where \(\otimes\) is the tensor product, \(W^{\star}\) the patient loadings, \(H^{\star}\) the genes loadings and \(Q^{\star}\) the modality loadings.
+		\Gls{ntf} has been successfuly applied to integrate multi-omics single-cell data~\cite{Fogel2024}.
+		Modality matrices are decomposed individually with \gls{nmf} to have a common embedding dimension.
+		The resulting factor matrices are concatenated along a third dimension.
+		The resulting tensor has three dimensions: the cell dimension, the embedding dimension, and the modality dimension.
+		\Gls{ntf} is then applied to decompose the multimodal tensor, and similarly to \gls{nmf}, the weight matrix \(W^{\star}\) is used in downstream tasks.
+
 		iCluster is another approach to integrate multi-omics data where the factor matrix, \(H\) is shared across all modalities.
 		By assuming that the factor matrix and the residuals, \(E_i = X_i - W_i H\) are normaly distributed, a multivariate normal log-likelihood can be derived before applying the expectation-maximization algorithm to solve this problem.
 		The variational Bayesian framework can also be used for the estimation of the matrix \(W\) and \(H\) by adding prior assumptions on their distributions~\cite{MOFA}.
 		Bayesian consensus clustering is another bayesian approach used to perform multi-omics data integration.
 		Each omics has its own clustering loosely adhering to a consensus clustering, making the individual clustering connected and sharing information.
-		% TODO: add NTF: https://accscience.com/journal/AIH/1/3/10.36922/aih.3427
-		% generalization to higher order tensors\footnote{matrices can be seen as second-orders tensors}
-		% https://www.plus.ac.at/wp-content/uploads/2021/02/2013-05_Flatz.pdf
 
 		Previsouly, we showed that the coordination of multiple representation is a way to perform data integration.
 		\Gls{cca} is a method whose objective is to finding linear combinations of variables in each set that are maximally correlated with each other.
@@ -408,10 +418,6 @@
 		% https://www.nature.com/articles/s41467-020-20430-7
 
 	\subsection{Deep learning models for multi-omics data}
-		%TODO
-		%\cite{Ma2019} AEs one per omics intermediate fusion
-		%Self-supervised learning of multi-omics embeddings in the low-label, high-data regime
-
 		Different deep-learning architectures like \gls{mlp}, \gls{ae}, \gls{vae}, \gls{cnn}, \gls{gnn}, or transformers can be combined with the various fusion methods: early fusion, intermediate fusion, and late fusion.
 		Early fusion combines raw or abstracted features before feeding them to a model.
 		Intermediate fusion combines latent representation obtained with modality-specific encoders.
