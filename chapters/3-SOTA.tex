@@ -783,7 +783,7 @@
 			where \(\symcal{A}\) is the set of actionable features.
 		\item[Sparsity\label{item:cf_sparse}]
 			A counterfactual should change a small number of features, \ie{}the proposed change should be as sparse as possible.
-			This constraints is satsified by adding a penalty \(s\) favoring sparsity on the proposed change \(x^{\text{CF}} - x\) such as L1-penalty:
+			This constraints is satisfied by adding a penalty \(s\) favoring sparsity on the proposed change \(x^{\text{CF}} - x\) such as L1-penalty:
 			\begin{equation*}
 				\argmin_{x^{\text{CF}} \in \symcal{A}} \symcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right) + s\left(x^{\text{CF}}-x\right)
 			\end{equation*}
@@ -816,7 +816,7 @@
 		\[\delta^{t+1} = \delta^{t} + \eta \nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta^{t}\right), y \right)\]
 		For \(\ell_{\infty}\)-norm, the projection onto the corresponding ball corresponds to clipping the value of \(\delta\) to the range \(\left[-\varepsilon, \varepsilon\right]\).
 		Fast gradient sign method~\cite{FGSM} has been proposed to find the perturbation in a single optimization step: \(\delta = \varepsilon \operatorname{sign}\left(\nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta^{t}\right), y \right)\right)\)\footnote{\(\delta\) is initialized as the zero vector.}.
-		On the contrary, \gls{pgd} attacks~\cite{PGDAttacks,PGDAttacks2} uses the classical iterative procedure to solve the maximization problem: \(\delta^{t+1} = \symcal{P}\left(\delta^{t} + \eta \nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta^{t}\right), y \right)\right)\), where \(\symcal{P}\) represents the projection onto the \(\ell_{p}\)-norm ball\footnote{For \(p = \infty\) this corresponds to clipping. For \(p =2\), the projection corresponds to \(\symcal{P}\left(z\right) = \varepsilon \frac{z}{\max\left(\varepsilon, \left\|z\right\|_{2}\right)}\).}.%\footnote{The different \(\ell_{p}\)-norm ball are}.
+		On the contrary, \gls{pgd} attacks~\cite{PGDAttacks,PGDAttacks2} uses the classical iterative procedure to solve the maximization problem: \(\delta^{t+1} = \symcal{P}\left(\delta^{t} + \eta \nabla_{\delta}\symcal{L}\left(g\left(\symbf{x}+\delta^{t}\right), y \right)\right)\), where \(\symcal{P}\) represents the projection onto the \(\ell_{p}\)-norm ball\footnote{For \(p = \infty\) this corresponds to clipping. For \(p =2\), the projection corresponds to \(\symcal{P}\left(z\right) = \varepsilon \frac{z}{\max\left(\varepsilon, \left\|z\right\|_{2}\right)}\).}.
 
 		Approaches to solving exactly the constrained optimization problem with mixed integer linear programming have also been proposed~\cite{tjeng2018evaluating} but are only applicable to small models.
 		Other approaches have been proposed to find an upper bound to the optimization problem, providing a guarantee of the robustness of the model~\cite{pmlr-v80-wong18a}.
@@ -838,7 +838,7 @@
 	They identified an upper bound on the distance between the solution of the two approaches~\cite{Pawelczyk2021ExploringCE}.
 
 	Due to the close proximity between counterfactuals and adversarial examples, it is recommended that models be robust to adversarial attacks.
-	The most effective strategy is an adversarial training of the model~\cite{huang2016learningstrongadversary}.
+	The most effective strategy is adversarial training of the model~\cite{huang2016learningstrongadversary}.
 	Adversarial training is achieved by solving the following min-max optimization problem~\cite{AdvTrainingMinMax}:
 	\begin{equation}
 		\min_{\theta} \E_{(x,y)}\left[\max_{\delta \in \Delta} \symcal{L}\left(g\left(\symbf{x}+\delta\right), y \right)  \right] \label{eq:adv_train}
@@ -848,9 +848,9 @@
 		\item solving the inner maximization problem, \ie{}finding adversarial examples, with fixed model weights,
 		\item solving the outer minimization problem, \ie{}updating model weights, on the computed adversarial examples\footnote{In practice, it is more common to also include the standard training loss, \ie{}include clean examples along the adversarial ones.}.
 	\end{enumerate}
-	In~\cite{TRADES}, \citeauthor{TRADES} studied the tradeoff between robustness and accuracy and based on their theoritical analysis proposed an improved adversarial training strategy known as TRADES\@.
+	In~\cite{TRADES}, \citeauthor{TRADES} studied the tradeoff between robustness and accuracy and, based on their theoretical analysis, proposed an improved adversarial training strategy known as TRADES\@.
 	TRADES adds a regularization term to the loss \(\symcal{L}\) in \cref{eq:adv_train} pushing the decision boundary away from the data when solving the outer minimization problem, \ie{}increasing the robustness of the model.
-	See~\cite{AdvTrainSurvey} for a detailled overview of the various adversarial training strategies.
+	See~\cite{AdvTrainSurvey} for a detailed overview of the various adversarial training strategies.
 
 	At the time of writing, counterfactual explanations have not yet been applied to omics data but have already been applied in precision medicine to produce recommendations for type 2 diabetes patients~\cite{Lenatti2022}, or on radiography images to highlight problematic regions~\cite{Thiagarajan2022,Mertes2022}.
 

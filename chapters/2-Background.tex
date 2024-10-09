@@ -64,7 +64,6 @@
 
 		\Gls{mlp} are called feedforward networks; the information flows from the input \(\symbf{x}\) to the output \(y\) without any feedback connection, where the output of the model would be fed back to the model itself.
 
-
 		The \gls{mlp} is one of the simplest models but can have many parameters, especially for high-dimensional inputs.
 		Indeed, the number of parameters roughly corresponds to the sum of the number of parameters in each weight matrix \(W^{l}\).
 		The weight matrix \(W^1\) depends on the input dimension \(d\); the larger \(d\), the higher the number of parameters to learn.
@@ -111,7 +110,7 @@
 
 		A graph is represented by three different matrices: its adjacency matrix \(A \in {\left\{0,1\right\}}^{\left|\symcal{V}\right| \times \left|\symcal{V}\right|}\) which describe the structure of the graph, the node embeddings \(X \in \symbb{R}^{\left|\symcal{V}\right| \times d_v}\) and the edge embeddings \(E \in \symbb{R}^{\left|\symcal{V}\right| \times d_e}\).
 		Each row of the node embedding matrix, \(X_{v}\), is node \(v\) \(d_v\)-length vector embedding.
-		Similarly, each row of the edge embeddings matrix is the \(d_e\)-legnth vector embedding of an edge.
+		Similarly, each row of the edge embeddings matrix is the \(d_e\)-length vector embedding of an edge.
 		In the following, I will focus on undirected graphs without edge embedding \(E\).
 
 		A \gls{gnn} is an architecture composed of an input layer, \(L\) hidden layers, and one output layer.
@@ -162,7 +161,7 @@
 		Each row of the attention matrix contains the weights of each input element that are important to the others.
 		The information of other input elements is incorporated by multiplying the matrix value by the attention matrix~(\cref{eq:attention_small}).
 
-		Usually, the self-attention computation is performed in \(h\) different heads to learn different types of interactions, this operation is called \gls{mhsa}.
+		Usually, the self-attention computation is performed in \(h\) different heads to learn different types of interactions: this operation is called \gls{mhsa}.
 		In each head, the input is projected into a \(\frac{d}{h}\)-dimensional space before applying the attention.
 		Each head has its own independent projection matrices: \(W^Q_h \in \symbb{R}^{s \times \frac{d}{h}}\), \(W^K_h \in \symbb{R}^{s \times \frac{d}{h}}\), \(W^V_h \in \symbb{R}^{s \times \frac{d}{h}}\)
 		The output of each head, \(H_i\), is concatenated and projected back to a \(d\)-dimensional space with another weight matrix \(W^O \in \symbb{R}^{d \times d}\).
@@ -174,8 +173,9 @@
 
 		The attention mechanism is used in the transformer, an encoder-decoder architecture.
 		I will only describe the encoder where the self-attention is used.
-		The transformer encoder is a stacking of \(n\) blocks, each block is composed of a self-attention and a feed-forward network, \(\operatorname{FFN}\)~\cref{eq:transformer_block}.
-		Each sublayer of the block has a residual connection to prevent vanishing gradients followed by a layer normalization \(\LN\)\footnote{We only describe the orignial transformer architecture where post-normalization is used but many recent architectures employ a pre-normalization scheme, which has been shown to work better~\cite{TransformerpreLN}.}.
+		The transformer encoder is a stacking of \(n\) blocks.
+		Each block is composed of a self-attention and a feed-forward network, \(\operatorname{FFN}\)~\cref{eq:transformer_block}.
+		Each sublayer of the block has a residual connection to prevent vanishing gradients followed by a layer normalization \(\LN\)\footnote{We only describe the original transformer architecture where post-normalization is used, but many recent architectures employ a pre-normalization scheme, which has been shown to work better~\cite{TransformerpreLN}.}.
 		\begin{equation}
 			\operatorname{TransformerBlock}\left(X\right) = \operatorname{FFN}\left(\LN\left(X + \MHSA\left(X\right)\right)\right)\label{eq:transformer_block}
 		\end{equation}
@@ -212,12 +212,13 @@
 		The mapping of the \gls{ae} is expressed as the composition of the encoder and the decoder: \(g\left(\symbf{x}, \theta\right) = D\left(E\left(\symbf{x}, \theta_E\right), \theta_D\right)\), where \(\theta\) corresponds to the parameters of the encoder \(\theta_E\) and the parameters of the decoder \(\theta_D\).
 
 		Variations of the \gls{ae} add different regularizations to improve the latent representation.
-		A commonly used strategy is the \gls{dae}, where a random noise, usually gaussian, is added to the input, and the model aims to reconstruct the denoised input.
-		The \gls{vae} adds regularization on the latent space by constraining the latent representation to follow a multivariate gaussian distribution, and each latent feature is represented by a gaussian distribution of parameters \(\mu\) and \(\sigma\)~\cite{VAEref}.
+		A commonly used strategy is the \gls{dae}, where a random noise, usually Gaussian, is added to the input, and the model aims to reconstruct the denoised input.
+		The \gls{vae} adds regularization on the latent space by constraining the latent representation to follow a multivariate normal distribution, and each latent feature is represented by a normal distribution of parameters \(\mu\) and \(\sigma\)~\cite{VAEref}.
 		The encoder does not anymore learn the latent representation but learns the parameters \(\mu_{\symbf{x}}\) and \(\sigma_{\symbf{x}}\) of the distribution: \(E\left(\symbf{x}\right) = \left(\mu_{\symbf{x}},\sigma_{\symbf{x}}\right) \).
 		The latent representation, \(\symbf{z}\), is then sampled from this distribution and fed to the decoder.
 
-		If the latent representation is later used for classification tasks, a classifier branch can be added to the latent representation to predict the corresponding class: \(\hat{y} = \operatorname{Classifier}\left(z\right)\).
+		Suppose the latent representation is later used for classification tasks.
+		In that case, a classifier branch can be added to the latent representation to predict the corresponding class: \(\hat{y} = \operatorname{Classifier}\left(z\right)\).
 		Adding a classification branch should improve the latent representation with more relevant features for the classification.
 		In this case, there are two different tasks:
 		\begin{enumerate}[nosep]
@@ -253,7 +254,7 @@
 		\begin{equation}
 			\symcal{L}_{AE}\left(\theta\right) = \frac{1}{N}\sum_{i=1}^{N} {\left\|x_i - \hat{x}_i \right\|}_2^{2} \label{eq:loss_ae}
 		\end{equation}
-		The \gls{vae} cost function is composed of the reconstruction term of the \gls{ae} loss and a regularization term that forces the latent space to follow a gaussian distribution: the Kullback-Leibler divergence (\(\KL\)):
+		The \gls{vae} cost function is composed of the reconstruction term of the \gls{ae} loss and a regularization term that forces the latent space to follow a Gaussian distribution: the Kullback-Leibler divergence (\(\KL\)):
 		\begin{equation}
 			\symcal{L}_{VAE}\left(\theta\right) = \symcal{L}_{AE}\left(\theta\right) + \KL\left(\symcal{N}\left(\mu_{x}, \sigma_{x}\right), \symcal{N}\left(0, I\right)\right)
 		\end{equation}
@@ -261,44 +262,44 @@
 
 		\begin{mybox}[label={box:survival}]{Survial analysis}
 			Survival analysis corresponds to the analysis of the duration before an event occurs.
-			Survival and hazard functions are two fundamentals quantifies used in survival analysis.
+			Survival and hazard functions are two fundamental quantifies used in survival analysis.
 			Survival time is represented by a non-negative random variable \(T\).
 			The survival function, \(S(t)\), represents the probability of a patient surviving past time \(t\):
 			\[S(t) = P(T > t)\]
 			The hazard function, \(\lambda(t)\), represents the probability that the event of interest will occur in the interval \(\Delta t\) knowing that it did not occur for a time \(t\):
 			\[\lambda(t) = \lim_{\Delta t \to 0} \frac{P(t \leq T < t + \Delta t | T \geq t)}{\Delta t}\]
-			A greater hazard correspond to a greater risk that the event occurs.
+			A higher hazard corresponds to a greater risk that the event occurs.
 			\tcbsubtitle{Survival data}
-			In survival analysis, for patient \(i\), \(\symbf{x}_{i}\) represents the feature or covariate vector, \(\delta_{i}\) is the event indicator taking 1 if the event occured and 0 for censored patient, and \(t_{i}\) represents the time at which the event occured or the censoring time for censored patient.
+			In survival analysis, for patient \(i\), \(\symbf{x}_{i}\) represents the feature or covariate vector, \(\delta_{i}\) is the event indicator taking 1 if the event occurred and 0 for censored patients, and \(t_{i}\) represents the time at which the event occured or the censoring time for censored patients.
 		\end{mybox}
 
-		In precision medicine a common task is to predict the time an event of interest occurs, also known as survival analysis~(\cref{box:survival}).
-		One of the main challenge with survival analysis is censoring\footnote{only right censoring is considered here}: the event of interest is not experienced by some patient during the study.
-		The exact survival time is not knwon but the survival time is at least the period the patient has been followed.
+		In precision medicine, a common task is to predict the time an event of interest occurs, also known as survival analysis~(\cref{box:survival}).
+		One of the main challenges with survival analysis is censoring\footnote{only right censoring is considered here}: the event of interest is not experienced by some patients during the study.
+		The exact survival time is not known, but the survival time is at least the period the patient has been followed.
 		Specific methods are needed to account for the partial information provided by censoring.
-		Cox models or proportional hazards models are survival models to relate the time before an event occurs to one or more covariates~(\cref{box:cox}).
-		Cox models have been adapted to deep learning architectures by replacing the relative risk score by an estimation from a neural network in the partial log-likelihood loss:
+		Cox or proportional hazards models are survival models that relate the time before an event occurs to one or more covariates~(\cref{box:cox}).
+		Cox models have been adapted to deep learning architectures by replacing the relative risk score with an estimation from a neural network in the partial log-likelihood loss:
 		\begin{equation}
 			\symcal{L}_{Cox}\left(\theta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\hat{y}_i - \log \sum_{j \in \symcal{R}(T_i)}\phi_j \right)\; \text{,} \label{eq:cox_loss}
 		\end{equation}
 		where \(\delta_i\) specifies if the event occurred for patient \(i\), \(T_i\) represents the time associated with the event, and \(N_{\delta_i = 1}\) is the number of patients for which the event occurred (\(\delta_i = 1\)).
 		\(\phi_i = e^{\hat{y}_i}\) is the predicted risk for patient \(i\).
 		\(\symcal{R}(T_i) = \{j: T_j > T_i\}\) is the risk set, the set of patients who are still at risk of death at time \(T_i\).
-		Other approaches discretize the survival times and compute the survival function on those intervals or directly estimates the probability mass function with a neural network~\cite{Lee2018}.
+		Other approaches discretize the survival times and compute the survival function on those intervals or directly estimate the probability mass function with a neural network~\cite{Lee2018}.
 
 		\begin{mybox}[label={box:cox}]{Cox models}
-			The Cox proportional hazards model\footnote{The hazard ratio of two patients is independant of time: \(\frac{\lambda(t | \symbf{x}_{i})}{\lambda(t | \symbf{x}_{j})} = e^{\beta\cdot \left(\symbf{x}_{i} - \symbf{x}_{j}\right)}\)} is a method used to estimate a patient survival from its covariates \(\symbf{x}\).
+			The Cox proportional hazards model\footnote{The hazard ratio of two patients is independent of time: \(\frac{\lambda(t | \symbf{x}_{i})}{\lambda(t | \symbf{x}_{j})} = e^{\beta\cdot \left(\symbf{x}_{i} - \symbf{x}_{j}\right)}\)} is a method used to estimate a patient survival from its covariates \(\symbf{x}\).
 			The hazard function has two components, a baseline hazard \(\lambda_0(t)\) and a relative risk score \(e^{\beta \symbf{x}}\):
 			\[\lambda(t | \symbf{x}) = \lambda_0(t) e^{\beta \symbf{x}}\]
 			The relative risk is estimated as a linear transformation of the covariates.
-			The model is estimated in two steps, in the first step the partial log-likelihood is maximized to estimate the parameters \(\beta\):
+			The model is estimated in two steps: in the first step, the partial log-likelihood is maximized to estimate the parameters \(\beta\):
 			\[\ell\left(\beta\right) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\beta \symbf{x} - \log \sum_{j \in \symcal{R}(T_i)}e^{\beta \symbf{x}} \right)\]
-			in a second step the baseline hazard is estimated.
+			in the second step, the baseline hazard is estimated.
 		\end{mybox}
 
 		There is no closed form to the optimization problem described in \cref{eq:dl_opt} to find the optimal parameters \(\theta^{*}\).
 		The minimization of the loss function is achieved with gradient descent.
-		The parameters \(\theta\) are randomly initialized, then the parameters are updated in gradient steps by back-propagating a fraction of the error, \ie{}the gradient of the loss with respect to the parameters: \(\theta_{n+1} = \theta_{n} - \eta \nabla \symcal{L}_{|\theta_n}\left(\theta_{n}\right)\).
+		The parameters \(\theta\) are randomly initialized, then they are updated in gradient steps by back-propagating a fraction of the error, \ie{}the gradient of the loss with respect to the parameters: \(\theta_{n+1} = \theta_{n} - \eta \nabla \symcal{L}_{|\theta_n}\left(\theta_{n}\right)\).
 		The hyperparameters \(\eta\) is called the learning rate, and it controls the convergence speed to the optimal solution.
 		Instead of considering all the training data \(N\), data is split into mini-batches of size \(N_b\), and the gradient descent is done on these mini-batches.
 		This is called \gls{sgd}.
@@ -306,7 +307,7 @@
 		It has been proposed to add a momentum term; it remembers the update \(\delta_{\theta}\) at each iteration and updates the weights as a linear combination of the gradient and the previous update.
 		RMSprop~\cite{OptimRMSProp} ensures that the learning rate is adapted for each model weight by normalizing the gradients with the moving average of the squares of gradients.
 		Adam~\cite{OptimAdam} combines the previous algorithm and keeps an exponential moving average estimate of the second-order moments of the gradients.
-		The processing of all mini-batches corresponds to one epoch, and the training is repeated for multiple epochs until convergence.
+		All mini-batch processing corresponds to one epoch, and the training is repeated for multiple epochs until convergence.
 
 		Deep learning models are sensitive to overfitting.
 		Models are complex with numerous parameters; they might learn how to perfectly solve a task on the training set without generalizing to new data.
@@ -320,7 +321,7 @@
 		The best way to have good generalization is to train the model on more data.
 		An excellent way to get more data is to generate fake data and add it to the training set.
 		For images, simple transformations like translations and rotations can be used to generate fake data.
-		However, it is not always possible to generate fake data; for instance, there is no such simple transformation for omics data.
+		However, generating fake data is not always possible; for instance, there is no such simple transformation for omics data.
 
 		A deep learning model and its training strategy have many hyperparameters that can influence the model's performance.
 		A good strategy to select the best hyperparameters is conducting a random search and comparing the performance on a validation set.
@@ -340,8 +341,8 @@
 		Let \(p_{d}\) be the true data distribution, generative models learn a distribution \(p_{g}\) as close as possible to the true distribution \(p_{d}\).
 		\Glspl{gan} are a type of generative model introduced by \citeauthor{Goodfellow2014GAN} in \citeyear{Goodfellow2014GAN} consisting of two components: a generator \(G\) and a discriminator \(D\)~\cite{Goodfellow2014GAN}.
 		The generator and the discriminator are neural networks whose architecture is adapted to the data type considered.
-		The generator captures the data distribution and is able to generate new data \(\hat{x} = G\left(z\right)\), where \(z\) is a latent noise vector sampled from a prior distribution \(p_z\).
-		The discriminator attempts to distinguish real samples from generated ones, it has a sigmoid activation and outputs the probability that a sample is real.
+		The generator captures the data distribution and can generate new data \(\hat{x} = G\left(z\right)\), where \(z\) is a latent noise vector sampled from a prior distribution \(p_z\).
+		The discriminator attempts to distinguish real samples from generated ones: it has a sigmoid activation and outputs the probability that a sample is real.
 		The generator and the discriminator compete with each other; the generator network attempts to fool the discriminator while the discriminator tries to be a better expert at detecting fake samples.
 		\(G\) and \(D\) are jointly trained at generating a distribution \(p_{g}\) such that \(D\) cannot distinguish between \(p_{d}\) and \(p_{g}\), \ie{}\(D\left(\symbf{x}\right) = \tfrac12\).
 		A \gls{gan} is trained by solving the following min-max problem:
@@ -349,7 +350,7 @@
 			\min_{G} \max_{D} \symcal{L}_{\text{GAN}}\left(G,D\right) = \E_{x\sim p_{d}}\left[ \log\left(D\left(x\right)\right)\right] + \E_{z\sim p_{z}}\left[ \log\left( 1 - D\left(G\left(z\right)\right)\right)\right] \label{eq:gan_loss}
 		\end{equation}
 
-		In practice \gls{gan} training is implemented as an iterative process alternating between \(k\) steps of optimizing \(D\) and one step optimizing \(G\).
+		In practice, \gls{gan} training is implemented as an iterative process alternating between \(k\) steps of optimizing \(D\) and one step optimizing \(G\).
 		The complete training procedure is presented in \cref{alg:gan}.
 		\begin{algorithm}[htbp]
 			\DontPrintSemicolon
@@ -380,19 +381,19 @@
 		The joint training of the two components corresponds to finding the Nash-equilibrium in a non-cooperative two-player game~\cite{Salimans2016ImprovedTF}.
 		Each players aims at minimizing its cost function, \(\symcal{L}_{G}\left(\theta_{G}, \theta_{D}\right)\) for the generator and \(\symcal{L}_{D}\left(\theta_{G}, \theta_{D}\right)\) for the discriminator.
 		As each component updates its weight concurrently, no convergence can be guaranteed.
-		\Glspl{gan} also suffers from model collapse, the generator ends always producing the same outputs that easily fools the discriminator.
+		\Glspl{gan} also suffers from model collapse: the generator ends up consistently producing the same outputs that easily fool the discriminator.
 		However, it fails to correctly capture the true data distribution \(p_{d}\) and produces samples with low diversity.
 
 		\Gls{wgan}~\cite{WGAN} was proposed to address issues in the original \gls{gan} formulation.
 		\citeauthor{WGAN} replaced the Jensen-shannon divergence with \(L^{1}\)-Wasserstein distance metric.
-		Wasserstein distance is another way of comparing two distributions, it measures the minimum cost of transforming one probability distribution into another, and provide a meaningful distance even if distributions do not overlap.
-		The discriminator is now called a critic that instead of classifying samples as real or fake provide a realness score\footnote{There are no more sigmoid activation at its output}.
+		Wasserstein distance is another way of comparing two distributions: it measures the minimum cost of transforming one probability distribution into another and provides a meaningful distance even if distributions do not overlap.
+		The discriminator is now called a critic that, instead of classifying samples as real or fake, provides a realness score\footnote{There are no more sigmoid activation at its output}.
 		The computation of the Wasserstein distance is complex and can be simplified by forcing the critic to be a K-Lipschitz function.
 		Which translates into constraints on the critic \(D\), \(D\) must belongs to the set \( \symcal{D}\) of K-Lipschitz function:
 		\begin{equation}
 			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{\text{WGAN}}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \label{eq:wgan_loss}
 		\end{equation}
-		To satisfy the Lipschitz constraint on the critic, \citeauthor{WGAN} proposed to clip critic weigths to maintain them in a fixed interval while acknowledging that is not a good way to ensure the Lipschitz constraint~\cite{WGAN}.
+		To satisfy the Lipschitz constraint on the critic, \citeauthor{WGAN} proposed to clip critic weights to maintain them in a fixed interval while acknowledging that is not a good way to ensure the Lipschitz constraint~\cite{WGAN}.
 		\citeauthor{WGANGP} replaced the weight clipping with a gradient penalty to ensure the Lipschitz constraint~\cite{WGANGP}:
 		\begin{multline}
 			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{\text{WGAN}}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \\ + \lambda \E_{\tilde{x}\sim p_{g}}\left[ {\left( {\left\|\nabla_{\tilde{x}}D\left(\tilde{x}\right) \right\|}_{2} -1 \right)}^{2}\right]  \label{eq:wgangp_loss}
@@ -442,7 +443,7 @@
 		On the contrary, non-synonymous mutations could change the amino acid in the protein sequence.
 		The replacement by a premature stop codon, a nonsense mutation, would result in a truncated non\-/functional protein.
 		The change of amino acid could change the structure of the protein or impact its catalytic site, leading to a malfunctioning protein.
-		Mutations in non-coding regions can have various impacts.\-/
+		Mutations in non-coding regions can have various impacts.
 
 	\subsection{Cancer}
 		Cancer is not a single disease but rather a group of diseases characterized by abnormal cell growth that can invade tissue and spread to other organs (metastasis).
@@ -450,10 +451,10 @@
 		The abnormal growth phenotype is acquired by the dysregulation of pathways controlling cell growth.
 		This dysregulation occurs by altering the expression of oncogenes, genes promoting cell growth, and tumor suppressor genes, genes inhibiting cell division and cell survival.
 		Mutations in a promoter region can alter these genes' expression, and the acquisition of mutations in the coding sequence of those genes can alter the protein function.
-		Mutations in the non-coding part of the genome can alter gene expression regulators and thus indirectly impact oncogenes or tumor suppressor genes expression.
+		Mutations in the non-coding part of the genome can alter gene expression regulators and thus indirectly impact oncogenes or tumor suppressor gene expression.
 		Epigenetic alterations are known to occur in cancer development.
 		These alterations can be hereditary and transmitted or acquired by environmental exposure to carcinogenic substances.
-		It is important to consider all the cell's molecular constituents to characterize cancer better, as cancers result from multiscale alterations.
+		It is essential to consider all the cell's molecular constituents to characterize cancer better, as cancers result from multiscale alterations.
 
 		\begin{figure}[htbp]
 			\centering
@@ -461,9 +462,9 @@
 			\caption[Cancer hallmarks]{The cancer hallmarks adapted from~\cite{Hanahan2011}}\label{fig:cancer_hallmarks}
 		\end{figure}
 		Despite being a group of more than a hundred different diseases, cancers share similar characteristics.
-		These shared properties are known as the hallmarks of cancer and defined as \textcquote{Hanahan2000,Hanahan2011}{acquired functional capabilities that allow cancer cells to survive, proliferate, and disseminate.}.
+		These shared properties are known as the hallmarks of cancer and are defined as \textcquote{Hanahan2000,Hanahan2011}{acquired functional capabilities that allow cancer cells to survive, proliferate, and disseminate.}.
 		They present an organizing principle to approach the complexity of cancers.
-		The hallmarks define six capabilities: sustaining proliferative signaling, evading growth suppressors, activating evasion and metastasis, enabling replicative immortality, inducing angionesis and resisting cell death, two enabling capabilities: genome instability and mutation, and tumor-promoting inflammation, and two emerging hallmarks:deregulating cellular energetics and avoiding immune destruction.
+		The hallmarks define six capabilities: sustaining proliferative signaling, evading growth suppressors, activating evasion and metastasis, enabling replicative immortality, inducing angiogenesis and resisting cell death; two enabling capabilities: genome instability and mutation, and tumor-promoting inflammation; and two emerging hallmarks:deregulating cellular energetics and avoiding immune destruction.
 
 \section{Omics data}
 	The omics field corresponds to the characterization and quantification of pools of biological molecules.
@@ -503,11 +504,11 @@
 		After fragmentation of the RNA molecule, a reverse transcriptase is used to convert the transcript into its \gls{cdna} sequence.
 		The \gls{cdna} fragment is then sequenced as described in the \cref{subsec:genomics}.
 		The reads are aligned to a reference genome; an annotation file is used to count the number of reads that map to a region known as a coding gene.
-		The resulting count matrix can later be normalized to account for the sequencing depth and the length of the gene in \gls{fpkm}, \gls{tpm}, or any other normalization depending on the study needs.
+		The resulting count matrix can later be normalized to account for the sequencing depth and the gene length in \gls{fpkm}, \gls{tpm}, or any other normalization, depending on the study needs.
 
 	\subsection{Epigenomics}
 		Epigenomics is the study of the epigenome, the epigenetic modification of the genetic material.
-		Epigenetic modification corresponds to a modification of a cell function, a gene regulation without any modification to the DNA sequence.
+		Epigenetic modification corresponds to a modification of a cell function: a gene regulation without any modification to the DNA sequence.
 		Different mechanisms can produce such changes:
 		\begin{itemize}[nosep]
 			\item \glsxtrfull{dnam},
@@ -540,7 +541,7 @@
 		One antibody-free approach is based on mass-spectrometry; it is used to determine the amino acid sequence of a protein.
 		Proteins are digested into smaller peptides; mass-to-charge ratios are measured with mass-spectrometry.
 		The signal intensities reflect the quantity of peptides.
-		Peptides mass-to-charge ratios are compared to theoritical ratios databases to identify the proteins.
+		Peptides mass-to-charge ratios are compared to theoretical ratios databases to identify the proteins.
 
 \section{Datasets}
 	Large multi-omics datasets are limited, and although the cost of high-throughput technologies has decreased, many difficulties remain in the acquisition of multi-omics data.

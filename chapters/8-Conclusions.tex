@@ -51,28 +51,29 @@
 \section{Perspectives}
 	This section aims to expand on the work described in this manuscript and discuss broader perspectives related to the precision medicine field.
 	\subsection{Removing groups in AttOmics}\label{sec:scalar_attention}
-		In \cref{chap:attomics}, we introduced AttOmics an architecture based on the self-attention mechanism.
+		In \cref{chap:attomics}, we introduced AttOmics, an architecture based on the self-attention mechanism.
 		To avoid self-attention limitations on high-dimensional vectors, we proposed to group features and apply the attention mechanism to these groups.
 		While this approach was shown to be effective~(\cref{chap:attomics}), groups are an architectural constraint; removing them would allow for directly considering feature interactions.
-		However, the self-attention operation requires elements with an embedding dimension strictly greater than one, since elements of omics profiles are scalar values with no embedding dimension an intermediate transformation is required.
+		However, the self-attention operation requires elements with an embedding dimension strictly greater than one; since elements of omics profiles are scalar values with no embedding dimension, an intermediate transformation is required.
 		The direct idea would be to project scalar values into a higher dimensional space and use the recent self-attention approximation~\cite{xiongNystrOmformerNystr2021,Linformer} or new efficient implementation~\cite{FlashAttention,rabeSelfattentionDoesNot2021,bolyaHydraAttentionEfficient2022a} that allows for scaling up to large inputs\footnote{see~\cite{EfficientTransformers} for an extensive overview of the possible methods}.
 		Nevertheless, there is no justification for projecting scalar values into a higher space, and more importantly, it is unclear what would represent each dimension of the newly obtained vector.
 
-		The attention matrix is obtained by measuring the similarity between pairs of inputs, for vectors this measure is the scalar product.
-		One could consider a similarity measure for scalar values, such as absolute difference, and inject this in the attention computation:
+		The attention matrix is obtained by measuring the similarity between pairs of inputs; for vectors, this measure is the scalar product.
+		One could consider a similarity measure for scalar values, such as absolute difference, and inject this into the attention computation:
 		\begin{equation}
 			A_{ij} = \operatorname{softmin}\left(\left|Q_{i} - K_{j} \right| \right) \label{eq:scalar_attention}
 		\end{equation}
-		where \(Q_{i}\) is the \(i\)-th value in the query vector and \(K_{j}\) is the \(j\)-th value in the key vector\footnote{Note that queries, keys and values are no longer matrices but vectors.}.
+		where \(Q_{i}\) is the \(i\)-th value in the query vector and \(K_{j}\) is the \(j\)-th value in the key vector\footnote{Note that queries, keys, and values are no longer matrices but vectors.}.
 		\pythoncode[label={code:torch_att}]{Pytorch implementation of the ScalarAttention}{figures/8-Conclusions/ScalarAttentionPyTorch.py}
 		This scalar formulation of the self-attention~(\cref{eq:scalar_attention}) can be easily implemented in PyTorch~(\cref{code:torch_att}) and has already been tested in~\cite{Lacan2023} but still requires to compute and store large \(d\times d\) attention matrices~(\cref{fig:lin_attention_benchA}).
 		\citeauthor{Lacan2023} masked the attention matrix and only computed attention for features pairs known to be interacting (\gls{ppi})\cite{Lacan2023}.
-		The \(i\)-th element of the attention output is computed as the scalar product of the \(i\)-th row of the attention matrix with the value vector, and the \(i\)-th row of the attention matrix corresponds to the absolute difference of the query vector with the \(i\)-th value of the key vector.
+		The \(i\)-th element of the attention output is computed as the scalar product of the \(i\)-th row of the attention matrix with the value vector.
+		The \(i\)-th row of the attention matrix corresponds to the absolute difference of the query vector with the \(i\)-th value of the key vector.
 		\begin{equation}
 			Z_{i} = \left| Q - K_{i} \right| \cdot V
 		\end{equation}
-		This formulation can be implemented in an optimized triton kernel~\cite{TritonLang} as proposed in~\cref{code:triton_att}, with a lower memory footprint withtout significantly increase the computation time~(\cref{fig:lin_attention_bench}).
-		Triton is a programming language and a compiler to easily write GPU efficient code.
+		This formulation can be implemented in an optimized triton kernel~\cite{TritonLang} as proposed in~\cref{code:triton_att}, with a lower memory footprint without significantly increasing the computation time~(\cref{fig:lin_attention_bench}).
+		Triton is a programming language and a compiler to write GPU-efficient code easily.
 		\pythoncode[label={code:triton_att}]{Triton implementation of the ScalarAttention}{figures/8-Conclusions/ScalarAttention.py}
 
 		\begin{figure}[htbp]
@@ -87,13 +88,13 @@
 		\end{figure}
 
 	\subsection{Extending CrossAttOmics to other type of modalities}
-		In \cref{chap:crossattomics}, we introduced CrossAttOmics a deep learning architecture to integrate multi-omics data.
-		As the attention mechanism can adapt any type of modalities, such as text or images, with the correct dimensions, a natural extension would be to consider non omics modalities such as histopathology images, clinical information or textual reports.
+		In \cref{chap:crossattomics}, we introduced CrossAttOmics, a deep learning architecture to integrate multi-omics data.
+		As the attention mechanism can adapt any type of modalities, such as text or images, with the correct dimensions, a natural extension would be to consider non-omics modalities, such as histopathology images, clinical information, or textual reports.
 		The main question would be how to connect them with the rest of the omics interactions graph~(\cref{fig:tcga_graph}).
 		Furthermore, the ScalarAttention proposed in \cref{sec:scalar_attention} can be extended to multimodal context, \ie{}a CrossScalarAttention where the query comes from one modality and the key from another one.
-		Using such an attention mechanism would refine the considered interactions to the feature level.
-		A modality interaction graph would define on which modality pairs the cross-attention is computed and the cross-attention matrix could then be masked or regularized\footnote{see discussion on knowledge integration in \cref{sec:persp_knwoledged}.} to focus on direct relation ships.
-		For instance an \gls{mirna} is expected to only interact with its \gls{mrna} targets\footnote{some \gls{mrna} targets are experimentally verified and other are putative targets based on the sequence complementarity.}.
+		Such an attention mechanism would refine the considered interactions to the feature level.
+		A modality interaction graph would define on which modality pairs the cross-attention is computed, and the cross-attention matrix could then be masked or regularized\footnote{see discussion on knowledge integration in \cref{sec:persp_knwoledged}.} to focus on direct relationships.
+		For instance, an \gls{mirna} is expected to only interact with its \gls{mrna} targets\footnote{some \gls{mrna} targets are experimentally verified, and others are putative targets based on the sequence complementarity.}.
 
 	\subsection{Biological knowledge}\label{sec:persp_knwoledged}
 		Biolgically-informed architectures are common when applying deep learning to biological problems as they provide a strong inductive bias.
@@ -101,8 +102,8 @@
 		For instance, annotations mainly cover coding genes, but noncoding genes are known to be involved in gene expression regulation.
 		Focusing only on annotated genes would leave out many features\footnote{For instance in \gls{go} only 14\% of the annotations involves \gls{ncrna}} and limits model capacity to consider all interactions, which at the end might limit the predictive performances.
 		Moreover, excluding unannotated features prevents researchers from discovering new biomarkers that could be detected by training models on all available features.
-		Instead of excluding unannotated features, a regularization favoring knwon relationships could be added to the training objective.
-		This kind of approach allow to exploit knowledge while allowing the network to use unannotated features and potentially discover new features interactions.
+		Instead of excluding unannotated features, a regularization favoring known relationships could be added to the training objective.
+		This kind of approach allows the exploitation of knowledge while allowing the network to use unannotated features and potentially discover new feature interactions.
 
 		Another aspect of knowledge integration is the continual construction of our understanding of biological mechanisms; some things we consider true become invalid, and newly discovered things enrich our knowledge.
 		This means that a model constructed at time \(T\) might become invalid at time \(T+1\) because our knowledge has evolved.
@@ -110,49 +111,49 @@
 		Continual learning might provide opportunities to develop AI systems that can continually acquire and update their knowledge\cite{wang2024comprehensivesurveycontinuallearning}.
 
 	\subsection{Omics data challenges}
-		Omics data are generated with various methods, various sequencing platform, at different places and time by different people.
-		Those variations leads to non-biological variation in the data, also knwon as \emph{batch effect}~\cite{Leek2010}.
+		Omics data are generated by different people using various methods and sequencing platforms at different places and times.
+		Those variations lead to non-biological variation in the data, also known as \emph{batch effect}~\cite{Leek2010}.
 		Deep learning models are sensitive to batch effects as they might capture and amplify those artifacts.
-		Model interpretability can help to detect such cases, but there is still a need to better consider batch effect by correcting it or adding domain adaptation tasks to ensure the same representation of all samples.
-		Moreover, various tools have been developped to extract gene counts from sequencing reads and might leads to different outputs.
-		The generated gene counts can also be impacted by the choice of the reference genome.
-		It is important to ensure that all samples have been analyzed in an identical way with fixed references.
-		There is a need of more initiative like \glsxtrshort{tcga} or ARCHS4~\cite{Lachmann2018} to provide data that have been analyzed with a common pipeline.
+		Model interpretability can help detect such cases, but there is still a need to consider batch effects better by correcting them or adding domain adaptation tasks to ensure the same representation of all samples.
+		Moreover, various tools have been developed to extract gene counts from sequencing reads, which might lead to different outputs.
+		The choice of the reference genome can also impact the generated gene counts.
+		It is important to ensure that all samples have been analyzed identically with fixed references.
+		More initiatives, like \glsxtrshort{tcga} or ARCHS4~\cite{Lachmann2018}, are needed to provide data analyzed with a standard pipeline.
 
 		\Gls{tcga} is an ongoing project regularly updated with new releases\footnote{\url{https://docs.gdc.cancer.gov/Data/Release_Notes/Data_Release_Notes/}} that add new data or correct erroneous information, which makes it more difficult to fairly compare various approaches since they are likely using different versions with various subset of included cancers.
-		This highlights\footnote{along with the non sharing of model weights, and in worst cases the absence of source codes} the need for a standardized benchmark to fairly compare multiple approaches.
+		This highlights\footnote{along with the non-sharing of model weights, and in worst cases, the absence of source codes.} the need for a standardized benchmark to fairly compare multiple approaches.
 
 		While the development of high-throughput sequencing methods increased the availability of omics data, the number of available samples remains limited compared to other deep learning fields.
 		Moreover, when analyzing multi-omics data, gold standard datasets where all modalities are available for all samples are rare.
-		Datasets where some modalities are available for some patients are more common as generating all modalities will increase the cost or the patient did not accept some analysis.
-		This results in datasets with various missingness patterns where two different samples have different set of available omics.
+		Datasets, where some modalities are available for some patients, are more common as generating all modalities will increase the cost, or patients did not accept some analysis.
+		This results in datasets with various missingness patterns where two samples have different sets of available omics.
 		Such datasets are challenging to use with deep learning multimodal architectures.
-		In \cref{chap:crossattomics}, we proposed to simulate the various missingness pattern during the training which increased the robustness to missing modalities.
-		Although this approach was effective, it increased the training time and supposed that all missingness pattern are generated during the training phase.
+		In \cref{chap:crossattomics}, we proposed to simulate the various missingness patterns during the training, which increased the robustness to missing modalities.
+		Although this approach was effective, it increased the training time and supposed that all missingness patterns were generated during the training phase.
 		Another way would be to generate the missing modalities from the other modalities using a generative or modality translation task.
-		Generating large molecular profile is still a difficult task as such network are difficult to train.
-		Other methods handling missing modalities project the available ones in a common latent space before combining\footnote{linear combination, product of experts, \dots} them; such model are trained in a self-supervised fashion~\cite{Lee2021AVI}.
+		Generating large molecular profiles is still a difficult task as such networks are difficult to train.
+		Other methods handling missing modalities project the available ones in a common latent space before combining\footnote{linear combination, product of experts, \dots} them; such models are trained in a self-supervised fashion~\cite{Lee2021AVI}.
 		%TODO: Figure how to handle missing modalities 
 
 	\subsection{Single-cell sequencing}
 		This manuscript focuses on omics data obtained from bulk experiments, measuring the average expression across millions of cells.
-		Current sequencing technologies allow for an increased resolution and quantify the expression at the single cell level.
-		Tumour are not composed of a single cell type, theay are a mixture of various cell type harbouring distinct molecular signatures~\cite{TumourHetero}.
-		Using single-cell data offers new insights in the understanding of the disease and can help identifying the subpopulation in the tumour sucesptible to treatments~\cite{DagogoJack2017}.
-		In order to apply the methods described here, datasets with paired measurements, multiple modalities are measured from a unique cell, are required.
+		Current sequencing technologies allow for an increased resolution and quantify the expression at the single-cell level.
+		Tumors are not composed of a single cell type; they are a mixture of various cell types harboring distinct molecular signatures~\cite{TumourHetero}.
+		Using single-cell data offers new insights into the understanding of the disease and can help identify the subpopulation in the tumor susceptible to treatments~\cite{DagogoJack2017}.
+		In order to apply the methods described here, datasets with paired measurements, where multiple modalities are measured from a unique cell, are required.
 		While methods generating paired measurements are becoming available~\cite{Macaulay2015,Hao2021,Vandereyken2023}, they are not widely used.
-		Most of the available datasets presents unpaired cells, modalities were measured on different cells.
-		In addition to integrate features from different modalities, different cells needs to be aligned, this is known as diagonal integration~\cite{Xu2022}.
+		Most of the available datasets present unpaired cells, where modalities were measured on different cells.
+		In addition to integrating features from different modalities, different cells need to be aligned, known as diagonal integration~\cite{Xu2022}.
 		Specific integration methods are needed to solve this modality fusion problem.
-		Recent technological development added a spatial dimension giving access to the cellular organization in tissue~\cite{Vandereyken2023}.
+		Recent technological development added a spatial dimension, giving access to the cellular organization in tissue~\cite{Vandereyken2023}.
 
 	\subsection{Foundations models}
-		Foundations models are large deep learning models trained on broad data that can be adapted to a wide range od downstream tasks~\cite{bommasani2022opportunitiesrisksfoundationmodels}.
-		Large \glsxtrshort{scrna} datasets are becoming widespread: the human cell atlas~\cite{Regev2017} encompass 62 millions of cells.
-		Such large datasets open new possibilities to train large models that can potentially be considered as foundations models~\cite{Moor2023}.
+		Foundations models are large deep learning models trained on broad data that can be adapted to a wide range of downstream tasks~\cite{bommasani2022opportunitiesrisksfoundationmodels}.
+		Large \glsxtrshort{scrna} datasets are becoming widespread: the human cell atlas~\cite{Regev2017} encompass 62 million cells.
+		Such large datasets open new possibilities to train large models that can be considered foundation models~\cite{Moor2023}.
 		In \citeyear{Cui2024}, \citeauthor{Cui2024} proposed scGPT a foundation model for single-cell biology~\cite{Cui2024}.
-		Their model, based on a \gls{gpt} and trained on over 33 millions of cells performed well in a number of downstream tasks after fine-tuning: cell-type annotation, multi-batch integration, genetic perturbation prediction, etc\@.
-		In their architecture, self-attention was applied on the expression of each cell, \ie{}on the genes features of each cell.
-		To cope with the requirements of the self-attention they defined a maximum number of features, 1200, that are randomly selected at each iteration, binned and embed to higher dimensional space~\cite{Cui2024}.
-		Their architecture is not able to handle complete expression profiles, and this limitations highlights the need of carefully designed architecture that are adapted to the specificity on data encountered in the biomedical field.
+		Their model, based on a \gls{gpt} and trained on over 33 million cells, performed well in several downstream tasks after fine-tuning: cell-type annotation, multi-batch integration, genetic perturbation prediction, etc\@.
+		In their architecture, self-attention was applied to the expression of each cell, \ie{}on the gene features of each cell.
+		To cope with self-attention requirements, they defined a maximum number of features, 1200, randomly selected at each iteration, binned, and embedded in higher dimensional space~\cite{Cui2024}.
+		Their architecture cannot handle complete expression profiles, and this limitation highlights the need for carefully designed architecture adapted to the specificity of data encountered in the biomedical field.
 \end{document}

@@ -121,7 +121,7 @@
 	\subsection{Gating mechanism improves accuracy}
 		\begin{figure}[htbp]
 			\centering
-			\includegraphics[scale=0.83]{signature_alphas.pdf}
+			\includegraphics{signature_alphas.pdf}
 			\caption[Comparison of \(\alpha^{ij}\) scores per class]{Visualization of how the different \(\alpha^{ij}\) are used among the different classes.}
 			\label{fig:alphas_signature}
 		\end{figure}
@@ -214,17 +214,42 @@
 		This observation suggests that the model is able to accommodate more interactions, but adding more interactions does not give more information as the accuracy remains similar.
 
 		\begin{figure}[htbp]
-			\begin{subfigure}[c]{0.62\textwidth}
+			\begin{subfigure}[t]{0.62\textwidth}
 				\centering
-				\caption{}
-				\includegraphics[width=\linewidth]{sparsity_stability.pdf}
-				\label{fig:sparsity_stability}
+				\caption{}\label{fig:sparsity_stability}
+				%\includegraphics[width=\linewidth]{sparsity_stability.pdf}
+				\begin{tikzpicture}
+					\begin{axis}[
+							xmode=log,
+							log ticks with fixed point,
+							ytick={0,2,...,8},
+							ymin=0,
+							xtick pos=lower,
+							ytick pos=left,
+							minor y tick num=1,
+							yticklabel style={font=\footnotesize},
+							xticklabel style={font=\footnotesize},
+							ylabel={Number of\\interactions},
+							xlabel={Sparsity rate \(\tau\)},
+							ylabel style={align=center, font=\footnotesize},
+							legend pos=south east,
+							legend style={draw=none, font=\footnotesize},
+							legend cell align={left},
+							height=4.5cm, width=9cm,
+						]
+						\addplot[only marks, gray!70] table[y=value, x=variable]{\CrossAttOmicsGateSparsityInteractionsAll};
+						\addlegendentry{All}
+						\addplot[dashed, red, mark=square*, mark size=3pt] table[y=value, x=variable]{\CrossAttOmicsGateSparsityInteractionsStable};
+						\addlegendentry{Stable}
+					\end{axis}
+				\end{tikzpicture}
+
 			\end{subfigure}
 			\hfill
-			\begin{subtable}[c]{0.33\textwidth}
+			\begin{subtable}[t]{0.33\textwidth}
 				\sisetup{separate-uncertainty-units=single, separate-uncertainty,detect-mode}
 				\centering
-				\label{tab:acc_sparsity}
+				\caption{}\label{tab:acc_sparsity}
 				\begin{tblr}{
 					colspec={
 							Q[si={table-format=1.3,table-number-alignment=center, table-align-uncertainty = true},c, wd=1.5cm]
@@ -242,7 +267,7 @@
 					0.300         & 0.982(2)
 				\end{tblr}
 			\end{subtable}
-			\caption[Impact of the sparsity rate \(\tau\)]{Impact of the sparsity rate \(\tau\) on (a) the number of selected interactions and (b) the accuracy.}
+			\caption[Impact of the sparsity rate \(\tau\)]{Impact of the sparsity rate \(\tau\) on~\subref{fig:sparsity_stability} the number of selected interactions and~\subref{tab:acc_sparsity} the accuracy.}
 		\end{figure}
 
 
@@ -371,7 +396,7 @@
 
 		\begin{figure}[htbp]
 			\centering
-			\includegraphics[scale=0.75]{signature_alphas_LRP.pdf}
+			\includegraphics{signature_alphas_LRP.pdf}
 			\caption{\glsfmtshort{lrp} importance score for the different modalities interactions.}\label{fig:signature_LRP}
 		\end{figure}
 
@@ -389,4 +414,5 @@
 	To ensure these two properties are met, we added four regularization terms to our training process.
 	Our ablation study showed that the four terms are essential to ensure both sparsity and diversity while improving accuracy.
 	While we tested our architecture in the healthcare domain on omics datasets, the architecture presented in this paper can be applied to any domain with high-dimensional multimodal data.
+
 \end{document}

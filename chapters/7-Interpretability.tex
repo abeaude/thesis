@@ -71,7 +71,7 @@
 				\draw[-stealth] (dis.east) -- (realfake.west);
 				\draw[stealth-stealth, dashed] (cly.east) -- node [midway,above, yshift=0.5ex] {\(\symcal{L}_{\operatorname{Cl}}\)}  (ycf.west);
 				\draw[stealth-stealth, dashed] (cl2y.east) -- node [midway,above, yshift=0.5ex] {\(\symcal{L}_{\operatorname{Cl}_{T}}\)}  (ytissue.west);
-				\draw[stealth-stealth, dashed] (realfake.east) -- node [midway,above, yshift=0.5ex] {\(\symcal{L}_{\text{GAN}}\)}  (labelrealfake.west);
+				\draw[stealth-stealth, dashed] (realfake.east) -- node [midway,above, yshift=0.5ex] {\(\symcal{L}_{\text{WGAN}}\)}  (labelrealfake.west);
 			\end{tikzpicture}
 			\caption[Architecture of the counterfactual \glsfmtshort{gan}]{Architecture of the counterfactual \glsfmtshort{gan}. The example \(x\), for which a counterfactual is searched, is passed through the generator \(G\) to obtain the optimal perturbation \(\delta\). This perturbation is added to the input to obtain the counterfactual point \(x^{\text{CF}}\). During the training phase, the counterfactual point is evaluated with two classifiers to ensure the point is classified to the desired class (\(\operatorname{Cl}\)) and belongs to the same tissue as the original point (\(\operatorname{Cl}_{T}\)). A critic \(D\) is used to ensure the generated point belongs to the original data distribution. }\label{fig:gan_cf}
 		\end{figure}
@@ -96,7 +96,7 @@
 		\end{multline}
 		where \(p_{d}\) is the true data distribution, \(p_{g}\) is the distribution learned by the generator \(G\), \(\lambda\) is the penalty weight forcing the discriminator \(D\) to be a K-Lipschitz function, and \(\tilde{x}\) is a linearly interpolated point between \(x\) and \(x^{\text{CF}}\).
 		The main desiderata of a counterfactual is to change the predicted class of \(\symbf{x}\) from \(\hat{y}\) to \(y^{\text{CF}}\).
-		The fullfilment of this constraint is achieved by adding a term \(\symcal{L}_{\operatorname{Cl}}\left(G,\operatorname{Cl}, y^{\text{CF}} \right) = \symcal{L}_{\text{CE}}\left(\operatorname{Cl}\left(x^{\text{CF}}\right),y^{\text{CF}}\right) \) to the optimization problem~(\cref{eq:wgan_opt_cf}), where \(\operatorname{Cl}\) is a pretrained classifier and \(\symcal{L}_{\text{CE}}\) the cross-entropy loss~(see~\cref{eq:ce_loss}).
+		The fullfilment of this constraint is achieved by adding a term \(\symcal{L}_{\operatorname{Cl}}\left(G,\operatorname{Cl}, y^{\text{CF}} \right) = \symcal{L}_{\text{CE}}\left(\operatorname{Cl}\left(x^{\text{CF}}\right),y^{\text{CF}}\right) \) to the optimization problem~(\cref{eq:wgan_opt_cf}), where \(\operatorname{Cl}\) is a pretrained classifier and \(\symcal{L}_{\text{CE}}\) the cross-entropy loss~(\cref{eq:ce_loss}).
 		The \ref{item:cf_sparse} constraint of a counterfactual is obtained by adding a \(L_{1}\) regularization on the generated perturbation \(\delta\) to the optimization problem~(\cref{eq:wgan_opt_cf}): \(\symcal{L}_{\text{Reg}}\left(G\right) = \left\|G\left(x\right) \odot \symcal{M}\right\|_{1}\).
 		More constraints can be added to the generator by adding other loss terms to the optimization problem.
 		For instance, in our scenario we added a loss term \(\symcal{L}_{\operatorname{Cl}_{T}}\left(G,\operatorname{Cl}_{T}, y_{T} \right) = \symcal{L}_{\text{CE}}\left(\operatorname{Cl}_{T}\left(x^{\text{CF}}\right),y_{T}\right)\) to ensure that the generated counterfactual belongs to the correct tissue type, where \(\operatorname{Cl}_{T}\) is a pretrained tissue classifier.

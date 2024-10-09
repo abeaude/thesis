@@ -81,6 +81,8 @@
     \pgfplotstableread[col sep=comma,]{data/attomics_perf_auroc_zoom.csv}\attomicsperfauroczoom
     \pgfplotstableread[col sep=comma]{data/CrossAttOmicsGateSelFreq.csv}\CrossAttOmicsGateSelFreq
     \pgfplotstableread[col sep=comma]{data/LRPCrossAttOmicsSubset.csv}\LRPCrossAttOmicsSubset
+    \pgfplotstableread[col sep=comma,]{data/CrossAttOmicsGateSparsityInteractionsAll.csv}\CrossAttOmicsGateSparsityInteractionsAll
+    \pgfplotstableread[col sep=comma,]{data/CrossAttOmicsGateSparsityInteractionsStable.csv}\CrossAttOmicsGateSparsityInteractionsStable
     \pgfplotstablegetrowsof{\attomicsperfzoom}
     \pgfmathsetmacro{\Nattomicszoom}{\pgfplotsretval-1}
     \pgfplotstablegetrowsof{\attomicsperfspecificityzoom}

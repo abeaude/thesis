@@ -32,14 +32,14 @@
 	These omics data provide new insights into the molecular mechanisms involved in pathological conditions.
 	Artificial intelligence, particularly machine learning, is well suited to studying such a large corpus of data to detect patterns and predict potential outcomes.
 	The application of machine learning on omics data has been pivotal in developing precision medicine.
-	Precision medicine focuses on improving patient health care journeys.
+	Precision medicine focuses on improving patient healthcare journeys.
 	This improvement is achieved by:
 	\begin{itemize}[nosep]
 		\item diagnosing early to provide the best care,
 		\item estimating the patient prognosis and anticipating disease development,
 		\item predicting the best treatment adequation for a patient.
 	\end{itemize}
-	The application of machine learning algorithms in precision medicine also allows identifying new biomarkers and improving current knowledge.
+	Applying machine learning algorithms in precision medicine also allows for the identification of new biomarkers and the improvement of current knowledge.
 
 	In this thesis, we focused on omics data from cancer patients.
 	Cancer is one of the leading causes of death worldwide, with a significant burden on healthcare systems, and its incidence is expected to grow in the following years.
@@ -62,7 +62,8 @@
 	RNAs producing proteins correspond to coding sequences, or genes,  in the DNA sequence, the non-coding sequences are still transcribed and are involved in regulating gene expression.
 	Quantifying all molecular components involved in the correct functioning of a cell generates high-dimensional data.
 	Indeed, there are more than 20,000 known coding genes and more than 30,000 known non-coding genes.
-	Among the three billion nucleotides in the human genome, 99\% is conserved between individuals and the remaining 1\% or thrity million nucleotides are responsible for the phenotypic differences~\cite{GeneticVariation}.
+	Among the three billion nucleotides in the human genome, 99\% is conserved between individuals.
+	The remaining 1\% or thirty million nucleotides are responsible for the phenotypic differences~\cite{GeneticVariation}.
 
 	The data scale highlights the need for computational methods to extract relevant information.
 	Machine learning methods have been successfully applied to study omics data and predict phenotypes.
@@ -78,7 +79,7 @@
 	The high-dimensionality of omics data leads to very large models, \ie{}with many parameters to estimate, making them susceptible to overfitting.
 	With classical deep learning models, the weights used to combine features to construct an abstract representation are learned during the training phase.
 	During the inference phase, they are fixed and assumed to be identical for all patients.
-	However, for a truly personalized medicine, interactions need to be specific for each patient as cellular functions are governed by the combined action of multiple molecular entities specific to a patient.
+	However, for a truly personalized medicine, interactions need to be specific for each patient, as cellular functions are governed by the combined action of multiple molecular entities specific to a patient.
 
 	Focusing on individual omics might not be sufficient to capture the full complexity of biological processes.
 	Indeed, a mutation in the genome might not correspond to a disease state.
@@ -102,7 +103,7 @@
 \section{Thesis context and objectives}
 	This Ph.D. is a collaboration between the IBISC laboratory\footnote{\url{https://www.ibisc.univ-evry.fr/}} and Sanofi\footnote{\url{https://www.sanofi.com/}} under the \gls{cifre} program.
 	The \gls{cifre} program is a French program aiming at strengthening exchanges between academic laboratories and private industries.
-	The company perceives a financial assistance to recruit a doctoral student whose research work is performed under the supervision of the academic partner.
+	The company receives financial assistance to recruit a doctoral student whose research work is performed under the supervision of the academic partner.
 	The program is funded by the French government, and its management is handled by the \gls{anrt}, which approves the collaboration project.
 
 	This collaboration aims to explore the interest of deep learning approaches in integrating and analyzing multi-omics data.
@@ -122,7 +123,7 @@
 		\item[Second objective]
 			Development of a predictive model integrating various omics data that can model the dependence of the different omics and be robust to missing modalities during inference.
 			We proposed a multi-omics integration method based on cross-attention that effectively considers interactions of pairs of omics known to interact.
-			We also established that modality dropout, where one or more modalities are randomly masked during training, is an effective approach to having robust models to different missingness patterns.
+			We also established that modality dropout, where one or more modalities are randomly masked during training, is an effective approach to having robust models for different missingness patterns.
 		\item[Third objective]
 			This objective focused on model interpretation to better understand the studied disease and to identify potential biomarkers.
 			We proposed a model integrating multi-omics data with the training objective, forcing the model to focus on the most important interaction.
