@@ -1,7 +1,7 @@
 \documentclass[../main.tex]{subfiles}
 \usepackage{silence}
 \WarningFilter{glossaries}{No \printglossary or \printglossaries found}
-
+\robExtConfigure{disable externalization}
 \begin{document}
 \ifSubfilesClassLoaded{%
 	\graphicspath{{figures/2-Background/}}%
@@ -28,6 +28,12 @@
 
 
 	\subsection{\Glsfmtfull{mlp}}\label{subsec:mlp}
+		\begin{wrapfigure}[11]{O}{0.4\textwidth}
+			\vspace{-1\intextsep}
+			\centering
+			\includegraphics{mlp.pdf}
+			\caption{Architecture of an \glsfmtshort{mlp}}\label{fig:mlp}
+		\end{wrapfigure}
 		\Gls{mlp} is an architecture taking one-dimensional input, \(\symbf{x} \in \symbb{R}^d\).
 		The architecture comprises an input layer, \(L\) hidden layers, and one output layer.
 		There are a total of \(L+2\) layers, \(L=0\) corresponds to the input layer, and the layer \(L+1\) is the output layer.
@@ -46,7 +52,7 @@
 			a_{j}^{l} & = f\left(\sum_{i}^{N_{l-1}}a_{i}^{l-1}w_{ij}^{l} + b_{j}^{l} \right) \\ \label{eq:mlp_neuron}
 			          & = f\left(z^{l}\right)
 		\end{align}
-		The computation of the activation of all neurons in layer \(l\) can be expressed in a matrix form~(\cref{eq:mlp_matrix}).
+		The computation of the activation of all neurons in layer \(l\) can be expressed in a matrix form:
 		\begin{equation}
 			\symbf{a}^{l} = f\left( \symbf{a}^{l-1} \cdot W^l + \symbf{b}^{l} \right) \label{eq:mlp_matrix}
 		\end{equation}
@@ -90,7 +96,6 @@
 		Similarly to \glspl{mlp}, \glspl{cnn} are feedforward networks, the mapping \(g\) of the \gls{cnn} is also expressed as the composition of the mapping of the individual layers.
 
 		As the \gls{cnn} is constructed around the convolution operator, it can easily be adapted to use one-dimensional input, \(\symbf{x} \in \symbb{R}^d\), by using one-dimensional kernel instead of two-dimensional kernel.
-
 		It should be noted that using the convolution operator implies spatial dependencies between input features.
 
 	\subsection{\Glsfmtfull{gnn}}
@@ -204,13 +209,41 @@
 
 	\subsection{\Glsfmtfull{ae} and \Glsfmtfull{vae}}
 		\Gls{ae} is a feedforward architecture used to learn a latent data representation with unsupervised training.
+
+		\begin{wrapfigure}[6]{O}{0.4\textwidth}
+			\vspace{-0.5\intextsep}
+			\centering
+			\begin{tikzpicture}[thick]
+				\node[fill=blue!20, minimum width=0.5cm, minimum height=1.5cm] (X) at (0,0) {\(\symbf{x}\)};
+
+				\draw[fill=purple!20, inner sep=0pt] ([xshift=0.5cm]X.north east) -- ([xshift=1.5cm,yshift=0.4cm]X.east) -- ([xshift=1.5cm,yshift=-0.4cm]X.east) -- ([xshift=0.5cm]X.south east) -- cycle;
+				\node[inner sep=0pt] at (1.3cm,0) {\(E\)};
+
+				\node[fill=red!20, minimum width=0.5cm, minimum height=8mm] (Z) at (2.6cm,0) {\(\symbf{z}\)};
+				\node (cl) [below=8mm of Z.south, xshift=8mm, anchor=west, draw, rounded corners=5, minimum width=0.9cm, inner sep=2pt, fill=violet!80, text=white, dashed] {\(\operatorname{Cl}\)};
+
+				\draw[fill=purple!20] ([xshift=0.5cm]Z.north east) -- ([xshift=1.5cm,yshift=0.35cm]Z.north east) -- ([xshift=1.5cm,yshift=-0.35cm]Z.south east) -- ([xshift=0.5cm]Z.south east) -- cycle;
+				\node[inner sep=0pt] at (3.85cm,0) {\(D\)};
+
+				\node [fill=blue!20, minimum width=0.5cm, minimum height=1.5cm] (Xp) at (5.2cm,0) {\(\symbf{\hat{x}}\)};
+				\node[minimum width=0.5cm, anchor=center, fill=teal!20] (haty) at (cl.east -| Xp.south) {\(\symbf{\hat{y}}\)};
+
+				\draw[-stealth] (X.east) -- ([xshift=0.5cm]X.east);
+				\draw[-stealth] ([xshift=-0.5cm]Z.west) -- (Z.west);
+				\draw[-stealth] (Z.east) -- ([xshift=0.5cm]Z.east);
+				\draw[-stealth] ([xshift=-0.5cm]Xp.west) -- (Xp.west);
+				\draw[-stealth, dashed] (cl.east) -- (haty.west);
+				\draw[-stealth, dashed] (Z.south) |- (cl.west);
+
+			\end{tikzpicture}
+			\caption{\Glsfmtshort{ae} architecture.}\label{fig:ae_arch}
+		\end{wrapfigure}
 		The \glsxtrlong{ae} is composed of an input \(\symbf{x}\), an encoder \(E\), a latent representation \(\symbf{z}\), a decoder \(D\) and an output \(\symbf{\hat{x}}\).
 		The encoder learns the latent representation of the input by encoding the input: \(\symbf{z} = E\left(\symbf{x}\right)\).
 		Then, the decoder reconstructs the input from the latent representation: \(\symbf{\hat{x}} = D\left(\symbf{z}\right)\).
 		The auto-encoder principles can be applied to numerous architecture and various input data; the encoder \(E\) and the decoder \(D\) can be an \gls{mlp}, a \gls{cnn} or a \gls{gnn}.
 
 		The mapping of the \gls{ae} is expressed as the composition of the encoder and the decoder: \(g\left(\symbf{x}, \theta\right) = D\left(E\left(\symbf{x}, \theta_E\right), \theta_D\right)\), where \(\theta\) corresponds to the parameters of the encoder \(\theta_E\) and the parameters of the decoder \(\theta_D\).
-
 		Variations of the \gls{ae} add different regularizations to improve the latent representation.
 		A commonly used strategy is the \gls{dae}, where a random noise, usually Gaussian, is added to the input, and the model aims to reconstruct the denoised input.
 		The \gls{vae} adds regularization on the latent space by constraining the latent representation to follow a multivariate normal distribution, and each latent feature is represented by a normal distribution of parameters \(\mu\) and \(\sigma\)~\cite{VAEref}.
@@ -218,7 +251,7 @@
 		The latent representation, \(\symbf{z}\), is then sampled from this distribution and fed to the decoder.
 
 		Suppose the latent representation is later used for classification tasks.
-		In that case, a classifier branch can be added to the latent representation to predict the corresponding class: \(\hat{y} = \operatorname{Classifier}\left(z\right)\).
+		In that case, a classifier branch, \(\operatorname{Cl}\), can be added to the latent representation to predict the corresponding class: \(\hat{y} = \operatorname{Cl}\left(z\right)\).
 		Adding a classification branch should improve the latent representation with more relevant features for the classification.
 		In this case, there are two different tasks:
 		\begin{enumerate}[nosep]
@@ -340,6 +373,33 @@
 		Deep learning models are suitable for capturing data characteristics, opening possibilities for \textbf{generative} tasks where the model generates new samples indistinguishable from the real samples.
 		Let \(p_{d}\) be the true data distribution, generative models learn a distribution \(p_{g}\) as close as possible to the true distribution \(p_{d}\).
 		\Glspl{gan} are a type of generative model introduced by \citeauthor{Goodfellow2014GAN} in \citeyear{Goodfellow2014GAN} consisting of two components: a generator \(G\) and a discriminator \(D\)~\cite{Goodfellow2014GAN}.
+
+		\begin{wrapfigure}[5]{o}{0.45\textwidth}
+			\vspace{-1\intextsep}
+			\centering
+			\begin{tikzpicture}[thick]
+				\begin{axis}[axis lines=none, width=3cm, height=3.5cm, name=noise]
+					\addplot3[surf,domain=-5:5,domain y=-5:5, shader=interp]
+					{exp(-( (x)^2 + (y)^2)/5 )};
+					\node at ([yshift=5pt] axis cs:0,0,1) {\(z\)};
+					\node (noise_anchor) at (axis cs:0,0,0.5) {};
+				\end{axis}
+				\node (gen) [right=0.8cm of noise_anchor.east, anchor=west, rounded rectangle, rounded rectangle west arc=none, draw, minimum width=11mm] {\(G\)};
+				\node (x_g) [right=0.5cm of gen.east, anchor=west, yshift=0.4ex, inner sep=2pt] {\(\hat{x}\)};
+				\node (dis) [right=0.5cm of x_g.east, anchor=west, rounded rectangle, rounded rectangle west arc=none, draw, minimum width=11mm, yshift=-.4ex] {\(D\)};
+				\node (xreal) [below=3mm of x_g.south, anchor=north, draw, double copy shadow={shadow xshift=-.25ex, shadow yshift=.25ex, opacity=.5}, fill=white] {\(\symcal{X}\)};
+				\node (fake) [draw=red, circle, fill=red, right=0.5cm of dis.east, anchor=west, yshift=0.8ex, minimum size=8pt, inner sep=0pt] {};
+				\node (real) [draw=green, circle, fill=green, right=0.5cm of dis.east, anchor=west, yshift=-0.8ex, minimum size=8pt, inner sep=0pt] {};
+				\node [right=1pt of real.east, anchor=west, inner sep=0pt] {\footnotesize Real};
+				\node [right=1pt of fake.east, anchor=west, inner sep=0pt] {\footnotesize Fake};
+				\draw[-stealth] (gen.east) -- ([yshift=-.4ex]x_g.west);
+				\draw[-stealth] ([yshift=-.4ex]x_g.east) -- (dis.west);
+				\draw[-stealth] (xreal.east) -- ++(1.25mm,0) |- ([yshift=-.6ex]dis.west);
+				\draw[-stealth] (dis.east) -- ++(5mm,0);
+				\draw[-stealth] ([xshift=2pt]noise_anchor.east) -- (gen.west);
+			\end{tikzpicture}
+			\caption{\glsfmtshort{gan} architecture}\label{fig:gan_arch}
+		\end{wrapfigure}
 		The generator and the discriminator are neural networks whose architecture is adapted to the data type considered.
 		The generator captures the data distribution and can generate new data \(\hat{x} = G\left(z\right)\), where \(z\) is a latent noise vector sampled from a prior distribution \(p_z\).
 		The discriminator attempts to distinguish real samples from generated ones: it has a sigmoid activation and outputs the probability that a sample is real.
@@ -516,6 +576,13 @@
 			\item \glsxtrfull{mirna},
 			\item \glsxtrfull{lncrna}.
 		\end{itemize}
+
+		% \begin{figure}[htbp]
+		% 	\centering
+		% 	\includegraphics[scale=0.7]{epigeneticmechanisms.pdf}
+		% 	\caption[Epigenetic mechanism]{Epigenetic mechanism, adapted from~\cite{IllustrationHowEpigenetic}}\label{fig:epigenetics}
+		% \end{figure}
+
 		\gls{mirna} and \gls{lncrna} quantification is obtained similarly to mRNAs quantification~(\cref{subsec:transcriptomics}).
 		Histone modifications are quantified with a mass-spectrometry-based approach, see \cref{subsec:proteomics}.
 		\Gls{dnam} is quantified with bead-chip-based methylation assay or bisulfite sequencing.
@@ -577,8 +644,8 @@
 
 
 		All samples in \gls{tcga} are processed in an harmonized way\footnote{\url{https://gdc.cancer.gov/about-data/gdc-data-processing}} against common reference files\footnote{\url{https://gdc.cancer.gov/about-data/gdc-data-processing/gdc-reference-files}}.
-		According to the \gls{tcga} consortium recommendation, we removed FFPE samples as they are not suitable for molecular analysis\footnote{\href{https://web.archive.org/web/20150919082952/https://gdac.broadinstitute.org/runs/sampleReports/latest/FPPP_FFPE_Cases.html}{https://gdac.broadinstitute.org/runs/sampleReports/latest/FPPP\_FFPE\_Cases.html}}.
-		We also followed their recommendation to select the best replicate\footnote{\href{https://web.archive.org/web/20150919044554/http://gdac.broadinstitute.org/runs/sampleReports/latest/READ_Replicate_Samples.html}{https://gdac.broadinstitute.org/runs/sampleReports/latest/READ\_Replicate\_Samples.html}}.
+		According to the \gls{tcga} consortium recommendation, we removed FFPE samples as they are not suitable for molecular analysis\footnote{\href{https://web.archive.org/web/20150919082952/https://gdac.broadinstitute.org/runs/sampleReports/latest/FPPP_FFPE_Cases.html}{\nolinkurl{https://gdac.broadinstitute.org/runs/sampleReports/latest/FPPP\_FFPE\_Cases.html}}}.
+		We also followed their recommendation to select the best replicate\footnote{\href{https://web.archive.org/web/20150919044554/http://gdac.broadinstitute.org/runs/sampleReports/latest/READ_Replicate_Samples.html}{\nolinkurl{https://gdac.broadinstitute.org/runs/sampleReports/latest/READ\_Replicate\_Samples.html}}}.
 		In \gls{tcga}, \gls{dnam} data is collected with two different methods: Illumina Human Methylation 450 and Human Methylation 27.
 		The methylation 450 platform contains more CpG sites but contains 94\% of the CpG sites detected by the methylation 27 method.
 		\Gls{dnam} data was restricted to the probes common to both HumanMethylation27 and HumanMethylation450 platforms.
