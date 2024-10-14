@@ -13,7 +13,7 @@
   url       = {https://doi.org/10.1093/bioinformatics/btad232},
   eprint    = {https://academic.oup.com/bioinformatics/article-pdf/39/Supplement\_1/i94/50741889/btad232.pdf},
   publisher = {{Oxford University Press (OUP)}},
-  keywords  = {mypubli},
+  keywords  = {submitted},
   usera     = {article}
 }
 
@@ -21,11 +21,12 @@
   title     = {{AttOmics: attention-based architecture for diagnosis and prognosis from omics data}},
   author    = {Beaude, Aur{\'e}lien and Rafiee Vahid, Milad and Aug{\'e}, Franck and Zehraoui, Farida and Hanczar, Blaise},
   author+an = {1=highlight},
-  booktitle = {{Intelligent Systems for Molecular Biology(ISMB)}},
+  booktitle = {{Intelligent Systems for Molecular Biology (ISMB)}},
   address   = {Lyon, France},
   year      = {2023},
   month     = Jun,
-  usera     = {pres}
+  usera     = {pres},
+  keywords  = {submitted}
 }
 @inproceedings{AttOmicsJOBIM,
   title     = {{AttOmics: attention-based architecture for diagnosis and prognosis from omics data}},
@@ -35,6 +36,26 @@
   year      = 2024,
   month     = jun,
   address   = {Toulouse, France},
-  usera     = {pres}
+  usera     = {pres},
+  keywords  = {submitted}
 }
-
+@article{MyCrossAttOmics,
+  author    = {Beaude, Aurélien and Augé, Franck and Zehraoui, Farida and Hanczar, Blaise},
+  author+an = {1=highlight},
+  title     = {{CrossAttOmics: Multi-Omics data integration with CrossAttention}},
+  journal   = {Under submission},
+  year      = {2024},
+  abstract  = {{Advances in high throughput technologies enabled large access to various types of omics. Each omics provides a partial view of the underlying biological process. Integrating multiple omics layers would help have a more accurate diagnosis. However, the complexity of omics data requires approaches that can capture complex relationships. One way to accomplish this is by exploiting the known regulatory links between the different omics, which could help in constructing a better multimodal representation.In this article, we propose CrossAttOmics, a new deep-learning architecture based on the cross-attention mechanism for multi-omics integration. Each modality is projected in a lower dimensional space with its specific encoder. Interactions between modalities are computed in the feature representation space with cross-attention. Instead of computing the interactions between all the modality pairs, we focused on the known regulatory links between the different omics. The results of different experiments carried out in this paper show that our model can accurately predict the types of cancer by exploiting the interactions between multiple modalities. Our approach can be combined with attribution methods like LRP to identify which interactions are the most important.}},
+  usera     = {article},
+  keywords  = {notsubmitted}
+}
+@article{MyCrossAttOmicsGate,
+  author    = {Beaude, Aurélien and Zehraoui, Farida and Augé, Franck  and Hanczar, Blaise},
+  author+an = {1=highlight},
+  title     = {{Interpretable deep learning for multimodal high dimensional omics data}},
+  journal   = {Under submission},
+  year      = {2024},
+  abstract  = {{Multimodal deep learning allows data integration from multiple modalities to enhance predictive performances by leveraging the redundancy and complementarity between modalities. Despite the success of deep learning in integrating multimodal data, generating an interpretable multimodal embedding remains challenging. We propose a new multimodal deep-learning architecture that is interpretable by construction. After computing modalities interactions with cross-attention, we used a gating mechanism to score the various interactions. This score allows us to understand the importance of interactions between modalities. This importance score must have enough sparsity to be interpretable and diverse across samples, as modalities interactions differ between samples. We added four regularization terms to ensure the gating scores respect these two properties.This approach can be applied to any multimodal dataset with high-dimensional tabular data. We validate the proposed model on omics datasets in the context of precision medicine to predict patient phenotypes. The gating mechanism improved the accuracy and provided interpretability by selecting the most essential interactions for each patient.}},
+  usera     = {article},
+  keywords  = {notsubmitted}
+}

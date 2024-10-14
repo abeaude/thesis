@@ -333,6 +333,21 @@
 \DefTblrTemplate{middlehead,lasthead}{default}{
 	\UseTblrTemplate{capcont}{default}
 }
+%\DefTblrTemplate{note-sep}{default}{}
+
+\DefTblrTemplate{note}{default}{
+	\begin{multicols}{2}
+		\begin{singlespace}
+			\MapTblrNotes{
+				\noindent
+				\UseTblrTemplate{note-tag}{default}
+				\UseTblrTemplate{note-text}{default}
+				\par
+			}
+		\end{singlespace}
+	\end{multicols}
+
+}
 \SetTblrStyle{contfoot-text}{font=\small}
 \SetTblrStyle{note-text}{font=\footnotesize}
 \SetTblrTemplate{caption-lot}{empty}
@@ -641,13 +656,16 @@
 	{\item}
 
 	\newcommand{\mypublications}{
-		\renewbibmacro*{begentry}{\iffieldundef{usera}{}{%
-				\llap{\printicon{\thefield{usera}}}\quad}}
-		\addchap{Publications}
-		\newrefsection[mypubli]
-		\nocite{*}
-		\printbibliography[heading=none, env=bibnonum]
-		\endrefsection
+	\renewbibmacro*{begentry}{\iffieldundef{usera}{}{%
+			\llap{\printicon{\thefield{usera}}}\quad}}
+	\addchap{Publications}
+	\newrefsection[mypubli]
+	\nocite{*}
+\section*{Accepted}
+	\printbibliography[heading=none, env=bibnonum, keyword=submitted]
+\section*{Under submission}
+	\printbibliography[heading=none, env=bibnonum, keyword=notsubmitted]
+	\endrefsection
 	}
 
 	\newcommand{\minitocpagetwocols}{
