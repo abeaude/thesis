@@ -1,6 +1,6 @@
 Precision medicine has been a transformative approach to healthcare, tailoring decisions to each patient.
-The rise of this medicine has been made possible by the development of high-throughput sequencing methods, enabling large patient data collection, and the development of deep learning methods to make the most out of this data.
-The high dimensionality of omics data leads to very large deep learning models, and while data availability is increasing, it remains limited for such large architectures.
+The rise of this medicine has been made possible by the development of high-throughput sequencing methods, enabling large patient data collection, and the development of deep learning methods to leverage this data.
+The high dimensionality of omics data leads to very large deep learning models, and while samples availability is increasing, it remains limited for such large architectures.
 Current deep learning architectures use fixed weights during inference that are the same for all patients, restricting the potential for truly personalized medicine.
 Diseases like cancer result from perturbations in biological processes at multiple levels.
 Current acquisition methods collect the information at all levels; analytical methods combining this multilevel information are needed to improve predictions and the understanding of these diseases.
@@ -10,6 +10,6 @@ Firstly, we developed AttOmics, a deep learning architecture based on the self-a
 We applied it to groups of related features to cope with attention memory requirements.
 Secondly, we proposed CrossAttOmics, an architecture based on the cross-attention mechanism.
 We only considered known regulatory interactions of modalities.
-Thirdly, we modified CrossAttOmics in CrossAttOmicsGate to score each modality interaction.
-Finally, we developed a generative model to obtain counterfactual explanations, allowing the identification of the required change in the molecular profile for a patient to be healthy.
+Thirdly, we proposed CrossAttOmicsGate to score each modality interaction.
+Finally, we developed a generative model to obtain counterfactual explanations, allowing the identification of the required change in the molecular profile for a patient to be healthier.
 We compared our methods with the current state-of-the-art methods for molecular data.

@@ -54,9 +54,11 @@
 		In \cref{chap:attomics}, we introduced AttOmics, an architecture based on the self-attention mechanism.
 		To avoid self-attention limitations on high-dimensional vectors, we proposed to group features and apply the attention mechanism to these groups.
 		While this approach was shown to be effective~(\cref{chap:attomics}), groups are an architectural constraint; removing them would allow for directly considering feature interactions.
-		However, the self-attention operation requires elements with an embedding dimension strictly greater than one; since elements of omics profiles are scalar values with no embedding dimension, an intermediate transformation is required.
-		The direct idea would be to project scalar values into a higher dimensional space and use the recent self-attention approximation~\cite{xiongNystrOmformerNystr2021,Linformer} or new efficient implementation~\cite{FlashAttention,rabeSelfattentionDoesNot2021,bolyaHydraAttentionEfficient2022a} that allows for scaling up to large inputs\footnote{see~\cite{EfficientTransformers} for an extensive overview of the possible methods}.
-		Nevertheless, there is no justification for projecting scalar values into a higher space, and more importantly, it is unclear what would represent each dimension of the newly obtained vector.
+		Removing groups means considering one-dimensional expression profiles incompatible with the attention mechanism.
+		Indeed, the self-attention operation requires elements with an embedding dimension strictly greater than one.
+		An intermediate transformation of the expression profile would be required.
+		The direct idea would be to project scalar values into a higher dimensional space~\cite{gorishniy2021revisiting} and use the recent self-attention approximation~\cite{xiongNystrOmformerNystr2021,Linformer} or new efficient implementation~\cite{FlashAttention,rabeSelfattentionDoesNot2021,bolyaHydraAttentionEfficient2022a} that allows for scaling up to large inputs\footnote{see~\cite{EfficientTransformers} for an extensive overview of the possible methods}.
+		Nevertheless, there is no justification for projecting scalar values into a higher dimensional space, and more importantly, it is unclear what would represent each dimension of the newly obtained vector.
 
 		The attention matrix is obtained by measuring the similarity between pairs of inputs; for vectors, this measure is the scalar product.
 		One could consider a similarity measure for scalar values, such as absolute difference, and inject this into the attention computation:
@@ -66,7 +68,7 @@
 		where \(Q_{i}\) is the \(i\)-th value in the query vector and \(K_{j}\) is the \(j\)-th value in the key vector\footnote{Note that queries, keys, and values are no longer matrices but vectors.}.
 		\pythoncode[label={code:torch_att}]{Pytorch implementation of the ScalarAttention}{figures/8-Conclusions/ScalarAttentionPyTorch.py}
 		This scalar formulation of the self-attention~(\cref{eq:scalar_attention}) can be easily implemented in PyTorch~(\cref{code:torch_att}) and has already been tested in~\cite{Lacan2023} but still requires to compute and store large \(d\times d\) attention matrices~(\cref{fig:lin_attention_benchA}).
-		\citeauthor{Lacan2023} masked the attention matrix and only computed attention for features pairs known to be interacting (\gls{ppi})\cite{Lacan2023}.
+		\citeauthor{Lacan2023} masked the attention matrix and only computed attention for features pairs known to be interacting (\gls{ppi})~\cite{Lacan2023}.
 		The \(i\)-th element of the attention output is computed as the scalar product of the \(i\)-th row of the attention matrix with the value vector.
 		The \(i\)-th row of the attention matrix corresponds to the absolute difference of the query vector with the \(i\)-th value of the key vector.
 		\begin{equation}
@@ -98,20 +100,20 @@
 
 	\subsection{Biological knowledge}\label{sec:persp_knwoledged}
 		Biolgically-informed architectures are common when applying deep learning to biological problems as they provide a strong inductive bias.
-		However, adding knowledge into the deep learning architectures is challenging as they are things that are still unknown\footnote{This is probably more a philosophical question to know whether we have a complete understanding of the biological mechanism or if there is still some to be discovered.}.
+		However, adding knowledge into the deep learning architectures is challenging as this knowledge can be incomplete or may contain errors\footnote{This is probably more a philosophical question to know whether we have a complete understanding of the biological mechanism or if there is still some to be discovered.}.
 		For instance, annotations mainly cover coding genes, but noncoding genes are known to be involved in gene expression regulation.
 		Focusing only on annotated genes would leave out many features\footnote{For instance in \gls{go} only 14\% of the annotations involves \gls{ncrna}} and limits model capacity to consider all interactions, which at the end might limit the predictive performances.
 		Moreover, excluding unannotated features prevents researchers from discovering new biomarkers that could be detected by training models on all available features.
 		Instead of excluding unannotated features, a regularization favoring known relationships could be added to the training objective.
 		This kind of approach allows the exploitation of knowledge while allowing the network to use unannotated features and potentially discover new feature interactions.
 
-		Another aspect of knowledge integration is the continual construction of our understanding of biological mechanisms; some things we consider true become invalid, and newly discovered things enrich our knowledge.
+		Another aspect of knowledge integration is the continual construction of our understanding of biological mechanisms; current knowledge can be invalidated or enriched with results from new experiments.
 		This means that a model constructed at time \(T\) might become invalid at time \(T+1\) because our knowledge has evolved.
 		Models would have to be retrained to incorporate up-to-date knowledge, but constantly retraining models can be economically and environmentally costly.
 		Continual learning might provide opportunities to develop AI systems that can continually acquire and update their knowledge\cite{wang2024comprehensivesurveycontinuallearning}.
 
 	\subsection{Omics data challenges}
-		Omics data are generated by different people using various methods and sequencing platforms at different places and times.
+		Omics data are generated using various methods and sequencing platforms at different places and times.
 		Those variations lead to non-biological variation in the data, also known as \emph{batch effect}~\cite{Leek2010}.
 		Deep learning models are sensitive to batch effects as they might capture and amplify those artifacts.
 		Model interpretability can help detect such cases, but there is still a need to consider batch effects better by correcting them or adding domain adaptation tasks to ensure the same representation of all samples.
@@ -132,7 +134,7 @@
 		Although this approach was effective, it increased the training time and supposed that all missingness patterns were generated during the training phase.
 		Another way would be to generate the missing modalities from the other modalities using a generative or modality translation task.
 		Generating large molecular profiles is still a difficult task as such networks are difficult to train.
-		Other methods handling missing modalities project the available ones in a common latent space before combining\footnote{linear combination, product of experts, \dots} them; such models are trained in a self-supervised fashion~\cite{Lee2021AVI}.
+		Other methods handling missing modalities project the available ones in a common latent space before combining\footnote{linear combination, product of experts, \dots} them, the missing modalities are ignored during training; such models are trained in a self-supervised fashion~\cite{Lee2021AVI}.
 		%TODO: Figure how to handle missing modalities 
 
 	\subsection{Single-cell sequencing}
@@ -140,7 +142,7 @@
 		Current sequencing technologies allow for an increased resolution and quantify the expression at the single-cell level.
 		Tumors are not composed of a single cell type; they are a mixture of various cell types harboring distinct molecular signatures~\cite{TumourHetero}.
 		Using single-cell data offers new insights into the understanding of the disease and can help identify the subpopulation in the tumor susceptible to treatments~\cite{DagogoJack2017}.
-		In order to apply the methods described here, datasets with paired measurements, where multiple modalities are measured from a unique cell, are required.
+		In order to apply the methods described in tjis thesis, datasets with paired measurements, where multiple modalities are measured from a unique cell, are required.
 		While methods generating paired measurements are becoming available~\cite{Macaulay2015,Hao2021,Vandereyken2023}, they are not widely used.
 		Most of the available datasets present unpaired cells, where modalities were measured on different cells.
 		In addition to integrating features from different modalities, different cells need to be aligned, known as diagonal integration~\cite{Xu2022}.

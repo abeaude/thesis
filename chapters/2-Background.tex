@@ -271,7 +271,7 @@
 		In the self-supervised case~(\gls{ae} and \gls{vae}), \(y\) is the training example itself.
 		For a multiclass classification problem, the cross-entropy loss is used as a cost function \(\symcal{L}\).
 		\begin{equation}
-			\symcal{L}_{\text{CE}}\left(\hat{y}, y\right) = \frac{-1}{N}\sum_{i=1}^{N}\sum_{c=1}^{C} w_c y_{i,c}\log\left(\hat{y}_{i,c}\right)\label{eq:ce_loss}
+			\symcal{L}_{\text{CE}}\left(\hat{y}, y\right) = -\frac{1}{N}\sum_{i=1}^{N}\sum_{c=1}^{C} w_c y_{i,c}\log\left(\hat{y}_{i,c}\right)\label{eq:ce_loss}
 		\end{equation}
 		where \(w_c\) denotes the weight, inversely proportional to the class size, of class \(c\) and \(N\) is the number of training examples.
 		\(\hat{y}_{i,c}\) is the probability predicted by the model that the example \(i\) belongs to the class \(c\).
@@ -283,13 +283,13 @@
 		\end{cases}
 		\).
 
-		The cost function is adapted to the problem; for the \gls{ae}, a reconstruction loss is used, and the goal is to minimize the difference between the input \(\symbf{x}\) and the reconstructed input \(\hat{x}\):
+		The cost function is adapted to the problem; for the \gls{ae}, a reconstruction loss is used, and the goal is to minimize the difference between the input \(\symbf{x}\) and the reconstructed input \(\hat{\symbf{x}}\):
 		\begin{equation}
-			\symcal{L}_{AE}\left(\theta\right) = \frac{1}{N}\sum_{i=1}^{N} {\left\|x_i - \hat{x}_i \right\|}_2^{2} \label{eq:loss_ae}
+			\symcal{L}_{AE}\left(\theta\right) = \frac{1}{N}\sum_{i=1}^{N} {\left\|\symbf{x}_i - \hat{\symbf{x}}_i \right\|}_2^{2} \label{eq:loss_ae}
 		\end{equation}
 		The \gls{vae} cost function is composed of the reconstruction term of the \gls{ae} loss and a regularization term that forces the latent space to follow a Gaussian distribution: the Kullback-Leibler divergence (\(\KL\)):
 		\begin{equation}
-			\symcal{L}_{VAE}\left(\theta\right) = \symcal{L}_{AE}\left(\theta\right) + \KL\left(\symcal{N}\left(\mu_{x}, \sigma_{x}\right), \symcal{N}\left(0, I\right)\right)
+			\symcal{L}_{VAE}\left(\theta\right) = \symcal{L}_{AE}\left(\theta\right) + \KL\left(\symcal{N}\left(\mu_{\symbf{x}}, \sigma_{\symbf{x}}\right), \symcal{N}\left(0, I\right)\right)
 		\end{equation}
 		The \(\KL\) divergence measures how a probability distribution is different from another probability distribution.
 
@@ -401,13 +401,13 @@
 			\caption{\glsfmtshort{gan} architecture}\label{fig:gan_arch}
 		\end{wrapfigure}
 		The generator and the discriminator are neural networks whose architecture is adapted to the data type considered.
-		The generator captures the data distribution and can generate new data \(\hat{x} = G\left(z\right)\), where \(z\) is a latent noise vector sampled from a prior distribution \(p_z\).
+		The generator captures the data distribution and can generate new data \(\hat{\symbf{x}} = G\left(z\right)\), where \(z\) is a latent noise vector sampled from a prior distribution \(p_z\).
 		The discriminator attempts to distinguish real samples from generated ones: it has a sigmoid activation and outputs the probability that a sample is real.
 		The generator and the discriminator compete with each other; the generator network attempts to fool the discriminator while the discriminator tries to be a better expert at detecting fake samples.
 		\(G\) and \(D\) are jointly trained at generating a distribution \(p_{g}\) such that \(D\) cannot distinguish between \(p_{d}\) and \(p_{g}\), \ie{}\(D\left(\symbf{x}\right) = \tfrac12\).
 		A \gls{gan} is trained by solving the following min-max problem:
 		\begin{equation}
-			\min_{G} \max_{D} \symcal{L}_{\text{GAN}}\left(G,D\right) = \E_{x\sim p_{d}}\left[ \log\left(D\left(x\right)\right)\right] + \E_{z\sim p_{z}}\left[ \log\left( 1 - D\left(G\left(z\right)\right)\right)\right] \label{eq:gan_loss}
+			\min_{G} \max_{D} \symcal{L}_{\text{GAN}}\left(G,D\right) = \E_{\symbf{x}\sim p_{d}}\left[ \log\left(D\left(\symbf{x}\right)\right)\right] + \E_{z\sim p_{z}}\left[ \log\left( 1 - D\left(G\left(z\right)\right)\right)\right] \label{eq:gan_loss}
 		\end{equation}
 
 		In practice, \gls{gan} training is implemented as an iterative process alternating between \(k\) steps of optimizing \(D\) and one step optimizing \(G\).
@@ -417,19 +417,19 @@
 			\KwIn{\(G\), \(D\), their respective parameters \(\theta_{G}\) and \(\theta_{D}\)}
 			\For{\(T\) training steps}{
 				\For{\(k\) steps}{
-					Sample a batch of real data \({\left\{x_{i}\right\}}_{i=1}^{N} \sim p_{d}\)\;
+					Sample a batch of real data \({\left\{\symbf{x}_{i}\right\}}_{i=1}^{N} \sim p_{d}\)\;
 					Sample a batch of noise \({\left\{z_{i}\right\}}_{i=1}^{N} \sim p_{g}\)\;
-					\(\hat{x}_{i} \leftarrow G\left(z_{i}\right)\)\;
+					\(\hat{\symbf{x}}_{i} \leftarrow G\left(z_{i}\right)\)\;
 					Update the discriminator:
 					\begin{algomathdisplay}
-						\theta_{D} \leftarrow \theta_{D} - \eta \nabla_{\theta_{D}}\frac{1}{N}\sum_{i=1}^{N}\log\left(D\left(x_{i}\right)\right) + \log\left( 1 - D\left(\hat{x}_{i}\right)\right)
+						\theta_{D} \leftarrow \theta_{D} - \eta \nabla_{\theta_{D}}\frac{1}{N}\sum_{i=1}^{N}\log\left(D\left(\symbf{x}_{i}\right)\right) + \log\left( 1 - D\left(\hat{\symbf{x}}_{i}\right)\right)
 					\end{algomathdisplay}
 				}
 				Sample a batch of noise \({\left\{z_{i}\right\}}_{i=1}^{N} \sim p_{g}\)\;
-				\(\hat{x}_{i} \leftarrow G\left(z_{i}\right)\)\;
+				\(\hat{\symbf{x}}_{i} \leftarrow G\left(z_{i}\right)\)\;
 				Update the generator:
 				\begin{algomathdisplay}
-					\theta_{G} \leftarrow \theta_{G} - \eta \nabla_{\theta_{G}}\frac{1}{N}\sum_{i=1}^{N} \log\left( 1 - D\left(\hat{x}_{i}\right)\right)
+					\theta_{G} \leftarrow \theta_{G} - \eta \nabla_{\theta_{G}}\frac{1}{N}\sum_{i=1}^{N} \log\left( 1 - D\left(\hat{\symbf{x}}_{i}\right)\right)
 				\end{algomathdisplay}
 			}
 			\caption{\glsfmtshort{gan} training algorithm}\label{alg:gan}
@@ -451,14 +451,14 @@
 		The computation of the Wasserstein distance is complex and can be simplified by forcing the critic to be a K-Lipschitz function.
 		Which translates into constraints on the critic \(D\), \(D\) must belongs to the set \( \symcal{D}\) of K-Lipschitz function:
 		\begin{equation}
-			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{\text{WGAN}}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \label{eq:wgan_loss}
+			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{\text{WGAN}}\left(G,D\right) = \E_{\symbf{x}\sim p_{d}}\left[ D\left(\symbf{x}\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \label{eq:wgan_loss}
 		\end{equation}
 		To satisfy the Lipschitz constraint on the critic, \citeauthor{WGAN} proposed to clip critic weights to maintain them in a fixed interval while acknowledging that is not a good way to ensure the Lipschitz constraint~\cite{WGAN}.
 		\citeauthor{WGANGP} replaced the weight clipping with a gradient penalty to ensure the Lipschitz constraint~\cite{WGANGP}:
 		\begin{multline}
-			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{\text{WGAN}}\left(G,D\right) = \E_{x\sim p_{d}}\left[ D\left(x\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \\ + \lambda \E_{\tilde{x}\sim p_{g}}\left[ {\left( {\left\|\nabla_{\tilde{x}}D\left(\tilde{x}\right) \right\|}_{2} -1 \right)}^{2}\right]  \label{eq:wgangp_loss}
+			\min_{G} \max_{D\in \symcal{D}} \symcal{L}_{\text{WGAN}}\left(G,D\right) = \E_{\symbf{x}\sim p_{d}}\left[ D\left(\symbf{x}\right)\right] - \E_{z\sim p_{g}}\left[ D\left(G\left(z\right)\right)\right] \\ + \lambda \E_{\tilde{\symbf{x}}\sim p_{g}}\left[ {\left( {\left\|\nabla_{\tilde{\symbf{x}}}D\left(\tilde{\symbf{x}}\right) \right\|}_{2} -1 \right)}^{2}\right]  \label{eq:wgangp_loss}
 		\end{multline}
-		where \(\tilde{x}\) is a linearly interpolated sample between a true sample \(x\) and a generated one \(G\left(z\right)\).
+		where \(\tilde{\symbf{x}}\) is a linearly interpolated sample between a true sample \(\symbf{x}\) and a generated one \(G\left(z\right)\).
 
 \section{Cancer biology}
 	%https://www.cell.com/fulltext/S0092-8674(11)00127-9
@@ -612,7 +612,7 @@
 
 \section{Datasets}
 	Large multi-omics datasets are limited, and although the cost of high-throughput technologies has decreased, many difficulties remain in the acquisition of multi-omics data.
-	\Gls{tcga} is the main dataset with high-quality patient data, \gls{ccle} is another multi-omics dataset on cell-lines.
+	\Gls{tcga} is the main dataset with high-quality patient data~\cite{TCGA}, \gls{ccle} is another multi-omics dataset on cell-lines~\cite{CCLE}.
 	Those datasets present uniformly processed data, ensuring that samples were analyzed the same way.
 
 	\subsection{\Glsfmtfull{tcga}}\label{sec:data_tcga}

@@ -12,7 +12,7 @@
 }{
 	\graphicspath{{../figures/3-SOTA/}}%
 }
-\chapter{Deep-learning for omics data analysis}\label{chap:sota}
+\chapter{Omics data analysis with AI}\label{chap:sota}
 \minitocpagecentered
 
 \section[Deep learning and single omics data]{Prediction from single omics data with deep learning methods}
@@ -73,7 +73,7 @@
 	The chosen algorithm ensures that all samples share the same spatial arrangements by ordering genes based on their mean level of expression across the dataset.
 	The treemap image are then colorized based on the gene expression abundances.
 	Instead of forcing a 2D representation of expression profile, 1D convolution can be directly used.
-	Similarly to 2D \gls{cnn}, features were reordered based on their genomic position~\cite{Mostavi2020,Zhao2020,Yin2022} or expression profile were leave untouched~\cite{Mohammed2021}.
+	Similarly to 2D \gls{cnn}, features were reordered based on their genomic position~\cite{Mostavi2020,Zhao2020,Yin2022} or features in the expression profile were not reordered~\cite{Mohammed2021}.
 	While many approaches around convolutions were developped they are not suited for omics data as they introduce wrong inductive biases.
 	Convolutions are more suited for structured data, and even the incorporation of a structure in the data based on the chromosomal location or some knowledge is a constraint that limits the range of possible interactions.
 	For instance such architectures do not consider interactions between genes that are far away from each other in the genome.
@@ -105,12 +105,12 @@
 
 	With MethylSPWNet, \citeauthor{levyMethylSPWNetMethylCapsNetBiologically2021a} propose an architecture based on \gls{capsnet}, another architecture borrowed from the computer vision domain~\cite{levyMethylSPWNetMethylCapsNetBiologically2021a}.
 	\Glspl{capsnet} are a type of architecture used to model hierarchical relationships, and a capsule correspond to a set of neurons whose activation vector represents a property of an object~\cite{CapsNet}.
-	In the context of its application to \gls{dnam}, a capsules represents the set of CpGs that are link to a set of manually curated genes.
+	In the context of its application to \gls{dnam}, a capsules represents the set of CpGs that are linked to a set of manually curated genes.
 	Each context capsules is dynamically routed to one output capsule.
 
 	For the application to omics data, deep learning architectures using attention mechanisms have been little explored.
 	Attention mechanisms are a simple weighting of the data, various way of obtaining this weight have been proposed.
-	\Glspl{fcn} can be used to score each feature~\cite{Lee2022,beykikhoshkDeepTRIAGEInterpretableIndividualised2020a}, the attention mechanism works more like a soft gate where only a part of the signal is transmitted to subsequent layers.
+	\Glspl{fcn} can be used to score each feature~\cite{Lee2022,beykikhoshkDeepTRIAGEInterpretableIndividualised2020a}, the attention mechanism works more like a soft gate where only a part of the feature signal is transmitted to subsequent layers.
 	This type of attention is different from the scaled-dot product attention that enrich the input vector with information from other features.
 	The Gene transformer~\cite{Khan2023} was the first architecture to apply self-attention to \gls{mrna} data.
 	The authors proposed to use 1D convolution layers combined with maximum pooling to reduce the dimension of the gene expression vector.
@@ -124,18 +124,18 @@
 	This standard model has been extended to consider non-linear survival data with deep learning models~\cite{katzmanDeepSurvPersonalizedTreatment2018,Ching2018}.
 	Cox-nnet~\cite{Ching2018} uses a log-likelihood loss (\cref{eq:cox_loss}) to predict prognosis from gene expression data.
 	Deep-surv~\cite{katzmanDeepSurvPersonalizedTreatment2018} uses the same principles to recommend the best treatment option for a patient by computing the risk ratio.
-	\citeauthor{Lee2022}~\cite{Lee2022} model the survival task as a regression on the survival days; this approach does not consider the particular structure of survival data and completely ignores censoring data.
+	\citeauthor{Lee2022}~\cite{Lee2022} models the survival task as a regression on the survival days; this approach does not consider the particular structure of survival data and completely ignores censoring data.
 
 	In precision medicine and the realm of omics, without prior knowledge, a mutation's impact cannot be known without \emph{looking} at the protein.
 	Furthermore, gene expression is a highly regulated phenomenon involving various molecular actors~(\cref{subsec:gene_regulation}).
-	Going to multi-omics data allows for a holistic view, which is necessary for a better understanding of the roles played by the various omics layers.
+	Moving to multi-omics data provides a holistic view of patients, which is necessary for a better understanding of the roles played by the various omics layers.
 
 \section{Multimodal machine learning}
 	A sphere or a vertical cylinder viewed from the top looks like a circle.
 	There is insufficient information to infer a 3D shape correctly from the top view; more information is needed to select from the possible hypothesis.
 	Each view of a 3D object carries different information; they can be complementary or redundant and help improve predictions regarding performance and robustness.
 	This is precisely what multimodal machine learning is: combining multiple views or modalities to make better predictions.
-	The following subsection will present multimodal machine learning, its properties, challenges, and methods to fuse multiple modalities.
+	In the following section, I will present multimodal machine learning, its properties, challenges, and methods to fuse multiple modalities.
 	This description will be based on the work of \citeauthor{MML_morency}: \citetitle{MML_morency}~\cite{MML_morency}.
 
 	Multimodal machine learning corresponds to machine learning methods developed to learn from multiple modalities.
@@ -149,13 +149,13 @@
 	In the context of this manuscript, a modality corresponds to an omics data type.
 	Each modality has its own specific characteristics and distributions~\cite{Tarazona2021}.
 	Indeed, each omics is obtained using different techniques and processed with different bioinformatics tools, leading to data with different dimensionalities and distributions.
-	The modality heterogeneity results from biological, as they measure different molecular components and technical reasons.
+	The modality heterogeneity results from biological and technical reasons.
 	Making the integration of these diverse data types a significant challenge.
 	While heterogeneous, modalities are connected as they share complementary information.
 	For instance, it should be noted that not all mRNAs are translated to proteins.
 	Both mRNAs and proteins provide a complementary view of the underlying biological process.
 	They also provide the same information due to their redundancy, as protein levels confirm the translation of mRNAs.
-	Integrating multiple modalities allows interactions between modalities to happen and exploit redundant and complementary information.
+	Integrating multiple modalities allows to consider interactions between modalities and exploit redundant and complementary information.
 	Multimodal models aim to learn a representation that reflects those cross-modal interactions.
 	To construct a multimodal representation different fusion strategies are employed~\cite{MML_morency,MMLSurvey}:
 	\begin{description}[%
@@ -179,8 +179,8 @@
 	\end{description}
 	Instead of fusing the latent representations of each modality, it is also possible to coordinate them~\cite{MML_morency}.
 	Coordination aims to ensure that the representations learned from each modality are compatible by constraining latent representations with representations of other modalities.
-	The constraints are obtained by imposing similarity constraints, finding linear combinations of variables in each set that are maximally correlated with each other, or through contrastive learning.
-	Contrastive learning forces the model to encode similar items closer together in the representation space while pushing dissimilar items further apart.
+	This can be obtained by imposing similarity constraints, finding linear combinations of variables in each modality that are maximally correlated with each other, or through contrastive learning.
+	Contrastive learning forces the model to encode similar samples closer together in the representation space while pushing dissimilar samples further apart.
 
 	The constructed multimodal representation must account for the interactions between modalities, \ie{}how to correctly align the different modalities~\cite{MML_morency}.
 	The alignment of modalities corresponds to knowing what features from one modality have an impact or are connected to another feature from a different modality.
@@ -198,7 +198,7 @@
 			leftmargin=!,
 			labelwidth=3cm,
 		]
-		\item[Early concatenation]
+		\item[Early fusion]
 			The representation of two modalities \(X_A \in \symbb{R}^{L_A \times d}\) and \(X_B \in \symbb{R}^{L_B \times d}\) are concatenated and passed to a self-attention layer: \(\operatorname{Attention}\left(\symbfup{C}\left(X_A,X_B\right)\right)\), where \(\symbfup{C}\) is the concatenation operation.
 			This early fusion technique learns undirected connections between modalities: all modality elements are connected to all other modality elements.
 			This fusion approach considers both intra-modality and inter-modality interactions.
@@ -245,7 +245,7 @@
 	In biology, connections between modalities are already known: an mRNA transcribed from a coding gene will likely be translated into a protein, and the impact of promoter methylation on the mRNA expression level is known.
 	Moreover, the connections between individual features from different modalities are also known.
 	For instance, connections from a coding gene and the corresponding protein are known, or CpGs methylation can be mapped to a gene based on their position in the genome.
-	Adding this knowledge into the integration process could help construct better multimodal representation.
+	Adding this knowledge into the integration process could help in constructing a more informative multimodal representation.
 	Restricting the integration to features with known regulatory links would leave out many features, as a large part of \gls{ncrna} roles still need to be discovered.
 	Even though their role is unknown, they can still play an essential role in gene expression regulation, particularly in cancer development.
 	Using data-driven approaches, such as contextualized representations based on the attention mechanism, can help identify new connections and generate new knowledge.
@@ -315,8 +315,8 @@
 	Finding the optimal factor and loadings matrix is achieved by solving the following optimization problem:
 	\begin{equation}
 		\min_{W,H} {\left\| X - WH \right\|}_{F} \label{eq:matrix_fact_opt}
-	\end{equation}
-	To find the matrices \(W\) and \(H\), \gls{nmf} is a common approach to solve the \cref{eq:matrix_fact_opt} by adding a non negativity constraint: \(W \geq 0\) and \(H \geq 0\).
+	\end{equation}%todo: cref long name ?
+	To find the matrices \(W\) and \(H\), \gls{nmf} is a common approach to solve \cref{eq:matrix_fact_opt} by adding a non negativity constraint: \(W \geq 0\) and \(H \geq 0\).
 	An extension have been proposed to handle multiple omics, \gls{intnmf}~\cite{Chalise2017}, that adds a parameter \(\phi_{i}\) controlling the weight of each modality:
 	\begin{equation}
 		\min_{W,H_i} \sum_{i=1}^{m} \phi_{i}{\left\| X_i - WH_i \right\|}_{F} \quad \text{s.t} \quad W \geq 0 \;\text{and}\; H_i \geq 0
@@ -393,7 +393,7 @@
 	One advantage of deep learning-based approaches is their flexibility:
 	\begin{itemize}[nosep]
 		\item it can adapt the various data types encountered in precision medicine (tabular, categorical, images, text, time-series);
-		\item the architecture can be designed to model the integration strategy explicitly.
+		\item its architecture can be designed to model the integration strategy explicitly.
 	\end{itemize}
 
 	%https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8829812/pdf/main.pdf
@@ -430,7 +430,7 @@
 		The latent representation is then used for various tasks.
 		In~\cite{Chaudhary2018}, survival-associated features of the latent representation are selected with a Cox model, and a K-means clustering is applied to the selected features to infer survival groups.
 		The resulting labels are used to construct a \gls{svm} based classifier from a subset of the multi-omics features.
-		To prevent overfitting, an elastic net regularization\footnote{\(\lambda_{1} \left\|\theta\right\|_{1}^{2} + \lambda_{2} \left\|\theta\right\|_{2}^{2}\), where \(\theta\) are model parameters} is added to the reconstruction loss, \(\symcal{L}_{AE}\)~\cref{eq:loss_ae}.
+		To prevent overfitting, an elastic net regularization\footnote{Elastic-net regularization is the linear combination of an \(L_{1}\) and an \(L_{2}\) regularization: \(\lambda_{1} \left\|\theta\right\|_{1}^{2} + \lambda_{2} \left\|\theta\right\|_{2}^{2}\), where \(\theta\) are model parameters} is added to the reconstruction loss, \(\symcal{L}_{AE}\)~(\cref{eq:loss_ae}).
 		\citeauthor{Lee2020} applied a similar strategy to identify survival groups in \gls{luad} patient but used a classifier based on \glspl{rf}~\cite{Lee2020}.
 		Similarly, \citeauthor{Guo2020} extracted a multi-omics latent representation by applying an \gls{ae} on concatenated multi-omics data and constructed a logistic classifier to predict ovarian subtypes from mRNA data.
 		The labels used to train the classifier were obtained by applying a K-means clustering on the multi-omics latent representation~\cite{Guo2020}.
@@ -471,7 +471,7 @@
 		Finally, pathways (\ie{}rows) are reordered to have correlated pathways close to each other.
 
 		\Glspl{gnn} with an early fusion strategy have also been applied to integrate multi-omics data with different types of graphs: \gls{ppi}~\cite{Althubaiti_2021,Guo2023} or patient similarity graphs~\cite{MoGCN}.
-		In MoGCN~\cite{MoGCN}, the graph is obtained by fusing the patient similarity graphs obtained on each omics with \gls{snf}.
+		In MoGCN~\cite{MoGCN}, the graph is obtained by fusing the patient similarity graphs obtained on each omics with \gls{snf}~(\cref{box:snf}).
 		In an early fusion context, the features from the different omics are concatenated before being mapped to the graph nodes.
 		For the \gls{ppi} graph each node represents a gene; therefore, features corresponding to this gene from the different omics are concatenated.
 		The node embedding is a vector \(h_{v} \in \symbb{R}^{M}\), where \(M\) is the number of omics considered.
@@ -490,7 +490,7 @@
 		\end{itemize}
 		The message-pasing step is done sequentially for each type of edge.
 
-		Architectures based on the Transformer architecture have been proposed.
+		Architectures based on the Transformer have been proposed.
 		\citeauthor{SubtypeFormer} proposed applying self-attention on the concatenation of the multi-omics features~\cite{SubtypeFormer}.
 		However, the method is only succinctly described, and they do not specify how the self-attention mechanism is applied to one-dimensional inputs.
 		Based on the code, they reshape the input vector to a three-dimensional vector to consider multi-heads.
@@ -498,7 +498,7 @@
 		DeepPathNet is another architecture combining the self-attention mechanism with early fusion~\cite{DeepPathNet}.
 		Multi-omics features are transformed into a pathway representation using the 241 curated pathways from LCpathways~\cite{LCpathways}.
 		Multi-omics features belonging to pathways are concatenated and projected to a 512-dimensional vector with pathway-specific weights.
-		Interactions between the 241 pathways are then computed with a transformer block~\cref{eq:transformer_block}.
+		Interactions between the 241 pathways are then computed with a transformer block~(\cref{eq:transformer_block}).
 
 	\subsection{Late fusion}
 		Unlike early fusion, late fusion allows for the independent processing of each omics before merging their predictions.
@@ -512,10 +512,10 @@
 		In the first phase, for each omics, a patient similarity graph is constructed and used to train a \gls{gcn} predicting cancer subtypes.
 		In the second phase, the \gls{vcdn} module is trained, and the \gls{gnn} are fine-tuned.
 		The \gls{vcdn} module takes as input the \emph{cross-omics discovery tensor} \(C^{o}\), an \(M\)-dimensional tensor, obtained by applying a generalized outer-product of predictions \(\hat{y}^{m} \in \symbb{R}^{C}\) obtained from each omics:
-		\begin{align}
+		\begin{align*}
 			C^{o}                     & = {\left(C^{o}_{a_{1}\cdots a_{M}}\right)}_{\substack{1 \leq a_{i} \leq C \\ 1 \leq i \leq M}} \\
 			C^{o}_{a_{1}\cdots a_{M}} & = \prod_{m=1}^{M}\hat{y}_{a_{m}}^{m}
-		\end{align}
+		\end{align*}
 		The \emph{cross-omics discovery tensor} is reshaped into a \(C^{M}\)-dimensional vector.
 		The resulting vector is passed to the \gls{vcdn} module, a \gls{fcn} that maps the tensor to a space of the same dimension before projecting to the label space.
 		The first projection requires \(C^{2M}\) parameters; this can easily represent billions of parameters for multiclass problems with multiple modalities.
@@ -523,14 +523,11 @@
 		Subsequent works replaced the individual omics predictors based on \gls{gcn} with one based on \gls{gat}~\cite{MODILM,Leng2022}.
 		HyperTMO~\cite{Wang2024} is another late fusion strategy used to integrate mRNA, miRNA and DNAm.
 		Each omics is processed independently using \gls{hgcn}.
-		\Glspl{hgcn} are similar to \glspl{gcn} but instead of using a graph they use an hypergraph.
+		\Glspl{hgcn}~\cite{Feng2019} are similar to \glspl{gcn} but instead of using a graph they use an hypergraph.
 		An hypergraph is a generalization of a graph where edges can join any number of nodes.
-		In their study, each nodes represents a patient and the edges were determined by applying the \gls{knn} algorithm on the patient similairity matrix.
-		\Glspl{hgcn} are used to extract evidences from each omics.
-		The evidences are then parameterized with a
-		Each network provide evidences Dirichlet distribution for uncertainty estimation.
-		This uncertainty estimation is used to weight the reliability of each omics.
-		The different evidences are combined using an evidential reasoning approach, the fusion is done considering the uncertainty of each evidence.
+		In~\cite{Wang2024}, each nodes represents a patient and the edges were determined by applying the \gls{knn} algorithm on the patient similairity matrix.
+		\Glspl{hgcn} are used to extract probability estimation from each omics.
+		The omics probability estimation are combined using an evidential reasoning approach, the fusion is done considering the confidence of each prediction.
 		The combined evidence is used to make the final classification.
 
 		Late fusion approaches cannot capture inter-omics interactions and use the complementarity information between omics~\cite{Picard2021}.
@@ -583,7 +580,7 @@
 		\citeauthor{customics} proposed a method combining \glspl{ae} and \glspl{vae}~\cite{customics}.
 		Each modality is encoded with its own \gls{ae}; the different \glspl{ae} are trained individually.
 		Afterwards, the different latent spaces are passed to a central \gls{vae}.
-		During the training of the central \gls{vae} omics \glspl{ae} are finetuned.
+		During the training of the central \gls{vae} omics-specific \glspl{ae} are finetuned.
 
 		% FCN/MLP
 		As for previous fusion strategy, reconstruction of large dimensional vectors such as omics profiles is challenging.
@@ -599,7 +596,7 @@
 		The maximum pooling on the latent representation proposed in MultiSurv~\cite{MultiSurv} to fused multiple modalities add an implicit coordination constraints on the latent features of the different modalities.
 		Instead various approaches simply concatenate the latent representation into a single multimodal representation~\cite{MOLI,Lin2020}.
 		\citeauthor{SALMON} also proposed a concatenation-based fusion but they transformed raw espression profile into a representation incorporating knowledge~\cite{SALMON}.
-		Omics features are transformed to an eigengene matrix, a weighted average of gene expression of genes in a given set of genes, before being fed to an \gls{mlp}.
+		Omics features are transformed to an eigengene matrix, a weighted average of expression of genes in a given set of genes, before being fed to an \gls{mlp}.
 		Similarly, \gls{cnn} have been explored as a way to encode individual omics before fusing their latent representation by concatenation~\cite{MohaiminulIslam2020}.
 		Authors also explored weight sharing between the different omics branches, but this strategy reduced the overall performances.
 		\Glspl{gan} have been explored as a way of integrating two omics.
@@ -615,10 +612,10 @@
 		\begin{enumerate}[nosep]
 			\item reconstruction losses: from one latent representation all available omics are reconstructed.
 			\item Masking: reconstruction of the input but features associated to a chromosome are masked.
-			\item Alignment loss\footnote{inspired from CLIP}: alignment of pairs of modalities with a contrastive loss.
+			\item Alignment loss\footnote{inspired from CLIP~\cite{CLIPLoss}, a contrastive learning method that brings closer related images and text.}: alignment of pairs of modalities with a contrastive loss.
 		\end{enumerate}
 		They also showed that pretraining modality-specifc encoders boost predictive performances.
-		However, the impact of the different self-supervised losses on the classificatio task remain limited.
+		However, the impact of the different self-supervised losses on the classification task remain limited.
 
 		\Glspl{gnn} have been widely studied for the intermediate fusion of multi-omics data as graphs are ubiquitous in biology.
 		\citeauthor{Kaczmarek2021}~\cite{Kaczmarek2021} exploited the knwon interactions between mRNAs and miRNAs by constructing a \gls{gat} applied on a miRNA-mRNA bipartite graph extracted from TargetScan.
@@ -639,17 +636,17 @@
 		The resulting graph is used to construct a \gls{gat} for each omics, the full expression profile is mapped to the corresponding patient node.
 		The latent representations are combined with an attention mechanism, attention weights are estimated by a linear projection of the graph representation and structure.
 		The training objective was to reconstruct the original graph structure from the multimodal embedding.
-		After the training this embedding was used as input to clustering algorithm to identify cancer subtypes.
+		After the training, this embedding was used as input to clustering algorithm to identify cancer subtypes.
 		Instead of representing each patient by its full expression profile, \citeauthor{Zhang2022}~\cite{Zhang2022} used \glspl{ae} to embed each expression profile.
 		They used a densely connected \gls{gcn}, a layer is connected to all subsequent layers.
 		In~\cite{Kesimoglu2022}, \citeauthor{Kesimoglu2022} used a supervised training strategy to identify cancer subtypes.
 		They also used a patient similairity graph and to reduced the node embeddings dimension they appllied a prior feature selection based on a \gls{rf} algorithm.
 
-		In machine learning, attention mechanisms correspond to a weighting of the data.
+		In machine learning, attention mechanisms correspond to a weighting.
 		There are various ways of computing attention weights, the most well known being the self-attention mechanism used in the Transformer architecture~\cite{AttentionAllYouNeed}.
 		\citeauthor{MOMA}~\cite{MOMA} proposed an attention mechanism based on cosine similarity.
-		In each omics, features are projected into a set of different modules, and each module is represented by a vector.
-		The attention mechanism is then used to focus on modules with high similairity between two omics.
+		For each omics, features are projected into a set of different modules, and each module is represented by a vector.
+		An attention mechanism based on modules cosine similarity is then used to focus on relevant modules.
 		Their approach can be extended to more than two omics but the computational cost increase as all pairs need to be considered.
 		The attention mechanism is later used to detect the most important modules and identify important genes.
 		Identified genes are used in pathway enrichment analysis to identify the most important pathways.
@@ -662,7 +659,8 @@
 		In~\cite{Lan2024}, each expression profile is transformed into a pathway representation.
 		The pathway representation is obtained by concatenating scalar pathway representation which corresponds to the sum of features belonging to this pathway.
 		Then, for each omics, self-attention is used to infer patient-interactions and the resulting representations are concatenated and passed to task-specifc classifier.
-		In~\cite{Yao_2024}, pretrained \glspl{ae} are used to embed each omics profile, the concatenated representation is used as the input of a self-attention layer, computing patient interactions.
+		In~\cite{Yao_2024}, pretrained \glspl{ae} are used to embed each omics profile.
+		The concatenated representation is used as the input of a self-attention layer, computing patient interactions.
 		Such uses of the self-attention to compute patient interactions can be seen as the application of a \gls{gat} on a complete patient graph\footnote{A graph where every pair of nodes is connected.}.
 
 		\ifSubfilesClassLoaded{%
@@ -707,7 +705,7 @@
 	In the rest of the manuscript, no distinction between the two terms will be made, and interpretability will be defined as the ability to understand the reasoning of a machine learning model supporting decision-making.
 	Many interpretability methods have been proposed, and various taxonomies have been considered to classify the different approaches.
 	% list some taxonomies and cite them 
-	There are two main approaches to interpreting deep learning models: post-hoc and self-explainable approaches.
+	There are two main approaches to interpret deep learning models: post-hoc and self-explainable approaches.
 	Post-hoc methods are applied to already trained models using a secondary approach dedicated to interpretability.
 	Self-explainable methods use models that are interpretable by design, \ie{}able to provide a prediction and a supporting interpretation.
 	The different approaches can be applied to get a local interpretation or a global one.
@@ -726,7 +724,7 @@
 	Such visualization helps to understand the prediction made by a model.
 	This vision of the attention as an interpretable block is currently debated~\cite{jain-wallace-2019-attention,wiegreffe-pinter-2019-attention}.
 	\citeauthor{jain-wallace-2019-attention} showed that high attention weights do not necessarily correlate with attribution scores~\cite{jain-wallace-2019-attention}.
-	\citeauthor{wiegreffe-pinter-2019-attention} highlighted the importance of the definition of explainability to consider the attention mechanism as interpretable or not~\citeauthor{wiegreffe-pinter-2019-attention}.
+	\citeauthor{wiegreffe-pinter-2019-attention} highlighted the importance of the definition of explainability to consider the attention mechanism as interpretable or not~\cite{wiegreffe-pinter-2019-attention}.
 	In~\cite{DeepMOCCA}, authors used the attention weights from the self-attention graph pooling to identify driver genes of different cancer types.
 
 	While self-explaining models are the recommended way to achieve interpretability in the context of deep learning models~\cite{Rudin2019}, it is not always possible to use self-explaining models.
@@ -737,7 +735,7 @@
 	This idea has been used to create saliency maps highlighting important parts of the inputs~\cite{intGrad}.
 	Grad-CAM is another gradient-based approach designed to interpret images, and the gradient is backpropagated only up to the last convolutional layer~\cite{GradCAM}.
 	In PathCNN~\cite{PathCNN}, authors used Grad-CAM to identify important pathways in their pathway images.
-	With gradient-based approaches, feature importance can be underestimated because of saturation,\ie{}perturbing the feature will not change the output, and therefore the corresponding gradient will be null.
+	With gradient-based approaches, feature importance can be underestimated because of saturation,\ie{}changing the feature value will not change the output, and therefore the corresponding gradient will be null.
 	To circumvent this limitation, DeepLIFT proposed to use a baseline; the explanation is expressed relative to the chosen reference~\cite{DeepLIFT}.
 	\citeauthor{PNet}~\cite{PNet} scored neurons in a knowledge-based architecture with DeepLIFT to detect the most relevant biological functions.
 	\Gls{lrp} is another gradient-based attribution method backpropagating the output signal through the network according to a propagation rule~\cite{LRP}.
@@ -759,14 +757,14 @@
 	A counterfatual explanation answers a \emph{what if} question: How would \(x\) change if \(y\) had been \(y^{\prime}\)?
 	\citeauthor{wachter2017counterfactual} provides a more formal definition of a counterfactual:
 	\begin{displaycquote}[adapted from][]{wachter2017counterfactual}[.]
-		\(y\) was predicted because input \(x\) had values \(\left(x_{1}, x_{2}, \ldots\right)\). If \(x\) instead had values \(\left(x_{1}^{\prime}, x_{2}^{\prime}, \ldots\right)\) and all other variables had remain constant, \(y^{\prime}\) would have been predicted
+		\(y\) was predicted because input \(x\) had values \(\left(x_{1}, x_{2}, x_{3}, \ldots\right)\). If \(x\) instead had values \(x_{1}^{\prime}\) and \(x_{2}^{\prime}\) while other variables, \(\left(x_{3}, \ldots\right)\), had remain the same, \(y^{\prime}\) would have been predicted
 	\end{displaycquote}
 	\citeauthor{wachter2017counterfactual} formulated the search of counterfactuals as an optimization problem minimizing the distance between the counterfactual \(x^{\text{CF}}\) and the original point \(x\) with the constraint that the class predicted on the counterfactual is the desired class \(y^{\text{CF}}\):
 	\begin{equation}
 		\argmin_{x^{\text{CF}}} \symcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right)\label{eq:opt_cf}
 	\end{equation}
 	where \(\symcal{L}\) is a loss measuring the closeness of the predicted class from the counterfactual to the desired class, and \(d\) is a distance measure.
-	\citeauthor{wachter2017counterfactual} used a distance in the label space for the first term, \({\left(g\left(x^{\text{CF}}\right) - y^{\text{CF}}\right)}^{2}\) and weighted Manhattan distance for the second term~\cite{wachter2017counterfactual}.
+	\citeauthor{wachter2017counterfactual} used a distance in the label space for the first term, \({\left\|g\left(x^{\text{CF}}\right) - y^{\text{CF}}\right\|}^{2}\) and weighted Manhattan distance for the second term~\cite{wachter2017counterfactual}.
 	A common way to illustrate a counterfactual explanation is a bank customer who had their loan refused; a counterfactual explanation represents the change the customer needs to operate to get their loan accepted.
 	The customer wants a more straightforward explanation where he can focus on a few changes, and the proposed changes need to be realistic and actionable.
 	Suggesting a change that is impossible to accomplish would be of little interest to the customer.
@@ -834,7 +832,7 @@
 	Adversarial attacks generate perturbation aimed at being imperceptible, whereas counterfactual explanation encourages minimal changes~(see \ref{item:cf_sparse} constraint).
 	They also stated that adversarial examples represent impossible points, but counterfactuals are realistic points~(see \ref{item:cf_data_manifold} constraint).
 	On the contrary, \citeauthor{browne2020} see counterfactuals and adversarial examples as mathematically equivalent, their main differences being in terms of semantic~\cite{browne2020}.
-	In~\cite[][8]{Freiesleben2021}, \citeauthor{Freiesleben2021} provides a detailed summary of the various opinions around the relation between counterfactuals and adversarial examples.
+	In~\cite{Freiesleben2021}, \citeauthor{Freiesleben2021} provides a detailed summary of the various opinions around the relation between counterfactuals and adversarial examples.
 	\citeauthor{Pawelczyk2021ExploringCE} proposed a theoritical comparison of a counterfactual generation method~\cite{wachter2017counterfactual} and an adversarial one~\cite{Carlini2016TowardsET}.
 	They identified an upper bound on the distance between the solution of the two approaches~\cite{Pawelczyk2021ExploringCE}.
 

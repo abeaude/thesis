@@ -1,6 +1,6 @@
 La médecine de précision a transformé le domaine des soins, en adaptant les décisions à chaque patient.
 L'essor de cette médecine a été rendu possible par le développement de méthodes de séquençage à haut débit, permettant la collecte de grandes quantités de données patients, et par le développement de méthodes d'apprentissage profond tirant parti de ces données.
-La grande dimension des données omiques conduit à des modèles de grande taille, et bien que la disponibilité des données augmente, elle reste limitée pour des architectures de cette taille.
+La grande dimension des données omiques conduit à des modèles de grande taille, et bien que la disponibilité d'échantillons augmente, elle reste limitée pour des architectures de cette taille.
 Les architectures actuelles utilisent des poids fixes pendant l'inférence qui sont les mêmes pour tous les patients, limitant le potentiel d'une médecine véritablement personnalisée.
 Les maladies comme le cancer résultent de perturbations de processus biologiques à de multiples niveaux.
 Les méthodes d'acquisition actuelles permettent la collecte d'informations à tous les niveaux, ouvrant la voie à des méthodes analytiques combinant ces informations pour améliorer les prédictions et la compréhension de ces maladies.
@@ -10,6 +10,6 @@ Tout d'abord, nous avons développé AttOmics, un modèle pour les données omiq
 Nous l'avons appliqué à des groupes de variables pour répondre aux besoins mémoires de l'attention.
 Deuxièmement, nous avons proposé CrossAttOmics, une architecture basée sur le mécanisme d'attention croisée.
 Nous n'avons pris en compte que les interactions de régulation connues entre les modalités.
-Troisièmement, nous avons modifié CrossAttOmics en CrossAttOmicsGate pour assigner un score à chaque interaction.
-Enfin, nous avons développé un modèle génératif d'explications contrefactuelles, permettant d'identifier le changement requis dans le profil moléculaire pour qu'un patient soit en bonne santé.
+Troisièmement, nous avons proposé CrossAttOmicsGate pour assigner un score à chaque interaction.
+Enfin, nous avons développé un modèle génératif d'explications contrefactuelles, permettant d'identifier le changement requis dans le profil moléculaire pour qu'un patient soit en meilleur santé.
 Nous avons comparé nos méthodes avec celles de l'état de l'art pour les données moléculaires.

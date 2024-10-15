@@ -202,7 +202,7 @@
 	\Crefname{figure}{Figure}{Figures}
 	\crefname{appendixfigure}{Appendix figure}{Appendix figures}
 	\crefname{appendixtable}{Appendix table}{Appendix tables}
-	\crefrangelabelformat{subfigure}{#3#1--\crefstripprefix{#1}{#2}#4}
+	\crefrangelabelformat{subfigure}{\StrCompare{#1}{#2}[\lastcommonpos]\StrLeft{#1}{\number\numexpr\lastcommonpos-1}[\MyFigNumber]#3\MyFigNumber\,\crefstripprefix{#2}{#1}--\crefstripprefix{#1}{#2}#4}
 	\newtcbinputlisting[
 		auto counter, number within=chapter, crefname={Listing}{Listings}
 	]{\pythoncode}[3][]{
@@ -357,7 +357,9 @@
 	colframe=Prune, %
 	fonttitle=\bfseries,% 
 	before skip=0cm, %
-	after skip=0cm%
+	after skip=0cm,%
+	left=2mm, right=2mm,
+	middle=1mm, top=1mm, bottom=1mm,
 }{%
 	\footnotesize\faFile*[regular]~\fullcite{#1}\tcblower\scriptsize\citefield{#1}{abstract}
 }
@@ -675,7 +677,7 @@
 		\end{multicols}
 	}
 	\newcommand{\minitocpage}{
-		\etocsettocstyle{\addsec*{Chapter contents\\\vspace{-15pt}\rule{\textwidth}{0.4pt}\vspace{-10pt}}\KOMAoption{parskip}{false}}{\vspace{-5pt}\noindent\rule{\textwidth}{0.4pt}\clearpage\KOMAoption{parskip}{half}}%
+		\etocsettocstyle{\addsec*{Chapter contents\\\vspace{-15pt}\rule{\textwidth}{0.4pt}\vspace{-10pt}}\KOMAoption{parskip}{false}\small}{\vspace{-5pt}\noindent\rule{\textwidth}{0.4pt}\clearpage\KOMAoption{parskip}{half}\normalsize}%
 		\localtableofcontents
 	}
 	\newcommand{\minitoc}{
@@ -721,8 +723,8 @@
 		\fi}
 
 	%% CUSTOMIZE CHAPTER TITLE PAGE
-	\RedeclareSectionCommand[afterskip=1\baselineskip plus 0.115\baselineskip minus 0.192\baselineskip]{chapter}
-	\newcommand\HUGE{\fontsize{60}{60}\selectfont}
+	\RedeclareSectionCommand[afterskip=0.8\baselineskip plus 0.115\baselineskip minus 0.192\baselineskip]{chapter}
+	\newcommand\HUGE{\fontsize{60}{0}\selectfont}
 
 	\renewcommand*\chapterformat{%
 		\smash{\textcolor{Prune}{\rule[-5pt]{2pt}{10cm}}}%
@@ -852,6 +854,7 @@
 		\captionsetup[figure]{list=no}%
 		\captionsetup[table]{list=no}%
 		\crefalias{figure}{appendixfigure}%
+		\crefalias{subfigure}{appendixfigure}%
 		\crefalias{table}{appendixtable}%
 		\renewcaptionname{english}{\figurename}{Appendix figure}%
 		\renewcaptionname{english}{\tablename}{Appendix table}%
