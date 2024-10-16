@@ -176,7 +176,7 @@
 		Attention mechanisms are a simple weighting of the data, and they enhance the data elements by dynamically including information about the input's context.
 		There are multiple flavors of attention; the most well-known one is the scaled-dot product attention~\cite{AttentionAllYouNeed}.
 
-		The self-attention, based on the scaled-dot product attention, takes a two-dimensional input, \(\symbf{x} \in \symbb{R}^{L\times s}\), where \(L\) is the number of input elements and \(s\) the embedding dimension.
+		The self-attention, based on the scaled-dot product attention, takes a two\-/dimensional input, \(\symbf{x} \in \symbb{R}^{L\times s}\), where \(L\) is the number of input elements and \(s\) the embedding dimension.
 		The input \(\symbf{x}\) is projected by three independent trainable linear projections into the query \(Q \in \symbb{R}^{L \times d}\), the key \(K \in \symbb{R}^{L \times d}\) and the value \(V \in \symbb{R}^{L \times d}\):
 		\begin{align}
 			Q & = \symbf{x}\cdot W^{Q} \\

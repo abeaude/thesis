@@ -18,6 +18,22 @@
 \chapterpubli{MyCrossAttOmicsGate}
 \minitocpage
 
+We proposed an intermediate fusion model based on the cross-attention in the previous \lcnamecref{chap:crossattomics}.
+Cross-attention was used to fuse modalities with known omics regulatory interactions.
+A better understanding of multimodal models is critical to gain insights into multimodal learning and help improve the model design.
+In~\cref{chap:crossattomics}, we used post-hoc techniques, such as \gls{lrp}, to assess the significance of modalities interactions.
+The generated explanations may not fully capture the underlying complexity of the model.
+Applying post-hoc methods to understand predictions on such large models significantly increases the computational cost.
+A model that, by construction, can provide a prediction and an associated explanation would reduce the computational burden of post-hoc methods~\cite{Rudin2019}.
+
+We propose a new multimodal deep-learning architecture that is interpretable by construction.
+Similarly to CrossAttOmics, modalities are encoded individually with attention-based encoders; then, modality interactions are modeled with cross-attention to reinforce a modality with information from another modality.
+A gating mechanism is used to score the different interactions, and this score can be used to understand how the various interactions contribute to the predictions.
+Multi-omics patient signature is the result of complex mechanisms that differ between individuals.
+In order to ensure that the predictions are tailored to the characteristics of each patient, it is necessary to ensure diversity across the interaction scores.
+The interaction scores must also have enough sparsity to be interpretable.
+We added four regularization terms to ensure the gating scores respect these two properties.
+
 \section{Method}
 	Initially, an encoder independently projects each modality into a representational space, utilizing a self-attention mechanism to capture intra-modality interactions.
 	Subsequently, the architecture employs cross-attention modules to represent modality pairs, focusing on inter-modality interactions.
@@ -119,21 +135,6 @@
 		This dataset is used on a classification task, predicting each patient's cancer type (18 classes).
 		The task was evaluated with the accuracy metric.
 
-	\subsection{Gating mechanism improves accuracy}
-		\begin{figure}[htbp]
-			\centering
-			\includegraphics{signature_alphas.pdf}
-			\caption[Comparison of \(\alpha^{ij}\) scores per class]{Visualization of how the different \(\alpha^{ij}\) are used among the different classes.}
-			\label{fig:alphas_signature}
-		\end{figure}
-
-		We choose the same model architecture without the gating mechanism as a baseline.
-		Adding the gating mechanism does not significantly change the number of parameters, ensuring a fair comparison.
-
-		We first evaluated the impact of the gating on the accuracy when predicting the type of cancer.
-		\Cref{tab:base_table} shows the accuracy obtained with the baseline model (no gate) and the gated model (gate).
-		The model with the gating mechanism slightly outperforms the baseline approach.
-
 		\begin{table}[htbp]
 			\sisetup{separate-uncertainty-units=single, separate-uncertainty,detect-mode}
 			\centering
@@ -157,6 +158,20 @@
 			\end{tblr}
 		\end{table}
 
+	\subsection{Gating mechanism improves accuracy}
+		We choose the same model architecture without the gating mechanism as a baseline.
+		Adding the gating mechanism does not significantly change the number of parameters, ensuring a fair comparison.
+
+		\begin{figure}[htbp]
+			\centering
+			\includegraphics{signature_alphas.pdf}
+			\caption[Comparison of \(\alpha^{ij}\) scores per class]{Visualization of how the different \(\alpha^{ij}\) are used among the different classes.}
+			\label{fig:alphas_signature}
+		\end{figure}
+
+		We first evaluated the impact of the gating on the accuracy when predicting the type of cancer.
+		\Cref{tab:base_table} shows the accuracy obtained with the baseline model (no gate) and the gated model (gate).
+		The model with the gating mechanism slightly outperforms the baseline approach.
 		The gating blocks enable us to directly measure the importance scores of each of the thirty calculated interactions (\cref{fig:alphas_signature}).
 		\Cref{fig:alphas_signature} is obtained by taking the mean of the \(\alpha^{ij}_k\), where sample \(k\) belong to class \(c\).
 		It shows that many interactions are not used; only a small subset is used to obtain the class predictions.
@@ -167,9 +182,9 @@
 		These two cancers originate from the same organ and have only a single difference in their signature.
 
 	\subsection{Stability of the selected interactions}
-		\begin{wrapfigure}[16]{o}{0.48\textwidth}
+		\begin{wrapfigure}[15]{o}{0.48\textwidth}
 			\centering
-			\vspace{-0.5\intextsep}
+			\vspace{-\intextsep}
 			\begin{tikzpicture}
 				\begin{axis}[
 						xbar=2pt,
@@ -373,7 +388,7 @@
 
 		\begin{figure}
 			\centering
-			\includegraphics[width=0.7\textwidth]{ablation_heatmaps.pdf}
+			\includegraphics[width=\textwidth]{ablation_heatmaps.pdf}
 			\caption[Impact of the different regularization terms on the \(\alpha^{ij}\)]{Impact of the different regularization terms on the \(\alpha^{ij}\). (Top left) Impact of the \(\symcal{L}_{01}\) regularization. (Top right) Impact of the \(\symcal{L}_{b}\) regularization. (Bottom left) Impact of the \(\symcal{L}_{e}\) regularization. (Bottom right) Impact of the \(\symcal{L}_{v}\) regularization.}
 			\label{fig:alphas_signature_ablation}
 		\end{figure}

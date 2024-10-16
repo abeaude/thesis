@@ -18,7 +18,20 @@
 	\graphicspath{{../figures/7-Interpretability/}}%
 }
 \chapter{Explaining with counterfactuals}\label{chap:counterfactuals}
-\minitocpage
+\minitoc
+
+In the previous \lcnamecrefs{chap:crossattomicsgate}, we proposed models that accurately predicted a patient phenotype, \ie{}its cancer type.
+While early diagnosis is essential to improve patient care, physicians are interested in knowing what caused the model to predict this cancer instead of another: What are the important genes or potential biomarkers?
+Moreover, suggesting actions that could lead the patient to a healthier state is highly interesting.
+On gene expression profiles, such changes correspond to activation or inactivation of the expression of genes.
+In machine learning, finding such changes that would change the predicted class is known as counterfactual explanations~\cite{wachter2017counterfactual}.
+The search for counterfactuals can be formulated as a constrained optimization problem.
+
+We propose to use \glspl{gan} to solve this optimization problem and generate counterfactual explanations.
+The \gls{gan} training strategy ensures that generated counterfactuals respect the data manifold as the generator learns the data distribution.
+The proposed feature changes in the expression profile can be compared to gene-disease association databases.
+The changes can also be used to propose a treatment plan based on the action of drugs on the gene expression levels.
+
 \section{Methods}
 	We propose to use \glspl{gan} to generate counterfactual explanations, and the proposed architecture is detailed in \cref{fig:gan_cf}.
 	We trained a \gls{wgangp} with extra classifiers, adding more constraints on the generated counterfactual: it does predict the desired class and does not change the tissue of origin.
@@ -152,7 +165,7 @@
 
 
 	\subsection{Robustness evaluation}
-		To evaluate the robustness of the classifier \(\operatorname{Cl}\), we used three metrics: model smoothness~\cite{MarginDecision}, margin decision~\cite{MarginDecision} and boundary thickness~\cite{AdvBoundaryThick}.
+		To evaluate the robustness of the classifier \(\operatorname{Cl}\), we used three metrics: model smoothness, margin decision~\cite{MarginDecision} and boundary thickness~\cite{AdvBoundaryThick}.
 		The details of each metric are given below:
 		\begin{description}[
 				style=multiline,
@@ -203,7 +216,7 @@
 		The maximum allowed \(\epsilon\) value was set to the minimal \(L_{\infty}\) distance between points of two different classes\footnote{choosing a higher epsilon will guarantee the existence of an adversarial example, \ie{} a point of another class.}~(\cref{fig:dist_cls_distibutionLinf}).
 		Adversarial training introduces an implicit task: the model robustness, which changes the training dynamics as the adversarial distributions evolve during training.
 		We noticed that with a very large number of training steps\footnote{four times more than \gls{mlp} NF.} the \gls{mlp} BN was able to benefit from adversarial training.
-		After identifying the optimal number of training steps for each model, we compared the robustness accuracy tradeoff of the models to \gls{pgd} attacks of various sizes~(\cref{fig:mlp_bn_adv_tradeoff,fig:mlp_ln_adv_tradeoff,fig:mlp_nonorm_adv_tradeoff,fig:mlp_fn_adv_tradeoff,fig:mlp_fnagcadv_tradeoff}) after a clean training (\(\epsilon = 0\)) or an adversarial training (\(\epsilon > 0\)).
+		After identifying the optimal number of training steps for each model, we compared the robustness accuracy tradeoff of the models to \(L_{\infty}\) \gls{pgd} attacks of various sizes~(\cref{fig:mlp_bn_adv_tradeoff,fig:mlp_ln_adv_tradeoff,fig:mlp_nonorm_adv_tradeoff,fig:mlp_fn_adv_tradeoff,fig:mlp_fnagcadv_tradeoff}) after a clean training (\(\epsilon = 0\)) or an adversarial training (\(\epsilon > 0\)).
 		Results for the \gls{mlp} BN model are describe in~\cref{fig:mlp_bn_adv_tradeoff}, results for the other models  are available in~\crefrange{fig:mlp_ln_adv_tradeoff}{fig:mlp_fnagcadv_tradeoff}.
 		We noticed that adversarial training with a fixed \(\epsilon\) leads to robustness to attacks of the same size.
 		Intuitively, adversarial training with large \(\epsilon\) would provide robustness to attacks with smaller \(\epsilon\).

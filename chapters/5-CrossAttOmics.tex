@@ -19,10 +19,26 @@
 \chapterpubli{MyCrossAttOmics}
 \minitocpage
 
+We focused on individual omics to predict a phenotype in the previous \lcnamecref{chap:attomics}.
+However, complex diseases like cancer are often the result of the disruption of multiple levels of omics, such as genomics, transcriptomics, epigenomics, and proteomics.
+Considering omics individually only provides a partial view of the underlying complex biological process and disregards significant molecular interactions.
+With recent advances in high-throughput methods, it is now possible to simultaneously measure multiple biological layers from a single patient.
+These advances have led to a significant increase in the availability and accessibility of multi-omics data.
+By analyzing multi-omics data, one can better comprehend the disease and leverage the complementarity and redundancy between individual omics data to improve the predictions.
+For instance, not all mRNAs are translated to proteins; they both provide a complementary view of the underlying biological process.
+They also provide the same information due to their redundancy, as protein levels confirm the translation of mRNAs.
+
+In a multimodal setting, attention can be used to learn relationships between different omics.
+Cross-attention learns the inter-modality interactions by adapting one modality to another.
+We propose a new intermediate fusion approach based on the attention mechanism to capture interactions between the different omics profiles of a patient in order to predict his phenotype, such as a cancer type.
+Cross-attention is used to compute modality interactions after encoding each modality with an attention-based method, such as AttOmics.
+In precision medicine, numerous omics modalities are available, leading to many omics interactions to consider.
+We focused the cross-attention computation on known omics regulatory interactions.
+
 \section{Model Architecture}
-	Our proposed architecture consists of two main components, illustrated in~\cref{fig:crossattomics_arch}.
+	Our proposed architecture, illustrated in~\cref{fig:crossattomics_arch}, consists of two main components.
 	Initially, a series of encoders independently projects each modality into a representational space, utilizing a self-attention mechanism to capture intra-modality interactions.
-	Subsequently, the architecture employs cross-attention modules to represent modality pairs, focusing on inter-modality interactions.
+	Subsequently, the architecture employs cross\-/attention modules to represent modality pairs, focusing on inter-modality interactions.
 	Given the high dimensionality of omics data, direct computation of attention matrices becomes impractical.
 	To address this challenge, we used a strategy of data decomposition into groups, effectively reducing the memory demands associated with attention calculations~\cite{AttOmics}.
 
@@ -137,8 +153,9 @@
 		For each dataset, 70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
 
 	\subsection{Comparative study}
-		For a comprehensive and comparative evaluation, we chose various deep learning architectures with different integration strategies: \gls{mlp} early fusion (MLP EF), \gls{mlp} intermediate fusion (MLP IF), AttOmics early fusion (AttOmics EF), AttOmics intermediate fusion (AttOmics IF), \gls{gnn} early fusion (GNN EF), P-NET~\cite{PNet} and MOGONET~\cite{MOGONET}.
-		We also considered single-omics architecture for comparison: attention-based model~(AttOmics), \gls{mlp} and \gls{gnn} based on the \gls{ppi} graph.
+		For a comprehensive and comparative evaluation, we chose various deep learning architectures with different integration strategies: \gls{mlp} early fusion (MLP EF), \gls{mlp} intermediate fusion (MLP IF), AttOmics early fusion (AttOmics EF), AttOmics intermediate fusion (AttOmics IF), \gls{gnn} early fusion (GNN EF), an early fusion knowledge\-/based \gls{mlp} P-NET~\cite{PNet} and MOGONET~\cite{MOGONET}.
+		We also considered single-omics architecture for comparison: attention-based model (AttOmics), \gls{mlp} and \gls{gnn} based on the \gls{ppi} graph.
+
 		\begin{wrapfigure}[9]{o}{0.4\textwidth}
 			\centering
 			\vspace{-1\intextsep}
@@ -176,14 +193,7 @@
 		Main results are presented on TCGA, similar results are available for CCLE in~\cref{chap:crossattomics_appendix}.
 
 \section{Results}
-
 	\subsection{Omics combination}
-		\begin{figure}[htbp]
-			\centering
-			\includegraphics[width=1\textwidth]{tcga_perf_omics_comb.pdf}
-			\caption[Comparison of the test accuracy of different multi-omics deep learning integration models on TCGA data]{Comparison of the test accuracy of different multi-omics deep learning integration models across different omics combination on the TCGA dataset. Each dot represents the mean accuracy obtained by a model on the test set after 5 different training. The error-bars represents the standard-error. For each combination a \cmark means that the omics is included in the combination and a \xmark means that the omics is excluded from the combination.}
-			\label{fig:tcga_perf_comb}
-		\end{figure}
 		\Cref{fig:tcga_perf_comb} shows the average and standard deviation of the accuracy on the cancer-type classification task according to the best omics combination for all tested methods on the TCGA dataset.
 
 		For single-omics baselines, \gls{mlp} and AttOmics achieve better performances than the \gls{gnn}.
@@ -199,6 +209,13 @@
 		Furthermore, proteomics is not used for diagnosis due to its high cost~\cite{Mundt2023}.
 		For those reasons, we decided not to report the best combination that includes proteins in~\cref{fig:tcga_perf_comb}.
 		Complete results are available in~\cref{chap:crossattomics_appendix}.
+
+		\begin{figure}[htbp]
+			\centering
+			\includegraphics[width=1\textwidth]{tcga_perf_omics_comb.pdf}
+			\caption[Comparison of the test accuracy of different multi-omics deep learning integration models on TCGA data]{Comparison of the test accuracy of different multi-omics deep learning integration models across different omics combination on the TCGA dataset. Each dot represents the mean accuracy obtained by a model on the test set after 5 different training. The error-bars represents the standard-error. For each combination a \cmark means that the omics is included in the combination and a \xmark means that the omics is excluded from the combination.}
+			\label{fig:tcga_perf_comb}
+		\end{figure}
 
 		Increasing the number of omics available during training can boost performances or have little to no effect on test accuracy.
 		There is no change in accuracy when going from two to three modalities with MOGONET.
@@ -252,6 +269,14 @@
 		The CrossAttOmics architecture exhibited the highest latency, which can be attributed to its extensive use of attention mechanisms. Nevertheless, the latency remained reasonable,  a few dozen milliseconds.
 
 	\subsection{Training with small sample sizes}
+		Despite the broad adoption of high throughput methods in personalized medicine, the availability of paired multi-omics data from cancer patients remains limited.
+		Many datasets contain partial multi-omics data, where some modalities are entirely missing.
+		Modalities missingness is often the result of economic constraints, experimental limitations, or patient refusal~\cite{Kang2021}.
+		We explore the impact of the training database size on the performances of CrossAttOmics and other deep-learning architectures by training the different models on a subset of the training set.
+		The different subsets are created by randomly sampling 1\%, 2.5\%, 5\%, 7.5\%, 10\%, 15\%, 30\%, 50\%, 70\% and 90\% of the training set while preserving class proportions.
+		For each subset, five models are trained.
+		The reported performance metrics are estimated on the test set.
+
 		\begin{figure}[htbp]
 			\centering
 			\begin{subcaptiongroup}
@@ -263,13 +288,6 @@
 			\caption[CrossAttOmics and other architectures accuracy on the TCGA test set according to the size of the training set]{Accuracy on the TCGA test set according to the size of the training set for various multi-omics deep learning models when trained on 6 omics~\subref{fig:lim_train_6_omics_A}. Panel~\subref{fig:lim_train_6_omics_B} corresponds to a zoom on the low data regime. Panel~\subref{fig:lim_train_6_omics_C} is a zoom on larger training sizes.}
 			\label{fig:lim_train_6_omics}
 		\end{figure}
-		Despite the broad adoption of high throughput methods in personalized medicine, the availability of paired multi-omics data from cancer patients remains limited.
-		Many datasets contain partial multi-omics data, where some modalities are entirely missing.
-		Modalities missingness is often the result of economic constraints, experimental limitations, or patient refusal~\cite{Kang2021}.
-		We explore the impact of the training database size on the performances of CrossAttOmics and other deep-learning architectures by training the different models on a subset of the training set.
-		The different subsets are created by randomly sampling 1\%, 2.5\%, 5\%, 7.5\%, 10\%, 15\%, 30\%, 50\%, 70\% and 90\% of the training set while preserving class proportions.
-		For each subset, five models are trained.
-		The reported performance metrics are estimated on the test set.
 
 		\Cref{fig:lim_train_6_omics} shows the average and standard deviation of the accuracy on the cancer-type classification task according to the training set size for all tested methods on the TCGA dataset.
 		The best accuracy is achieved with the highest number of samples.
@@ -293,13 +311,13 @@
 
 		A straightforward strategy is to create different missingness patterns during the training~\cite{Cheerla2019}.
 		At each iteration, we randomly drop each modality with probability \(P\).
-		The maximum number of modalities that can be dropped is a model hyperparameter.
+		The maximum number of modalities that can be dropped is a model hyperparameter.\pagebreak
 
-		\begin{wrapfigure}[18]{o}{3in}
+		\begin{wrapfigure}[16]{o}{3in}
 			\centering
-			\vspace{-0.8\intextsep}
+			%\vspace{-0.8\intextsep}
 			\includegraphics{robustness_missing_modalities_dropout.pdf}
-			\caption[CrossAttOmics robustness to missing modalities]{Comparison of CrossAttOmics robustness to missing modalities under two different training strategy: classical training and modality dropout. With modality dropout various scheme of missingness are created during training.}\label{fig:modality_dropout}
+			\caption[CrossAttOmics robustness to missing modalities]{Comparison of CrossAttOmics robustness to missing modalities under two different training strategy: classical training and modality dropout.}\label{fig:modality_dropout}
 		\end{wrapfigure}
 		\Cref{fig:modality_dropout} shows the accuracy distribution with different numbers of missing omics under standard and modality dropout training strategies.
 		Each boxplot is calculated with all possible missingness patterns.
@@ -318,10 +336,14 @@
 		One such method is \gls{lrp}.
 		\Gls{lrp} aims to back-propagate the prediction signal \(p_c\) in the neural network to assign a relevance score to each neuron.
 		We measure the importance of modality interactions as the mean of the \gls{lrp} importance scores assigned to the cross-attention output neurons.
+		\Cref{fig:LRP_CrossAttOmics_subset} presents the \gls{lrp} attribution score for each considered interaction by cancer.
+		Each cancer is characterized by a specific set of important interactions, suggesting that the cross-attention can learn interactions specific to each cancer~(\cref{fig:LRP_CrossAttOmics}).
+		Among the various cancers, the interaction of CNVs with mRNAs stands out as a significant interaction.
+		Combining CNVs and mRNAs makes it possible to exploit their complementarity, and the level of mRNAs confirms the presence of multiple copies of the gene.
 
-		\begin{wrapfigure}[16]{o}{0.48\textwidth}
+		\begin{wrapfigure}[16]{O}{0.45\textwidth}
 			\centering
-			\vspace{-\intextsep}
+			\vspace{-1\intextsep}
 			\begin{tikzpicture}
 				\begin{axis}[
 						xbar=0pt, bar width=__LRPBARWIDTH__,
@@ -382,10 +404,6 @@
 			%\includegraphics[width=\linewidth]{LRP_crossattomics_subset.pdf}
 			\caption[Comparison of the \glsfmtshort{lrp} relevance scores]{Comparison of the \glsfmtshort{lrp} relevance score for the different modelled modality interactions for three cancer.}\label{fig:LRP_CrossAttOmics_subset}
 		\end{wrapfigure}
-		\Cref{fig:LRP_CrossAttOmics_subset} presents the \gls{lrp} attribution score for each considered interaction by cancer.
-		Each cancer is characterized by a specific set of important interactions, suggesting that the cross-attention can learn interactions specific to each cancer~(\cref{fig:LRP_CrossAttOmics}).
-		Among the various cancers, the interaction of CNVs with mRNAs stands out as a significant interaction.
-		Combining CNVs and mRNAs makes it possible to exploit their complementarity, and the level of mRNAs confirms the presence of multiple copies of the gene.
 		In the case of colorectal cancer (COAD, \cref{fig:LRP_CrossAttOmics_subset}),  the interaction between miRNA and mRNA has been identified as one of the main interactions for this cancer.
 		miRNAs play a crucial role in gene regulatory networks by targeting various mRNAs~\cite{Amirkhah2015}.
 		In breast cancer (BRCA, \cref{fig:LRP_CrossAttOmics_subset}), DNAm - mRNA, DNAm - nc mRNA, and nc mRNA - mRNA interactions were identified as among the most important.
@@ -407,12 +425,9 @@
 	In a second phase the multimodal part, i.e. the fusion through the different cross-attention and the predictor module are trained.
 	There are no restrictions on training the model in an end-to-end fashion, it should be noted that this will increase the training time.
 
-	In this work, we only considered omics modalities, but in precision medicine, a wide range of non-omics modalities are available, such as scanners, MRIs, histology slides, or health records.
-	The flexible modeling capabilities of the attention mechanism could help develop a multimodal model integrating heterogeneous and complex modalities.
-
 	To assess the significance of modalities interactions, we used post-hoc techniques applied after model training.
 	The generated explanations may not fully capture the underlying complexity of the model, and the explanations may not be reliable.
-	CrossAttOmics could be improved by integrating trainable weights in the architecture to measure the importance of modalities interactions.
+	CrossAttOmics could be improved by adopting a data-driven approach with trainable weights in the architecture to measure the importance of modalities interactions.
 
 
 \end{document}

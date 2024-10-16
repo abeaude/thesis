@@ -20,7 +20,7 @@
 
 	In~\cref{chap:attomics}, we proposed AttOmics an architecture leveraging the self-attention mechanism to capture patient-specific feature interactions.
 	To ensure the compatibility of high-dimensional molecular profiles with the self-attention memory requirements, we applied self-attention to groups of features.
-	The architecture's flexibility allows the consideration of various group creation processes, particularly knowledge-based groups.
+	The flexibility of the architecture allows the consideration of various group creation processes, particularly knowledge-based groups.
 	With this approach, the number of parameters was reduced compared to an \gls{mlp} with similar dimensions while accurately predicting the type of cancer.
 	Self-attention also allows the visualization of the learned interactions to understand the model better, especially when combined with knowledge-based groups.
 	In our comparison with other deep learning architectures, we observed that AttOmics was the only architecture consistently performing well on different omics data.
@@ -51,7 +51,7 @@
 \section{Perspectives}
 	This section aims to expand on the work described in this manuscript and discuss broader perspectives related to the precision medicine field.
 	\subsection{Removing groups in AttOmics}\label{sec:scalar_attention}
-		In \cref{chap:attomics}, we introduced AttOmics, an architecture based on the self-attention mechanism.
+		In \cref{chap:attomics}, we introduced AttOmics, an architecture based on the self\-/attention mechanism.
 		To avoid self-attention limitations on high-dimensional vectors, we proposed to group features and apply the attention mechanism to these groups.
 		While this approach was shown to be effective~(\cref{chap:attomics}), groups are an architectural constraint; removing them would allow for directly considering feature interactions.
 		Removing groups means considering one-dimensional expression profiles incompatible with the attention mechanism.
@@ -145,7 +145,8 @@
 		In order to apply the methods described in tjis thesis, datasets with paired measurements, where multiple modalities are measured from a unique cell, are required.
 		While methods generating paired measurements are becoming available~\cite{Macaulay2015,Hao2021,Vandereyken2023}, they are not widely used.
 		Most of the available datasets present unpaired cells, where modalities were measured on different cells.
-		In addition to integrating features from different modalities, different cells need to be aligned, known as diagonal integration~\cite{Xu2022}.
+		In addition to integrating features from different modalities, different cells need to be aligned.
+		This integration scheme is known as diagonal integration~\cite{Xu2022}.
 		Specific integration methods are needed to solve this modality fusion problem.
 		Recent technological development added a spatial dimension, giving access to the cellular organization in tissue~\cite{Vandereyken2023}.
 

@@ -109,7 +109,7 @@
 \setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/, version=normal]
 \setmathfontface\mathrm{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/, version=normal]
 \setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/, version=smaller]
-\setmathfontface\mathrm{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/, version=smaller]
+\setmathfontface\mathrm{latinmodern-math.otf}[Scale=1, Path = fonts/, version=smaller]
 \setmathfont{latinmodern-math.otf}[Scale=0.6, Path = fonts/, version=tiny]
 \setmathfontface\mathrm{latinmodern-math.otf}[Scale=0.6, Path = fonts/, version=tiny]
 \setmathfont{latinmodern-math.otf}[Scale=0.8, Path = fonts/, version=middlesize]
@@ -685,7 +685,7 @@
 		\localtableofcontents
 	}
 	\newcommand{\minitoc}{
-		\etocsettocstyle{\addsec*{Chapter contents\\\vspace{-15pt}\rule{\textwidth}{0.4pt}\vspace{-10pt}}\KOMAoption{parskip}{false}}{\vspace{-5pt}\noindent\rule{\textwidth}{0.4pt}\\\KOMAoption{parskip}{half}\vspace{-30pt}}%
+		\etocsettocstyle{\addsec*{Chapter contents\\\vspace{-15pt}\rule{\textwidth}{0.4pt}\vspace{-10pt}}\KOMAoption{parskip}{false}}{\vspace{-5pt}\noindent\rule{\textwidth}{0.4pt}\\\KOMAoption{parskip}{half}\vspace{-20pt}}%
 		\localtableofcontents
 	}
 

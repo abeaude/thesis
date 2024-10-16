@@ -14,6 +14,21 @@
 \chapterpubli{MyAttomics}
 \minitocpage
 
+The disruption of different biological processes can negatively affect an organism and lead to a disease state.
+The development of high-throughput methods enabled easy access to a large amount of biological information for each patient, such as omics profile.
+Omics profiles are high-dimensional complex signatures resulting from interactions of many molecular entities.
+Cellular functions are governed by the combined action of multiple molecular entities specific to a patient.
+The expression of one gene may impact the expression of other genes differently in different patients.
+With classical deep learning approaches, these interactions are learned during training.
+They are assumed to be identical for all patients in the inference phase.
+It would be more beneficial to compute patient-specific feature interactions.
+Self-attention can be used to improve the representation of the features vector by incorporating dynamically computed relationships between elements of the omics profile.
+
+Here, we propose a new method based on the self-attention mechanism to capture interactions between different molecular entities to predict the phenotype of patients, e.g., cancer types or the risk of death from omics data.
+Using a self-attention mechanism allows the model to dynamically capture feature interactions specific to each patient.
+Applying self-attention to high-dimensional vectors such as omics profiles is challenging as the self-attention memory requirements scale quadratically with the number of elements.
+To overcome this problem, we propose considering groups of features and applying self-attention to these groups.
+
 \section{Model Architecture}
 	\subsection{Architecture Details}
 		The model includes a grouping module and an encoder followed by a predictor, illustrated in \cref{fig:attomics_A}.
@@ -34,7 +49,7 @@
 				\phantomcaption\label{fig:attomics_C}
 				\phantomcaption\label{fig:attomics_D}
 			\end{subcaptiongroup}
-			\caption[The AttOmics architecture]{The AttOmics architecture is composed of a grouping module, an encoder and a predictor~\subref{fig:attomics_A}. The grouping module transforms the input features into a set of different groups. In each of the \(n\) encoder blocks, each group is projected into a lower dimensional space~\subref{fig:attomics_B}. Interactions between the different groups is computed with the \glsfirst{mhsa}~\subref{fig:attomics_C}. In each of the \(h\) heads of the \gls{mhsa}, a scaled-dot product attention is computed between the different groups~\subref{fig:attomics_D}. A residual connection is added around the \gls{mhsa} before applying a normalization. The new representation obtained with the encoder is transmitted to the predictor, a \glsfirst{fcn} followed by a normalization.~\subrefrange{fig:attomics_A}{fig:attomics_C}}\label{fig:attomics_arch}
+			\caption[The AttOmics architecture]{The AttOmics architecture is composed of a grouping module, an encoder and a predictor~\subref{fig:attomics_A}. The grouping module transforms the input features into a set of different groups. In each of the \(n\) encoder blocks, each group is projected into a lower dimensional space~\subref{fig:attomics_B}. Interactions between the different groups is computed with the \glsfirst{mhsa}~\subref{fig:attomics_C}. In each of the \(h\) heads of the \gls{mhsa}, a scaled-dot product attention is computed between the different groups~\subref{fig:attomics_D}. A residual connection is added around the \gls{mhsa} before applying a normalization. The new representation obtained with the encoder is transmitted to the predictor, a \glsfirst{fcn} followed by a normalization.}\label{fig:attomics_arch}
 		\end{figure}
 
 		\subsubsection{Grouped FCN (gFCN)}
@@ -54,7 +69,7 @@
 
 		\subsubsection{Multi-Head Self-Attention}
 
-			\Gls{mhsa} is applied to construct a new representation of the groups, \(U = {\left\{ U_{g_i}\right\}}_{1 \leq i \leq k}\), by allowing them to interact with each other~(\cref{fig:attomics_C}).
+			\Gls{mhsa} is applied to construct a new representation of the groups by allowing them to interact with each other: \(U = {\left\{ U_{g_i}\right\}}_{1 \leq i \leq k}\)~(\cref{fig:attomics_C}).
 
 			\Gls{mhsa} is performed with \(h\) different heads to learn different types of interactions.
 			For each head \(j\), self-attention is applied to each group \(g_i\)~(\(1 \leq i \leq k \)), in order to obtain: \(U^{(j)} = {\left\{ U^{(j)}_{g_i} \in \symbb{R}^{l} \right\}}_{1 \leq i \leq k}\), where \(l = \frac{s}{h} \in \symbb{N}\).
@@ -87,7 +102,7 @@
 			The vectors \(Z_{g_i}\) are concatenated into a new vector \(Z' \in \symbb{R}^{ks}\).
 			The output of the encoder \(Z'\) is then fed to a \gls{fcn} followed by a normalization layer to predict the cancer type or the prognosis \(\hat{Y}\)~(\cref{fig:attomics_A}).
 
-			For classification tasks,  the output layer has one neuron per class, and a \(\operatorname{softmax}\) activation function is applied to get the probability vector \(P = {\left[p_c\right]}_{1\leq c\leq M}\), where \(M\) denotes the number of classes.
+			For classification tasks, the output layer has one neuron per class, and a \(\operatorname{softmax}\) activation function is applied to get the probability vector \(P = {\left[p_c\right]}_{1\leq c\leq M}\), where \(M\) denotes the number of classes.
 			For the survival analysis, the output is a single neuron with a linear activation function.
 
 	\subsection{Grouping strategies}\label{sec:grouping}
@@ -128,7 +143,7 @@
 		\[ \symcal{L}(\theta) = - \sum_{c=1}^{M}w_c Y_c \log\left( p_c\right) \text{,}\]
 		where \(w_c\) denotes the weight (inversely proportional to the size) of class \(c \in \left\{1, \ldots,M \right\}\) and \(\theta\) the model parameters.
 
-		For survival analysis, our model is end-to-end trained with a partial log-likelihood loss, as proposed in DeepSurv~\cite{katzmanDeepSurvPersonalizedTreatment2018}:
+		For survival analysis, our model is end-to-end trained with a partial log\-/likelihood loss, as proposed in DeepSurv~\cite{katzmanDeepSurvPersonalizedTreatment2018}:
 		\[ \symcal{L}(\theta) = \frac{1}{N_{\delta_i = 1}} \sum_{i:\delta_i=1} \left(\hat{Y}_i - \log \sum_{j \in \symcal{R}(T_i)}\eta_j \right) \text{,}\]
 		where \(\delta_i\) specifies if the event occurred for patient \(i\), \(T_i\) represents the time associated to the event and \(N_{\delta_i = 1}\) is the number of patients for which the event occurred (\(\delta_i = 1\)).
 		\(\eta_i = e^{\hat{Y}_i}\) is the predicted risk for patient \(i\).
@@ -287,7 +302,7 @@
 		The improvement is more significant when the number of training examples is limited.
 
 		The size of a neural network, i.e.\ its number of parameters to fit, has a strong impact on its performances and required hardware resources (memory, computing time).
-		AttOmics architecture reduces the number of parameters compared to the CNN architecture or \gls{mlp} and achieves similar or better performances~(\cref{tab:n_params_arch}).
+		The AttOmics architecture reduces the number of parameters compared to the CNN architecture or \gls{mlp} and achieves similar or better performances (\cref{tab:n_params_arch}).
 		Due to the high number of features in the omics profile, most \gls{mlp} parameters are within the first layer.
 		However, the total number of parameters of a model is limited by the available hardware.
 		One way to reduce the number of parameters would be to select features, but as explained earlier, this may lead to a loss of relevant information.
@@ -295,12 +310,6 @@
 		Limiting the first projection's space leads to an extensive compression of the omics profile.
 		With self-attention, we can increase the dimension of the projection by reducing the number of parameters and compressing the omics profile more gradually.
 		For instance, for the mRNA clustering approach with self-attention, the profile is projected into a 43280-dimensional space with only 125 million parameters, whereas projecting into the same dimension would require 2.5 billion parameters with an \gls{mlp}.
-
-		As self-attention is known to have a quadratic complexity, we explored its impact on the memory usage of the model and the runtime to obtain prediction from the test set~(\cref{fig:mem_uasge,tab:arch_timings}).
-		During inference on the test set, there is a 45\% increase in memory consumption with the \gls{mlp}.
-		With AttOmics, memory overhead range from 65\% for the largest model to 250\% for the smallest model.
-		The runtime increases with AttOmics compared to the \gls{mlp} but stays in the milliseconds' range and is at least an order of magnitude better than the non-deep-learning methods.
-
 		A similar study is performed for prognosis prediction.
 		The evolution of the \(\operatorname{C-Index}\) according to the number of training examples is presented in~\cref{fig:limit_train_cox}.
 		All models obtain similar performance on this task.
@@ -308,6 +317,10 @@
 		Indeed, for DNAm data, AttOmics has a similar \(\operatorname{C-Index}\) to the \gls{cnn} architecture. For mRNA data, AttOmics has similar performances to the \gls{gnn}.
 		For miRNA data, the \gls{gnn} architecture outperforms all other architectures.
 
+		As self-attention is known to have a quadratic complexity, we explored its impact on the memory usage of the model and the runtime to obtain prediction from the test set~(\cref{fig:mem_uasge,tab:arch_timings}).
+		During inference on the test set, there is a 45\% increase in memory consumption with the \gls{mlp}.
+		With AttOmics, memory overhead range from 65\% for the largest model to 250\% for the smallest model.
+		The runtime increases with AttOmics compared to the \gls{mlp} but stays in the milliseconds' range and is at least an order of magnitude better than the non-deep-learning methods.
 		To conclude these results, incorporating self-attention in the architecture allows having a softer compression of the features, improving the representation of the data and, therefore, the performances.
 
 		AttOmics works on methylation data (DNAm) and gene expression data (mRNA) but not on micro-RNA expression data (miRNA).
@@ -347,5 +360,20 @@
 		In the model based on hallmarks, the inflammatory response group is also identified as involved in different interactions~(\cref{fig:att_map_blca_comp}).
 		The group composition between the two strategies is different, with an overlap of 29\%.
 		The model can handle any grouping, handcrafted groups, or based on a different knowledge source that could be used to improve the information contained in an attention map.
+
+\section{Conclusions}
+	We proposed AttOmics, a novel deep-learning architecture for personalized medicine.
+	AttOmics leverages self-attention to capture feature interactions specific to each patient.
+	Features were grouped before applying self-attention on high dimensional vectors, such as omics profile.
+	With this approach, we can reduce the number of parameters compared to an \gls{mlp} with a similar dimension while accurately predicting the type of cancer.
+	The self-attention also allows the visualization of the learned interactions to understand the model better.
+	AttOmics is the only architecture consistently performing well on different omics data.
+
+	The different omics profiles were studied individually but they are known to interact.
+	Considering the different omics profiles in a unique model could improve the prediction performances by exploiting the complementary and redundant information between the different omics profiles.
+	The attention mechanism has proven to combine multiple modalities within a joint representation effectively.
+	Attention-based multimodal deep-learning models are a promising approach to integrate the different omics data into a unique representation.
+	Early fusion of multiple omics with attention mechanisms might be difficult to achieve as the total number of considered features largely exceed current hardware capacities.
+	Cross-attention might be a better approach as it directly learns interactions between pairs of modalities.
 
 \end{document}
