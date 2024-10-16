@@ -19,16 +19,16 @@
 	With the application of deep-learning to omics data multiple tasks are possible: predict gene expression from the DNA sequence~\cite{Avsec2021}, predict the impact of a sequence variation on \glsxtrlong{dnam}~\cite{Zeng2017}, annotate genome variants~\cite{Quang2014}, etc\@.
 	In this document, we will focus on tasks predicting a phenotype: does a patient have a cancer or not, what type of cancer a patient has; or survival-related tasks.
 
-	Omics data suffers from a curse of dimensionality: they are high-dimensional but the number of available examples remains limited.
-	To overcome the limitation of training examples, various strategies have been used: self-supervised training, feature engineering, transfer learning.
+	Omics data suffers from a curse of dimensionality: they are high-dimensional, but the number of available examples remains limited.
+	In order to overcome the limitation of training examples, various strategies have been used: self-supervised training, feature engineering, and transfer learning.
 	\Glspl{ae} or \glspl{vae} are used to learn a compact representation of the input; the latent representation should contain relevant biological features.
-	The latent representation can be fed to a downstream classifier such as \gls{svm}~\cite{Zhang2020}, \gls{xgboost} or k-NN classifier~\cite{Arafa2023} logistic regression~\cite{Wang2018} or used to train a neural network classifier~\cite{Karim2019}.
+	The latent representation can be fed to a downstream classifier such as an \gls{svm}~\cite{Zhang2020}, \gls{xgboost} or a k-NN classifier~\cite{Arafa2023} logistic regression~\cite{Wang2018} or used to train a neural network classifier~\cite{Karim2019}.
 	The encoder part of the \gls{ae} can be fine-tuned on a predictive task through transfer learning~\cite{Levy2020,Kaczmarek2022}.
 	\citeauthor{Hanczar2018} pretrain each layer of an \gls{mlp} with a denoising \gls{ae}~\cite{Hanczar2018}.
 	Feature engineering involves the creation, selection, and transformation of features to enhance the model's ability to capture essential patterns or signals hidden within the omics data.
 	Many works use feature selection to reduce the input dimension of neural networks.
-	The selections process can be based on features with the highest median absolute deviation, based on a student t-test selection~\cite{Liu2019}, based on knowledge on important features~\cite{Kaczmarek2022} or based on another models such as \glspl{rf}~\cite{Wojewodzic2021,Liu2019} or LASSO~\cite{Liu2019} or PCA~\cite{Yu2019}.
-	Other approaches use the available knowledge to transform raw features to annotated biologically relevant features.
+	The selections process can be based on features with the highest median absolute deviation, based on a student t-test selection~\cite{Liu2019}, based on knowledge on important features~\cite{Kaczmarek2022} or based on another model such as \glspl{rf}~\cite{Wojewodzic2021,Liu2019} or LASSO~\cite{Liu2019} or PCA~\cite{Yu2019}.
+	Other approaches use the available knowledge to transform raw features into annotated biologically relevant features.
 	DeepCC~\cite{gaoDeepCCNovelDeep2019} applies an \gls{mlp} on biologically informed features by transforming gene expression data into a functional spectrum, \ie{}a list of enrichment scores calculated by gene set enrichment analysis.
 	DeepTRIAGE~\cite{beykikhoshkDeepTRIAGEInterpretableIndividualised2020a} transforms gene counts to pathways counts by summing all gene counts belonging to a gene ontology biological process pathway or a KEGG pathway.
 	\citeauthor{Zhang2020} use a gated \gls{mlp} to identify a set of important features, those features are then used to train an \gls{ae}~\cite{Zhang2020}.
@@ -127,13 +127,16 @@
 	\citeauthor{Lee2022}~\cite{Lee2022} models the survival task as a regression on the survival days; this approach does not consider the particular structure of survival data and completely ignores censoring data.
 
 	In precision medicine and the realm of omics, without prior knowledge, a mutation's impact cannot be known without \emph{looking} at the protein.
-	Furthermore, gene expression is a highly regulated phenomenon involving various molecular actors~(\cref{subsec:gene_regulation}).
 	Moving to multi-omics data provides a holistic view of patients, which is necessary for a better understanding of the roles played by the various omics layers.
 
 \section{Multimodal machine learning}
-	A sphere or a vertical cylinder viewed from the top looks like a circle.
-	There is insufficient information to infer a 3D shape correctly from the top view; more information is needed to select from the possible hypothesis.
-	Each view of a 3D object carries different information; they can be complementary or redundant and help improve predictions regarding performance and robustness.
+
+	Gene expression is a highly regulated phenomenon involving various molecular actors~(\cref{subsec:gene_regulation}).
+	The various layers of omics, such as genomics, epigenomics, transcriptomics, and proteomics, are interconnected~(\cref{fig:multiomics_layers}).
+	Considering omics individually is not sufficient.
+	As described in \cref{subsec:gene_regulation}, gene expression is a mechanism with multiple levels of regulation.
+	Each omic can impact the others, and therefore, each carries different information.
+	They can be complementary or redundant and help improve predictions regarding performance and robustness.
 	This is precisely what multimodal machine learning is: combining multiple views or modalities to make better predictions.
 	In the following section, I will present multimodal machine learning, its properties, challenges, and methods to fuse multiple modalities.
 	This description will be based on the work of \citeauthor{MML_morency}: \citetitle{MML_morency}~\cite{MML_morency}.
@@ -179,10 +182,10 @@
 	\end{description}
 	Instead of fusing the latent representations of each modality, it is also possible to coordinate them~\cite{MML_morency}.
 	Coordination aims to ensure that the representations learned from each modality are compatible by constraining latent representations with representations of other modalities.
-	This can be obtained by imposing similarity constraints, finding linear combinations of variables in each modality that are maximally correlated with each other, or through contrastive learning.
+	This coordination can be obtained by imposing similarity constraints, finding linear combinations of variables in each modality that are maximally correlated with each other, or through contrastive learning.
 	Contrastive learning forces the model to encode similar samples closer together in the representation space while pushing dissimilar samples further apart.
 
-	The constructed multimodal representation must account for the interactions between modalities, \ie{}how to correctly align the different modalities~\cite{MML_morency}.
+	The constructed multimodal representation must account for the interactions between modalities~\cite{MML_morency}, \ie{}how to correctly align the different modalities.
 	The alignment of modalities corresponds to knowing what features from one modality have an impact or are connected to another feature from a different modality.
 	There are multiple ways of modeling this with multimodal machine learning models.
 	Contrastive learning is a good way to find an alignment between multiple modalities by forcing similar concepts expressed in different modalities to match.
@@ -385,12 +388,12 @@
 	\end{mybox}
 
 	Classical machine learning algorithms like \glspl{svm} or \glspl{rf} can also integrate multi-omics data with an early or late fusion approach.
-	An \gls{svm} classifier is trained for each omics, and predictions are combined with learnable weights~\cite{CarrilloPerez2022}.
+	In~\cite{CarrilloPerez2022} an \gls{svm} classifier is trained for each omics, and predictions are combined with learnable weights.
 	In an early fusion strategy, the different omics are combined in a single matrix, and a \gls{rf} variant called BlockForest is used to get predictions from fused omics data~\cite{Hornung2019}.
 
-	The recent rise of deep learning in many domains such as computer vision, audio, \gls{nlp} allowed the development of multimodal integration methods using deep learning, particularly for omics data~\cite{Kang2021}.
+	The recent advancement of deep learning in many domains such as computer vision, audio, \gls{nlp} has facilitated the development of multimodal integration methods using deep learning, particularly for omics data~\cite{Kang2021}.
 	Such approaches provide new modeling capacities capturing complex patterns with nonlinear relationships between modalities.
-	One advantage of deep learning-based approaches is their flexibility:
+	One advantage of deep learning\-/based approaches is their flexibility:
 	\begin{itemize}[nosep]
 		\item it can adapt the various data types encountered in precision medicine (tabular, categorical, images, text, time-series);
 		\item its architecture can be designed to model the integration strategy explicitly.
@@ -497,7 +500,7 @@
 		In practice, this reshaping corresponds to creating multiple input elements or tokens and considering a single head in the self-attention mechanism.
 		DeepPathNet is another architecture combining the self-attention mechanism with early fusion~\cite{DeepPathNet}.
 		Multi-omics features are transformed into a pathway representation using the 241 curated pathways from LCpathways~\cite{LCpathways}.
-		Multi-omics features belonging to pathways are concatenated and projected to a 512-dimensional vector with pathway-specific weights.
+		Multi-omics features belonging to a pathway are concatenated and projected to a 512-dimensional vector with pathway-specific weights.
 		Interactions between the 241 pathways are then computed with a transformer block~(\cref{eq:transformer_block}).
 
 	\subsection{Late fusion}
@@ -561,7 +564,7 @@
 		They called this approach stacked-\gls{ae}~\cite{Wu2022StackedAB}.
 		The encoder-decoder architecture allows to create new training strategies.
 		The classical way to train an \gls{ae} is to use the decoder to reconstruct the input, in a multi-omics framework the decoder can also be used to reconstruct the other modalities.
-		DeePathlogy\footnote{Suprisingly they used a cosine-similarity loss for their classification tasks.}~\cite{Azarkhalili2019} uses an encoder to encode mRNA expression profile and the a decoder that reconstruct the mRNA profile but also predict the level of miRNA expression.
+		DeePathlogy\footnote{Suprisingly they used a cosine-similarity loss for their classification tasks.} uses an encoder to encode mRNA expression profile and the a decoder that reconstruct the mRNA profile but also predict the level of miRNA expression~\cite{Azarkhalili2019}.
 		They did ensure that no miRNA genes were present in the mRNA expression profile.
 		This translation tasks forces the network to learn the relationships between the two omics and thus should improve the latent representation.
 		Instead of having a single \gls{ae}, \citeauthor{CrossAE} proposed to have one \gls{ae} per omics and each \gls{ae} reconstruct its input and the other omics.
@@ -827,7 +830,7 @@
 
 	Adversarial examples and counterfactual explanations are obtained by solving similar optimization problems~\cite{Pawelczyk2021ExploringCE,Freiesleben2021}.
 	Adversarial examples are also obtained by finding the minimal perturbation changing model prediction on a given example~(\cref{box:adversarial})~\cite{Szegedy2013IntriguingPO}.
-	As they solve similar optimization problems, there are some discussions around their relationship.
+	As they solve similar optimization problems, there are discussions around their relationship.
 	\citeauthor{wachter2017counterfactual} already identified this close relationship between the two concepts and highlighted a difference in the distance used~\cite{wachter2017counterfactual}.
 	Adversarial attacks generate perturbation aimed at being imperceptible, whereas counterfactual explanation encourages minimal changes~(see \ref{item:cf_sparse} constraint).
 	They also stated that adversarial examples represent impossible points, but counterfactuals are realistic points~(see \ref{item:cf_data_manifold} constraint).

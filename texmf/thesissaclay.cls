@@ -104,12 +104,16 @@
 \RequirePackage{amssymb}
 \RequirePackage{amsfonts}
 \RequirePackage{nicefrac}
-\RequirePackage[all,warning]{onlyamsmath}
+% \RequirePackage[all,warning]{onlyamsmath}
 \RequirePackage[math-style=TeX, bold-style=TeX, active-frac=small]{unicode-math}
 \setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/, version=normal]
 \setmathfontface\mathrm{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/, version=normal]
 \setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/, version=smaller]
 \setmathfontface\mathrm{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/, version=smaller]
+\setmathfont{latinmodern-math.otf}[Scale=0.6, Path = fonts/, version=tiny]
+\setmathfontface\mathrm{latinmodern-math.otf}[Scale=0.6, Path = fonts/, version=tiny]
+\setmathfont{latinmodern-math.otf}[Scale=0.8, Path = fonts/, version=middlesize]
+\setmathfontface\mathrm{latinmodern-math.otf}[Scale=0.8, Path = fonts/, version=middlesize]
 \setoperatorfont{\mathrm}
 % \setoperatorfont{\symbfsfup}
 \newtheorem{definition}{Definition} %TODO: language support

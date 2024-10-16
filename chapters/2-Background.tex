@@ -118,6 +118,16 @@
 		Similarly, each row of the edge embeddings matrix is the \(d_e\)-length vector embedding of an edge.
 		In the following, I will focus on undirected graphs without edge embedding \(E\).
 
+		\begin{figure}[htbp]
+			\centering
+			\ifSubfilesClassLoaded{%
+				\input{figures/2-Background/gnn.tex}%
+			}{
+				\input{../figures/2-Background/gnn.tex}%
+			}
+			\caption[Example of a \glsfmtlong{gnn}]{Example of a \glsfmtlong{gnn} with two graph convolution layers. The details of the computation of the graph convolution for the node 2 is given. }\label{fig:gnn}
+		\end{figure}
+
 		A \gls{gnn} is an architecture composed of an input layer, \(L\) hidden layers, and one output layer.
 		Similarly to the \gls{cnn}, some hidden layers are replaced with graph convolution layers
 		\Glspl{gcn}, update node embeddings by aggregating information from neighboring nodes.
@@ -126,7 +136,7 @@
 			h^{l+1}_{v}          & = f\left( \frac{h^{l}_{v}W^{l}}{\left|\symcal{N}_{v} \right|} + h^{l}_{v,\text{agg}}W^{l}\right)                \\
 			h^{l}_{v,\text{agg}} & = \sum_{u \in \symcal{N}_{v}} \frac{h^{l}_{u}}{\sqrt{\left|\symcal{N}_{v} \right|\left|\symcal{N}_{u} \right|}}
 		\end{align}
-		\(W^{l} \in \symbb{R}^{d_{l}\times d_{l+1}}\) is the learnable weight matrix applied to the node embeddings, and \(f\) is a non-linear activation function, such as \(\operatorname{ReLU}\).
+		The weight \(W^{l} \in \symbb{R}^{d_{l}\times d_{l+1}}\) is the learnable weight matrix applied to the node embeddings, and \(f\) is a non-linear activation function, such as \(\operatorname{ReLU}\).
 		Node embeddings \(h_{u}^{l}\) are normalized by the size of their neighborhood, \ie{}their degree: \(\left|\symcal{N}_{u} \right|\) to prevent explosion of the embeddings.
 		The updates of all nodes can be written in the following matrix form:
 		\begin{equation}
@@ -145,10 +155,27 @@
 		\end{itemize}
 
 	\subsection{Self-attention and transformers}\label{sec:self_attention_transformer}
+
+		\begin{figure}[htbp]
+			\centering
+			\begin{subcaptiongroup}
+				\ifSubfilesClassLoaded{%
+					\input{figures/2-Background/transformers.tex}%
+				}{
+					\input{../figures/2-Background/transformers.tex}%
+				}
+				\phantomcaption\label{fig:transformer_block}
+				\phantomcaption\label{fig:transformer_mhsa}
+				\phantomcaption\label{fig:transformer_attention}
+			\end{subcaptiongroup}
+			\caption[Details of a Transformer block]{The transformer encoder is a stacking of \(n\) \(\operatorname{TransformerBlock}\). The architecture of a \(\operatorname{TransformerBlock}\) is detailled in \subref{fig:transformer_block}. The \(\MHSA\) module is detailled in \subref{fig:transformer_mhsa}. The computation details of the \(\operatorname{Attention}\) happening in each head is detailled in \subref{fig:transformer_attention}.}\label{fig:transformers}
+		\end{figure}
+
 		To correctly understand a sentence, one must relate words to the sentence's other words to augment their meaning.
 		In machine learning, this is achieved through attention mechanisms.
 		Attention mechanisms are a simple weighting of the data, and they enhance the data elements by dynamically including information about the input's context.
 		There are multiple flavors of attention; the most well-known one is the scaled-dot product attention~\cite{AttentionAllYouNeed}.
+
 		The self-attention, based on the scaled-dot product attention, takes a two-dimensional input, \(\symbf{x} \in \symbb{R}^{L\times s}\), where \(L\) is the number of input elements and \(s\) the embedding dimension.
 		The input \(\symbf{x}\) is projected by three independent trainable linear projections into the query \(Q \in \symbb{R}^{L \times d}\), the key \(K \in \symbb{R}^{L \times d}\) and the value \(V \in \symbb{R}^{L \times d}\):
 		\begin{align}
@@ -179,7 +206,7 @@
 		The attention mechanism is used in the transformer, an encoder-decoder architecture.
 		I will only describe the encoder where the self-attention is used.
 		The transformer encoder is a stacking of \(n\) blocks.
-		Each block is composed of a self-attention and a feed-forward network, \(\operatorname{FFN}\)~\cref{eq:transformer_block}.
+		Each block is composed of a self-attention and a feed-forward network, \(\operatorname{FFN}\)~(\cref{eq:transformer_block}).
 		Each sublayer of the block has a residual connection to prevent vanishing gradients followed by a layer normalization \(\LN\)\footnote{We only describe the original transformer architecture where post-normalization is used, but many recent architectures employ a pre-normalization scheme, which has been shown to work better~\cite{TransformerpreLN}.}.
 		\begin{equation}
 			\operatorname{TransformerBlock}\left(X\right) = \operatorname{FFN}\left(\LN\left(X + \MHSA\left(X\right)\right)\right)\label{eq:transformer_block}
@@ -346,8 +373,8 @@
 		Models are complex with numerous parameters; they might learn how to perfectly solve a task on the training set without generalizing to new data.
 		The risk of overfitting is increased when number of training samples is limited.
 		Different regularization techniques have been designed to prevent this overfitting.
-		Batch normalization normalizes the signal \(z^{l}\) by re-centering and re-scaling it before applying the activation function \(f\)~\cite{BatchNorm}.
-		Dropout randomly ignores some neurons during training~\cite{Dropout}.
+		Batch normalization~\cite{BatchNorm} normalizes the signal \(z^{l}\) by re-centering and re-scaling it before applying the activation function \(f\).
+		Dropout~\cite{Dropout} randomly ignores some neurons during training.
 		The ignored neurons are sampled independently from a Bernoulli distribution.
 		Regularization terms can be added to the loss such as L1 regularization \({\|\theta\|}_{1}\) which forces model weights to be sparse or L2 regularization \({\|\theta\|}_{2}\) favoring smaller and evenly distributed weights.
 		Early stopping monitors a validation metric; the training is stopped to prevent overfitting when it no longer improves.
@@ -361,7 +388,7 @@
 		The hyperparameters leading to the best performances are then selected.
 
 		For classification tasks, the performances were evaluated with the error rate or the accuracy, recall, precision, specificity, F1-score, and the \gls{auroc}.
-		For survival prediction tasks, performances were evaluated with the concordance-index.
+		For survival prediction tasks, performances were evaluated with the concordance-index~\cite{Harrell1982}.
 		It estimates that for a pair of individuals, the predicted risks, \(\phi\),  are concordant with their actual survival times.
 		\begin{equation}
 			\operatorname{C-Index} = \frac{\sum_{i,j}\symbb{1}_{T_j < T_i}\symbb{1}_{\phi_j > \phi_i}\delta_j}{\sum_{i,j}\symbb{1}_{T_j < T_i}\delta_j}
@@ -375,7 +402,7 @@
 		\Glspl{gan} are a type of generative model introduced by \citeauthor{Goodfellow2014GAN} in \citeyear{Goodfellow2014GAN} consisting of two components: a generator \(G\) and a discriminator \(D\)~\cite{Goodfellow2014GAN}.
 
 		\begin{wrapfigure}[5]{o}{0.45\textwidth}
-			\vspace{-0.5\intextsep}
+			\vspace{-1\intextsep}
 			\centering
 			\begin{tikzpicture}[thick]
 				\begin{axis}[axis lines=none, width=3cm, height=3.5cm, name=noise]
@@ -435,7 +462,7 @@
 			\caption{\glsfmtshort{gan} training algorithm}\label{alg:gan}
 		\end{algorithm}
 		In practice, \glspl{gan} suffers from unstable training.
-		Optimization of the \gls{gan} loss function \cref{eq:gan_loss} corresponds to the minimization of the \gls{js} divergence between \(p_{d}\) and \(p_{g}\).
+		Optimization of the \gls{gan} loss function~(\cref{eq:gan_loss}) corresponds to the minimization of the \gls{js} divergence between \(p_{d}\) and \(p_{g}\).
 		When the two distributions \(p_d\) and \(p_g\) do not overlap significantly, the discriminator will be perfect and have no difficulty distinguishing between the two distributions.
 		It has been shown that a perfect discriminator leads to vanishing gradients on the generator~\cite{Arjovsky2017TowardsPM}.
 		The joint training of the two components corresponds to finding the Nash-equilibrium in a non-cooperative two-player game~\cite{Salimans2016ImprovedTF}.
@@ -532,6 +559,16 @@
 	The \emph{ome} suffix refers to all constituents.
 	For instance, the genome refers to all the genetic information of an organism, and genomics corresponds to the study of the genome.
 
+	\begin{figure}[htbp]
+		\centering
+		\ifSubfilesClassLoaded{%
+			\input{figures/2-Background/multiomics.tex}%
+		}{
+			\input{../figures/2-Background/multiomics.tex}%
+		}
+		\caption[Multi-omics layers]{Various layers of interconnected omics data. Connections between omics are represented by the black dashed links and connections between features in each omics are represented by the colored links.}\label{fig:multiomics_layers}
+	\end{figure}
+
 	The development of high-throughput technologies and the cost decline associated with those technologies helped foster a wide adoption of those methods.
 	This adoption enabled a large availability of omics data, particularly multi-omics data, which helped revolutionize the field of precision medicine.
 	There are multiple platforms to study omics data with different protocols, multiple references and annotations files, and various tools to perform the final quantification.
@@ -580,7 +617,7 @@
 		\begin{figure}[htbp]
 			\centering
 			\includegraphics[width=\textwidth]{epigenetics.pdf}
-			\caption[Epigenetic mechanism]{Epigenetics mechanism from~\cite{Jones2016}}\label{fig:epigenetics}
+			\caption[Epigenetic markers]{Epigenetics markers from~\cite{Jones2016}}\label{fig:epigenetics}
 		\end{figure}
 
 		\gls{mirna} and \gls{lncrna} quantification is obtained similarly to mRNAs quantification~(\cref{subsec:transcriptomics}).
@@ -611,7 +648,7 @@
 		Peptides mass-to-charge ratios are compared to theoretical ratios databases to identify the proteins.
 
 \section{Datasets}
-	Large multi-omics datasets are limited, and although the cost of high-throughput technologies has decreased, many difficulties remain in the acquisition of multi-omics data.
+	Large multi-omics datasets are limited, and although the cost of high\-/throughput technologies has decreased, many difficulties remain in the acquisition of multi-omics data.
 	\Gls{tcga} is the main dataset with high-quality patient data~\cite{TCGA}, \gls{ccle} is another multi-omics dataset on cell-lines~\cite{CCLE}.
 	Those datasets present uniformly processed data, ensuring that samples were analyzed the same way.
 
@@ -663,6 +700,8 @@
 
 	\subsection{\Glsfmtfull{ccle}}\label{sec:data_ccle}
 		This second dataset, available on the DepMap portal\footnote{\url{https://depmap.org/portal/data_page/?tab=allData}}, is composed of \glsxtrfull{dnam}, \glsxtrfull{mrna}, \glsxtrfull{mirna} expression, \glsxtrfull{cnv}, metabolomics, and proteomics for 536 cells of 16 different cancers.
+		Methods to obtain the molecular features from the cancer cell-lines is described in~\cite{CCLE}.
+		Contrary to \gls{tcga}, \gls{dnam} data were quantified with reduced representation bisulfite sequencing which focuses on methylation sites in promoters regions.
 		No feature selection was applied, and data were standardized to a zero mean and unit variance.
 		70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
 
