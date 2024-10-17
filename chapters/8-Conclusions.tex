@@ -60,6 +60,17 @@
 		The direct idea would be to project scalar values into a higher dimensional space~\cite{gorishniy2021revisiting} and use the recent self-attention approximation~\cite{xiongNystrOmformerNystr2021,Linformer} or new efficient implementation~\cite{FlashAttention,rabeSelfattentionDoesNot2021,bolyaHydraAttentionEfficient2022a} that allows for scaling up to large inputs\footnote{see~\cite{EfficientTransformers} for an extensive overview of the possible methods}.
 		Nevertheless, there is no justification for projecting scalar values into a higher dimensional space, and more importantly, it is unclear what would represent each dimension of the newly obtained vector.
 
+		\begin{figure}[htbp]
+			\centering
+			\begin{subcaptiongroup}
+				\includegraphics{ScalarAttentionBenchmark.pdf}
+				\phantomcaption\label{fig:lin_attention_benchA}
+				\phantomcaption\label{fig:lin_attention_benchB}
+			\end{subcaptiongroup}
+			\caption[Comparison of two ScalarAttention implementation]{Comparison of the memory usage~\subref{fig:lin_attention_benchA} and the computation time~\subref{fig:lin_attention_benchB} of a \textcolor[HTML]{3969AC}{PyTorch} and a \textcolor[HTML]{F2B701}{Triton} implementation of the ScalarAttention}
+			\label{fig:lin_attention_bench}
+		\end{figure}
+
 		The attention matrix is obtained by measuring the similarity between pairs of inputs; for vectors, this measure is the scalar product.
 		One could consider a similarity measure for scalar values, such as absolute difference, and inject this into the attention computation:
 		\begin{equation}
@@ -77,17 +88,6 @@
 		This formulation can be implemented in an optimized triton kernel~\cite{TritonLang} as proposed in~\cref{code:triton_att}, with a lower memory footprint without significantly increasing the computation time~(\cref{fig:lin_attention_bench}).
 		Triton is a programming language and a compiler to write GPU-efficient code easily.
 		\pythoncode[label={code:triton_att}]{Triton implementation of the ScalarAttention}{figures/8-Conclusions/ScalarAttention.py}
-
-		\begin{figure}[htbp]
-			\centering
-			\begin{subcaptiongroup}
-				\includegraphics{ScalarAttentionBenchmark.pdf}
-				\phantomcaption\label{fig:lin_attention_benchA}
-				\phantomcaption\label{fig:lin_attention_benchB}
-			\end{subcaptiongroup}
-			\caption[Comparison of two ScalarAttention implementation]{Comparison of the memory usage~\subref{fig:lin_attention_benchA} and the computation time~\subref{fig:lin_attention_benchB} of a \textcolor[HTML]{3969AC}{PyTorch} and a \textcolor[HTML]{F2B701}{Triton} implementation of the ScalarAttention}
-			\label{fig:lin_attention_bench}
-		\end{figure}
 
 	\subsection{Extending CrossAttOmics to other type of modalities}
 		In \cref{chap:crossattomics}, we introduced CrossAttOmics, a deep learning architecture to integrate multi-omics data.
@@ -149,6 +149,7 @@
 		This integration scheme is known as diagonal integration~\cite{Xu2022}.
 		Specific integration methods are needed to solve this modality fusion problem.
 		Recent technological development added a spatial dimension, giving access to the cellular organization in tissue~\cite{Vandereyken2023}.
+		\newpage
 
 	\subsection{Foundations models}
 		Foundations models are large deep learning models trained on broad data that can be adapted to a wide range of downstream tasks~\cite{bommasani2022opportunitiesrisksfoundationmodels}.

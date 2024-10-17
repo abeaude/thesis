@@ -6,6 +6,7 @@ $allow_subdir_creation=2;
 $max_repeat=6;
 $bibtex_use = 2;
 $xdvipdfmx_silent_switch = ""; # -q
+$xdvipdfmx = "xdvipdfmx -E -o %D %O %S"; #-z 0
 $success_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log | sed -r 's/\\x1B\\\[(;?[0-9]{1,3})+[mGK]//g' | grep -vE 'LaTeX2e|Document Class|Output written|Package silence' && if [ %A = 'main' ]; then rm -f %Y/%A.log %Y/%A.aux; fi";
 $failure_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log | sed -r 's/\\x1B\\\[(;?[0-9]{1,3})+[mGK]//g' | grep -vE 'LaTeX2e|Document Class|Output written|Package silence' ";
 $silent = 1;

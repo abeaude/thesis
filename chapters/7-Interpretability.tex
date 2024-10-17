@@ -187,15 +187,19 @@ The changes can also be used to propose a treatment plan based on the action of 
 				\end{equation}
 				A higher margin decision is better.
 			\item[Boundary thickness]
-				The boundaries thickness measures the margin of the region where the probability difference \(D_{ij}\left(\cdot\right) = \operatorname{Cl}\left(\cdot\right)_{i} - \operatorname{Cl}\left(\cdot\right)_{j}\), where \(i\) and \(j\) are respectively the predicted labels of a clean sample \(\symbf{x}\) and its adversarial example \(\symbf{x}^{\star}\), lies between two values \(\alpha\) and \(\beta\)~\cite{AdvBoundaryThick}:
+				The boundaries thickness measures the margin of the region where the probability difference \(D_{ij}\left(\cdot\right) = \operatorname{Cl}\left(\cdot\right)_{i} - \operatorname{Cl}\left(\cdot\right)_{j}\), lies between two values \(\alpha\) and \(\beta\)~\cite{AdvBoundaryThick}:
 				\begin{equation}
 					\left\|\symbf{x} - \symbf{x}^{\star}\right\|_{2} \int_{0}^{1} \symbb{1}\left\{ \alpha < D_{ij}\left(t\symbf{x} + \left(1-t\right)\symbf{x}^{\star} \right) < \beta\right\}
 				\end{equation}
+				where \(i\) and \(j\) are respectively the predicted labels of a clean sample \(\symbf{x}\) and its adversarial example \(\symbf{x}^{\star}\).
 				Thicker boundary helps improve robustness against adversarial examples.
 		\end{description}
 
 
 \section{Preliminary results}
+	We successfuly trained a \gls{gan} to generate counterfactuals explanations.
+	However, more analysis are required to ensure the biological relevances of the proposed changes.
+	Only the results on the adversarial robustness study are presented.
 	\subsection{Adversarial study}
 		Batch normalization was rapidly identified as problematic for learning robust models with adversarial training~\cite{AdvBNProblems,xie2019intriguingpropertiesadversarialtraining}.
 		Indeed, batch normalization was designed to learn statistics from a single distribution: introducing adversarial examples in a batch creates batches with data from two distributions.
@@ -207,6 +211,12 @@ The changes can also be used to propose a treatment plan based on the action of 
 			\hat{W}^{l}_{ij} = \gamma\frac{W^{l}_{ij} - \mu^{l}_{i}}{\sigma^{l}_{i}\sqrt{F^{l}_{\text{in}}}}
 		\end{equation}
 		where \(\gamma\) is a scaling factor depending on the type of non-linearities~\cite{brock2021characterizing}, \(\mu^{l}_{i}\) and \(\sigma^{l}_{i}\) are the mean and standard deviation of  the \(i\)-th row of \(W^{l}\) and \(F^{l}_{\text{in}}\) is the number of input elements of the layer, \ie{}the batch size for linear layers.
+
+		\begin{figure}[htbp]
+			\centering
+			\includegraphics[scale=0.9]{MLP_BN_adversarial_tradeoff.pdf}
+			\caption[\glsfmtshort{mlp} BN adversarial robustness-accuracy tradeoff]{Comparison of the adversarial robustness-accuracy tradeoff for \glsfmtshort{pgd} attacks with different sizes (\(\epsilon > 0\)) after adversarial training of the \glsfmtshort{mlp} BN model with various \glsfmtshort{pgd} attacks sizes, \(\epsilon = 0\) corresponds to a classical training on only clean samples.}\label{fig:mlp_bn_adv_tradeoff}
+		\end{figure}
 
 		To identify the most robust classifier \(\operatorname{Cl}\), we compared the tradeoff accuracy robustness of five models: an \gls{mlp} with batch normalization (\glsxtrshort{mlp} BN), an \gls{mlp} with layer normalization (\glsxtrshort{mlp} LN), an \gls{mlp} without any normalization layer (\glsxtrshort{mlp} NoNorm), a norm-free \gls{mlp} where weights are standardized (\glsxtrshort{mlp} NF) and an \glsxtrshort{mlp} NF where \gls{agc} is used during training (\glsxtrshort{mlp} NF \glsxtrshort{agc}).
 		\Gls{agc} was introduced in~\cite{NoNormApplied} to improve training stability on larger batches by controlling the magnitude of the gradients according to the ratio of gradient norms to parameter norms and ensuring balanced updates.
@@ -228,21 +238,6 @@ The changes can also be used to propose a treatment plan based on the action of 
 
 		\begin{figure}[htbp]
 			\centering
-			\includegraphics[scale=0.9]{MLP_BN_adversarial_tradeoff.pdf}
-			\caption[\glsfmtshort{mlp} BN adversarial robustness-accuracy tradeoff]{Comparison of the adversarial robustness-accuracy tradeoff for \glsfmtshort{pgd} attacks with different sizes (\(\epsilon > 0\)) after adversarial training of the \glsfmtshort{mlp} BN model with various \glsfmtshort{pgd} attacks sizes, \(\epsilon = 0\) corresponds to a classical training on only clean samples.}\label{fig:mlp_bn_adv_tradeoff}
-		\end{figure}
-
-		In the following, \(\epsilon = 0.1\) will be used for \gls{pgd} attacks.
-		\Cref{fig:adv_robust_strat} compares the robustness-accuracy tradeoff with different training strategies: clean training, untargeted, and targeted adversarial training.
-		For all considered models, both targeted and untargeted adversarial training improve robustness while sacrificing some clean accuracy~(\crefrange{fig:adv_robust_strat_mlp_bn}{fig:adv_robust_strat_mlp_fn_agc}).
-		For all considered models, the untargeted adversarial training leads to the best robustness compared to the targeted strategy~(\cref{fig:adv_robust_strat}), approximately two times higher robustness.
-		The highest robustness ease achieved with untargeted adversarial training for \gls{mlp} BN, \gls{mlp} NF and \gls{mlp} NF AGC~(\cref{fig:adv_robust_strat_mlp_bn,fig:adv_robust_strat_mlp_fn,fig:adv_robust_strat_mlp_fn_agc}).
-		For two models, \gls{mlp} NF and \gls{mlp} NF AGC, the loss of accuracy is higher than the other models while achieving better robustness than for the other three~(\cref{fig:adv_robust_strat_mlp_fn,fig:adv_robust_strat_mlp_fn_agc}).
-		Going from zero robustness to \(0.5\) robustness is a major improvement.
-		Other adversarial training strategies need to be explored to see if the robustness can be increased~\cite{AdvTrainSurvey}.
-
-		\begin{figure}[htbp]
-			\centering
 			\begin{subcaptiongroup}
 				\includegraphics{adversarial_robustness_strategy.pdf}
 				\phantomcaption\label{fig:adv_robust_strat_mlp_bn}
@@ -253,6 +248,15 @@ The changes can also be used to propose a treatment plan based on the action of 
 			\end{subcaptiongroup}
 			\caption[Comparison of the accuracy-robustness tradeoff with various training strategies]{Comparison of the accuracy-robustness tradeoff between three training strategies: clean training, untargeted adversarial training and targeted adversarial training for five models: \glsfmtshort{mlp} BN~\subref{fig:adv_robust_strat_mlp_bn}, \glsfmtshort{mlp} LN~\subref{fig:adv_robust_strat_mlp_ln}, \glsfmtshort{mlp} NoNorm~\subref{fig:adv_robust_strat_mlp_nonorm}, \glsfmtshort{mlp} NF~\subref{fig:adv_robust_strat_mlp_fn}, and \glsfmtshort{mlp} NF \glsfmtshort{agc}~\subref{fig:adv_robust_strat_mlp_fn_agc}.}\label{fig:adv_robust_strat}
 		\end{figure}
+
+		In the following, \(\epsilon = 0.1\) will be used for \gls{pgd} attacks.
+		\Cref{fig:adv_robust_strat} compares the robustness-accuracy tradeoff with different training strategies: clean training, untargeted, and targeted adversarial training.
+		For all considered models, both targeted and untargeted adversarial training improve robustness while sacrificing some clean accuracy~(\crefrange{fig:adv_robust_strat_mlp_bn}{fig:adv_robust_strat_mlp_fn_agc}).
+		For all considered models, the untargeted adversarial training leads to the best robustness compared to the targeted strategy~(\cref{fig:adv_robust_strat}), approximately two times higher robustness.
+		The highest robustness ease achieved with untargeted adversarial training for \gls{mlp} BN, \gls{mlp} NF and \gls{mlp} NF AGC~(\cref{fig:adv_robust_strat_mlp_bn,fig:adv_robust_strat_mlp_fn,fig:adv_robust_strat_mlp_fn_agc}).
+		For two models, \gls{mlp} NF and \gls{mlp} NF AGC, the loss of accuracy is higher than the other models while achieving better robustness than for the other three~(\cref{fig:adv_robust_strat_mlp_fn,fig:adv_robust_strat_mlp_fn_agc}).
+		Going from zero robustness to \(0.5\) robustness is a major improvement.
+		Other adversarial training strategies need to be explored to see if the robustness can be increased~\cite{AdvTrainSurvey}.
 
 		In the following, an untargeted adversarial training strategy will be used to increase the model's robustness.
 		\Cref{tab:metrics_adv} presents a comparison of boundary thickness, margin decision, and model smoothness of the five considered models after clean training (Robust \xmark) and adversarial training (Robust \cmark).
@@ -328,8 +332,5 @@ The changes can also be used to propose a treatment plan based on the action of 
 			\caption[\glsfmtshort{knn} characterization of adversarial examples with \glsfmtshort{mlp} BN]{\glsfmtshort{knn} characterization of adversarial examples with \glsfmtshort{mlp} BN after clean training (Not Robust) and adversarial training (Robust). For both training strategies we compared untargeted and targeted attacks. \(Y\) represents the true label, \(\hat{Y}\) the predicted class by the model, \(Y^{\text{kNN}}\) the majority voting from the 20 nearest neighbors, \(\hat{Y}_{adv}\) the predicted class of the found adversarial example, \(Y^{\text{kNN}}_{adv}\) the majority voting from the 20 nearest neighbors of the found adversarial, and \(\tilde{Y}\) the desired class of targeted attackes. We set \(\tilde{Y}\) to normal for all samples.}\label{fig:mlp_bn_knn_comp}
 		\end{figure}
 
-	\subsection{Counterfactuals}
-		We successfuly trained a \gls{gan} to generate counterfactuals explanations.
-		However, more analysis are required to ensure the biological relevances of the proposed changes.
 
 \end{document}

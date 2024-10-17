@@ -771,19 +771,19 @@
 
 	\if@twoside%
 		\cfoot*{}
-		%\ofoot*{\pagemark}
-		\lefoot*{
-			\begin{tikzpicture}<disable externalization>
-				\node (b) [inner sep=0pt]{\pagemark};
-				\node[inner sep=0pt, right=1mm of b.east, anchor=west]{\pgfornament[height=2ex, symmetry=v]{72}};
-			\end{tikzpicture}
-		}
-		\rofoot*{
-			\begin{tikzpicture}<disable externalization>
-				\node (a) [inner sep=0pt]{\pgfornament[height=2ex]{72}};
-				\node [right=1mm of a.east, inner sep=0pt, anchor=west]{\pagemark};
-			\end{tikzpicture}
-		}
+		\ofoot*{\pagemark}
+		% \lefoot*{
+		% 	\begin{tikzpicture}<disable externalization>
+		% 		\node (b) [inner sep=0pt]{\pagemark};
+		% 		\node[inner sep=0pt, right=1mm of b.east, anchor=west]{\pgfornament[height=2ex, symmetry=v]{72}};
+		% 	\end{tikzpicture}
+		% }
+		% \rofoot*{
+		% 	\begin{tikzpicture}<disable externalization>
+		% 		\node (a) [inner sep=0pt]{\pgfornament[height=2ex]{72}};
+		% 		\node [right=1mm of a.east, inner sep=0pt, anchor=west]{\pagemark};
+		% 	\end{tikzpicture}
+		% }
 	\else%
 		\cfoot*{\begin{tikzpicture}<disable externalization>
 				\node (a) [inner sep=0pt]{\pgfornament[height=2ex]{72}};

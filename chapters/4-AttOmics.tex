@@ -102,7 +102,7 @@ To overcome this problem, we propose considering groups of features and applying
 			The vectors \(Z_{g_i}\) are concatenated into a new vector \(Z' \in \symbb{R}^{ks}\).
 			The output of the encoder \(Z'\) is then fed to a \gls{fcn} followed by a normalization layer to predict the cancer type or the prognosis \(\hat{Y}\)~(\cref{fig:attomics_A}).
 
-			For classification tasks, the output layer has one neuron per class, and a \(\operatorname{softmax}\) activation function is applied to get the probability vector \(P = {\left[p_c\right]}_{1\leq c\leq M}\), where \(M\) denotes the number of classes.
+			For classification tasks, the output layer has one neuron per class, and \(\operatorname{softmax}\) activation is applied to get the probability vector \(P = {\left[p_c\right]}_{1\leq c\leq M}\), where \(M\) denotes the number of classes.
 			For the survival analysis, the output is a single neuron with a linear activation function.
 
 	\subsection{Grouping strategies}\label{sec:grouping}

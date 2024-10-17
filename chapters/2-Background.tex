@@ -15,20 +15,19 @@
 
 \section{Deep-Learning models}
 	In this section, I will introduce the main deep learning architectures used for discriminative tasks: \glsxtrfull{mlp}, \glsxtrfull{cnn}, \glsxtrfull{gnn}.
-	The work of this thesis relies on applying the attention mechanism.
+	The work of this thesis relies on attention mechanisms.
 	Therefore, I will detail the attention mechanism and its usage in the transformer architecture.
-	I will also describe the \glsxtrfull{ae} and its probabilistic variant, the \glsxtrfull{vae}, as they are commonly used in the literature to study omics data.
-	Finally, I will present the \glsxtrfull{gan} architecture, which is used in some of the work in this thesis.
+	I will also describe the \glsxtrfull{ae} and its probabilistic variant, the \glsxtrfull{vae}, as they are commonly used to study omics data.
+	Finally, I will present the \glsxtrfull{gan} architecture, which is used in one project of this thesis.
 
 	Let \(\symbf{x}\) be the input and \(y \in \left\{1,2, \ldots, C \right\} \) the associated label, where \(C\) is the number of classes.
 	The dimension of \(\symbf{x}\) will be specified in each architecture described.
 	For discriminative tasks, the goal is to return a prediction \(\hat{y} \in {\left[0,1\right]}^C\).
 	The goal of the different deep learning architectures is to find the best approximation \(g^{*}\) that maps an input \(\symbf{x}\) into a class \(y\): \(y = g^{*}\left(\symbf{x}\right)\).
 	A deep learning architecture defines a mapping \(y=g\left(\symbf{x}; \theta\right)\) and learns the parameters \(\theta\) that give the best function approximation.
-
-
+	\vspace{-1\baselineskip}
 	\subsection{\Glsfmtfull{mlp}}\label{subsec:mlp}
-		\begin{wrapfigure}[11]{O}{0.4\textwidth}
+		\begin{wrapfigure}[12]{O}{0.4\textwidth}
 			\vspace{-1\intextsep}
 			\centering
 			\includegraphics{mlp.pdf}
@@ -39,7 +38,7 @@
 		There are a total of \(L+2\) layers, \(L=0\) corresponds to the input layer, and the layer \(L+1\) is the output layer.
 		The input layer has \(d\) neurons, one for each input feature in \(\symbf{x}\).
 		The number of neurons in the output layer depends on the type of task:
-		\begin{itemize}
+		\begin{itemize}[nosep, topsep=-5pt]
 			\item for binary classification, \(C=2\), it has only one neuron,
 			\item for multiclass classification \(C > 2 \), it has one neuron per class.
 		\end{itemize}

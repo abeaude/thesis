@@ -4,16 +4,16 @@
 \robExtConfigure{disable externalization}
 \begin{document}
 \robExtConfigure{
-	set placeholder eval={__LRPBARWIDTH__}{\lenToCm{0.25\baselineskip}},
-	set placeholder eval={__LRPHEIGHT__}{\lenToCm{11\baselineskip}},
-	set placeholder eval={__LRPWIDTH__}{\lenToCm{0.528\linewidth}},
+    set placeholder eval={__LRPBARWIDTH__}{\lenToCm{0.25\baselineskip}},
+    set placeholder eval={__LRPHEIGHT__}{\lenToCm{11\baselineskip}},
+    set placeholder eval={__LRPWIDTH__}{\lenToCm{0.528\linewidth}},
 }
 \ifSubfilesClassLoaded{%
-	\graphicspath{{figures/5-CrossAttOmics/}}%
-	\setcounter{chapter}{4}%
-	\mainmatter%
+    \graphicspath{{figures/5-CrossAttOmics/}}%
+    \setcounter{chapter}{4}%
+    \mainmatter%
 }{
-	\graphicspath{{../figures/5-CrossAttOmics/}}%
+    \graphicspath{{../figures/5-CrossAttOmics/}}%
 }
 \chapter{CrossAttOmics}\label{chap:crossattomics}
 \chapterpubli{MyCrossAttOmics}
@@ -43,374 +43,375 @@ We focused the cross-attention computation on known omics regulatory interaction
 	To address this challenge, we used a strategy of data decomposition into groups, effectively reducing the memory demands associated with attention calculations~\cite{AttOmics}.
 
 	\begin{figure}[htbp]
-		\begin{subcaptiongroup}
-			\ifSubfilesClassLoaded{%
-				\input{figures/5-CrossAttOmics/model_architecture.tex}%
-			}{
-				\input{../figures/5-CrossAttOmics/model_architecture.tex}%
-			}
-			\phantomcaption\label{fig:crossattomics_A}
-			\phantomcaption\label{fig:crossattomics_B}
-			\phantomcaption\label{fig:crossattomics_C}
-			\phantomcaption\label{fig:crossattomics_D}
-		\end{subcaptiongroup}
+	    \begin{subcaptiongroup}
+	        \ifSubfilesClassLoaded{%
+	            \input{figures/5-CrossAttOmics/model_architecture.tex}%
+	        }{
+	            \input{../figures/5-CrossAttOmics/model_architecture.tex}%
+	        }
+	        \phantomcaption\label{fig:crossattomics_A}
+	        \phantomcaption\label{fig:crossattomics_B}
+	        \phantomcaption\label{fig:crossattomics_C}
+	        \phantomcaption\label{fig:crossattomics_D}
+	    \end{subcaptiongroup}
 
-		\caption[The CrossAttOmics architecture]{The CrossAttOmics architecture is composed of modalities encoders, cross-attention modules and a predictor~\subref{fig:crossattomics_A}. Each modality is encoded with its specific attention based encoders capturing intra-modality interactions~\subref{fig:crossattomics_C}. Modality interactions are computed with cross-attentions~\subref{fig:crossattomics_D} according to the modality interaction graph~\subref{fig:crossattomics_B}.}
-		\label{fig:crossattomics_arch}
+	    \caption[The CrossAttOmics architecture]{The CrossAttOmics architecture is composed of modalities encoders, cross-attention modules and a predictor~\subref{fig:crossattomics_A}. Each modality is encoded with its specific attention based encoders capturing intra-modality interactions~\subref{fig:crossattomics_C}. Modality interactions are computed with cross-attentions~\subref{fig:crossattomics_D} according to the modality interaction graph~\subref{fig:crossattomics_B}.}
+	    \label{fig:crossattomics_arch}
 	\end{figure}
 
 	\subsection{Modalities Encoder}
-		Let \( X = \left\{X^{1}, \cdots, X^{M} \right\} \) be a multimodal training example, where \(M\) is the number of modalities and \(Y\) is the associated label.
-		We denote with \(X^{i} \in \mathbb{R}^{p_i}\) each modality input, and \(p_i\) is the number of features for modality \(i\).
-		Each modality input \(X^{i}\) is encoded with a self-attention-based encoder~(\cref{fig:crossattomics_C}): \(\enc^{i}\)~\cite{AttOmics}.
-		Each modality input \(X^i\) is randomly split into \(k^i\) groups \(g_j\), \(1\leq j \leq k^i\)  (\cref{eq:attomics_groups}).
-		\begin{equation}
-			X^{i}_{G} = \left\{X^{i}_{g_j} \right\}_{1\leq j\leq k^i}\label{eq:attomics_groups}
-		\end{equation}
+	    Let \( X = \left\{X^{1}, \cdots, X^{M} \right\} \) be a multimodal training example, where \(M\) is the number of modalities and \(Y\) is the associated label.
+	    We denote with \(X^{i} \in \mathbb{R}^{p_i}\) each modality input, and \(p_i\) is the number of features for modality \(i\).
+	    Each modality input \(X^{i}\) is encoded with a self-attention-based encoder~(\cref{fig:crossattomics_C}): \(\enc^{i}\)~\cite{AttOmics}.
+	    Each modality input \(X^i\) is randomly split into \(k^i\) groups \(g_j\), \(1\leq j \leq k^i\)  (\cref{eq:attomics_groups}).
+	    \begin{equation}
+	        X^{i}_{G} = \left\{X^{i}_{g_j} \right\}_{1\leq j\leq k^i}\label{eq:attomics_groups}
+	    \end{equation}
 
-		Each group  \(X^{i}_{g_j}\) is projected into an \(s^i\)-dimensional space with an \(\operatorname{FCN}^i\), a succession of \glspl{fcl}, to compute \(X^{i'}_{g_j}\) (\cref{eq:attomics_groups_proj}).
-		Each \gls{fcl} is the composition of an affine transformation of its inputs with a \gls{relu} activation function: \(\operatorname{FCL}\left(x\right) = \operatorname{ReLU}\left(Wx+b \right) = \max\left(0, Wx+b\right)\).
-		\begin{equation}
-			X^{'i}_{G} = \left\{\operatorname{FCN}^i\left(X^{i}_{g_j} \right) \right\}_{1\leq j\leq k^i}\label{eq:attomics_groups_proj}
-		\end{equation}
-		\Gls{mhsa} is then applied to each group \(g^i_j\)~(\(1 \leq j \leq k^i \)) to compute a new representation \({U^i = \left\{ U^i_{g_j}\right\}_{1 \leq j \leq k^i}}\) considering interactions between groups of the i-th modality.
-		In each head,
-		\begin{equation}
-			U^{i}_{g_j} = A^{i}_{g_j} \cdot \left[ X_{g_1}' \cdot W^V, \cdots ,  X_{g_{k^i}}' \cdot W^V\right]^T \text{,}\label{eq:enc_mhsa}
-		\end{equation}
-		where \(A^{i}_{g_j}\) is the attention vector computed by the usual dot product attention~\cite{AttentionAllYouNeed}.
+	    Each group  \(X^{i}_{g_j}\) is projected into an \(s^i\)-dimensional space with an \(\operatorname{FCN}^i\), a succession of \glspl{fcl}, to compute \(X^{i'}_{g_j}\) (\cref{eq:attomics_groups_proj}).
+	    Each \gls{fcl} is the composition of an affine transformation of its inputs with a \gls{relu} activation function: \(\operatorname{FCL}\left(x\right) = \operatorname{ReLU}\left(Wx+b \right) = \max\left(0, Wx+b\right)\).
+	    \begin{equation}
+	        X^{'i}_{G} = \left\{\operatorname{FCN}^i\left(X^{i}_{g_j} \right) \right\}_{1\leq j\leq k^i}\label{eq:attomics_groups_proj}
+	    \end{equation}
+	    \Gls{mhsa} is then applied to each group \(g^i_j\)~(\(1 \leq j \leq k^i \)) to compute a new representation \({U^i = \left\{ U^i_{g_j}\right\}_{1 \leq j \leq k^i}}\) considering interactions between groups of the i-th modality.
+	    In each head,
+	    \begin{equation}
+	        U^{i}_{g_j} = A^{i}_{g_j} \cdot \left[ X_{g_1}' \cdot W^V, \cdots ,  X_{g_{k^i}}' \cdot W^V\right]^T \text{,}\label{eq:enc_mhsa}
+	    \end{equation}
+	    where \(A^{i}_{g_j}\) is the attention vector computed by the usual dot product attention~\cite{AttentionAllYouNeed}.
 
-		Each modality \(i\) is represented in a lower dimensional space: \(U^{i} = \enc^{i}\left(X^{i}\right)\).
-		Combining the different representations makes it possible to exploit their complementarity and redundancy.
+	    Each modality \(i\) is represented in a lower dimensional space: \(U^{i} = \enc^{i}\left(X^{i}\right)\).
+	    Combining the different representations makes it possible to exploit their complementarity and redundancy.
 
 	\subsection{CrossAttention: modality interactions}\label{sec:crossatt}
-		Cross-attention is applied to construct a new representation in which a target modality is reinforced by features from a source modality.
-		This is performed by learning cross-modal interactions between the two modalities.
-		The cross-attention is applied to all pairs of modality defined by the directed interaction graph \({G = \left(V,E\right)}\)~(\cref{fig:crossattomics_B}).
-		Each node \(v \in V\) represents a modality, and each edge \(\left(u,v\right) \in V^2, u\neq v\) represents a regulatory link between the two modalities \(u\) and \(v\).
-		The modality \(u\) is considered the source, and modality \(v\) is the target.
+	    Cross-attention is applied to construct a new representation in which a target modality is reinforced by features from a source modality.
+	    This is performed by learning cross-modal interactions between the two modalities.
+	    The cross-attention is applied to all pairs of modality defined by the directed interaction graph \({G = \left(V,E\right)}\)~(\cref{fig:crossattomics_B}).
+	    Each node \(v \in V\) represents a modality, and each edge \(\left(u,v\right) \in V^2, u\neq v\) represents a regulatory link between the two modalities \(u\) and \(v\).
+	    The modality \(u\) is considered the source, and modality \(v\) is the target.
 
-		Let us consider two modalities, a source \(i\) and a target \(j\), \(i \neq j\), which are encoded with their respective encoders to obtain the new representations \(U^i\) and \(U^j\).
-		Cross-attention is performed with \(H\) different heads to learn different types of cross-modal interactions.
-		For each head \(h\), cross-attention is applied to each group \(g_p\) of the modalities in order to obtain~(\cref{fig:crossattomics_D}):
-		\[ Z^{i\rightarrow j} = \left\{ Z^{i\rightarrow j}_{g_p} \in \mathbb{R}^{l^j} \right\}_{1 \leq p \leq k^j}\text{,}\]
-		where \(l^j = \frac{s^j}{H} \in \mathbb{N}\).
-		\( Z^{i\rightarrow j}\) has the same number of groups than the target modality \(j\).
+	    Let us consider two modalities, a source \(i\) and a target \(j\), \(i \neq j\), which are encoded with their respective encoders to obtain the new representations \(U^i\) and \(U^j\).
+	    Cross-attention is performed with \(H\) different heads to learn different types of cross-modal interactions.
+	    For each head \(h\), cross-attention is applied to each group \(g_p\) of the modalities in order to obtain~(\cref{fig:crossattomics_D}):
+	    \[ Z^{i\rightarrow j} = \left\{ Z^{i\rightarrow j}_{g_p} \in \mathbb{R}^{l^j} \right\}_{1 \leq p \leq k^j}\text{,}\]
+	    where \(l^j = \frac{s^j}{H} \in \mathbb{N}\).
+	    \( Z^{i\rightarrow j}\) has the same number of groups than the target modality \(j\).
 
-		\(Z^{i\rightarrow j}_{g_p}\) is defined by:
+	    \(Z^{i\rightarrow j}_{g_p}\) is defined by:
 
-		\begin{equation}
-			Z^{i\rightarrow j}_{g_p} = A^{i\rightarrow j}_{g_p} \cdot \left[ U^{i}_{g_1} \cdot W_{h}^{V_i}, \cdots ,  U^{i}_{g_{k^i}} \cdot W_{h}^{V_i}\right]^T \text{,} \label{eq:cross_att}
-		\end{equation}
+	    \begin{equation}
+	        Z^{i\rightarrow j}_{g_p} = A^{i\rightarrow j}_{g_p} \cdot \left[ U^{i}_{g_1} \cdot W_{h}^{V_i}, \cdots ,  U^{i}_{g_{k^i}} \cdot W_{h}^{V_i}\right]^T \text{,} \label{eq:cross_att}
+	    \end{equation}
 
-		where \(A^{i\rightarrow j}_{g_p}\) is the cross-attention vector, whose n-th element quantifies the attention that the group \(g_p\) of modality \(j\) pays to the group \(g_n\) of modality \(i\).
-		It is computed by the usual dot product attention~\cite{AttentionAllYouNeed}.
+	    where \(A^{i\rightarrow j}_{g_p}\) is the cross-attention vector, whose n-th element quantifies the attention that the group \(g_p\) of modality \(j\) pays to the group \(g_n\) of modality \(i\).
+	    It is computed by the usual dot product attention~\cite{AttentionAllYouNeed}.
 
-		\begin{align}
-			A^{i\rightarrow j}_{g_p}         & = \operatorname{softmax}\left( \left[ a^{i\rightarrow j}_{g_p,g_1}, \cdots, a^{i\rightarrow j}_{g_p,g_{k^i}} \right] \right) \text{,} \label{eq:cross_att_weights} \\
-			a^{i\rightarrow j}_{g_p,g_{k^i}} & = \frac{\left(U^{j}_{g_p} \cdot W_{h}^{Q^j}\right)^T \cdot \left(U^{i}_{g_{k^i}} \cdot W_{h}^{K^i} \right)}{\sqrt{s^{j}}} \text{.}\label{eq:cross_att_weight}
-		\end{align}
+	    \begin{align}
+	        A^{i\rightarrow j}_{g_p}         & = \operatorname{softmax}\left( \left[ a^{i\rightarrow j}_{g_p,g_1}, \cdots, a^{i\rightarrow j}_{g_p,g_{k^i}} \right] \right) \text{,} \label{eq:cross_att_weights} \\
+	        a^{i\rightarrow j}_{g_p,g_{k^i}} & = \frac{\left(U^{j}_{g_p} \cdot W_{h}^{Q^j}\right)^T \cdot \left(U^{i}_{g_{k^i}} \cdot W_{h}^{K^i} \right)}{\sqrt{s^{j}}} \text{.}\label{eq:cross_att_weight}
+	    \end{align}
 
-		Projection matrix \(W^{Q^j}_{h}\) maps the group \(U^{j}_{g_p}\), from an \(s^j\)-dimensional space to an \(l^j\)-dimensional space.
-		Projection matrix \(W^{K^i}_{h}\) and \(W^{V^i}_{h}\) maps the group \(U^{i}_{g_{k^i}}\), from an \(s^i\)-dimensional space to an \(l^j\)-dimensional space.
-		The different heads are fused in an \(s^{i}\)-dimensional space using a projection matrix \(W^O\).
-		A residual connection is added to the cross-attention computation to prevent vanishing gradients~\cite{AttentionAllYouNeed}, and cross-attention inputs are normalized using layer-normalization.
+	    Projection matrix \(W^{Q^j}_{h}\) maps the group \(U^{j}_{g_p}\), from an \(s^j\)-dimensional space to an \(l^j\)-dimensional space.
+	    Projection matrix \(W^{K^i}_{h}\) and \(W^{V^i}_{h}\) maps the group \(U^{i}_{g_{k^i}}\), from an \(s^i\)-dimensional space to an \(l^j\)-dimensional space.
+	    The different heads are fused in an \(s^{i}\)-dimensional space using a projection matrix \(W^O\).
+	    A residual connection is added to the cross-attention computation to prevent vanishing gradients~\cite{AttentionAllYouNeed}, and cross-attention inputs are normalized using layer-normalization.
 
 	\subsection{Predictor module}
-		All embeddings having the same target modality \(j\) and \(U^j\) are concatenated in an unique ensemble \(Z^j\)~(\cref{fig:crossattomics_arch}).
-		We then apply \gls{mhsa} on this ensemble \(Z^j\) in a similar way as the encoder (\(\enc\)) to enrich the multimodal representation from the different modality adaptation~(\cref{fig:crossattomics_arch}).
-		In each branch, the vectors \(Z^{i\rightarrow j}_{g_p}\) are concatenated into a new vector \(Z^j\).
-		Modalities \(i\) with a zero in-degree, (\(\operatorname{deg}^{-}\left(i\right) = 0\)), in the interaction graph are considered in unimodal branches by taking their unimodal embedding \(U^i\).
-		Then, the different multimodal \(Z^j\) and unimodal \(U^i\) branches are concatenated to form a single multimodal vector \(Z\).
-		The vector \(Z\) is then fed to a \gls{fcn} to predict the cancer type \(\hat{Y}\)~(\cref{fig:crossattomics_arch}).
+	    All embeddings having the same target modality \(j\) and \(U^j\) are concatenated in an unique ensemble \(Z^j\)~(\cref{fig:crossattomics_arch}).
+	    We then apply \gls{mhsa} on this ensemble \(Z^j\) in a similar way as the encoder (\(\enc\)) to enrich the multimodal representation from the different modality adaptation~(\cref{fig:crossattomics_arch}).
+	    In each branch, the vectors \(Z^{i\rightarrow j}_{g_p}\) are concatenated into a new vector \(Z^j\).
+	    Modalities \(i\) with a zero in-degree, (\(\operatorname{deg}^{-}\left(i\right) = 0\)), in the interaction graph are considered in unimodal branches by taking their unimodal embedding \(U^i\).
+	    Then, the different multimodal \(Z^j\) and unimodal \(U^i\) branches are concatenated to form a single multimodal vector \(Z\).
+	    The vector \(Z\) is then fed to a \gls{fcn} to predict the cancer type \(\hat{Y}\)~(\cref{fig:crossattomics_arch}).
 
-		The output layer has one neuron per class, and a \(\operatorname{softmax}\) activation function is applied to get the probability vector \({P = \left[p_c\right]_{1\leq c\leq C}}\), where \(C\) denotes the number of classes.
+	    The output layer has one neuron per class, and a \(\operatorname{softmax}\) activation function is applied to get the probability vector \({P = \left[p_c\right]_{1\leq c\leq C}}\), where \(C\) denotes the number of classes.
 
 	\subsection{Model training}
-		We adopt a two-phase training procedure.
-		In the first step, each modality encoder \(\enc^i\) is trained individually to learn a compact representation of the modality \(i\) by adding an \gls{fcn} layer with one neuron per class and a \(\operatorname{softmax}\) activation function.
-		Each encoder is trained end-to-end with a weighted cross-entropy loss to account for class imbalance:
-		\begin{equation*}
-			\mathcal{L}(\theta^{i}) = - \sum_{c=1}^{C}w_c Y_c \log\left( \fcn\left(\enc^{i}\left(X^{i}\right)\right)\right) \text{,}
-		\end{equation*}
-		where \( \theta^{i}\), are the parameters associated with the encoder \(\enc^{i}\) and \(w_c\) denotes the weight\footnote{inversely proportional to the class size} of class \(c \in \left\{1, \cdots,C \right\}\)
+	    We adopt a two-phase training procedure.
+	    In the first step, each modality encoder \(\enc^i\) is trained individually to learn a compact representation of the modality \(i\) by adding an \gls{fcn} layer with one neuron per class and a \(\operatorname{softmax}\) activation function.
+	    Each encoder is trained end-to-end with a weighted cross-entropy loss to account for class imbalance:
+	    \begin{equation*}
+	        \mathcal{L}(\theta^{i}) = - \sum_{c=1}^{C}w_c Y_c \log\left( \fcn\left(\enc^{i}\left(X^{i}\right)\right)\right) \text{,}
+	    \end{equation*}
+	    where \( \theta^{i}\), are the parameters associated with the encoder \(\enc^{i}\) and \(w_c\) denotes the weight\footnote{inversely proportional to the class size} of class \(c \in \left\{1, \cdots,C \right\}\)
 
-		In a second step, we freeze the encoder parameters \(\theta^i\), and only the multimodal weights of the model, i.e. all the cross-attention and the predictor module weights, are trained.
-		The training is done with a weighted cross-entropy loss:
-		\begin{equation*}
-			\mathcal{L}(\theta) = - \sum_{c=1}^{C}w_c Y_c \log\left( p_c\right) \text{,}
-		\end{equation*}
-		where \(\theta\) denotes the multimodal parameters, i.e. the cross-attention and predictor parameters.
+	    In a second step, we freeze the encoder parameters \(\theta^i\), and only the multimodal weights of the model, i.e. all the cross-attention and the predictor module weights, are trained.
+	    The training is done with a weighted cross-entropy loss:
+	    \begin{equation*}
+	        \mathcal{L}(\theta) = - \sum_{c=1}^{C}w_c Y_c \log\left( p_c\right) \text{,}
+	    \end{equation*}
+	    where \(\theta\) denotes the multimodal parameters, i.e. the cross-attention and predictor parameters.
 
 \section{Experiments}
 	\subsection{Data}
-		To evaluate our proposed approach AttOmics two datasets were considered: \gls{tcga} and \gls{ccle}~(\cref{sec:data_tcga,sec:data_ccle}).
-		For \gls{tcga}, \Gls{dnam}, \gls{mrna}, \gls{mirna}, \gls{cnv} and proteomics were used and for \gls{ccle} \gls{dnam}, \gls{mrna}, \gls{mirna}, \gls{cnv}, metabolomics and proteomics were used.
-		For \gls{dnam}, we considered the average of all probes located within 1500 bp of a gene transcription start site as methylation features.
-		Coding (\glsxtrshort{mrna}) and \glsxtrfull{ncrna} were considered as two different modalities.
-		Those dataset are used to perform a classification task: phenotype prediction, 18 classes for \gls{tcga} and 16 for \gls{ccle}.
-		For \gls{tcga}, a total of 5862 patients were available and \gls{ccle} a total of 536 cells for the survival risk prediction.
-		For each dataset, 70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
+	    To evaluate our proposed approach AttOmics two datasets were considered: \gls{tcga} and \gls{ccle}~(\cref{sec:data_tcga,sec:data_ccle}).
+	    For \gls{tcga}, \Gls{dnam}, \gls{mrna}, \gls{mirna}, \gls{cnv} and proteomics were used and for \gls{ccle} \gls{dnam}, \gls{mrna}, \gls{mirna}, \gls{cnv}, metabolomics and proteomics were used.
+	    For \gls{dnam}, we considered the average of all probes located within 1500 bp of a gene transcription start site as methylation features.
+	    Coding (\glsxtrshort{mrna}) and \glsxtrfull{ncrna} were considered as two different modalities.
+	    Those dataset are used to perform a classification task: phenotype prediction, 18 classes for \gls{tcga} and 16 for \gls{ccle}.
+	    For \gls{tcga}, a total of 5862 patients were available and \gls{ccle} a total of 536 cells for the survival risk prediction.
+	    For each dataset, 70\% of the data was used as a training set, 15\% forms the validation set, and the remaining 15\% forms the test set while preserving the proportion of each cancer.
 
 	\subsection{Comparative study}
-		For a comprehensive and comparative evaluation, we chose various deep learning architectures with different integration strategies: \gls{mlp} early fusion (MLP EF), \gls{mlp} intermediate fusion (MLP IF), AttOmics early fusion (AttOmics EF), AttOmics intermediate fusion (AttOmics IF), \gls{gnn} early fusion (GNN EF), an early fusion knowledge\-/based \gls{mlp} P-NET~\cite{PNet} and MOGONET~\cite{MOGONET}.
-		We also considered single-omics architecture for comparison: attention-based model (AttOmics), \gls{mlp} and \gls{gnn} based on the \gls{ppi} graph.
+	    For a comprehensive and comparative evaluation, we chose various deep learning architectures with different integration strategies: \gls{mlp} early fusion (MLP EF), \gls{mlp} intermediate fusion (MLP IF), AttOmics early fusion (AttOmics EF), AttOmics intermediate fusion (AttOmics IF), \gls{gnn} early fusion (GNN EF), an early fusion knowledge\-/based \gls{mlp} P-NET~\cite{PNet} and MOGONET~\cite{MOGONET}.
+	    We also considered single-omics architecture for comparison: attention-based model (AttOmics), \gls{mlp} and \gls{gnn} based on the \gls{ppi} graph.
 
-		\begin{wrapfigure}[9]{o}{0.4\textwidth}
-			\centering
-			\vspace{-1\intextsep}
-			\small
-			\begin{tikzpicture}<disable externalization>
-				\node (DNAm) at (-2,0.5) {DNAm};
-				\node (miRNA) at (-2,-0.8) {miRNA};
-				\node (CNV) at (0,0) {CNV};
-				\node (nc mRNA) at (2,-0.8) {nc mRNA};
-				\node (mRNA) at (0,-1.6) {mRNA};
-				\node (Proteins) at (0,-2.7) {Proteins};
+	    \begin{wrapfigure}[9]{o}{0.4\textwidth}
+	        \centering
+	        \vspace{-1\intextsep}
+	        \small
+	        \begin{tikzpicture}<disable externalization>
+	            \node (DNAm) at (-2,0.5) {DNAm};
+	            \node (miRNA) at (-2,-0.8) {miRNA};
+	            \node (CNV) at (0,0) {CNV};
+	            \node (nc mRNA) at (2,-0.8) {nc mRNA};
+	            \node (mRNA) at (0,-1.6) {mRNA};
+	            \node (Proteins) at (0,-2.7) {Proteins};
 
-				\draw [->] (DNAm) to (miRNA);
-				\node (temp) at ([xshift=-3mm]DNAm.west) {};
-				\draw [->] (DNAm.west) -- (temp.center) |- (temp.center |- mRNA.west) -- (mRNA.west);
-				\draw[->] (DNAm) -- node {} ++(2cm,0) -| (nc mRNA);
-				\draw [->] (CNV) to (mRNA);
-				\draw [->] (mRNA) to (Proteins);
-				\draw [->] (miRNA) to (mRNA);
-				\draw [->] (nc mRNA) to (mRNA);
-				\draw [->] (CNV) to (miRNA);
-				\draw [->] (CNV) to (nc mRNA);
+	            \draw [->] (DNAm) to (miRNA);
+	            \node (temp) at ([xshift=-3mm]DNAm.west) {};
+	            \draw [->] (DNAm.west) -- (temp.center) |- (temp.center |- mRNA.west) -- (mRNA.west);
+	            \draw[->] (DNAm) -- node {} ++(2cm,0) -| (nc mRNA);
+	            \draw [->] (CNV) to (mRNA);
+	            \draw [->] (mRNA) to (Proteins);
+	            \draw [->] (miRNA) to (mRNA);
+	            \draw [->] (nc mRNA) to (mRNA);
+	            \draw [->] (CNV) to (miRNA);
+	            \draw [->] (CNV) to (nc mRNA);
 
-			\end{tikzpicture}
-			\caption{Interaction graph between modalities used for CrossAttOmics with \glsfmtshort{tcga} data.}\label{fig:tcga_graph}
-		\end{wrapfigure}
-		We used the modality interaction graph described in~\cref{fig:tcga_graph} to train CrossAttOmics on TCGA data.
-		The details of the different architectures and training hyperparameters is available in~\cref{sec:crossattomics_training_details}.
-		Attention based architectures, AttOmics EF, AttOmics IF and CrossAttOmics are impacted by the number of groups.
-		We used similar numbers of groups as used in~\cite{AttOmics}.
-		All models were trained on an Nvidia GeForce RTX 3090.
+	        \end{tikzpicture}
+	        \caption{Interaction graph between modalities used for CrossAttOmics with \glsfmtshort{tcga} data.}\label{fig:tcga_graph}
+	    \end{wrapfigure}
+	    We used the modality interaction graph described in~\cref{fig:tcga_graph} to train CrossAttOmics on TCGA data.
+	    The details of the different architectures and training hyperparameters is available in~\cref{sec:crossattomics_training_details}.
+	    Attention based architectures, AttOmics EF, AttOmics IF and CrossAttOmics are impacted by the number of groups.
+	    We used similar numbers of groups as used in~\cite{AttOmics}.
+	    All models were trained on an Nvidia GeForce RTX 3090.
 
-		All the architectures cannot be tested with all possible combinations due to hardware constraints (see below) or architecture limitations.
-		For architecture based on knowledge, not all modalities can be mapped to the knowledge source, for instance miRNA cannot be associated to the \gls{ppi} graph.
-		Main results are presented on TCGA, similar results are available for CCLE in~\cref{chap:crossattomics_appendix}.
+	    All the architectures cannot be tested with all possible combinations due to hardware constraints (see below) or architecture limitations.
+	    For architecture based on knowledge, not all modalities can be mapped to the knowledge source, for instance miRNA cannot be associated to the \gls{ppi} graph.
+	    Main results are presented on TCGA, similar results are available for CCLE in~\cref{chap:crossattomics_appendix}.
 
 \section{Results}
 	\subsection{Omics combination}
-		\Cref{fig:tcga_perf_comb} shows the average and standard deviation of the accuracy on the cancer-type classification task according to the best omics combination for all tested methods on the TCGA dataset.
+	    \Cref{fig:tcga_perf_comb} shows the average and standard deviation of the accuracy on the cancer-type classification task according to the best omics combination for all tested methods on the TCGA dataset.
 
-		For single-omics baselines, \gls{mlp} and AttOmics achieve better performances than the \gls{gnn}.
-		Results vary according to the studied omics; AttOmics outperforms the \gls{mlp} when analyzing DNAm or nc mRNA and performs similarly for mRNA and proteins~(\cref{fig:tcga_perf_comb}).
-		The best accuracy is obtained with the proteins for the \gls{mlp} and AttOmics.
-		On this modality, the best model is the \gls{mlp}, as the number of features is reduced (454 features), grouping the features does not offer any computational advantages.
-		The proteins used to construct this dataset were pre-selected as known cancer biomarkers.
-		Therefore, they have higher predictive power than the other studied omics.
-		With their higher predictive power, proteins can cause biases towards this modality.
-		During the training phase, modalities will compete with each other, and only a subset of modalities will win~\cite{pmlr-v162-huang22e}.
-		Experimentally, we noticed that including proteins would significantly boost predictive performances for some architectures~(\cref{fig:perf_gain_prot}
-		).
-		Furthermore, proteomics is not used for diagnosis due to its high cost~\cite{Mundt2023}.
-		For those reasons, we decided not to report the best combination that includes proteins in~\cref{fig:tcga_perf_comb}.
-		Complete results are available in~\cref{chap:crossattomics_appendix}.
+	    For single-omics baselines, \gls{mlp} and AttOmics achieve better performances than the \gls{gnn}.
+	    Results vary according to the studied omics; AttOmics outperforms the \gls{mlp} when analyzing DNAm or nc mRNA and performs similarly for mRNA and proteins~(\cref{fig:tcga_perf_comb}).
+	    The best accuracy is obtained with the proteins for the \gls{mlp} and AttOmics.
+	    On this modality, the best model is the \gls{mlp}, as the number of features is reduced (454 features), grouping the features does not offer any computational advantages.
+	    The proteins used to construct this dataset were pre-selected as known cancer biomarkers.
+	    Therefore, they have higher predictive power than the other studied omics.
+	    With their higher predictive power, proteins can cause biases towards this modality.
+	    During the training phase, modalities will compete with each other, and only a subset of modalities will win~\cite{pmlr-v162-huang22e}.
+	    Experimentally, we noticed that including proteins would significantly boost predictive performances for some architectures~(\cref{fig:perf_gain_prot}
+	    ).
+	    Furthermore, proteomics is not used for diagnosis due to its high cost~\cite{Mundt2023}.
+	    For those reasons, we decided not to report the best combination that includes proteins in~\cref{fig:tcga_perf_comb}.
+	    Complete results are available in~\cref{chap:crossattomics_appendix}.
 
-		\begin{figure}[htbp]
-			\centering
-			\includegraphics[width=1\textwidth]{tcga_perf_omics_comb.pdf}
-			\caption[Comparison of the test accuracy of different multi-omics deep learning integration models on TCGA data]{Comparison of the test accuracy of different multi-omics deep learning integration models across different omics combination on the TCGA dataset. Each dot represents the mean accuracy obtained by a model on the test set after 5 different training. The error-bars represents the standard-error. For each combination a \cmark means that the omics is included in the combination and a \xmark means that the omics is excluded from the combination.}
-			\label{fig:tcga_perf_comb}
-		\end{figure}
+	    \begin{figure}[htbp]
+	        \centering
+	        \includegraphics[width=1\textwidth]{tcga_perf_omics_comb.pdf}
+	        \caption[Comparison of the test accuracy of different multi-omics deep learning integration models on TCGA data]{Comparison of the test accuracy of different multi-omics deep learning integration models across different omics combination on the TCGA dataset. Each dot represents the mean accuracy obtained by a model on the test set after 5 different training. The error-bars represents the standard-error. For each combination a \cmark means that the omics is included in the combination and a \xmark means that the omics is excluded from the combination.}
+	        \label{fig:tcga_perf_comb}
+	    \end{figure}
 
-		Increasing the number of omics available during training can boost performances or have little to no effect on test accuracy.
-		There is no change in accuracy when going from two to three modalities with MOGONET.
-		It is impossible to test this model with a higher number of modalities due to the huge memory requirements of the architecture.
-		The VCDN module, used to perform the integration, requires \(C^{2M}\) parameters.
-		For 19 classes and four views, this would represent more than 16 billion parameters.
-		P-Net did not benefit either from adding more modalities, and it even reduced the performance.
-		The combination of DNAm and mRNA has lower performances than the \gls{mlp} on those individual modalities~(\cref{fig:tcga_perf_comb}).
-		AttOmics EF did not benefit from multiple modalities; the performance of the DNAm and mRNA combination is similar to AttOmics on mRNA only and lower than AttOmics on DNAm.
-		Adding multiple modalities hinders the performance in this case.
-		This architecture did not gain from even more modalities; the performances stayed around the same value.
-		The number of groups has been increased to accommodate large multi-omics input, but the architecture is known to be impacted negatively with a large number of groups~\cite{AttOmics}.
-		When going from single omics to multi-omics, we observe a small accuracy gain for the \gls{gnn} architecture.
-		However, the performances were still lower than AttOmics or \gls{mlp} on single omics.
+	    Increasing the number of omics available during training can boost performances or have little to no effect on test accuracy.
+	    There is no change in accuracy when going from two to three modalities with MOGONET.
+	    It is impossible to test this model with a higher number of modalities due to the huge memory requirements of the architecture.
+	    The VCDN module, used to perform the integration, requires \(C^{2M}\) parameters.
+	    For 19 classes and four views, this would represent more than 16 billion parameters.
+	    P-Net did not benefit either from adding more modalities, and it even reduced the performance.
+	    The combination of DNAm and mRNA has lower performances than the \gls{mlp} on those individual modalities~(\cref{fig:tcga_perf_comb}).
+	    AttOmics EF did not benefit from multiple modalities; the performance of the DNAm and mRNA combination is similar to AttOmics on mRNA only and lower than AttOmics on DNAm.
+	    Adding multiple modalities hinders the performance in this case.
+	    This architecture did not gain from even more modalities; the performances stayed around the same value.
+	    The number of groups has been increased to accommodate large multi-omics input, but the architecture is known to be impacted negatively with a large number of groups~\cite{AttOmics}.
+	    When going from single omics to multi-omics, we observe a small accuracy gain for the \gls{gnn} architecture.
+	    However, the performances were still lower than AttOmics or \gls{mlp} on single omics.
 
-		Knowledge-based methods are not among the best-performing methods.
-		Their performance depends on the quality of the knowledge, which can be incomplete or outdated.
-		Incorporating knowledge into the architecture may not necessarily improve performance, but it can enhance the interpretability of predictions.
+	    Knowledge-based methods are not among the best-performing methods.
+	    Their performance depends on the quality of the knowledge, which can be incomplete or outdated.
+	    Incorporating knowledge into the architecture may not necessarily improve performance, but it can enhance the interpretability of predictions.
 
-		Surprisingly, for the \gls{mlp}, the integration strategy, early or intermediate, did not impact the performances.
-		Those models achieve better accuracy with two omics than some single omics baselines but could not outperform models only trained on the proteins.
-		Adding more omics did not improve the performances and even started to degrade the accuracy.
-		The addition of omics brings more noise rather than more information.
-		With two and three omics, CrossAttOmics is the best-performing model.
-		It can achieve similar accuracy to a model trained on proteins with multiple omics that are not proteins.
-		Similarly, AttOmics IF is the second-best model.
+	    Surprisingly, for the \gls{mlp}, the integration strategy, early or intermediate, did not impact the performances.
+	    Those models achieve better accuracy with two omics than some single omics baselines but could not outperform models only trained on the proteins.
+	    Adding more omics did not improve the performances and even started to degrade the accuracy.
+	    The addition of omics brings more noise rather than more information.
+	    With two and three omics, CrossAttOmics is the best-performing model.
+	    It can achieve similar accuracy to a model trained on proteins with multiple omics that are not proteins.
+	    Similarly, AttOmics IF is the second-best model.
 
-		When training on the six available omics, AttOmics IF outperforms CrossAttOmics.
-		In this case, AttOmics IF has fewer multimodal parameters than CrossAttOmics and is easier to train.
+	    When training on the six available omics, AttOmics IF outperforms CrossAttOmics.
+	    In this case, AttOmics IF has fewer multimodal parameters than CrossAttOmics and is easier to train.
 
-		\begin{figure}
-			\centering
-			\begin{subcaptiongroup}
-				\includegraphics{umap_mRNA.pdf}
-				\phantomcaption\label{fig:umap_mrna_A}
-				\phantomcaption\label{fig:umap_mrna_B}
-				\phantomcaption\label{fig:umap_mrna_C}
-			\end{subcaptiongroup}
-			\caption[UMAP comparison of pan-cancer samples]{UMAP comparison of pan-cancer samples in the data space~\subref{fig:umap_mrna_A}, after passing through the modality encoder~\subref{fig:umap_mrna_B} and after applying the cross-attention~\subref{fig:umap_mrna_C}. Each color represent one of the 18 cancer. }
-			\label{fig:umap_mrna}
-		\end{figure}
+	    \begin{figure}
+	        \centering
+	        \begin{subcaptiongroup}
+	            \includegraphics{umap_mRNA.pdf}
+	            \phantomcaption\label{fig:umap_mrna_A}
+	            \phantomcaption\label{fig:umap_mrna_B}
+	            \phantomcaption\label{fig:umap_mrna_C}
+	        \end{subcaptiongroup}
+	        \caption[UMAP comparison of pan-cancer samples]{UMAP comparison of pan-cancer samples in the data space~\subref{fig:umap_mrna_A}, after passing through the modality encoder~\subref{fig:umap_mrna_B} and after applying the cross-attention~\subref{fig:umap_mrna_C}. Each color represent one of the 18 cancer. }
+	        \label{fig:umap_mrna}
+	    \end{figure}
 
-		To visualize the segregation capabilities in the raw data space, after encoding individual modalities and after enriching individual representation with multi-omics information, we reduce the dimension of each patient representation to a 2D space using a UMAP reduction~(\cref{fig:umap_mrna}).
-		Embedding modalities in a latent space with modalities-specific encoders allow for clear identification of cancer clusters, but the separation between some clusters is still unclear (\cref{fig:umap_mrna_A,fig:umap_mrna_B}).
-		The addition of multi-omics information through cross-attention allows better distinguishing the different cancer type-associated clusters (\cref{fig:umap_mrna_C}).
-		The multi-omics embedding can better represent samples from distinct cancers.
+	    To visualize the segregation capabilities in the raw data space, after encoding individual modalities and after enriching individual representation with multi-omics information, we reduce the dimension of each patient representation to a 2D space using a UMAP reduction~(\cref{fig:umap_mrna}).
+	    Embedding modalities in a latent space with modalities-specific encoders allow for clear identification of cancer clusters, but the separation between some clusters is still unclear (\cref{fig:umap_mrna_A,fig:umap_mrna_B}).
+	    The addition of multi-omics information through cross-attention allows better distinguishing the different cancer type-associated clusters (\cref{fig:umap_mrna_C}).
+	    The multi-omics embedding can better represent samples from distinct cancers.
 
 
-		Given the quadratic complexity of the attention mechanism, we conducted a comparative analysis of the latency, defined as the time required to obtain a prediction from a single sample, across the various multi-omics architectures considered in this study (\cref{fig:latency}).
-		It was observed that, for all architectures, an increase in the number of modalities increased the models' latency.
-		The CrossAttOmics architecture exhibited the highest latency, which can be attributed to its extensive use of attention mechanisms. Nevertheless, the latency remained reasonable,  a few dozen milliseconds.
+	    Given the quadratic complexity of the attention mechanism, we conducted a comparative analysis of the latency, defined as the time required to obtain a prediction from a single sample, across the various multi-omics architectures considered in this study (\cref{fig:latency}).
+	    It was observed that, for all architectures, an increase in the number of modalities increased the models' latency.
+	    The CrossAttOmics architecture exhibited the highest latency, which can be attributed to its extensive use of attention mechanisms. Nevertheless, the latency remained reasonable,  a few dozen milliseconds.
 
 	\subsection{Training with small sample sizes}
-		Despite the broad adoption of high throughput methods in personalized medicine, the availability of paired multi-omics data from cancer patients remains limited.
-		Many datasets contain partial multi-omics data, where some modalities are entirely missing.
-		Modalities missingness is often the result of economic constraints, experimental limitations, or patient refusal~\cite{Kang2021}.
-		We explore the impact of the training database size on the performances of CrossAttOmics and other deep-learning architectures by training the different models on a subset of the training set.
-		The different subsets are created by randomly sampling 1\%, 2.5\%, 5\%, 7.5\%, 10\%, 15\%, 30\%, 50\%, 70\% and 90\% of the training set while preserving class proportions.
-		For each subset, five models are trained.
-		The reported performance metrics are estimated on the test set.
+	    Despite the broad adoption of high throughput methods in personalized medicine, the availability of paired multi-omics data from cancer patients remains limited.
+	    Many datasets contain partial multi-omics data, where some modalities are entirely missing.
+	    Modalities missingness is often the result of economic constraints, experimental limitations, or patient refusal~\cite{Kang2021}.
+	    We explore the impact of the training database size on the performances of CrossAttOmics and other deep-learning architectures by training the different models on a subset of the training set.
+	    The different subsets are created by randomly sampling 1\%, 2.5\%, 5\%, 7.5\%, 10\%, 15\%, 30\%, 50\%, 70\% and 90\% of the training set while preserving class proportions.
+	    For each subset, five models are trained.
+	    The reported performance metrics are estimated on the test set.
 
-		\begin{figure}[htbp]
-			\centering
-			\begin{subcaptiongroup}
-				\includegraphics{limited_training_6_omics.pdf}
-				\phantomcaption\label{fig:lim_train_6_omics_A}
-				\phantomcaption\label{fig:lim_train_6_omics_B}
-				\phantomcaption\label{fig:lim_train_6_omics_C}
-			\end{subcaptiongroup}
-			\caption[CrossAttOmics and other architectures accuracy on the TCGA test set according to the size of the training set]{Accuracy on the TCGA test set according to the size of the training set for various multi-omics deep learning models when trained on 6 omics~\subref{fig:lim_train_6_omics_A}. Panel~\subref{fig:lim_train_6_omics_B} corresponds to a zoom on the low data regime. Panel~\subref{fig:lim_train_6_omics_C} is a zoom on larger training sizes.}
-			\label{fig:lim_train_6_omics}
-		\end{figure}
+	    \begin{figure}[htbp]
+	        \centering
+	        \begin{subcaptiongroup}
+	            \includegraphics{limited_training_6_omics.pdf}
+	            \phantomcaption\label{fig:lim_train_6_omics_A}
+	            \phantomcaption\label{fig:lim_train_6_omics_B}
+	            \phantomcaption\label{fig:lim_train_6_omics_C}
+	        \end{subcaptiongroup}
+	        \caption[CrossAttOmics and other architectures accuracy on the TCGA test set according to the size of the training set]{Accuracy on the TCGA test set according to the size of the training set for various multi-omics deep learning models when trained on 6 omics~\subref{fig:lim_train_6_omics_A}. Panel~\subref{fig:lim_train_6_omics_B} corresponds to a zoom on the low data regime. Panel~\subref{fig:lim_train_6_omics_C} is a zoom on larger training sizes.}
+	        \label{fig:lim_train_6_omics}
+	    \end{figure}
 
-		\Cref{fig:lim_train_6_omics} shows the average and standard deviation of the accuracy on the cancer-type classification task according to the training set size for all tested methods on the TCGA dataset.
-		The best accuracy is achieved with the highest number of samples.
-		Reducing the number of training examples affects model performance adversely, as a limited training database hinders the capacity of the model to extract hidden information during training.
+	    \Cref{fig:lim_train_6_omics} shows the average and standard deviation of the accuracy on the cancer-type classification task according to the training set size for all tested methods on the TCGA dataset.
+	    The best accuracy is achieved with the highest number of samples.
+	    Reducing the number of training examples affects model performance adversely, as a limited training database hinders the capacity of the model to extract hidden information during training.
 
-		We observe significant differences between models' accuracy when training with minimal training datasets.
-		The MLP EF and AttOmics EF are models sensitive to the size of the training set.
-		Despite being easy to implement, early fusion approaches are size-sensitive.
-		On the contrary, the intermediate fusion approach is more resistant to small training sets.
-		Models' accuracy is lower than those trained on the complete datasets but outperforms early fusion models when trained with less than 600 training examples~(\cref{fig:lim_train_6_omics_B}).
-		When trained with less than 300 training examples, CrossAttOmics achieves the best accuracy.
-		Despite CrossAttOmics and AttOmics IF sharing the same encoder, when trained with only 39 examples, CrossAttOmics outperforms AttOmics IF by more than 0.1 points of accuracy.
-		Under limited training settings, cross-attention can improve multimodal representation by allowing modalities to interact and exchange information\footnote{We ran the same experiment using the three best omics for each architecture (\cref{fig:lim_train_3_omics})}.
+	    We observe significant differences between models' accuracy when training with minimal training datasets.
+	    The MLP EF and AttOmics EF are models sensitive to the size of the training set.
+	    Despite being easy to implement, early fusion approaches are size-sensitive.
+	    On the contrary, the intermediate fusion approach is more resistant to small training sets.
+	    Models' accuracy is lower than those trained on the complete datasets but outperforms early fusion models when trained with less than 600 training examples~(\cref{fig:lim_train_6_omics_B}).
+	    When trained with less than 300 training examples, CrossAttOmics achieves the best accuracy.
+	    Despite CrossAttOmics and AttOmics IF sharing the same encoder, when trained with only 39 examples, CrossAttOmics outperforms AttOmics IF by more than 0.1 points of accuracy.
+	    Under limited training settings, cross-attention can improve multimodal representation by allowing modalities to interact and exchange information\footnote{We ran the same experiment using the three best omics for each architecture (\cref{fig:lim_train_3_omics})}.
 
 	\subsection{Robustness to missing modality}
-		As mentioned earlier, missing modalities in multi-omics is a challenge.
-		We circumvent this problem by narrowing our dataset to only complete multi-omics samples for the training step.
-		However, in real-world inference scenarios, it is not feasible to exclude patients simply because of incomplete data.
-		The model needs to be robust to different missingness patterns.
-		Although machine learning usually deals with missing data by imputing them, omics artificial generation is still challenging.
+	    As mentioned earlier, missing modalities in multi-omics is a challenge.
+	    We circumvent this problem by narrowing our dataset to only complete multi-omics samples for the training step.
+	    However, in real-world inference scenarios, it is not feasible to exclude patients simply because of incomplete data.
+	    The model needs to be robust to different missingness patterns.
+	    Although machine learning usually deals with missing data by imputing them, omics artificial generation is still challenging.
 
-		A straightforward strategy is to create different missingness patterns during the training~\cite{Cheerla2019}.
-		At each iteration, we randomly drop each modality with probability \(P\).
-		The maximum number of modalities that can be dropped is a model hyperparameter.\pagebreak
+	    A straightforward strategy is to create different missingness patterns during the training~\cite{Cheerla2019}.
+	    At each iteration, we randomly drop each modality with probability \(P\).
+	    The maximum number of modalities that can be dropped is a model hyperparameter.\pagebreak
 
-		\begin{wrapfigure}[16]{o}{3in}
-			\centering
-			%\vspace{-0.8\intextsep}
-			\includegraphics{robustness_missing_modalities_dropout.pdf}
-			\caption[CrossAttOmics robustness to missing modalities]{Comparison of CrossAttOmics robustness to missing modalities under two different training strategy: classical training and modality dropout.}\label{fig:modality_dropout}
-		\end{wrapfigure}
-		\Cref{fig:modality_dropout} shows the accuracy distribution with different numbers of missing omics under standard and modality dropout training strategies.
-		Each boxplot is calculated with all possible missingness patterns.
-		With classical training, increasing the number of missing omics degrades the performance.
-		CrossAttOmics is robust to 1 or 2 missing omics, as the multiple cross-attention allows the exchange of information before constructing the multimodal representation.
-		With modality dropout, the robustness is increased, and CrossAttOmics can support up to three missing omics without impacting the accuracy.
-		The performance is slightly impacted when four omics are missing.
-		The impact on the accuracy depends on the omics that are missing.
-		The absence of CNV, an uninformative omic, does not have the same impact as the absence of mRNA, an informative omic.
-		If many of the most informative omics are missing, the model will not be able to restore the missing information from the less informative omics, even by training the model on this specific missingness pattern.
+	    \begin{wrapfigure}[16]{o}{3in}
+	        \centering
+	        %\vspace{-0.8\intextsep}
+	        \includegraphics{robustness_missing_modalities_dropout.pdf}
+	        \caption[CrossAttOmics robustness to missing modalities]{Comparison of CrossAttOmics robustness to missing modalities under two different training strategy: classical training and modality dropout.}\label{fig:modality_dropout}
+	    \end{wrapfigure}
+	    \Cref{fig:modality_dropout} shows the accuracy distribution with different numbers of missing omics under standard and modality dropout training strategies.
+	    Each boxplot is calculated with all possible missingness patterns.
+	    With classical training, increasing the number of missing omics degrades the performance.
+	    CrossAttOmics is robust to 1 or 2 missing omics, as the multiple cross-attention allows the exchange of information before constructing the multimodal representation.
+	    With modality dropout, the robustness is increased, and CrossAttOmics can support up to three missing omics without impacting the accuracy.
+	    The performance is slightly impacted when four omics are missing.
+	    The impact on the accuracy depends on the omics that are missing.
+	    The absence of CNV, an uninformative omic, does not have the same impact as the absence of mRNA, an informative omic.
+	    If many of the most informative omics are missing, the model will not be able to restore the missing information from the less informative omics, even by training the model on this specific missingness pattern.
 
-		Modality dropout is a simple but effective strategy to increase model robustness to missing modalities.
+	    Modality dropout is a simple but effective strategy to increase model robustness to missing modalities.
 
 	\subsection{Interaction importances}
-		Using gradient-based methods to backpropagate the output in the model, we can identify the most significant interactions.
-		One such method is \gls{lrp}.
-		\Gls{lrp} aims to back-propagate the prediction signal \(p_c\) in the neural network to assign a relevance score to each neuron.
-		We measure the importance of modality interactions as the mean of the \gls{lrp} importance scores assigned to the cross-attention output neurons.
-		\Cref{fig:LRP_CrossAttOmics_subset} presents the \gls{lrp} attribution score for each considered interaction by cancer.
-		Each cancer is characterized by a specific set of important interactions, suggesting that the cross-attention can learn interactions specific to each cancer~(\cref{fig:LRP_CrossAttOmics}).
-		Among the various cancers, the interaction of CNVs with mRNAs stands out as a significant interaction.
-		Combining CNVs and mRNAs makes it possible to exploit their complementarity, and the level of mRNAs confirms the presence of multiple copies of the gene.
+	    Using gradient-based methods to backpropagate the output in the model, we can identify the most significant interactions.
+	    One such method is \gls{lrp}.
+	    \Gls{lrp} aims to back-propagate the prediction signal \(p_c\) in the neural network to assign a relevance score to each neuron.
+	    We measure the importance of modality interactions as the mean of the \gls{lrp} importance scores assigned to the cross-attention output neurons.
 
-		\begin{wrapfigure}[16]{O}{0.45\textwidth}
-			\centering
-			\vspace{-1\intextsep}
-			\begin{tikzpicture}
-				\begin{axis}[
-						xbar=0pt, bar width=__LRPBARWIDTH__,
-						ytick=data,
-						yticklabels from table={\LRPCrossAttOmicsSubset}{cancer},
-						yticklabel style={rotate=90, font=\footnotesize},
-						xticklabel style={font=\scriptsize},
-						xlabel style={font=\scriptsize},
-						xlabel near ticks,
-						xlabel shift=-1mm,
-						y dir=reverse,
-						xmin=-0.025,
-						xlabel=LRP relevance score,
-						minor x tick num=2,
-						ytick style={draw=none}, ytick align=inside,
-						y axis line style={draw=none},
-						xtick pos=lower,
-						axis y line*=none,
-						axis x line*=bottom,
-						height=__LRPHEIGHT__,
-						width=__LRPWIDTH__,
-						legend to name={LRPsubset},
-						legend columns=3,
-						enlarge y limits=0.3,
-						enlarge x limits=false,
-						legend cell align={left},
-						legend style={draw=none, row sep=0pt, /tikz/every even column/.append style={column sep=3pt}, font=\tiny,},
-						legend image code/.code={%
-								\draw[#1] (0cm,-0.1cm) rectangle (0.3cm,0.1cm);
-							}
-					]
-					\pgfplotstableforeachcolumn\LRPCrossAttOmicsSubset\as\col{%
-						\IfStrEq{\col}{cancer}{}{
-							\intCaseF {\pgfplotstablecol} {
-								{9}{
-										\addplot[draw=none,fill=lrp1] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};
-									}
-									{8}{
-										\addplot[draw=none,fill=lrp2] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};
-										%\addlegendentryexpanded{Test2}
-									}
-									{7}{\addplot[draw=none,fill=lrp3] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
-									{6}{\addplot[draw=none,fill=lrp4] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
-									{5}{\addplot[draw=none,fill=lrp5] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
-									{4}{\addplot[draw=none,fill=lrp6] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
-									{3}{\addplot[draw=none,fill=lrp7] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
-									{2}{\addplot[draw=none,fill=lrp8] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
-									{1}{\addplot[draw=none,fill=lrp9] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
-							}{}
-							\verbtocs{\myarrow}|→|
-							\StrSubstitute{\col}{---}{→}[\lgdentry]%→
-							\addlegendentryexpanded{\lgdentry}
-						}
-					}
-				\end{axis}
-				\node[anchor=north, yshift=1ex] at (current axis.below south) {\pgfplotslegendfromname{LRPsubset}};
-			\end{tikzpicture}
-			%\includegraphics[width=\linewidth]{LRP_crossattomics_subset.pdf}
-			\caption[Comparison of the \glsfmtshort{lrp} relevance scores]{Comparison of the \glsfmtshort{lrp} relevance score for the different modelled modality interactions for three cancer.}\label{fig:LRP_CrossAttOmics_subset}
-		\end{wrapfigure}
-		In the case of colorectal cancer (COAD, \cref{fig:LRP_CrossAttOmics_subset}),  the interaction between miRNA and mRNA has been identified as one of the main interactions for this cancer.
-		miRNAs play a crucial role in gene regulatory networks by targeting various mRNAs~\cite{Amirkhah2015}.
-		In breast cancer (BRCA, \cref{fig:LRP_CrossAttOmics_subset}), DNAm - mRNA, DNAm - nc mRNA, and nc mRNA - mRNA interactions were identified as among the most important.
-		Promoter hypomethylation of tumor suppressor genes, such as BRCA1, promotes tumor initiation and progression~\cite{Szyf2004}.
-		Promoter hypomethylation can also upregulate \gls{lncrna}, such as EPIC1, which promotes breast cancer tumourigenesis~\cite{Wang2018}.
-		In gastric cancer (STAD, \cref{fig:LRP_CrossAttOmics_subset}), main interactions involve non-coding mRNAs.
-		For this cancer, \glspl{lncrna} are known to play key roles in gastric tumourigenesis~\cite{Tan2020}.
+	    \Cref{fig:LRP_CrossAttOmics_subset} presents the \gls{lrp} attribution score for each considered interaction by cancer.
+	    Each cancer is characterized by a specific set of important interactions, suggesting that the cross-attention can learn interactions specific to each cancer~(\cref{fig:LRP_CrossAttOmics}).
+	    Among the various cancers, the interaction of CNVs with mRNAs stands out as a significant interaction.
+	    Combining CNVs and mRNAs makes it possible to exploit their complementarity, and the level of mRNAs confirms the presence of multiple copies of the gene.
+
+	    \begin{wrapfigure}[16]{O}{0.45\textwidth}
+	        \centering
+	        \vspace{-1\intextsep}
+	        \begin{tikzpicture}
+	            \begin{axis}[
+	                    xbar=0pt, bar width=__LRPBARWIDTH__,
+	                    ytick=data,
+	                    yticklabels from table={\LRPCrossAttOmicsSubset}{cancer},
+	                    yticklabel style={rotate=90, font=\footnotesize},
+	                    xticklabel style={font=\scriptsize},
+	                    xlabel style={font=\scriptsize},
+	                    xlabel near ticks,
+	                    xlabel shift=-1mm,
+	                    y dir=reverse,
+	                    xmin=-0.025,
+	                    xlabel=LRP relevance score,
+	                    minor x tick num=2,
+	                    ytick style={draw=none}, ytick align=inside,
+	                    y axis line style={draw=none},
+	                    xtick pos=lower,
+	                    axis y line*=none,
+	                    axis x line*=bottom,
+	                    height=__LRPHEIGHT__,
+	                    width=__LRPWIDTH__,
+	                    legend to name={LRPsubset},
+	                    legend columns=3,
+	                    enlarge y limits=0.3,
+	                    enlarge x limits=false,
+	                    legend cell align={left},
+	                    legend style={draw=none, row sep=0pt, /tikz/every even column/.append style={column sep=3pt}, font=\tiny,},
+	                    legend image code/.code={%
+	                            \draw[#1] (0cm,-0.1cm) rectangle (0.3cm,0.1cm);
+	                        }
+	                ]
+	                \pgfplotstableforeachcolumn\LRPCrossAttOmicsSubset\as\col{%
+	                    \IfStrEq{\col}{cancer}{}{
+	                        \intCaseF {\pgfplotstablecol} {
+	                            {9}{
+	                                    \addplot[draw=none,fill=lrp1] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};
+	                                }
+	                                {8}{
+	                                    \addplot[draw=none,fill=lrp2] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};
+	                                    %\addlegendentryexpanded{Test2}
+	                                }
+	                                {7}{\addplot[draw=none,fill=lrp3] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
+	                                {6}{\addplot[draw=none,fill=lrp4] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
+	                                {5}{\addplot[draw=none,fill=lrp5] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
+	                                {4}{\addplot[draw=none,fill=lrp6] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
+	                                {3}{\addplot[draw=none,fill=lrp7] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
+	                                {2}{\addplot[draw=none,fill=lrp8] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
+	                                {1}{\addplot[draw=none,fill=lrp9] table[y expr=\coordindex, x=\col]{\LRPCrossAttOmicsSubset};}
+	                        }{}
+	                        \verbtocs{\myarrow}|→|
+	                        \StrSubstitute{\col}{---}{→}[\lgdentry]%→
+	                        \addlegendentryexpanded{\lgdentry}
+	                    }
+	                }
+	            \end{axis}
+	            \node[anchor=north, yshift=1ex] at (current axis.below south) {\pgfplotslegendfromname{LRPsubset}};
+	        \end{tikzpicture}
+	        %\includegraphics[width=\linewidth]{LRP_crossattomics_subset.pdf}
+	        \caption[Comparison of the \glsfmtshort{lrp} relevance scores]{Comparison of the \glsfmtshort{lrp} relevance score for the different modelled modality interactions for three cancer.}\label{fig:LRP_CrossAttOmics_subset}
+	    \end{wrapfigure}
+	    In the case of colorectal cancer (COAD, \cref{fig:LRP_CrossAttOmics_subset}),  the interaction between miRNA and mRNA has been identified as one of the main interactions for this cancer.
+	    miRNAs play a crucial role in gene regulatory networks by targeting various mRNAs~\cite{Amirkhah2015}.
+	    In breast cancer (BRCA, \cref{fig:LRP_CrossAttOmics_subset}), DNAm - mRNA, DNAm - nc mRNA, and nc mRNA - mRNA interactions were identified as among the most important.
+	    Promoter hypomethylation of tumor suppressor genes, such as BRCA1, promotes tumor initiation and progression~\cite{Szyf2004}.
+	    Promoter hypomethylation can also upregulate \gls{lncrna}, such as EPIC1, which promotes breast cancer tumourigenesis~\cite{Wang2018}.
+	    In gastric cancer (STAD, \cref{fig:LRP_CrossAttOmics_subset}), main interactions involve non-coding mRNAs.
+	    For this cancer, \glspl{lncrna} are known to play key roles in gastric tumourigenesis~\cite{Tan2020}.
 
 \section{Conclusions}
 	In this paper, we propose CrossAttOmics, a novel deep-learning approach to combine multi-omics data.
@@ -421,7 +422,7 @@ We focused the cross-attention computation on known omics regulatory interaction
 	This is achieved by allowing information to flow between the different omics through the cross-attention layers.
 	By explicitly modeling the interactions between different omics, attribution methods such as \gls{lrp} can help in identifying the most important interactions.
 
-	We adopted a two phase training strategy, where modalities encoders are trained independently on the prediction task in a first phase.
+	We adopted a two phase training strategy, where modalities encoders are pretrained independently on the prediction task in a first phase.
 	In a second phase the multimodal part, i.e. the fusion through the different cross-attention and the predictor module are trained.
 	There are no restrictions on training the model in an end-to-end fashion, it should be noted that this will increase the training time.
 
