@@ -1,0 +1,304 @@
+---
+title: "Developping and exploring the interest of deep learning approaches in the field of multi-omics data"
+subtitle: "Développer et explorer l'intérêt des approches de deep learning dans le domaine des données multi-omiques"
+author: "Aurélien Beaude"
+date: 06/12/2024
+format:
+  revealjs: 
+    progress: true
+    theme: [simple, title-slide.scss]
+    slide-number: true
+    show-slide-number: all
+    margin: 0.025
+    width: 1200
+    template-partials:
+      - title-slide.html
+    revealjs-plugins:
+      - pointer
+      - animate
+    filters: 
+      - animate
+---
+
+## Towards a personalized medicine
+
+```yaml { .animate src="IntroductionPersoMedicine-MédecineTrad_Perso.svg"}
+setup:
+  - element: "#Title1"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "0"
+  - element: "#Patient1"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#Diagnosis1"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "2"
+  - element: "#Prognosis1"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "3"
+  - element: "#Treatment1"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "3"
+  - element: "#TreatmentOK"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "4"
+  - element: "#TreatmentKO"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "5"
+  - element: "#Title2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "6"
+  - element: "#Patient2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "6"
+  - element: "#Diagnosis2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "7"
+  - element: "#Prognosis2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "8"
+  - element: "#Treatment2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "9"
+```
+
+## Omics data 
+
+
+## Precision medicine
+
+![](IntroductionPersoMedicine-SlideIntro.svg){fig-align="center" .r-stretch}
+
+## Data: TCGA and CCLE
+
+
+## Outline 
+
+::: {layout-ncol="3"}
+
+:::: {#first-column}
+### Single omics
+
+::: {style="font-size: 70%; padding-left: 0.7em;"}
+  - State of the Art
+  - AttOmics
+  - Results
+
+:::
+
+:::
+
+::: {#second-column}
+### Multi Omics
+
+::: {style="font-size: 70%; padding-left: 0.7em;"}
+  - State of the Art
+  - CrossAttOmics
+  - Results
+  - CrossAttOmicsGate
+
+:::
+
+:::
+
+::: {#third-column}
+### Interpretability
+
+::: {style="font-size: 70%; padding-left: 0.7em;"}
+  - Counterfactuals
+  - GAN
+  - Results
+
+:::
+
+:::
+
+::::
+
+### Conclusions and Perspectives
+
+# Single omics
+
+## State of the art 
+
+## Limits {.smaller}
+
+* **Classical deep learning limits**
+  * High number of parameters
+  * With limited number of examples
+  * Risk of overfitting
+  
+:::{.callout-important appearance="simple"}
+**Reduce the number of parameters ?**
+:::
+
+* **Gene expression impacts** 
+  * With classical DL, features interactions are learned during training and fixed for inference
+
+:::{.callout-important appearance="simple"}
+**Compute interaction specific to each patient ?**
+:::
+
+## (Self)-Attention mechanism
+
+:::{.callout-note appearance="simple"}
+How to pick relevant information from input data
+:::
+
+* **Self-attention** allows to capture the associated context of each input element by interacting with other elements
+  * Quadratic complexity (Space and Time)
+
+$$\operatorname{Attention}\left(Q,K,V\right) = \operatorname{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V $$
+
+:::{.callout-important appearance="simple"}
+**Applying self-attention to large large vectors ?**
+:::
+
+## AttOmics Architecture
+
+:::: {.columns}
+
+::: {.column width="60%" }
+![](AttOmics-ArchitectureFull.svg){fig-align="left" width=90%}
+:::
+
+::: {.column width="40%"}
+
+:::{.r-stack}
+
+::: {.fragment .fade-in-then-out fragment-index=1}
+
+::: {style="font-size: 70%;"}
+**Grouping Strategies**
+
+* Random
+* Clustering
+* Knowledge:
+  * Gene ontology
+  * Cancer Hallmarks
+
+:::
+  
+:::
+
+::: {.fragment .fade-out fragment-index=5}
+
+::: {style="font-size: 70%;"}
+
+::: {.fragment .fade-in fragment-index=2}
+**Intra-group interactions**: New representation
+:::
+
+::: {.fragment .fade-in fragment-index=3}
+:::{.callout-important appearance="simple"}
+Genes grouping creates unwanted restrictions
+:::
+:::
+
+::: {.fragment .fade-in fragment-index=4}
+:::{.callout-tip appearance="simple"}
+Restore group interactions with the Attention mechanism
+:::
+:::
+
+:::
+
+:::
+
+::: {.fragment .fade-in fragment-index=5}
+
+::: {style="font-size: 70%;"}
+Inter-groups interactions
+:::
+:::
+
+
+:::
+
+:::
+
+::::
+
+
+
+## Results
+
+## AttOmics Conclusions
+
+# Multi omics
+
+## Multimodal AI
+
+## State of the art 
+
+## Cross-attention
+
+## CrossAttOmics
+
+## Omics combination
+
+![](tcga_perf_omics_comb.svg){fig-align="center" .lightbox .r-stretch}
+
+::: {.fragment .fade-up}
+Conclusion of the figure
+
+Conclusions3
+:::
+
+
+## Robustness to missing modalities
+
+## Towards a data-driven approach: CrossAttOmicsGate
+
+## Transition
+
+# Interpretability
+
+## Counterfactuals 
+
+![](counterfactualsProperties.svg){fig-align="center" .r-stretch}
+
+::: {.fragment .fade-up}
+GAN good distribution estimators
+:::
+
+## Generating counterfactuals with a GAN
+
+## Adversarial training
+
+## Results
+
+# Conclusions and Perspectives
+
+## Conclusions
+
+## Perspectives
+
+## {.center}
+::: {.r-fit-text}
+Thank you
+:::
