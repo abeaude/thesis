@@ -3,35 +3,32 @@
 .reveal .slides #title-slide {
 
   // Title
- .title {
-        font-size: 1.6em;
-        color: #63003C;
-      }
+  .title {
+    font-size: 1.6em;
+    color: #63003C;
+  }
 
   // Subtitle
   .subtitle {
-  font-weight: 400;
-  font-size: 0.7em;
-  color: #666666;
-}
+    font-weight: 400;
+    font-size: 0.7em;
+    color: #666666;
+  }
 
-.quarto-title-author-name {
-  font-size: 0.8em;
-  color: #222;
-}
+  .quarto-title-author-name {
+    font-size: 0.8em;
+    color: #222;
+  }
 
-.callout-content  {
-  font-size: 2em;
-}
+  .callout-content {
+    font-size: 2em;
+  }
 
-#vcenter {
-  vertical-align: middle;
-}
+  .column {
+    text-align: left;
+  }
 
-.column {
-text-align: left;
-}
-/*
+  /*
   .quarto-title-author-name, .quarto-title-author-email > a, p.date {
     color: $stanford-description-gray;
   }
@@ -46,19 +43,34 @@ text-align: left;
 }
 
 .reveal .progress {
-    color: #63003C;
+  color: #63003C;
 }
 
-$presentation-author-block-padding-left: if(
-  $presentation-title-slide-text-align != left,
-  0.5em,
-  0
-);
-$presentation-author-block-padding-right: if(
-  $presentation-title-slide-text-align != right,
-  0.5em,
-  0
-);
+.reveal .slide ul li {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
+
+#vcenter {
+  vertical-align: middle;
+}
+
+.callout {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  border-radius: 0.25rem;
+}
+
+// .math.display {
+//   font-size: 80%;
+// }
+
+$presentation-author-block-padding-left: if($presentation-title-slide-text-align !=left,
+    0.5em,
+    0);
+$presentation-author-block-padding-right: if($presentation-title-slide-text-align !=right,
+    0.5em,
+    0);
 
 .reveal {
   .quarto-title-block {

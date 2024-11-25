@@ -11,6 +11,8 @@ format:
     show-slide-number: all
     margin: 0.025
     width: 1200
+    include-in-header:
+      - file: mathjax-color.html
     template-partials:
       - title-slide.html
     revealjs-plugins:
@@ -91,7 +93,7 @@ setup:
 
 ## Precision medicine
 
-![](IntroductionPersoMedicine-SlideIntro.svg){fig-align="center" .r-stretch}
+![](IntroductionPersoMedicine-SlideIntro.svg){fig-align="center" .r-stretch width="110%"}
 
 ## Data: TCGA and CCLE
 
@@ -145,45 +147,74 @@ setup:
 
 ## State of the art 
 
+![](SOTA_single_omics.svg){fig-align="center"}
+
 ## Limits {.smaller}
 
-* **Classical deep learning limits**
-  * High number of parameters
-  * With limited number of examples
-  * Risk of overfitting
-  
-:::{.callout-important appearance="simple"}
-**Reduce the number of parameters ?**
+### Classical deep learning limits
+::: {style="font-size: 90%;"}
+  + High number of parameters
+  + With limited number of examples
+  + Risk of overfitting
+
 :::
 
-* **Gene expression impacts** 
-  * With classical DL, features interactions are learned during training and fixed for inference
-
 :::{.callout-important appearance="simple"}
-**Compute interaction specific to each patient ?**
+**How to reduce the number of parameters ?**
+:::
+### Gene expression impacts patient differently
+::: {style="font-size: 90%;"}
++ With classical DL, features interactions are learned during training and fixed for inference
+:::
+  
+:::{.callout-important appearance="simple"}
+**How to compute interaction specific to each patient ?**
 :::
 
 ## (Self)-Attention mechanism
 
+:::: {.columns}
+
+::: {.column width="75%"}
+
 :::{.callout-note appearance="simple"}
-How to pick relevant information from input data
+How to pick relevant information from input data $X = [x_i]_{1 \leq i \leq L}$ ?
 :::
-
+::: {style="font-size: 65%;"}
 * **Self-attention** allows to capture the associated context of each input element by interacting with other elements
-  * Quadratic complexity (Space and Time)
-
-$$\operatorname{Attention}\left(Q,K,V\right) = \operatorname{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V $$
-
-:::{.callout-important appearance="simple"}
-**Applying self-attention to large large vectors ?**
+$$
+\operatorname{Attention}\left({\color{query}Q},{\color{key}K},{\color{value}V}\right) = \operatorname{softmax}\left(\frac{{\color{query}Q}{\color{key}K^T}}{\sqrt{d_k}}\right){\color{value}V}
+$$
+$\color{query}Q = \left[q_i\right]_{1 \leq i \leq L}$ with $\color{query}q_i = X_i \cdot W_q$, $\color{key}K$ and $\color{value}V$ are obtained similarly.
+ * Quadratic complexity (Space and Time)
 :::
+
+::: {style="font-size: 70%"}
+:::{.callout-important appearance="simple"}
+**How to apply self-attention to large large vectors ?**
+:::
+
+:::{.callout-tip appearance="simple"}
+Group related features together and apply self-attention on it
+:::
+:::
+
+:::
+
+::: {.column width="25%"}
+![](Attention.svg){fig-align="right" width=90%}
+:::
+
+::::
 
 ## AttOmics Architecture
 
 :::: {.columns}
 
 ::: {.column width="60%" }
+
 ![](AttOmics-ArchitectureFull.svg){fig-align="left" width=90%}
+
 :::
 
 ::: {.column width="40%"}
@@ -201,8 +232,15 @@ $$\operatorname{Attention}\left(Q,K,V\right) = \operatorname{softmax}\left(\frac
   * Gene ontology
   * Cancer Hallmarks
 
+$$
+\begin{align}
+X_G &= \mathcal{T}\left(X\right) \\
+ &= \left[X_{g_1}, \cdots, X_{g_4}\right]
+\end{align}
+$$
+
 :::
-  
+
 :::
 
 ::: {.fragment .fade-out fragment-index=5}
@@ -210,19 +248,36 @@ $$\operatorname{Attention}\left(Q,K,V\right) = \operatorname{softmax}\left(\frac
 ::: {style="font-size: 70%;"}
 
 ::: {.fragment .fade-in fragment-index=2}
-**Intra-group interactions**: New representation
+**Intra-group interactions**
 :::
 
 ::: {.fragment .fade-in fragment-index=3}
+
 :::{.callout-important appearance="simple"}
-Genes grouping creates unwanted restrictions
+**Gene grouping creates unwanted restrictions**
+
+Genes in group $g_1$ cannot interact with genes from other groups
 :::
+
 :::
 
 ::: {.fragment .fade-in fragment-index=4}
+
 :::{.callout-tip appearance="simple"}
 Restore group interactions with the Attention mechanism
 :::
+
+:::
+
+::: {.fragment .fade-in fragment-index=2}
+
+$$ 
+X'_{g_i} = \operatorname{FCN}\left(X_{g_i}\right)
+$$
+
+$$ 
+X'_G = \left[X'_{g_1}, \cdots, X'_{g_4}\right]
+$$
 :::
 
 :::
@@ -232,10 +287,37 @@ Restore group interactions with the Attention mechanism
 ::: {.fragment .fade-in fragment-index=5}
 
 ::: {style="font-size: 70%;"}
-Inter-groups interactions
-:::
+**Inter-groups interactions** 
+
+:::{.callout-note appearance="simple"}
+New representation of each group taking into consideration features from other groups
 :::
 
+$$
+\begin{align}
+\color{query}q_i &= \color{query}X'_{g_i} \cdot W_q^h \\
+\color{key}k_i &= \color{key}X'_{g_i} \cdot W_k^h \\
+\color{value}v_i &=\color{value} X'_{g_i} \cdot W_v^h 
+\end{align}
+$$
+
+$$
+\begin{align}
+Z &= \operatorname{MultiHeadAttention}\left(X'_G\right) \\
+ &= \operatorname{concat}\left(\left[h_1, \cdots, h_H \right]\right) \\
+ h_i &= \operatorname{Attention}\left({\color{query}Q},{\color{key}K},{\color{value}V}\right)
+\end{align}
+$$
+
+:::
+
+:::
+
+:::
+
+:::
+
+:::
 
 :::
 
@@ -244,20 +326,134 @@ Inter-groups interactions
 ::::
 
 
-
 ## Results
 
+![](AttOmicsLimitedTraining.svg){.r-stretch fig-align="center"}
+
+## Cancer Signature {.smaller}
+
+:::: {.columns}
+
+::: {.column width="70%" }
+![](AttOmicsCancerSignatures.svg)
+:::
+
+::: {.column width="30%" }
+
+* Cancer heatmaps are a mean of patient heatmaps with the same cancer
+* Each square of the heatmap represents the attention weight between two different group learnt by the model
+
+::: {.fragment .fade-up fragment-index=1}
+::: {.fragment .highlight-red	fragment-index=1}
+**Across cancers different interactions are learnt**
+:::
+:::
+
+:::
+
+::::
+
+## CESC cancer {.smaller}
+
+:::: {.columns}
+
+::: {.column width="60%" }
+![](AttOmicsCESCPathways.svg){width=90%}
+:::
+
+::: {.column width="40%" }
+**Identified pathways:**
+
+* IL6 JAK STAT3 signaling
+* Hedgehog signaling
+* WNT singaling
+
+**Identified interactions:**
+
+* WNT and Hedgehog cross-talk involved in chemo-resistant cervical cancer
+:::
+::::
+
 ## AttOmics Conclusions
+
+* Proposed a grouping mechanism to scale the self-attention to omics data
+* AttOmics has less parameters and achieves similar or better performances
+* AttOmics has better performances with a limited training set
+* Self-attention: capture patient specific feature interactions
+
+:::{style="font-size=90%;"}
+:::{.callout-important appearance="simple"}
+Omics were analyzed individually but a phenotype results from their interaction
+:::
+
+:::{.callout-tip appearance="simple"}
+Combine the different omics in a single model.
+:::
+:::
 
 # Multi omics
 
 ## Multimodal AI
 
-## State of the art 
+![](SOTA_MultiOmics.svg)
 
-## Cross-attention
+## Attention as an integration strategy {.smaller}
+
+:::{.callout-note appearance="simple"}
+Attention mechansim can capture interaction between two vectors
+:::
+
+:::: {.columns}
+
+::: {.column width="30%" }
+### Early Fusion
+
+![](AttentionEF.svg){fig-align="center" width=40%}
+
+:::{.callout-important appearance="simple"}
+* High dimensionnality
+* Attention complexity: $\mathcal{O}(n^2)$
+:::
+:::
+
+::: {.column width="70%"}
+### Intermediate Fusion
+
+:::: {.columns}
+
+::: {.column  #vcenter width="45%"}
+
+::: {layout="[[-1], [-1], [1], [-1]]" style="font-size: 90%;"}
+
+\begin{align}
+Z_{\beta \rightarrow \alpha} &=  \operatorname{CrossAtt}_{\beta \rightarrow \alpha}\left(X_{\alpha}, X_{\beta} \right) \\
+&= \operatorname{Attention}\left(Q_{\alpha},K_{\beta},V_{\beta} \right)
+\end{align}
+
+
+:::
+::: 
+
+::: {.column width="50%" }
+![](AttentionIF.svg){fig-align="center" width=80%}
+:::
+::::
+
+:::{.callout-important appearance="simple"}
+Consider all modality pairs: $n(n-1)$ pairs to consider
+:::
+
+:::{.callout-tip appearance="simple"}
+Only consider pairs known to interact
+:::
+
+:::
+
+::::
 
 ## CrossAttOmics
+
+![](CrossAttOmics.svg)
 
 ## Omics combination
 
@@ -269,16 +465,74 @@ Conclusion of the figure
 Conclusions3
 :::
 
+## Identifying important interactions
+
+:::: {.columns}
+
+::: {.column width=40%}
+
+**LRP** 
+
+```yaml { .animate src="LRP.svg"}
+setup:
+  - element: "#LRP"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "0"
+```
+
+![](CrossAttOmicsDetailsLRP.svg){width=90%}
+:::
+
+::: {.column width=60%}
+![](CrossAttOmicsLRP.svg){width=100%}
+:::
+::::
+
 
 ## Robustness to missing modalities
 
-## Towards a data-driven approach: CrossAttOmicsGate
+:::: {.columns}
+
+::: {.column width="33%"}
+
+
+::: {layout="[[1], [1, 1]]"}
+![](missing_modality_pattern.svg)
+
+![](missing_modality_latent.svg)
+
+![](missing_modality_reconstruction.svg)
+:::
+
+:::
+
+::: {.column width="67%"}
+![](CrossAttOmicsModalityDropout.svg){fig-align="center" width=90%}
+:::
+
+::::
+
+## CrossAttOmicsGate: a data-driven approach
+
+![](CrossAttOmicsGate.svg){.r-stretch}
+
+## CrossAttOmicsGate results {.smaller}
+
+|  Model  | Accuracy      | Precision     | Recall          | F1            |
+|---------|--------------:|--------------:|----------------:|--------------:|
+| No Gate | 0.980 ± 0.001 | 0.982 ± 0.002 | 0.979 ± 0.002   | 0.980 ± 0.002 |
+| Gate    | 0.987 ± 0.001 | 0.989 ± 0.001 | 0.987 ± 0.001   | 0.987 ± 0.001 |
+
+![](CrossAttOmicsGateAlphaHeatmap.svg){fig-align="center"}
 
 ## Transition
 
 # Interpretability
 
 ## Counterfactuals 
+
 
 ![](counterfactualsProperties.svg){fig-align="center" .r-stretch}
 
@@ -287,6 +541,8 @@ GAN good distribution estimators
 :::
 
 ## Generating counterfactuals with a GAN
+
+![](ConterfactualGAN.svg){.r-stretch}
 
 ## Adversarial training
 
@@ -302,3 +558,5 @@ GAN good distribution estimators
 ::: {.r-fit-text}
 Thank you
 :::
+
+# Appendix
