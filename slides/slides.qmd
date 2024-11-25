@@ -90,6 +90,7 @@ setup:
 
 ## Omics data 
 
+![](Omics.svg){fig-align="center"}
 
 ## Precision medicine
 
@@ -333,7 +334,7 @@ $$
 :::: {.columns}
 
 ::: {.column width="70%" }
-![](AttOmicsCancerSignatures.svg)
+![](AttOmicsCancerSignatures.png)
 :::
 
 ::: {.column width="30%" }
@@ -459,9 +460,7 @@ Only consider pairs known to interact
 ![](tcga_perf_omics_comb.svg){fig-align="center" .lightbox .r-stretch}
 
 ::: {.fragment .fade-up}
-Conclusion of the figure
 
-Conclusions3
 :::
 
 ## Identifying important interactions
@@ -517,6 +516,7 @@ setup:
 
 ![](CrossAttOmicsGate.svg){.r-stretch}
 
+
 ## CrossAttOmicsGate results {.smaller}
 
 |  Model  | Accuracy      | Precision     | Recall          | F1            |
@@ -526,25 +526,37 @@ setup:
 
 ![](CrossAttOmicsGateAlphaHeatmap.svg){fig-align="center"}
 
-## Transition
+## Multi-omics conclusions 
+
+:::{.incremental}
+* Harness cross-attention to build a multimodal representation that explicitly consider interactions between modalities
+* Using only two or three non-protein omics combination, achieve similar accuracy to what is obtained by training only on proteins
+* Modality dropout is an effective strategy to increase robustness to missing modalities
+* Data-driven strategy to identify important interactions
+:::
+
+:::{.callout-tip appearance="simple"}
+Patient can be diagnosed efficiently but what are the disease drivers ? How to treat the patient ?
+:::
 
 # Interpretability
 
-## Counterfactuals 
+## Counterfactuals properties
 
 
 ![](counterfactualsProperties.svg){fig-align="center" .r-stretch}
 
-::: {.fragment .fade-up}
-GAN good distribution estimators
+::: {.incremental}
+* Data manifold closeness = respect the original data distribution
+* GANs captures the data distribution (Goodfellow et al., 2014)
 :::
 
 ## Generating counterfactuals with a GAN
 
 ![](ConterfactualGAN.svg){.r-stretch}
 
-* $\mathcal{L}_{\text{WGAN}} =$
-* $\mathcal{L}_{\operatorname{CL}} = \operatorname{CE}\left(\operatorname{CL}\left(x^{\text{CF}}\right), y^{\text{CF}}\right)$
+<!-- * $\mathcal{L}_{\text{WGAN}} =$ -->
+<!-- * $\mathcal{L}_{\operatorname{CL}} = \operatorname{CE}\left(\operatorname{CL}\left(x^{\text{CF}}\right), y^{\text{CF}}\right)$ -->
 
 ## Adversarial training of $\operatorname{Cl}$
 
@@ -590,30 +602,68 @@ $$
 
 ## Results
 
-:::: {.columns}
+![](BRCA_CF_UMAP.svg){fig-align="center"}
 
+## Results
 
-:::{.column width=80%}
-![](BRCA_CF.svg){width=100%}
-:::
+![](BRCA_CF.svg){.r-strech fig-align="center"}
 
-:::{.column width=20%}
 :::{style="font-size:40%;"}
-* GDA: gene-disease association from DisGenet
-* COSMIC: Catalogue of somatic mutations in cancer
+GDA: gene-disease association from DisGenet / COSMIC: Catalogue of somatic mutations in cancer
 :::
-:::
-::::
 
 # Conclusions and Perspectives
 
 ## Conclusions
 
+:::{.incremental style="font-size:90%;"}
+* **AttOmics**: Applied self-attention mechanism to omics profile tp capture patient-specific interactions. Self-attention was applied to groups of features which allowed the addition of knowledge in the groups.
+* **CrossAttOmics**: Integrate multi-omics data based on the known regulatory interactions between modalities and the cross-attention. 
+* **CrossAttOmicsGate**: Let the network score each interaction with a gating mechanism
+* **Counterfactual Generation**: Find the perturbation on the molecular profile that will change the prediction from a disease state to a health
+:::
+
 ## Perspectives: Scalar Attention
 
-![](ScalarAttentionMemory.svg)
+:::: {.columns}
+
+:::{.column width=65%}
+
+* In AttOmics, groups are an architectural constraints
+* Removing groups: directly consider feature interactions
+
+:::{.callout-important appearance="simple"}
+How to compute attention between scalar values ? 
+:::
+
+
+$$
+A_{ij} = \operatorname{softmin}\left(\left|Q_{i} - K_{j} \right| \right)
+$$
+
+
+:::{.callout-tip appearance="simple"}
+Efficient implementation with Triton
+:::
+:::
+
+:::{.column width=35%}
+![](ScalarAttentionMemory.svg){fig-align="right" width=100%}
+:::
+
+::::
 
 ## Perspectives: Knowledge
+
+* Biolgically-informed architectures are common when applying deep learning to biological problems as they provide a strong inductive bias.
+
+:::{.callout-important appearance="simple"}
+Knowledge is incomplete or may contains errors. How to handle this ?
+:::
+
+:::{.callout-important appearance="simple"}
+What to do about unnannotated features ? 
+:::
 
 ## {.center}
 ::: {.r-fit-text}

@@ -221,7 +221,8 @@ Aurélien Beaude
 </section>
 <section id="omics-data" class="slide level2">
 <h2>Omics data</h2>
-</section>
+
+<img data-src="Omics.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="precision-medicine" class="slide level2">
 <h2>Precision medicine</h2>
 
@@ -480,7 +481,7 @@ h_i &amp;= \operatorname{Attention}\left({\color{query}Q},{\color{key}K},{\color
 <h2>Cancer Signature</h2>
 <div class="columns">
 <div class="column" style="width:70%;">
-<p><img data-src="AttOmicsCancerSignatures.svg"></p>
+<p><img data-src="AttOmicsCancerSignatures.png"></p>
 </div><div class="column" style="width:30%;">
 <ul>
 <li>Cancer heatmaps are a mean of patient heatmaps with the same cancer</li>
@@ -648,8 +649,7 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 <h2>Omics combination</h2>
 
 <img data-src="tcga_perf_omics_comb.svg" class="r-stretch quarto-figure quarto-figure-center"><div class="fragment fade-up">
-<p>Conclusion of the figure</p>
-<p>Conclusions3</p>
+
 </div>
 </section>
 <section id="identifying-important-interactions" class="slide level2">
@@ -740,28 +740,47 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 </table>
 
 <img data-src="CrossAttOmicsGateAlphaHeatmap.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
-<section id="transition" class="slide level2">
-<h2>Transition</h2>
+<section id="multi-omics-conclusions" class="slide level2">
+<h2>Multi-omics conclusions</h2>
+<div>
+<ul>
+<li class="fragment">Harness cross-attention to build a multimodal representation that explicitly consider interactions between modalities</li>
+<li class="fragment">Using only two or three non-protein omics combination, achieve similar accuracy to what is obtained by training only on proteins</li>
+<li class="fragment">Modality dropout is an effective strategy to increase robustness to missing modalities</li>
+<li class="fragment">Data-driven strategy to identify important interactions</li>
+</ul>
+</div>
+<div class="callout callout-tip callout-style-simple">
+<div class="callout-body">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-content">
+<p>Patient can be diagnosed efficiently but what are the disease drivers ? How to treat the patient ?</p>
+</div>
+</div>
+</div>
 </section></section>
 <section>
 <section id="interpretability-1" class="title-slide slide level1 center">
 <h1>Interpretability</h1>
 
 </section>
-<section id="counterfactuals" class="slide level2">
-<h2>Counterfactuals</h2>
+<section id="counterfactuals-properties" class="slide level2">
+<h2>Counterfactuals properties</h2>
 
-<img data-src="counterfactualsProperties.svg" class="r-stretch quarto-figure quarto-figure-center"><div class="fragment fade-up">
-<p>GAN good distribution estimators</p>
+<img data-src="counterfactualsProperties.svg" class="r-stretch quarto-figure quarto-figure-center"><div>
+<ul>
+<li class="fragment">Data manifold closeness = respect the original data distribution</li>
+<li class="fragment">GANs captures the data distribution (Goodfellow et al., 2014)</li>
+</ul>
 </div>
 </section>
 <section id="generating-counterfactuals-with-a-gan" class="slide level2">
 <h2>Generating counterfactuals with a GAN</h2>
 <img data-src="ConterfactualGAN.svg" class="r-stretch">
-<ul>
-<li><span class="math inline">\(\mathcal{L}_{\text{WGAN}} =\)</span></li>
-<li><span class="math inline">\(\mathcal{L}_{\operatorname{CL}} = \operatorname{CE}\left(\operatorname{CL}\left(x^{\text{CF}}\right), y^{\text{CF}}\right)\)</span></li>
-</ul>
+<!-- * $\mathcal{L}_{\text{WGAN}} =$ -->
+<!-- * $\mathcal{L}_{\operatorname{CL}} = \operatorname{CE}\left(\operatorname{CL}\left(x^{\text{CF}}\right), y^{\text{CF}}\right)$ -->
 </section>
 <section id="adversarial-training-of-operatornamecl" class="slide level2">
 <h2>Adversarial training of <span class="math inline">\(\operatorname{Cl}\)</span></h2>
@@ -828,17 +847,14 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 </section>
 <section id="results-2" class="slide level2">
 <h2>Results</h2>
-<div class="columns">
-<div class="column" style="width:80%;">
-<p><img data-src="BRCA_CF.svg" style="width:100.0%"></p>
-</div><div class="column" style="width:20%;">
-<div style="font-size:40%;">
-<ul>
-<li>GDA: gene-disease association from DisGenet</li>
-<li>COSMIC: Catalogue of somatic mutations in cancer</li>
-</ul>
+
+<img data-src="BRCA_CF_UMAP.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="results-3" class="slide level2">
+<h2>Results</h2>
+
+<img data-src="BRCA_CF.svg" class="r-strech quarto-figure quarto-figure-center r-stretch"><div style="font-size:40%;">
+<p>GDA: gene-disease association from DisGenet / COSMIC: Catalogue of somatic mutations in cancer</p>
 </div>
-</div></div>
 </section></section>
 <section>
 <section id="conclusions-and-perspectives-1" class="title-slide slide level1 center">
@@ -847,13 +863,79 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 </section>
 <section id="conclusions" class="slide level2">
 <h2>Conclusions</h2>
+<div style="font-size:90%;">
+<ul>
+<li class="fragment"><strong>AttOmics</strong>: Applied self-attention mechanism to omics profile tp capture patient-specific interactions. Self-attention was applied to groups of features which allowed the addition of knowledge in the groups.</li>
+<li class="fragment"><strong>CrossAttOmics</strong>: Integrate multi-omics data based on the known regulatory interactions between modalities and the cross-attention.</li>
+<li class="fragment"><strong>CrossAttOmicsGate</strong>: Let the network score each interaction with a gating mechanism</li>
+<li class="fragment"><strong>Counterfactual Generation</strong>: Find the perturbation on the molecular profile that will change the prediction from a disease state to a health</li>
+</ul>
+</div>
 </section>
 <section id="perspectives-scalar-attention" class="slide level2">
 <h2>Perspectives: Scalar Attention</h2>
-
-<img data-src="ScalarAttentionMemory.svg" class="r-stretch"></section>
+<div class="columns">
+<div class="column" style="width:65%;">
+<ul>
+<li>In AttOmics, groups are an architectural constraints</li>
+<li>Removing groups: directly consider feature interactions</li>
+</ul>
+<div class="callout callout-important callout-style-simple">
+<div class="callout-body">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-content">
+<p>How to compute attention between scalar values ?</p>
+</div>
+</div>
+</div>
+<p><span class="math display">\[
+A_{ij} = \operatorname{softmin}\left(\left|Q_{i} - K_{j} \right| \right)
+\]</span></p>
+<div class="callout callout-tip callout-style-simple">
+<div class="callout-body">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-content">
+<p>Efficient implementation with Triton</p>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:35%;">
+<div class="quarto-figure quarto-figure-right">
+<figure>
+<p><img data-src="ScalarAttentionMemory.svg" class="quarto-figure quarto-figure-right" style="width:100.0%"></p>
+</figure>
+</div>
+</div></div>
+</section>
 <section id="perspectives-knowledge" class="slide level2">
 <h2>Perspectives: Knowledge</h2>
+<ul>
+<li>Biolgically-informed architectures are common when applying deep learning to biological problems as they provide a strong inductive bias.</li>
+</ul>
+<div class="callout callout-important callout-style-simple">
+<div class="callout-body">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-content">
+<p>Knowledge is incomplete or may contains errors. How to handle this ?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-important callout-style-simple">
+<div class="callout-body">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-content">
+<p>What to do about unnannotated features ?</p>
+</div>
+</div>
+</div>
 </section>
 <section id="section" class="slide level2 center">
 <h2></h2>
