@@ -95,8 +95,6 @@ setup:
 
 ![](IntroductionPersoMedicine-SlideIntro.svg){fig-align="center" .r-stretch width="110%"}
 
-## Data: TCGA and CCLE
-
 
 ## Outline 
 
@@ -405,25 +403,26 @@ Attention mechansim can capture interaction between two vectors
 
 :::: {.columns}
 
-::: {.column width="30%" }
+::: {.column width="40%" }
 ### Early Fusion
 
-![](AttentionEF.svg){fig-align="center" width=40%}
+![](AttentionEF.svg){fig-align="center" width=48%}
 
 :::{.callout-important appearance="simple"}
 * High dimensionnality
 * Attention complexity: $\mathcal{O}(n^2)$
 :::
+
 :::
 
-::: {.column width="70%"}
+::: {.column width="60%"}
 ### Intermediate Fusion
 
 :::: {.columns}
 
 ::: {.column  #vcenter width="45%"}
 
-::: {layout="[[-1], [-1], [1], [-1]]" style="font-size: 90%;"}
+::: {layout="[[-1], [-1], [1], [-1]]" style="font-size: 80%;"}
 
 \begin{align}
 Z_{\beta \rightarrow \alpha} &=  \operatorname{CrossAtt}_{\beta \rightarrow \alpha}\left(X_{\alpha}, X_{\beta} \right) \\
@@ -544,15 +543,77 @@ GAN good distribution estimators
 
 ![](ConterfactualGAN.svg){.r-stretch}
 
-## Adversarial training
+* $\mathcal{L}_{\text{WGAN}} =$
+* $\mathcal{L}_{\operatorname{CL}} = \operatorname{CE}\left(\operatorname{CL}\left(x^{\text{CF}}\right), y^{\text{CF}}\right)$
+
+## Adversarial training of $\operatorname{Cl}$
+
+::: {.incremental}
+* An **adversarial example**, $x^{\star} = x + \delta$, is an instance $x$ with the addition of a small perturbation
+$\delta$ that is incorrectly predicted by a model
+* They are obtained by solving $\max_{\delta \in \Delta} \mathcal{L}\left(\operatorname{Cl}\left(x + \delta\right), y\right)$ with gradient ascent. (ex: projected gradient ascent)
+* Adversarial training:
+$$
+\min_{\operatorname{Cl}} \mathbb{E}_{(x,y)}\left[\max_{\delta^{\star} \in \Delta} \mathcal{L}_{\text{CE}}\left(\operatorname{Cl}\left(x+\delta^{\star}\right), y \right)  \right]
+$$
+:::
 
 ## Results
+
+::::{.columns}
+
+:::{.column width=70% }
+:::{style="font-size:80%;"}
+* Counterfactual Accuracy ($y^{\text{CF}}$ ✅︎ and $y_{\text{Tissue}}$ ✅︎): $\mathcal{A}_{\text{CF}} = 0.96$
+* Distance to the original point: $L_1$, $L_2$, $L_{\infty}$
+* Sparsity: $L_0 = \sum_i \left|x_i \right|^{0}$ with $\left|0\right|^0 = 0$
+* kNN Accuracy: $\mathcal{A}_{\text{kNN}} = \frac{1}{k} = \sum_{i=1}^{k} \mathbb{1}\left(y^{\text{CF}}, y_{i}^{\text{kNN}}\right)$
+:::
+
+![](kNN_Accuracy.svg){fig-align="center" width=50%}
+:::
+
+:::{.column width=30%}
+:::{style="font-size:70%;"}
+|                               |      |
+|-------------------------------|------|
+| $L_1$                         | 2440 |
+| $L_2$                         | 30   |
+| $L_{\infty}$                  | 1    |
+| $\mathcal{A}_{\text{kNN}}$    | 0    |
+| $\mathcal{A}_{\text{Oracle}}$ | 0.94 |
+:::
+![](InterClassDistances.svg){fig-align="center"}
+:::
+
+::::
+
+## Results
+
+:::: {.columns}
+
+
+:::{.column width=80%}
+![](BRCA_CF.svg){width=100%}
+:::
+
+:::{.column width=20%}
+:::{style="font-size:40%;"}
+* GDA: gene-disease association from DisGenet
+* COSMIC: Catalogue of somatic mutations in cancer
+:::
+:::
+::::
 
 # Conclusions and Perspectives
 
 ## Conclusions
 
-## Perspectives
+## Perspectives: Scalar Attention
+
+![](ScalarAttentionMemory.svg)
+
+## Perspectives: Knowledge
 
 ## {.center}
 ::: {.r-fit-text}
