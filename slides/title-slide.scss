@@ -43,7 +43,8 @@
 }
 
 .reveal .progress {
-  color: #63003C;
+  color: #004e7d;
+  height: 5px;
 }
 
 .reveal .slide ul li {
@@ -51,14 +52,41 @@
   margin-bottom: 0.2em;
 }
 
+.reveal .slide-number {
+  color: #ffffff;
+  bottom: 3px !important;
+}
+
+.reveal .footer {
+  background-color: #63003C;
+  color: #ffffff;
+  display: block;
+  position: fixed;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  bottom: 0px !important; // Makes footer div flush with bottom of slide
+  width: 100%;
+  z-index: 2 !important; // Sets the footer div further down the z-index
+}
+
 #vcenter {
   vertical-align: middle;
 }
 
-.callout {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  border-radius: 0.25rem;
+.callout.callout-style-simple {
+  margin-top: 0.5em !important;
+  margin-bottom: 0.5em !important;
+  border-radius: 0.25rem !important;
+}
+
+div.callout-important {
+  color: #ffffff;
+  background-color: #d9534f !important;
+}
+
+div.callout-tip {
+  color: #ffffff;
+  background-color: #02b875 !important;
 }
 
 // .math.display {

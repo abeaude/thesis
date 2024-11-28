@@ -9,7 +9,10 @@ format:
     theme: [simple, title-slide.scss]
     slide-number: true
     show-slide-number: all
-    margin: 0.025
+    footer: PhD defense - Aurélien BEAUDE
+    menu: false
+    callout-icon: false
+    margin: 0.05
     width: 1200
     include-in-header:
       - file: mathjax-color.html
@@ -56,36 +59,51 @@ setup:
     parameters:
       - class: fragment
         data-fragment-index: "4"
-  - element: "#TreatmentKO"
+  - element: "#TreatmentKO1"
     modifier: attr
     parameters:
       - class: fragment
         data-fragment-index: "5"
-  - element: "#Title2"
+  - element: "#TreatmentKO2"
     modifier: attr
     parameters:
       - class: fragment
         data-fragment-index: "6"
-  - element: "#Patient2"
-    modifier: attr
-    parameters:
-      - class: fragment
-        data-fragment-index: "6"
-  - element: "#Diagnosis2"
+  - element: "#TreatmentKO3"
     modifier: attr
     parameters:
       - class: fragment
         data-fragment-index: "7"
-  - element: "#Prognosis2"
+  - element: "#Title2"
     modifier: attr
     parameters:
       - class: fragment
         data-fragment-index: "8"
-  - element: "#Treatment2"
+  - element: "#Patient2"
     modifier: attr
     parameters:
       - class: fragment
         data-fragment-index: "9"
+  - element: "#Diagnosis2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "10"
+  - element: "#Prognosis2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "11"
+  - element: "#Treatment2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "12"
+  - element: "#CCL"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "13"
 ```
 
 ## Omics data 
@@ -146,12 +164,94 @@ setup:
 
 ## State of the art 
 
-![](SOTA_single_omics.svg){fig-align="center"}
+[]{.fragment .fade-in-then-out}
+[]{.fragment .fade-in-then-out}
+[]{.fragment .fade-in-then-out}
+[]{.fragment .fade-in-then-out}
+[]{.fragment .fade-in-then-out}
+```yaml { .animate src="SingleOmicsSOTA.svg"}
+animation:
+  - []
+  - 
+    - element: "#MLP"
+      modifier: transform
+      parameters:
+        - scale: 2
+          translateX: 250
+          translateY: 130
+  - 
+    - element: "#MLP"
+      modifier: transform
+      parameters:
+        - scale: 1
+          translateX: 0
+          translateY: 0
+    - element: "#MLP"
+      modifier: opacity
+      parameters: [0]
+    - element: "#AE"
+      modifier: transform
+      parameters:
+        - scale: 2
+          translateX: -250
+          translateY: 130
+  - 
+    - element: "#AE"
+      modifier: transform
+      parameters:
+        - scale: 1
+          translateX: 0
+          translateY: 0
+    - element: "#AE"
+      modifier: opacity
+      parameters: [0]
+    - element: "#CNN"
+      modifier: transform
+      parameters:
+        - scale: 2
+          translateX: 250
+          translateY: -130
+  - 
+    - element: "#CNN"
+      modifier: transform
+      parameters:
+        - scale: 1
+          translateX: 0
+          translateY: 0
+    - element: "#CNN"
+      modifier: opacity
+      parameters: [0]
+    - element: "#GNN"
+      modifier: transform
+      parameters:
+        - scale: 2
+          translateX: -250
+          translateY: -130
+  - 
+    - element: "#GNN"
+      modifier: transform
+      parameters:
+        - scale: 1
+          translateX: 0
+          translateY: 0
+    - element: "#CNN"
+      modifier: opacity
+      parameters: [1]
+    - element: "#AE"
+      modifier: opacity
+      parameters: [1]
+    - element: "#MLP"
+      modifier: opacity
+      parameters: [1]
+    
+```
 
-## Limits {.smaller}
+<!-- ![](SOTA_single_omics.svg){fig-align="center"} -->
 
-### Classical deep learning limits
-::: {style="font-size: 90%;"}
+## Limits 
+
+#### Classical deep learning limits
+::: {style="font-size: 75%;"}
   + High number of parameters
   + With limited number of examples
   + Risk of overfitting
@@ -159,15 +259,15 @@ setup:
 :::
 
 :::{.callout-important appearance="simple"}
-**How to reduce the number of parameters ?**
+{{< fa circle-exclamation >}} **How to reduce the number of parameters ?**
 :::
-### Gene expression impacts patient differently
-::: {style="font-size: 90%;"}
+#### Gene expression impacts patient differently
+::: {style="font-size: 75%;"}
 + With classical DL, features interactions are learned during training and fixed for inference
 :::
   
-:::{.callout-important appearance="simple"}
-**How to compute interaction specific to each patient ?**
+:::{.callout-important appearance="simple" icon=false}
+{{< fa circle-exclamation >}} **How to compute interaction specific to each patient ?**
 :::
 
 ## (Self)-Attention mechanism
@@ -180,6 +280,8 @@ setup:
 How to pick relevant information from input data $X = [x_i]_{1 \leq i \leq L}$ ?
 :::
 ::: {style="font-size: 65%;"}
+
+::: {.incremental}
 * **Self-attention** allows to capture the associated context of each input element by interacting with other elements
 $$
 \operatorname{Attention}\left({\color{query}Q},{\color{key}K},{\color{value}V}\right) = \operatorname{softmax}\left(\frac{{\color{query}Q}{\color{key}K^T}}{\sqrt{d_k}}\right){\color{value}V}
@@ -188,20 +290,34 @@ $\color{query}Q = \left[q_i\right]_{1 \leq i \leq L}$ with $\color{query}q_i = X
  * Quadratic complexity (Space and Time)
 :::
 
-::: {style="font-size: 70%"}
-:::{.callout-important appearance="simple"}
-**How to apply self-attention to large large vectors ?**
 :::
 
-:::{.callout-tip appearance="simple"}
-Group related features together and apply self-attention on it
+::: {style="font-size: 90%"}
+
+::: {.fragment .fade-up}
+
+:::{.callout-important appearance="simple"}
+{{< fa circle-exclamation >}} **How to apply self-attention to large large vectors ?**
 :::
+
+:::
+
+::: {.fragment .fade-up}
+
+:::{.callout-tip appearance="simple"}
+{{< fa lightbulb >}}  **Group related features together and apply self-attention on it.**
+:::
+
+:::
+
 :::
 
 :::
 
 ::: {.column width="25%"}
-![](Attention.svg){fig-align="right" width=90%}
+::: {.fragment .fade-up fragment-index=1}
+![](Attention.svg){fig-align="right" width=100%}
+:::
 :::
 
 ::::
@@ -253,7 +369,7 @@ $$
 ::: {.fragment .fade-in fragment-index=3}
 
 :::{.callout-important appearance="simple"}
-**Gene grouping creates unwanted restrictions**
+{{< fa circle-exclamation >}} **Gene grouping creates unwanted restrictions**
 
 Genes in group $g_1$ cannot interact with genes from other groups
 :::
@@ -263,7 +379,7 @@ Genes in group $g_1$ cannot interact with genes from other groups
 ::: {.fragment .fade-in fragment-index=4}
 
 :::{.callout-tip appearance="simple"}
-Restore group interactions with the Attention mechanism
+{{< fa lightbulb >}} **Restore group interactions with the Attention mechanism.**
 :::
 
 :::
@@ -327,7 +443,54 @@ $$
 
 ## Results
 
-![](AttOmicsLimitedTraining.svg){.r-stretch fig-align="center"}
+```yaml { .animate src="AttOmicsLimitedTraining.svg" width=100%}
+setup: 
+  - element: "#DNAm_all"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "0"
+  - element: "#mRNA_all"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "0"
+  - element: "#miRNA_all"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "0"
+  - element: "#Zoom_DNAm"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#Zoom_mRNA"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#Zoom_miRNA"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#DNAm_curve"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#mRNA_curve"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#miRNA_curve"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+```
 
 ## Cancer Signature {.smaller}
 
@@ -375,28 +538,98 @@ $$
 
 ## AttOmics Conclusions
 
+:::{.incremental}
 * Proposed a grouping mechanism to scale the self-attention to omics data
 * AttOmics has less parameters and achieves similar or better performances
 * AttOmics has better performances with a limited training set
 * Self-attention: capture patient specific feature interactions
+:::
 
 :::{style="font-size=90%;"}
+::: {.fragment .fade-up}
+
 :::{.callout-important appearance="simple"}
-Omics were analyzed individually but a phenotype results from their interaction
+{{< fa circle-exclamation >}} **Omics were analyzed individually but a phenotype results from their interaction**
 :::
 
-:::{.callout-tip appearance="simple"}
-Combine the different omics in a single model.
 :::
+
+::: {.fragment .fade-up}
+
+:::{.callout-tip appearance="simple"}
+{{< fa lightbulb >}} **Combine the different omics in a single model.**
+:::
+
+:::
+
 :::
 
 # Multi omics
 
 ## Multimodal AI
 
-![](SOTA_MultiOmics.svg)
+```yaml { .animate src="MultiModalAI.svg"}
+setup: 
+  - element: "#Q1"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "0"
+  - element: "#modalities"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "0"
+  - element: "#EF"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#LimEF"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "2"
+  - element: "#LF"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "3"
+  - element: "#LimLF"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "4"
+  - element: "#IF"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "5"
+  - element: "#AdvIF"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "6"
+  - element: "#HierFusion"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "7"
+  - element: "#Q2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "8"
+  - element: "#Fusion"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "9"
+```
 
-## Attention as an integration strategy {.smaller}
+## State of the art
+
+## Attention as an integration strategy
 
 :::{.callout-note appearance="simple"}
 Attention mechansim can capture interaction between two vectors
@@ -405,25 +638,31 @@ Attention mechansim can capture interaction between two vectors
 :::: {.columns}
 
 ::: {.column width="40%" }
-### Early Fusion
 
-![](AttentionEF.svg){fig-align="center" width=48%}
+::: {.fragment .fade-right}
+#### Early Fusion
 
+![](AttentionEF.svg){fig-align="center" width=45%}
+:::
+
+::: {.fragment .fade-up}
 :::{.callout-important appearance="simple"}
-* High dimensionnality
-* Attention complexity: $\mathcal{O}(n^2)$
+* **High dimensionnality**
+* **Attention complexity: $\mathcal{O}(n^2)$**
+:::
 :::
 
 :::
 
 ::: {.column width="60%"}
-### Intermediate Fusion
+::: {.fragment .fade-left}
+#### Intermediate Fusion
 
 :::: {.columns}
 
 ::: {.column  #vcenter width="45%"}
 
-::: {layout="[[-1], [-1], [1], [-1]]" style="font-size: 80%;"}
+::: {layout="[[-1], [-1], [1], [-1]]" style="font-size: 60%;"}
 
 \begin{align}
 Z_{\beta \rightarrow \alpha} &=  \operatorname{CrossAtt}_{\beta \rightarrow \alpha}\left(X_{\alpha}, X_{\beta} \right) \\
@@ -435,16 +674,21 @@ Z_{\beta \rightarrow \alpha} &=  \operatorname{CrossAtt}_{\beta \rightarrow \alp
 ::: 
 
 ::: {.column width="50%" }
-![](AttentionIF.svg){fig-align="center" width=80%}
+![](AttentionIF.svg){fig-align="right" width=80%}
 :::
 ::::
+::: 
 
+::: {.fragment .fade-up}
 :::{.callout-important appearance="simple"}
-Consider all modality pairs: $n(n-1)$ pairs to consider
+{{< fa circle-exclamation >}} **Consider all modality pairs: $n^2$ pairs to consider**
+:::
 :::
 
+::: {.fragment .fade-up}
 :::{.callout-tip appearance="simple"}
-Only consider pairs known to interact
+{{< fa lightbulb >}} **Only consider pairs known to interact**
+:::
 :::
 
 :::
@@ -459,18 +703,16 @@ Only consider pairs known to interact
 
 ![](tcga_perf_omics_comb.svg){fig-align="center" .lightbox .r-stretch}
 
-::: {.fragment .fade-up}
 
-:::
-
-## Identifying important interactions
+## Identifying important interactions {.smaller}
 
 :::: {.columns}
 
 ::: {.column width=40%}
 
-**LRP** 
+**Layer-wise relevance propagation** 
 
+[]{.fragment .fade-in fragment-index=0}
 ```yaml { .animate src="LRP.svg"}
 setup:
   - element: "#LRP"
@@ -479,12 +721,15 @@ setup:
       - class: fragment
         data-fragment-index: "0"
 ```
-
+::: {.fragment .fade-up fragment-index=1}
 ![](CrossAttOmicsDetailsLRP.svg){width=90%}
+:::
 :::
 
 ::: {.column width=60%}
+::: {.fragment .fade-up fragment-index=2}
 ![](CrossAttOmicsLRP.svg){width=100%}
+:::
 :::
 ::::
 
@@ -497,58 +742,93 @@ setup:
 
 
 ::: {layout="[[1], [1, 1]]"}
+
+::: {.fragment .fade-up fragment-index=1}
 ![](missing_modality_pattern.svg)
-
+:::
+::: {.fragment .fade-up fragment-index=2}
 ![](missing_modality_latent.svg)
-
+:::
+::: {.fragment .fade-up fragment-index=3}
 ![](missing_modality_reconstruction.svg)
 :::
 
 :::
 
+:::
+
 ::: {.column width="67%"}
+::: {.fragment .fade-up fragment-index=4}
 ![](CrossAttOmicsModalityDropout.svg){fig-align="center" width=90%}
+:::
 :::
 
 ::::
 
-## CrossAttOmicsGate: a data-driven approach
-
-![](CrossAttOmicsGate.svg){.r-stretch}
-
-
-## CrossAttOmicsGate results {.smaller}
-
-|  Model  | Accuracy      | Precision     | Recall          | F1            |
-|---------|--------------:|--------------:|----------------:|--------------:|
-| No Gate | 0.980 ± 0.001 | 0.982 ± 0.002 | 0.979 ± 0.002   | 0.980 ± 0.002 |
-| Gate    | 0.987 ± 0.001 | 0.989 ± 0.001 | 0.987 ± 0.001   | 0.987 ± 0.001 |
-
-![](CrossAttOmicsGateAlphaHeatmap.svg){fig-align="center"}
-
 ## Multi-omics conclusions 
 
 :::{.incremental}
-* Harness cross-attention to build a multimodal representation that explicitly consider interactions between modalities
-* Using only two or three non-protein omics combination, achieve similar accuracy to what is obtained by training only on proteins
-* Modality dropout is an effective strategy to increase robustness to missing modalities
-* Data-driven strategy to identify important interactions
+* Harness cross-attention to build a multimodal representation explicitly considering interactions between modalities.
+* Using only two or three non-protein omics combination, achieve similar accuracy to what is obtained by training only on proteins.
+* Modality dropout increases robustness to missing modalities.
+* Data-driven strategy to identify important interactions: CrossAttOmicsGate.
 :::
 
-:::{.callout-tip appearance="simple"}
-Patient can be diagnosed efficiently but what are the disease drivers ? How to treat the patient ?
+::: {.fragment .fade-up}
+
+:::{.callout-important appearance="simple"}
+{{< fa circle-exclamation >}} **Patient can be diagnosed efficiently but what are the disease drivers? How to treat the patient?**
 :::
 
-# Interpretability
+:::
+
+# From predictions to actions
+
+## Interpretability
+
+## Counterfactuals
 
 ## Counterfactuals properties
 
+[]{.fragment .fade-in-then-out fragment-index=0}
+[]{.fragment .fade-in-then-out fragment-index=1}
+[]{.fragment .fade-in-then-out fragment-index=2}
+[]{.fragment .fade-in-then-out fragment-index=3}
+```yaml {.animate src="counterfactualsProperties.svg"}
+setup: 
+  - element: "#CF"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "0"
+  - element: "#actionnability"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#actionnability_mask"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#sparsity"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "2"
+  - element: "#manifold"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "3"
+```
 
-![](counterfactualsProperties.svg){fig-align="center" .r-stretch}
+::: {.fragment .fade-in fragment-index=4}
+Data manifold closeness = respect the original data distribution
+:::
 
-::: {.incremental}
-* Data manifold closeness = respect the original data distribution
-* GANs captures the data distribution (Goodfellow et al., 2014)
+::: {.fragment .fade-in fragment-index=5}
+{{< fa right-long >}} GANs captures the data distribution (Goodfellow et al., 2014)
 :::
 
 ## Generating counterfactuals with a GAN
@@ -558,19 +838,7 @@ Patient can be diagnosed efficiently but what are the disease drivers ? How to t
 <!-- * $\mathcal{L}_{\text{WGAN}} =$ -->
 <!-- * $\mathcal{L}_{\operatorname{CL}} = \operatorname{CE}\left(\operatorname{CL}\left(x^{\text{CF}}\right), y^{\text{CF}}\right)$ -->
 
-## Adversarial training of $\operatorname{Cl}$
-
-::: {.incremental}
-* An **adversarial example**, $x^{\star} = x + \delta$, is an instance $x$ with the addition of a small perturbation
-$\delta$ that is incorrectly predicted by a model
-* They are obtained by solving $\max_{\delta \in \Delta} \mathcal{L}\left(\operatorname{Cl}\left(x + \delta\right), y\right)$ with gradient ascent. (ex: projected gradient ascent)
-* Adversarial training:
-$$
-\min_{\operatorname{Cl}} \mathbb{E}_{(x,y)}\left[\max_{\delta^{\star} \in \Delta} \mathcal{L}_{\text{CE}}\left(\operatorname{Cl}\left(x+\delta^{\star}\right), y \right)  \right]
-$$
-:::
-
-## Results
+## Preliminary Results
 
 ::::{.columns}
 
@@ -600,11 +868,11 @@ $$
 
 ::::
 
-## Results
+## Preliminary Results
 
 ![](BRCA_CF_UMAP.svg){fig-align="center"}
 
-## Results
+## Preliminary Results
 
 ![](BRCA_CF.svg){.r-strech fig-align="center"}
 
@@ -629,26 +897,32 @@ GDA: gene-disease association from DisGenet / COSMIC: Catalogue of somatic mutat
 
 :::{.column width=65%}
 
-* In AttOmics, groups are an architectural constraints
-* Removing groups: directly consider feature interactions
+* Groups are an architectural constraints
+* Directly consider feature interactions
 
+::: {.fragment .fade-in fragment-index=1}
 :::{.callout-important appearance="simple"}
-How to compute attention between scalar values ? 
+{{< fa circle-exclamation >}} **How to compute attention between scalar values ?**
+:::
 :::
 
-
+:::{.fragment .fade-up fragment-index=2}
 $$
 A_{ij} = \operatorname{softmin}\left(\left|Q_{i} - K_{j} \right| \right)
 $$
+:::
 
-
+::: {.fragment .fade-left fragment-index=3}
 :::{.callout-tip appearance="simple"}
-Efficient implementation with Triton
+{{< fa lightbulb >}} **Efficient implementation with Triton.**
+:::
 :::
 :::
 
 :::{.column width=35%}
+::: {.fragment .fade-left fragment-index=3}
 ![](ScalarAttentionMemory.svg){fig-align="right" width=100%}
+:::
 :::
 
 ::::
@@ -657,12 +931,22 @@ Efficient implementation with Triton
 
 * Biolgically-informed architectures are common when applying deep learning to biological problems as they provide a strong inductive bias.
 
+::: {.fragment .fade-up}
 :::{.callout-important appearance="simple"}
-Knowledge is incomplete or may contains errors. How to handle this ?
+{{< fa circle-exclamation >}} **Knowledge is incomplete or may contains errors. How to handle this ?**
+:::
 :::
 
+::: {.fragment .fade-up}
 :::{.callout-important appearance="simple"}
-What to do about unnannotated features ? 
+{{< fa circle-exclamation >}} **Dynamical aspect**
+:::
+:::
+
+::: {.fragment .fade-up}
+:::{.callout-important appearance="simple"}
+{{< fa circle-exclamation >}} **What to do about unnannotated features ?**
+:::
 :::
 
 ## {.center}
@@ -671,3 +955,29 @@ Thank you
 :::
 
 # Appendix
+
+## CrossAttOmicsGate: a data-driven approach
+
+![](CrossAttOmicsGate.svg){.r-stretch}
+
+
+## CrossAttOmicsGate results {.smaller}
+
+|  Model  | Accuracy      | Precision     | Recall          | F1            |
+|---------|--------------:|--------------:|----------------:|--------------:|
+| No Gate | 0.980 ± 0.001 | 0.982 ± 0.002 | 0.979 ± 0.002   | 0.980 ± 0.002 |
+| Gate    | 0.987 ± 0.001 | 0.989 ± 0.001 | 0.987 ± 0.001   | 0.987 ± 0.001 |
+
+![](CrossAttOmicsGateAlphaHeatmap.svg){fig-align="center"}
+
+## Adversarial training of $\operatorname{Cl}$
+
+::: {.incremental}
+* An **adversarial example**, $x^{\star} = x + \delta$, is an instance $x$ with the addition of a small perturbation
+$\delta$ that is incorrectly predicted by a model
+* They are obtained by solving $\max_{\delta \in \Delta} \mathcal{L}\left(\operatorname{Cl}\left(x + \delta\right), y\right)$ with gradient ascent. (ex: projected gradient ascent)
+* Adversarial training:
+$$
+\min_{\operatorname{Cl}} \mathbb{E}_{(x,y)}\left[\max_{\delta^{\star} \in \Delta} \mathcal{L}_{\text{CE}}\left(\operatorname{Cl}\left(x+\delta^{\star}\right), y \right)  \right]
+$$
+:::
