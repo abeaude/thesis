@@ -539,17 +539,22 @@ setup:
 ## AttOmics Conclusions
 
 :::{.incremental}
+
 * Proposed a grouping mechanism to scale the self-attention to omics data
 * AttOmics has less parameters and achieves similar or better performances
 * AttOmics has better performances with a limited training set
 * Self-attention: capture patient specific feature interactions
+
 :::
 
 :::{style="font-size=90%;"}
+
 ::: {.fragment .fade-up}
 
 :::{.callout-important appearance="simple"}
+
 {{< fa circle-exclamation >}} **Omics were analyzed individually but a phenotype results from their interaction**
+
 :::
 
 :::
@@ -557,7 +562,9 @@ setup:
 ::: {.fragment .fade-up}
 
 :::{.callout-tip appearance="simple"}
+
 {{< fa lightbulb >}} **Combine the different omics in a single model.**
+
 :::
 
 :::
@@ -628,6 +635,8 @@ setup:
 ```
 
 ## State of the art
+
+![](SOTA_MultiOmics.svg){fig-align="center"}
 
 ## Attention as an integration strategy
 
@@ -746,11 +755,15 @@ setup:
 ::: {.fragment .fade-up fragment-index=1}
 ![](missing_modality_pattern.svg)
 :::
-::: {.fragment .fade-up fragment-index=2}
+::: {.fragment .fade-up	 fragment-index=2}
+::: {.fragment .semi-fade-out fragment-index=4}
 ![](missing_modality_latent.svg)
 :::
+:::
 ::: {.fragment .fade-up fragment-index=3}
+::: {.fragment .semi-fade-out fragment-index=4}
 ![](missing_modality_reconstruction.svg)
+:::
 :::
 
 :::
@@ -784,9 +797,64 @@ setup:
 
 # From predictions to actions
 
-## Interpretability
+## Motivation
+
+:::: {.columns}
+
+:::{.column width=50%}
+![](CF_motivation.svg){width=100%}
+:::
+
+::: {.column width=50% style="font-size:80%;"}
+
+:::{.fragment .fade-up}
+:::{.callout-important appearance="simple"}
+{{< fa circle-exclamation >}} **What are the important genes or potential biomarkers?**
+:::
+:::
+
+:::{.fragment .fade-up}
+:::{.callout-important appearance="simple"}
+{{< fa circle-exclamation >}} **Whate are the actions that could lead a patient to a healthier state?**
+:::
+:::
+
+:::{.fragment .fade-up}
+:::{.callout-tip appearance="simple"}
+{{< fa lightbulb >}} **Counterfactuals**
+:::
+:::
+
+:::
+
+::::
 
 ## Counterfactuals
+
+:::{.callout-note appearance="simple"}
+
+**How would $x$ change if $y$ had been $y^{\prime}$?**
+
+:::
+
+> $y$ was predicted because input $x$ had values $\left(x_{1}, x_{2}, x_{3}, \ldots\right)$. If $x$ instead had values $x_{1}^{\prime}$ and $x_{2}^{\prime}$ while other variables, $\left(x_{3}, \ldots\right)$, had remain the same, $y^{\prime}$ would have been predicted.
+
+:::{style="text-align: right; font-size:50%;"}
+(Wachter et al., 2017)
+:::
+
+
+$$ 
+\operatorname*{argmin}_{x^{\text{CF}}} \mathcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right)
+$$
+
+:::{.fragment .fade-up}
+:::{.callout-important appearance="simple"}
+{{< fa circle-exclamation >}} **Is it sufficient to have realistic and actionnable points?**
+:::
+:::
+
+
 
 ## Counterfactuals properties
 
@@ -833,10 +901,13 @@ Data manifold closeness = respect the original data distribution
 
 ## Generating counterfactuals with a GAN
 
-![](ConterfactualGAN.svg){.r-stretch}
+![](ConterfactualGAN.svg){fig-align="center" .r-stretch}
 
-<!-- * $\mathcal{L}_{\text{WGAN}} =$ -->
-<!-- * $\mathcal{L}_{\operatorname{CL}} = \operatorname{CE}\left(\operatorname{CL}\left(x^{\text{CF}}\right), y^{\text{CF}}\right)$ -->
+:::{style="font-size:80%;"}
+$$
+ \mathcal{L} = {\color{manifold}\mathbb{E}_{x\sim p_{d}}\left[ D\left(x\right)\right] - \mathbb{E}_{x^{\text{CF}}\sim p_{g}}\left[ D\left(x^{\text{CF}}\right)\right] + \lambda \mathbb{E}_{\tilde{x}\sim p_{g}}\left[ {\left( {\left\|\nabla_{\tilde{x}}D\left(\tilde{x}\right) \right\|}_{2} -1 \right)}^{2}\right]} \\ + {\color{cf}\mathcal{L}_{\operatorname{Cl}} + \mathcal{L}_{\operatorname{Cl}_{T}}} + {\color{sparsity}\mathcal{L}_{\text{Reg}}\left(G\right)}
+ $$
+:::
 
 ## Preliminary Results
 
@@ -854,12 +925,13 @@ Data manifold closeness = respect the original data distribution
 :::
 
 :::{.column width=30%}
-:::{style="font-size:70%;"}
+:::{style="font-size:65%;"}
 |                               |      |
 |-------------------------------|------|
 | $L_1$                         | 2440 |
 | $L_2$                         | 30   |
 | $L_{\infty}$                  | 1    |
+| $L_0$                         | 0.52 |
 | $\mathcal{A}_{\text{kNN}}$    | 0    |
 | $\mathcal{A}_{\text{Oracle}}$ | 0.94 |
 :::
@@ -939,7 +1011,7 @@ $$
 
 ::: {.fragment .fade-up}
 :::{.callout-important appearance="simple"}
-{{< fa circle-exclamation >}} **Dynamical aspect**
+{{< fa circle-exclamation >}} **Knowledge is iteratively constructed and omics measurement represent a *mean* of all occuring pathwyays.**
 :::
 :::
 

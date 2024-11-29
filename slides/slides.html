@@ -335,6 +335,10 @@
            MathJax.Extension["TeX/color"].colors["query"] = '#3399FF';
            MathJax.Extension["TeX/color"].colors["key"] = '#FF3333';
            MathJax.Extension["TeX/color"].colors["value"] = '#97D077';
+          MathJax.Extension["TeX/color"].colors["manifold"] = '#7EA6E0';
+          MathJax.Extension["TeX/color"].colors["sparsity"] = '#B5739D';
+          MathJax.Extension["TeX/color"].colors["cf"] = '#67AB9F';
+
       });
   </script>
 </head>
@@ -929,7 +933,8 @@ h_i &amp;= \operatorname{Attention}\left({\color{query}Q},{\color{key}K},{\color
 </section>
 <section id="state-of-the-art-1" class="slide level2">
 <h2>State of the art</h2>
-</section>
+
+<img data-src="SOTA_MultiOmics.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="attention-as-an-integration-strategy" class="slide level2">
 <h2>Attention as an integration strategy</h2>
 <div class="callout callout-note no-icon callout-style-simple">
@@ -971,7 +976,7 @@ h_i &amp;= \operatorname{Attention}\left({\color{query}Q},{\color{key}K},{\color
 <div>
 
 </div>
-<div class="quarto-layout-panel" style="font-size: 60%;" data-layout="[[-1], [-1], [1], [-1]]">
+<div class="quarto-layout-panel" data-layout="[[-1], [-1], [1], [-1]]" style="font-size: 60%;">
 <div class="quarto-layout-row">
 <div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
 <p>&nbsp;</p>
@@ -1062,11 +1067,15 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 </div>
 </div>
 <div class="quarto-layout-row">
-<div class="fragment fade-up quarto-layout-cell" data-fragment-index="2" style="flex-basis: 50.0%;justify-content: center;">
+<div class="fragment fade-up quarto-layout-cell" data-fragment-index="2" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="fragment semi-fade-out" data-fragment-index="4">
 <p><img data-src="missing_modality_latent.svg"></p>
 </div>
-<div class="fragment fade-up quarto-layout-cell" data-fragment-index="3" style="flex-basis: 50.0%;justify-content: center;">
+</div>
+<div class="fragment fade-up quarto-layout-cell" data-fragment-index="3" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="fragment semi-fade-out" data-fragment-index="4">
 <p><img data-src="missing_modality_reconstruction.svg"></p>
+</div>
 </div>
 </div>
 </div>
@@ -1105,11 +1114,68 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 <h1>From predictions to actions</h1>
 
 </section>
-<section id="interpretability-1" class="slide level2">
-<h2>Interpretability</h2>
+<section id="motivation" class="slide level2">
+<h2>Motivation</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="CF_motivation.svg" style="width:100.0%"></p>
+</div><div class="column" style="font-size:80%;">
+<div class="fragment fade-up">
+<div class="callout callout-important no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p><i class="fa-solid fa-circle-exclamation" aria-label="circle-exclamation"></i> <strong>What are the important genes or potential biomarkers?</strong></p>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment fade-up">
+<div class="callout callout-important no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p><i class="fa-solid fa-circle-exclamation" aria-label="circle-exclamation"></i> <strong>Whate are the actions that could lead a patient to a healthier state?</strong></p>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment fade-up">
+<div class="callout callout-tip no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> <strong>Counterfactuals</strong></p>
+</div>
+</div>
+</div>
+</div>
+</div></div>
 </section>
 <section id="counterfactuals" class="slide level2">
 <h2>Counterfactuals</h2>
+<div class="callout callout-note no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p><strong>How would <span class="math inline">\(x\)</span> change if <span class="math inline">\(y\)</span> had been <span class="math inline">\(y^{\prime}\)</span>?</strong></p>
+</div>
+</div>
+</div>
+<blockquote>
+<p><span class="math inline">\(y\)</span> was predicted because input <span class="math inline">\(x\)</span> had values <span class="math inline">\(\left(x_{1}, x_{2}, x_{3}, \ldots\right)\)</span>. If <span class="math inline">\(x\)</span> instead had values <span class="math inline">\(x_{1}^{\prime}\)</span> and <span class="math inline">\(x_{2}^{\prime}\)</span> while other variables, <span class="math inline">\(\left(x_{3}, \ldots\right)\)</span>, had remain the same, <span class="math inline">\(y^{\prime}\)</span> would have been predicted.</p>
+</blockquote>
+<div style="text-align: right; font-size:50%;">
+<p>(Wachter et al., 2017)</p>
+</div>
+<p><span class="math display">\[
+\operatorname*{argmin}_{x^{\text{CF}}} \mathcal{L}\left(g\left(x^{\text{CF}}\right), y^{\text{CF}} \right) + d\left(x^{\text{CF}}, x\right)
+\]</span></p>
+<div class="fragment fade-up">
+<div class="callout callout-important no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p><i class="fa-solid fa-circle-exclamation" aria-label="circle-exclamation"></i> <strong>Is it sufficient to have realistic and actionnable points?</strong></p>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="counterfactuals-properties" class="slide level2">
 <h2>Counterfactuals properties</h2>
@@ -1149,9 +1215,12 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 </section>
 <section id="generating-counterfactuals-with-a-gan" class="slide level2">
 <h2>Generating counterfactuals with a GAN</h2>
-<img data-src="ConterfactualGAN.svg" class="r-stretch">
-<!-- * $\mathcal{L}_{\text{WGAN}} =$ -->
-<!-- * $\mathcal{L}_{\operatorname{CL}} = \operatorname{CE}\left(\operatorname{CL}\left(x^{\text{CF}}\right), y^{\text{CF}}\right)$ -->
+
+<img data-src="ConterfactualGAN.svg" class="r-stretch quarto-figure quarto-figure-center"><div style="font-size:80%;">
+<p><span class="math display">\[
+\mathcal{L} = {\color{manifold}\mathbb{E}_{x\sim p_{d}}\left[ D\left(x\right)\right] - \mathbb{E}_{x^{\text{CF}}\sim p_{g}}\left[ D\left(x^{\text{CF}}\right)\right] + \lambda \mathbb{E}_{\tilde{x}\sim p_{g}}\left[ {\left( {\left\|\nabla_{\tilde{x}}D\left(\tilde{x}\right) \right\|}_{2} -1 \right)}^{2}\right]} \\ + {\color{cf}\mathcal{L}_{\operatorname{Cl}} + \mathcal{L}_{\operatorname{Cl}_{T}}} + {\color{sparsity}\mathcal{L}_{\text{Reg}}\left(G\right)}
+\]</span></p>
+</div>
 </section>
 <section id="preliminary-results" class="slide level2">
 <h2>Preliminary Results</h2>
@@ -1171,7 +1240,7 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 </figure>
 </div>
 </div><div class="column" style="width:30%;">
-<div style="font-size:70%;">
+<div style="font-size:65%;">
 <table class="caption-top">
 <tbody>
 <tr class="odd">
@@ -1187,10 +1256,14 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 <td>1</td>
 </tr>
 <tr class="even">
+<td><span class="math inline">\(L_0\)</span></td>
+<td>0.52</td>
+</tr>
+<tr class="odd">
 <td><span class="math inline">\(\mathcal{A}_{\text{kNN}}\)</span></td>
 <td>0</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><span class="math inline">\(\mathcal{A}_{\text{Oracle}}\)</span></td>
 <td>0.94</td>
 </tr>
@@ -1290,7 +1363,7 @@ A_{ij} = \operatorname{softmin}\left(\left|Q_{i} - K_{j} \right| \right)
 <div class="callout callout-important no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
-<p><i class="fa-solid fa-circle-exclamation" aria-label="circle-exclamation"></i> <strong>Dynamical aspect</strong></p>
+<p><i class="fa-solid fa-circle-exclamation" aria-label="circle-exclamation"></i> <strong>Knowledge is iteratively constructed and omics measurement represent a <em>mean</em> of all occuring pathwyays.</strong></p>
 </div>
 </div>
 </div>
@@ -1778,7 +1851,7 @@ A_{ij} = \operatorname{softmin}\left(\left|Q_{i} - K_{j} \right| \right)
       }
     });
     </script>
-    <script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","loop":false,"closeEffect":"zoom","descPosition":"bottom"});
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom","selector":".lightbox","loop":false});
     (function() {
       let previousOnload = window.onload;
       window.onload = () => {
