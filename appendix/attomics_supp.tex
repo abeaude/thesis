@@ -261,21 +261,22 @@
 \end{table}
 
 
+
 \begin{table}[htbp]
-	\sisetup{separate-uncertainty-units=single, separate-uncertainty,detect-mode}
+	\sisetup{detect-mode}
 	\centering
 	\caption{Classification performances of the different models}\label{tab:perf_results}
 	% TODO: longtblr
 	\begin{tblr}{
 		colspec={
-				Q[l,m]
-				Q[l,m]
-				Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
-				Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
-				Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
-				Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
-				Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
-				Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}]
+				Q[l,m, colsep=2pt]
+				Q[l,m, colsep=2pt]
+				Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}, colsep=2pt]
+				Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}, colsep=2pt]
+				Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}, colsep=2pt]
+				Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}, colsep=2pt]
+				Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}, colsep=2pt]
+				Q[si={table-format=1.3(3),table-number-alignment=center, table-align-uncertainty = true}, colsep=2pt]
 			},%
 		row{1} = {guard},%
 		row{2-Z} = {font=\footnotesize},%
@@ -317,42 +318,45 @@
 	\end{tblr}
 \end{table}
 
-\begin{sidewaystable}
-	\centering
-	\caption{P-value from the t-test on the error rate of the different models}\label{tab:pval_error_rate}
-	\begin{tabular}{llrrrrrrrrrr}
-		\toprule
-		omics                  & Model                   & AttOmics --- GO & AttOmics --- Hallmarks & AttOmics --- Random & CNN1d & GCN --- CoExp & MLP      & RF    & SVM      & XGBoost  & GCN --- PPI \\
-		\midrule
-		\multirow{7}{*}{DNAm}  & AttOmics --- Clustering & -               & -                      & 1.00                & 0.083 & 0.083         & 0.083    & 0.083 & 0.648    & 0.083    & -           \\
-		                       & AttOmics --- Random     & -               & -                      & -                   & 0.083 & 0.381         & 0.083    & 0.083 & 0.648    & 0.083    & -           \\
-		                       & CNN1d                   & -               & -                      & -                   & -     & 0.083         & 0.083    & 0.083 & 0.083    & 0.083    & -           \\
-		                       & GCN --- CoExp           & -               & -                      & -                   & -     & -             & 0.510417 & 0.083 & 0.159091 & 0.083    & -           \\
-		                       & MLP                     & -               & -                      & -                   & -     & -             & -        & 0.083 & 0.083    & 0.083    & -           \\
-		                       & RF                      & -               & -                      & -                   & -     & -             & -        & -     & 0.083    & 0.648148 & -           \\
-		                       & SVM                     & -               & -                      & -                   & -     & -             & -        & -     & -        & 0.083    & -           \\
-		\midrule
-		\multirow{10}{*}{mRNA} & AttOmics --- Clustering & 0.219           & 0.149                  & 0.078               & 0.078 & 0.078         & 0.078    & 0.078 & 0.078    & 0.078    & 0.078       \\
-		                       & AttOmics --- GO         & -               & 0.149                  & 0.828               & 0.078 & 0.078         & 0.078    & 0.078 & 0.078    & 0.078    & 0.078       \\
-		                       & AttOmics --- Hallmarks  & -               & -                      & 0.078               & 0.078 & 0.661         & 0.661    & 0.078 & 0.078    & 0.078    & 0.661       \\
-		                       & AttOmics --- Random     & -               & -                      & -                   & 0.078 & 0.078         & 0.078    & 0.078 & 0.078    & 0.078    & 0.078       \\
-		                       & CNN1d                   & -               & -                      & -                   & -     & 0.078         & 0.078    & 0.078 & 0.828    & 0.078    & 0.078       \\
-		                       & GCN --- CoExp           & -               & -                      & -                   & -     & -             & 0.501    & 0.078 & 0.078    & 0.078    & 0.661       \\
-		                       & GCN --- PPI             & -               & -                      & -                   & -     & -             & 1.00     & 0.078 & 0.078    & 0.078    & -           \\
-		                       & MLP                     & -               & -                      & -                   & -     & -             & -        & 0.078 & 0.078    & 0.078    & -           \\
-		                       & RF                      & -               & -                      & -                   & -     & -             & -        & -     & 0.078    & 0.078    & -           \\
-		                       & SVM                     & -               & -                      & -                   & -     & -             & -        & -     & -        & 0.078    & -           \\
-		\midrule
-		\multirow{7}{*}{miRNA} & AttOmics --- Clustering & -               & -                      & 0.159               & 0.092 & 0.159         & 0.159    & 0.092 & 0.092    & 0.092    & -           \\
-		                       & AttOmics --- Random     & -               & -                      & -                   & 0.092 & 0.510         & 1.00     & 0.092 & 0.673    & 0.092    & -           \\
-		                       & CNN1d                   & -               & -                      & -                   & -     & 0.092         & 0.092    & 0.092 & 0.092    & 0.092    & -           \\
-		                       & GCN --- CoExp           & -               & -                      & -                   & -     & -             & 0.673    & 0.092 & 0.510    & 0.092    & -           \\
-		                       & MLP                     & -               & -                      & -                   & -     & -             & -        & 0.092 & 1.00     & 0.092    & -           \\
-		                       & RF                      & -               & -                      & -                   & -     & -             & -        & -     & 0.092    & 0.092    & -           \\
-		                       & SVM                     & -               & -                      & -                   & -     & -             & -        & -     & -        & 0.092    & -           \\
-		\bottomrule
-	\end{tabular}
-\end{sidewaystable}
+\begin{landscape}
+	\begin{table}
+		\tiny
+		\centering
+		\caption{P-value from the t-test on the error rate of the different models}\label{tab:pval_error_rate}
+		\begin{tabular}{llrrrrrrrrrr}
+			\toprule
+			omics                  & Model                   & AttOmics --- GO & AttOmics --- Hallmarks & AttOmics --- Random & CNN1d & GCN --- CoExp & MLP      & RF    & SVM      & XGBoost  & GCN --- PPI \\
+			\midrule
+			\multirow{7}{*}{DNAm}  & AttOmics --- Clustering & -               & -                      & 1.00                & 0.083 & 0.083         & 0.083    & 0.083 & 0.648    & 0.083    & -           \\
+			                       & AttOmics --- Random     & -               & -                      & -                   & 0.083 & 0.381         & 0.083    & 0.083 & 0.648    & 0.083    & -           \\
+			                       & CNN1d                   & -               & -                      & -                   & -     & 0.083         & 0.083    & 0.083 & 0.083    & 0.083    & -           \\
+			                       & GCN --- CoExp           & -               & -                      & -                   & -     & -             & 0.510417 & 0.083 & 0.159091 & 0.083    & -           \\
+			                       & MLP                     & -               & -                      & -                   & -     & -             & -        & 0.083 & 0.083    & 0.083    & -           \\
+			                       & RF                      & -               & -                      & -                   & -     & -             & -        & -     & 0.083    & 0.648148 & -           \\
+			                       & SVM                     & -               & -                      & -                   & -     & -             & -        & -     & -        & 0.083    & -           \\
+			\midrule
+			\multirow{10}{*}{mRNA} & AttOmics --- Clustering & 0.219           & 0.149                  & 0.078               & 0.078 & 0.078         & 0.078    & 0.078 & 0.078    & 0.078    & 0.078       \\
+			                       & AttOmics --- GO         & -               & 0.149                  & 0.828               & 0.078 & 0.078         & 0.078    & 0.078 & 0.078    & 0.078    & 0.078       \\
+			                       & AttOmics --- Hallmarks  & -               & -                      & 0.078               & 0.078 & 0.661         & 0.661    & 0.078 & 0.078    & 0.078    & 0.661       \\
+			                       & AttOmics --- Random     & -               & -                      & -                   & 0.078 & 0.078         & 0.078    & 0.078 & 0.078    & 0.078    & 0.078       \\
+			                       & CNN1d                   & -               & -                      & -                   & -     & 0.078         & 0.078    & 0.078 & 0.828    & 0.078    & 0.078       \\
+			                       & GCN --- CoExp           & -               & -                      & -                   & -     & -             & 0.501    & 0.078 & 0.078    & 0.078    & 0.661       \\
+			                       & GCN --- PPI             & -               & -                      & -                   & -     & -             & 1.00     & 0.078 & 0.078    & 0.078    & -           \\
+			                       & MLP                     & -               & -                      & -                   & -     & -             & -        & 0.078 & 0.078    & 0.078    & -           \\
+			                       & RF                      & -               & -                      & -                   & -     & -             & -        & -     & 0.078    & 0.078    & -           \\
+			                       & SVM                     & -               & -                      & -                   & -     & -             & -        & -     & -        & 0.078    & -           \\
+			\midrule
+			\multirow{7}{*}{miRNA} & AttOmics --- Clustering & -               & -                      & 0.159               & 0.092 & 0.159         & 0.159    & 0.092 & 0.092    & 0.092    & -           \\
+			                       & AttOmics --- Random     & -               & -                      & -                   & 0.092 & 0.510         & 1.00     & 0.092 & 0.673    & 0.092    & -           \\
+			                       & CNN1d                   & -               & -                      & -                   & -     & 0.092         & 0.092    & 0.092 & 0.092    & 0.092    & -           \\
+			                       & GCN --- CoExp           & -               & -                      & -                   & -     & -             & 0.673    & 0.092 & 0.510    & 0.092    & -           \\
+			                       & MLP                     & -               & -                      & -                   & -     & -             & -        & 0.092 & 1.00     & 0.092    & -           \\
+			                       & RF                      & -               & -                      & -                   & -     & -             & -        & -     & 0.092    & 0.092    & -           \\
+			                       & SVM                     & -               & -                      & -                   & -     & -             & -        & -     & -        & 0.092    & -           \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+\end{landscape}
 
 
 \begin{figure}[htbp]

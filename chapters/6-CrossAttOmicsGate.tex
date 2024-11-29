@@ -175,16 +175,19 @@ We added four regularization terms to ensure the gating scores respect these two
 		The gating blocks enable us to directly measure the importance scores of each of the thirty calculated interactions (\cref{fig:alphas_signature}).
 		\Cref{fig:alphas_signature} is obtained by taking the mean of the \(\alpha^{ij}_k\), where sample \(k\) belong to class \(c\).
 		It shows that many interactions are not used; only a small subset is used to obtain the class predictions.
-
 		This result suggests that not all interactions are necessary for good predictive performance.
 		Some cancers share a similar signature; this observation fits the idea that similar mechanisms are involved in the oncogenesis process even though they are different cancers.
 		Lung adenocarcinoma (LUAD) and lung squamous cell carcinoma (LUSC) are the two subtypes of lung cancer.
 		These two cancers originate from the same organ and have only a single difference in their signature.
 
 	\subsection{Stability of the selected interactions}
-		\begin{wrapfigure}[15]{o}{0.48\textwidth}
+		The gating block helps increase the prediction's accuracy and interpretability by highlighting the important interactions between modalities.
+		In a multimodal setting, where many modalities are available, one could hypothesize that the selected interactions are random, as different modalities could provide the same amount of information.
+		We trained the model fifty times to test this hypothesis and looked at the top selected interactions and their selection frequency~(\cref{fig:alphas_stability}).
+
+		\begin{wrapfigure}[16]{o}{0.48\textwidth}
 			\centering
-			\vspace{-\intextsep}
+			\vspace{-0.5\intextsep}
 			\begin{tikzpicture}
 				\begin{axis}[
 						xbar=2pt,
@@ -210,10 +213,6 @@ We added four regularization terms to ensure the gating scores respect these two
 			\caption{Selection frequency of the different interactions.}
 			\label{fig:alphas_stability}
 		\end{wrapfigure}
-		The gating block helps increase the prediction's accuracy and interpretability by highlighting the important interactions between modalities.
-		In a multimodal setting, where many modalities are available, one could hypothesize that the selected interactions are random, as different modalities could provide the same amount of information.
-		We trained the model fifty times to test this hypothesis and looked at the top selected interactions and their selection frequency~(\cref{fig:alphas_stability}).
-
 		A core of 5 interactions was selected in most of the runs: Protein \(\rightarrow\) DNAm, miRNA \(\rightarrow\) DNAm, CNV \(\rightarrow\) DNAm, nc mRNA \(\rightarrow\) DNAm, mRNA \(\rightarrow\) DNAm.
 		These interactions are the most important as they are likely to contribute to the exploitation of complementary information between modalities.
 		Some interactions were only selected in a few training runs and not considered informative for the predictions.

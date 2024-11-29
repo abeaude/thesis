@@ -532,8 +532,11 @@
 	\def\thesiscodirector#1{
 		\gappto\@textsupervisor{, la co-direction de\\#1}
 	}
-	\def\thesissupervisor#1{
+	\def\thesissupervisorun#1{
 		\gappto\@textsupervisor{, le co-encadrement de\\#1}
+	}
+	\def\thesissupervisordeux#1{
+		\gappto\@textsupervisor{, et de\\#1}
 	}
 	\def\thesisindustrysupervisor#1{
 		\gappto\@textsupervisor{, la co-supervision de\\#1}
@@ -556,7 +559,7 @@
 					\node[anchor=north west, inner sep=0pt] (logo ups) at ([xshift=10.43mm, yshift=-7.1mm] rect.north east) {\includegraphics{logos/Logotype UPSaclay_CMJN.eps}};
 					%\node[right= \paperwidth - 107.7mm of logo ups, anchor=east, inner sep=0pt] (logo co) {\includegraphics{logos/Logotype UPSaclay_CMJN.eps}};
 					\node[color=white, rotate=90, anchor=north west, inner sep=0] (type) at ([xshift=10.8mm, yshift=16.6mm] current page.south west) {\Large THÈSE DE DOCTORAT};
-					\node[right=7.5mm of type.south west, color=white,rotate=90, anchor=north west, inner sep=0] {NNT: \@nnt};
+					\node[right=7.5mm of type.south west, color=white,rotate=90, anchor=north west, inner sep=0] {NNT: 2024UPASG090}; %TODO
 				\end{tikzpicture}
 				\vspace{3.3cm}
 				% logo
