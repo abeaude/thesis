@@ -15,7 +15,7 @@
     "editor.lineNumbers": "on",
     "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
     "editor.guides.bracketPairs": false,
-    "breadcrumbs.enabled": false,
+    "breadcrumbs.enabled": true,
     "window.menuBarVisibility": "hidden",
     "workbench.layoutControl.enabled": false,
     "window.title": "${dirty}${activeEditorShort}",

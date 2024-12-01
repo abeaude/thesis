@@ -118,7 +118,8 @@
                 "PKief.material-icon-theme",
                 "christian-kohler.path-intellisense",
                 "valentjn.vscode-ltex",
-                "RaillyHugo.one-hunter"
+                "RaillyHugo.one-hunter",
+                "quarto.quarto"
             ]
         }
     }
