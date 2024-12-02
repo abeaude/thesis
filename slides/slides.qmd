@@ -1,6 +1,6 @@
 ---
 title: "Developping and exploring the interest of deep learning approaches in the field of multi-omics data"
-subtitle: "Développer et explorer l'intérêt des approches de deep learning dans le domaine des données multi-omiques"
+subtitle: "Under the supervision of Blaise Hanczar, Farida Zehraoui and Franck Augé"
 author: "Aurélien Beaude"
 date: 06/12/2024
 format:
@@ -115,12 +115,12 @@ setup:
 ![](IntroductionPersoMedicine-SlideIntro.svg){fig-align="center" .r-stretch width="110%"}
 
 
-## Outline 
+## Outline
 
 ::: {layout-ncol="3"}
 
 :::: {#first-column}
-### Single omics
+### 1. Single omics 
 
 ::: {style="font-size: 70%; padding-left: 0.7em;"}
   - State of the Art
@@ -132,7 +132,7 @@ setup:
 :::
 
 ::: {#second-column}
-### Multi Omics
+### 2. Multi Omics
 
 ::: {style="font-size: 70%; padding-left: 0.7em;"}
   - State of the Art
@@ -145,7 +145,7 @@ setup:
 :::
 
 ::: {#third-column}
-### Interpretability
+### 3. Interpretability
 
 ::: {style="font-size: 70%; padding-left: 0.7em;"}
   - Counterfactuals
@@ -158,9 +158,9 @@ setup:
 
 ::::
 
-### Conclusions and Perspectives
+### 4. Conclusions and Perspectives
 
-# Single omics
+# Single omics 
 
 ## State of the art 
 
@@ -706,11 +706,76 @@ Z_{\beta \rightarrow \alpha} &=  \operatorname{CrossAtt}_{\beta \rightarrow \alp
 
 ## CrossAttOmics
 
-![](CrossAttOmics.svg)
+<!-- ![](CrossAttOmics.svg) -->
+
+[]{.fragment .fade-in}
+[]{.fragment .fade-in}
+```yaml { .animate src="CrossAttOmics.svg"}
+setup:
+  - element: "#arch"
+    modifier: opacity
+    parameters: [0]
+  - element: "#Freeze1"
+    modifier: opacity
+    parameters: [0]
+  - element: "#Freeze2"
+    modifier: opacity
+    parameters: [0]
+  - element: "#Freeze3"
+    modifier: opacity
+    parameters: [0]
+animation:
+  - 
+    - element: "#GraphOmics"
+      modifier: transform
+      parameters:
+        - scale: 3
+          translateX: 50
+          translateY: 75
+  - 
+    - element: "#GraphOmics"
+      modifier: transform
+      parameters:
+        - scale: 1.5
+          translateX: 350
+          translateY: 200
+    - element: "#arch"
+      modifier: opacity
+      parameters: [1]
+  - 
+    - element: "#Freeze1"
+      modifier: opacity
+      parameters: [1]
+    - element: "#Freeze2"
+      modifier: opacity
+      parameters: [1]
+    - element: "#Freeze3"
+      modifier: opacity
+      parameters: [1]
+```
 
 ## Omics combination
 
-![](tcga_perf_omics_comb.svg){fig-align="center" .lightbox .r-stretch}
+<!-- ![](tcga_perf_omics_comb.svg){fig-align="center"  .r-stretch} -->
+
+```yaml { .animate src="tcga_perf_omics_comb.svg"}
+setup:
+  - element: "#omics2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "0"
+  - element: "#omics3"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#omics4"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "2"
+```
 
 
 ## Identifying important interactions {.smaller}
@@ -802,24 +867,28 @@ setup:
 :::: {.columns}
 
 :::{.column width=50%}
+
+::: {.fragment .fade-right fragment-index=2}
 ![](CF_motivation.svg){width=100%}
+:::
+
 :::
 
 ::: {.column width=50% style="font-size:80%;"}
 
-:::{.fragment .fade-up}
+:::{.fragment .fade-up fragment-index=1}
 :::{.callout-important appearance="simple"}
 {{< fa circle-exclamation >}} **What are the important genes or potential biomarkers?**
 :::
 :::
 
-:::{.fragment .fade-up}
+:::{.fragment .fade-up fragment-index=2}
 :::{.callout-important appearance="simple"}
 {{< fa circle-exclamation >}} **Whate are the actions that could lead a patient to a healthier state?**
 :::
 :::
 
-:::{.fragment .fade-up}
+:::{.fragment .fade-up fragment-index=3}
 :::{.callout-tip appearance="simple"}
 {{< fa lightbulb >}} **Counterfactuals**
 :::

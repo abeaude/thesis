@@ -9,10 +9,7 @@
 <link href="slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <link href="slides_files/libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
-<link href="slides_files/libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
-<script src="slides_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
-<link href="slides_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="slides_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+<link href="slides_files/libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="Aurélien Beaude">
@@ -348,7 +345,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">Developping and exploring the interest of deep learning approaches in the field of multi-omics data</h1>
-  <p class="subtitle">Développer et explorer l’intérêt des approches de deep learning dans le domaine des données multi-omiques</p>
+  <p class="subtitle">Under the supervision of Blaise Hanczar, Farida Zehraoui and Franck Augé</p>
 
   <p class="date">2024-06-12</p>
 
@@ -455,7 +452,7 @@ Aurélien Beaude
 <div class="quarto-layout-panel" data-layout-ncol="3">
 <div class="quarto-layout-row">
 <div id="first-column" class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<h3 id="single-omics">Single omics</h3>
+<h3 id="single-omics">1. Single omics</h3>
 <div style="font-size: 70%; padding-left: 0.7em;">
 <ul>
 <li>State of the Art</li>
@@ -465,7 +462,7 @@ Aurélien Beaude
 </div>
 </div>
 <div id="second-column" class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<h3 id="multi-omics">Multi Omics</h3>
+<h3 id="multi-omics">2. Multi Omics</h3>
 <div style="font-size: 70%; padding-left: 0.7em;">
 <ul>
 <li>State of the Art</li>
@@ -476,7 +473,7 @@ Aurélien Beaude
 </div>
 </div>
 <div id="third-column" class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<h3 id="interpretability">Interpretability</h3>
+<h3 id="interpretability">3. Interpretability</h3>
 <div style="font-size: 70%; padding-left: 0.7em;">
 <ul>
 <li>Counterfactuals</li>
@@ -487,7 +484,7 @@ Aurélien Beaude
 </div>
 </div>
 </div>
-<h3 id="conclusions-and-perspectives">Conclusions and Perspectives</h3>
+<h3 id="conclusions-and-perspectives">4. Conclusions and Perspectives</h3>
 </section>
 <section>
 <section id="single-omics-1" class="title-slide slide level1 center">
@@ -976,7 +973,7 @@ h_i &amp;= \operatorname{Attention}\left({\color{query}Q},{\color{key}K},{\color
 <div>
 
 </div>
-<div class="quarto-layout-panel" data-layout="[[-1], [-1], [1], [-1]]" style="font-size: 60%;">
+<div class="quarto-layout-panel" style="font-size: 60%;" data-layout="[[-1], [-1], [1], [-1]]">
 <div class="quarto-layout-row">
 <div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
 <p>&nbsp;</p>
@@ -1026,12 +1023,70 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 </section>
 <section id="crossattomics" class="slide level2">
 <h2>CrossAttOmics</h2>
-
-<img data-src="CrossAttOmics.svg" class="r-stretch"></section>
+<!-- ![](CrossAttOmics.svg) -->
+<p><span class="fragment fade-in"></span> <span class="fragment fade-in"></span></p>
+<div data-animate="" data-src="CrossAttOmics.svg"><!-- setup:
+  - element: "#arch"
+    modifier: opacity
+    parameters: [0]
+  - element: "#Freeze1"
+    modifier: opacity
+    parameters: [0]
+  - element: "#Freeze2"
+    modifier: opacity
+    parameters: [0]
+  - element: "#Freeze3"
+    modifier: opacity
+    parameters: [0]
+animation:
+  - 
+    - element: "#GraphOmics"
+      modifier: transform
+      parameters:
+        - scale: 3
+          translateX: 50
+          translateY: 75
+  - 
+    - element: "#GraphOmics"
+      modifier: transform
+      parameters:
+        - scale: 1.5
+          translateX: 350
+          translateY: 200
+    - element: "#arch"
+      modifier: opacity
+      parameters: [1]
+  - 
+    - element: "#Freeze1"
+      modifier: opacity
+      parameters: [1]
+    - element: "#Freeze2"
+      modifier: opacity
+      parameters: [1]
+    - element: "#Freeze3"
+      modifier: opacity
+      parameters: [1] --></div>
+</section>
 <section id="omics-combination" class="slide level2">
 <h2>Omics combination</h2>
-
-<img data-src="tcga_perf_omics_comb.svg" class="r-stretch quarto-figure quarto-figure-center"></section>
+<!-- ![](tcga_perf_omics_comb.svg){fig-align="center"  .r-stretch} -->
+<div data-animate="" data-src="tcga_perf_omics_comb.svg"><!-- setup:
+  - element: "#omics2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "0"
+  - element: "#omics3"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#omics4"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "2" --></div>
+</section>
 <section id="identifying-important-interactions" class="slide level2 smaller">
 <h2>Identifying important interactions</h2>
 <div class="columns">
@@ -1118,9 +1173,11 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 <h2>Motivation</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
+<div class="fragment fade-right" data-fragment-index="2">
 <p><img data-src="CF_motivation.svg" style="width:100.0%"></p>
+</div>
 </div><div class="column" style="font-size:80%;">
-<div class="fragment fade-up">
+<div class="fragment fade-up" data-fragment-index="1">
 <div class="callout callout-important no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
@@ -1129,7 +1186,7 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 </div>
 </div>
 </div>
-<div class="fragment fade-up">
+<div class="fragment fade-up" data-fragment-index="2">
 <div class="callout callout-important no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
@@ -1138,7 +1195,7 @@ Z_{\beta \rightarrow \alpha} &amp;=  \operatorname{CrossAtt}_{\beta \rightarrow 
 </div>
 </div>
 </div>
-<div class="fragment fade-up">
+<div class="fragment fade-up" data-fragment-index="3">
 <div class="callout callout-tip no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
@@ -1851,38 +1908,6 @@ A_{ij} = \operatorname{softmin}\left(\left|Q_{i} - K_{j} \right| \right)
       }
     });
     </script>
-    <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom","selector":".lightbox","loop":false});
-    (function() {
-      let previousOnload = window.onload;
-      window.onload = () => {
-        if (previousOnload) {
-          previousOnload();
-        }
-        lightboxQuarto.on('slide_before_load', (data) => {
-          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-          const href = trigger.getAttribute('href');
-          if (href !== null) {
-            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-            if (imgEl !== null) {
-              const srcAttr = imgEl.getAttribute("src");
-              if (srcAttr && srcAttr.startsWith("data:")) {
-                slideConfig.href = srcAttr;
-              }
-            }
-          } 
-        });
-      
-        lightboxQuarto.on('slide_after_load', (data) => {
-          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-          if (window.Quarto?.typesetMath) {
-            window.Quarto.typesetMath(slideNode);
-          }
-        });
-      
-      };
-      
-    })();
-              </script>
     
 
 </body></html>
