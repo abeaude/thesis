@@ -89,6 +89,13 @@ div.callout-tip {
   background-color: #02b875 !important;
 }
 
+.title-logo {
+  display: flex;
+  height: auto;
+  align-items: center;
+  justify-content: space-between; /* this will add equal space between each image */
+}
+
 // .math.display {
 //   font-size: 80%;
 // }

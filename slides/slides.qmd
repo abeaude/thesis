@@ -115,12 +115,18 @@ setup:
 
 ![](IntroductionPersoMedicine-SlideIntro.svg){fig-align="center" .r-stretch width="110%"}
 
+::: {.notes}
+ML = help precision medicine
+
+difficult to exploit all the data
+:::
+
 
 ## Outline
 
-::: {layout-ncol="3"}
+:::: {layout-ncol="3"}
 
-:::: {#first-column}
+::: {#first-column}
 ### 1. Single omics 
 
 ::: {style="font-size: 70%; padding-left: 0.7em;"}
@@ -247,12 +253,17 @@ animation:
     
 ```
 
-<!-- ![](SOTA_single_omics.svg){fig-align="center"} -->
+::: {.notes}
+CNN + GNN requires knowledge ==> restrict what can be extracted
+
+Consider everything = use MLP but some disadvantages
+:::
 
 ## Limits 
 
 #### Classical deep learning limits
 ::: {style="font-size: 75%;"}
+
   + High number of parameters
   + With limited number of examples
   + Risk of overfitting
@@ -260,15 +271,22 @@ animation:
 :::
 
 :::{.callout-important appearance="simple"}
+
 {{< fa circle-exclamation >}} **How to reduce the number of parameters ?**
+
 :::
+
 #### Gene expression impacts patient differently
 ::: {style="font-size: 75%;"}
+
 + With classical DL, features interactions are learned during training and fixed for inference
+
 :::
   
 :::{.callout-important appearance="simple" icon=false}
+
 {{< fa circle-exclamation >}} **How to compute interaction specific to each patient ?**
+
 :::
 
 ## (Self)-Attention mechanism
@@ -278,17 +296,22 @@ animation:
 ::: {.column width="75%"}
 
 :::{.callout-note appearance="simple"}
+
 How to pick relevant information from input data $X = [x_i]_{1 \leq i \leq L}$ ?
+
 :::
+
 ::: {style="font-size: 65%;"}
 
 ::: {.incremental}
+
 * **Self-attention** allows to capture the associated context of each input element by interacting with other elements
 $$
 \operatorname{Attention}\left({\color{query}Q},{\color{key}K},{\color{value}V}\right) = \operatorname{softmax}\left(\frac{{\color{query}Q}{\color{key}K^T}}{\sqrt{d_k}}\right){\color{value}V}
 $$
 $\color{query}Q = \left[q_i\right]_{1 \leq i \leq L}$ with $\color{query}q_i = X_i \cdot W_q$, $\color{key}K$ and $\color{value}V$ are obtained similarly.
  * Quadratic complexity (Space and Time)
+
 :::
 
 :::
@@ -298,7 +321,9 @@ $\color{query}Q = \left[q_i\right]_{1 \leq i \leq L}$ with $\color{query}q_i = X
 ::: {.fragment .fade-up}
 
 :::{.callout-important appearance="simple"}
+
 {{< fa circle-exclamation >}} **How to apply self-attention to large large vectors ?**
+
 :::
 
 :::
@@ -306,7 +331,9 @@ $\color{query}Q = \left[q_i\right]_{1 \leq i \leq L}$ with $\color{query}q_i = X
 ::: {.fragment .fade-up}
 
 :::{.callout-tip appearance="simple"}
+
 {{< fa lightbulb >}}  **Group related features together and apply self-attention on it.**
+
 :::
 
 :::
@@ -316,12 +343,20 @@ $\color{query}Q = \left[q_i\right]_{1 \leq i \leq L}$ with $\color{query}q_i = X
 :::
 
 ::: {.column width="25%"}
+
 ::: {.fragment .fade-up fragment-index=1}
+
 ![](Attention.svg){fig-align="right" width=100%}
+
 :::
+
 :::
 
 ::::
+
+::: {.notes}
+What is Attention more conceptually 
+:::
 
 ## AttOmics Architecture
 
@@ -340,6 +375,7 @@ $\color{query}Q = \left[q_i\right]_{1 \leq i \leq L}$ with $\color{query}q_i = X
 ::: {.fragment .fade-in-then-out fragment-index=1}
 
 ::: {style="font-size: 70%;"}
+
 **Grouping Strategies**
 
 * Random
@@ -364,15 +400,19 @@ $$
 ::: {style="font-size: 70%;"}
 
 ::: {.fragment .fade-in fragment-index=2}
+
 **Intra-group interactions**
+
 :::
 
 ::: {.fragment .fade-in fragment-index=3}
 
 :::{.callout-important appearance="simple"}
+
 {{< fa circle-exclamation >}} **Gene grouping creates unwanted restrictions**
 
 Genes in group $g_1$ cannot interact with genes from other groups
+
 :::
 
 :::
@@ -380,7 +420,9 @@ Genes in group $g_1$ cannot interact with genes from other groups
 ::: {.fragment .fade-in fragment-index=4}
 
 :::{.callout-tip appearance="simple"}
+
 {{< fa lightbulb >}} **Restore group interactions with the Attention mechanism.**
+
 :::
 
 :::
@@ -394,6 +436,7 @@ $$
 $$ 
 X'_G = \left[X'_{g_1}, \cdots, X'_{g_4}\right]
 $$
+
 :::
 
 :::
@@ -403,10 +446,13 @@ $$
 ::: {.fragment .fade-in fragment-index=5}
 
 ::: {style="font-size: 70%;"}
+
 **Inter-groups interactions** 
 
 :::{.callout-note appearance="simple"}
+
 New representation of each group taking into consideration features from other groups
+
 :::
 
 $$
@@ -498,7 +544,9 @@ setup:
 :::: {.columns}
 
 ::: {.column width="70%" }
+
 ![](AttOmicsCancerSignatures.png)
+
 :::
 
 ::: {.column width="30%" }
@@ -507,24 +555,36 @@ setup:
 * Each square of the heatmap represents the attention weight between two different group learnt by the model
 
 ::: {.fragment .fade-up fragment-index=1}
+
 ::: {.fragment .highlight-red	fragment-index=1}
+
 **Across cancers different interactions are learnt**
+
 :::
+
 :::
 
 :::
 
 ::::
 
+::: {.notes}
+Attention is localized, focus on some interactions that are different for each cancer
+When combined with knowledge this can be informative, here an example.
+:::
+
 ## CESC cancer {.smaller}
 
 :::: {.columns}
 
 ::: {.column width="60%" }
+
 ![](AttOmicsCESCPathways.svg){width=90%}
+
 :::
 
 ::: {.column width="40%" }
+
 **Identified pathways:**
 
 * IL6 JAK STAT3 signaling
@@ -534,7 +594,9 @@ setup:
 **Identified interactions:**
 
 * WNT and Hedgehog cross-talk involved in chemo-resistant cervical cancer
+
 :::
+
 ::::
 
 ## AttOmics Conclusions
@@ -642,7 +704,9 @@ setup:
 ## Attention as an integration strategy
 
 :::{.callout-note appearance="simple"}
+
 Attention mechansim can capture interaction between two vectors
+
 :::
 
 :::: {.columns}
@@ -650,22 +714,31 @@ Attention mechansim can capture interaction between two vectors
 ::: {.column width="40%" }
 
 ::: {.fragment .fade-right}
+
 #### Early Fusion
 
 ![](AttentionEF.svg){fig-align="center" width=45%}
+
 :::
 
 ::: {.fragment .fade-up}
+
 :::{.callout-important appearance="simple"}
+
 * **High dimensionnality**
+
 * **Attention complexity: $\mathcal{O}(n^2)$**
+
 :::
+
 :::
 
 :::
 
 ::: {.column width="60%"}
+
 ::: {.fragment .fade-left}
+
 #### Intermediate Fusion
 
 :::: {.columns}
@@ -681,24 +754,37 @@ Z_{\beta \rightarrow \alpha} &=  \operatorname{CrossAtt}_{\beta \rightarrow \alp
 
 
 :::
+
 ::: 
 
 ::: {.column width="50%" }
+
 ![](AttentionIF.svg){fig-align="right" width=80%}
+
 :::
+
 ::::
+
 ::: 
 
 ::: {.fragment .fade-up}
+
 :::{.callout-important appearance="simple"}
+
 {{< fa circle-exclamation >}} **Consider all modality pairs: $n^2$ pairs to consider**
+
 :::
+
 :::
 
 ::: {.fragment .fade-up}
+
 :::{.callout-tip appearance="simple"}
+
 {{< fa lightbulb >}} **Only consider pairs known to interact**
+
 :::
+
 :::
 
 :::
@@ -706,8 +792,6 @@ Z_{\beta \rightarrow \alpha} &=  \operatorname{CrossAtt}_{\beta \rightarrow \alp
 ::::
 
 ## CrossAttOmics
-
-<!-- ![](CrossAttOmics.svg) -->
 
 []{.fragment .fade-in}
 []{.fragment .fade-in}
@@ -757,8 +841,6 @@ animation:
 
 ## Omics combination
 
-<!-- ![](tcga_perf_omics_comb.svg){fig-align="center"  .r-stretch} -->
-
 ```yaml { .animate src="tcga_perf_omics_comb.svg"}
 setup:
   - element: "#omics2"
@@ -778,6 +860,15 @@ setup:
         data-fragment-index: "2"
 ```
 
+::: {.notes}
+Precision medicine: many modalities to consider = many pairs costly
+
+reduce number of pairs by focusing on some interactions.
+
+I proposed to use this interactions graphs that summarize how the different omics impacts each other
+
+Enc freeze benefits from pretraining.
+:::
 
 ## Identifying important interactions {.smaller}
 
@@ -796,17 +887,30 @@ setup:
       - class: fragment
         data-fragment-index: "0"
 ```
+
 ::: {.fragment .fade-up fragment-index=1}
+
 ![](CrossAttOmicsDetailsLRP.svg){width=90%}
+
 :::
+
 :::
 
 ::: {.column width=60%}
+
 ::: {.fragment .fade-up fragment-index=2}
+
 ![](CrossAttOmicsLRP.svg){width=100%}
+
 :::
+
 :::
+
 ::::
+
+::: {.notes}
+Explain post-hoc then LRP
+:::
 
 
 ## Robustness to missing modalities
@@ -819,17 +923,29 @@ setup:
 ::: {layout="[[1], [1, 1]]"}
 
 ::: {.fragment .fade-up fragment-index=1}
+
 ![](missing_modality_pattern.svg)
+
 :::
+
 ::: {.fragment .fade-up	 fragment-index=2}
+
 ::: {.fragment .semi-fade-out fragment-index=4}
+
 ![](missing_modality_latent.svg)
+
 :::
+
 :::
+
 ::: {.fragment .fade-up fragment-index=3}
+
 ::: {.fragment .semi-fade-out fragment-index=4}
+
 ![](missing_modality_reconstruction.svg)
+
 :::
+
 :::
 
 :::
@@ -837,9 +953,13 @@ setup:
 :::
 
 ::: {.column width="67%"}
+
 ::: {.fragment .fade-up fragment-index=4}
+
 ![](CrossAttOmicsModalityDropout.svg){fig-align="center" width=90%}
+
 :::
+
 :::
 
 ::::
@@ -847,16 +967,20 @@ setup:
 ## Multi-omics conclusions 
 
 :::{.incremental}
+
 * Harness cross-attention to build a multimodal representation explicitly considering interactions between modalities.
 * Using only two or three non-protein omics combination, achieve similar accuracy to what is obtained by training only on proteins.
 * Modality dropout increases robustness to missing modalities.
 * Data-driven strategy to identify important interactions: CrossAttOmicsGate.
+
 :::
 
 ::: {.fragment .fade-up}
 
 :::{.callout-important appearance="simple"}
+
 {{< fa circle-exclamation >}} **Patient can be diagnosed efficiently but what are the disease drivers? How to treat the patient?**
+
 :::
 
 :::
@@ -870,7 +994,9 @@ setup:
 :::{.column width=50%}
 
 ::: {.fragment .fade-right fragment-index=2}
+
 ![](CF_motivation.svg){width=100%}
+
 :::
 
 :::
