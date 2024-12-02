@@ -1153,7 +1153,7 @@ GDA: gene-disease association from DisGenet / COSMIC: Catalogue of somatic mutat
 ## Conclusions 
 
 :::{.incremental style="font-size:75%;"}
-* **AttOmics**: Applied self-attention mechanism to omics profile tp capture patient-specific interactions. Self-attention was applied to groups of features which allowed the addition of knowledge in the groups.
+* **AttOmics**: Applied self-attention mechanism to omics profile to capture patient-specific interactions. Self-attention was applied to groups of features which allowed the addition of knowledge in the groups.
   
   :::{style="font-size:50%;"}
   {{< fa book >}} **Aurélien Beaude**, Milad Rafiee Vahid, Franck Augé, Farida Zehraoui, and Blaise Hanczar.
