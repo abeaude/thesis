@@ -6,6 +6,7 @@ date: 06/12/2024
 format:
   revealjs: 
     progress: true
+    embed-resources: true
     theme: [simple, title-slide.scss]
     slide-number: true
     show-slide-number: all
