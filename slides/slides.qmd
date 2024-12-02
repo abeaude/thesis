@@ -1102,7 +1102,7 @@ Data manifold closeness = respect the original data distribution
 :::{style="font-size:80%;"}
 $$
  \mathcal{L} = {\color{manifold}\mathbb{E}_{x\sim p_{d}}\left[ D\left(x\right)\right] - \mathbb{E}_{x^{\text{CF}}\sim p_{g}}\left[ D\left(x^{\text{CF}}\right)\right] + \lambda \mathbb{E}_{\tilde{x}\sim p_{g}}\left[ {\left( {\left\|\nabla_{\tilde{x}}D\left(\tilde{x}\right) \right\|}_{2} -1 \right)}^{2}\right]} \\ + {\color{cf}\mathcal{L}_{\operatorname{Cl}} + \mathcal{L}_{\operatorname{Cl}_{T}}} + {\color{sparsity}\mathcal{L}_{\text{Reg}}\left(G\right)}
- $$
+$$
 :::
 
 ## Preliminary Results
@@ -1150,12 +1150,28 @@ GDA: gene-disease association from DisGenet / COSMIC: Catalogue of somatic mutat
 
 # Conclusions and Perspectives
 
-## Conclusions
+## Conclusions 
 
-:::{.incremental style="font-size:90%;"}
+:::{.incremental style="font-size:75%;"}
 * **AttOmics**: Applied self-attention mechanism to omics profile tp capture patient-specific interactions. Self-attention was applied to groups of features which allowed the addition of knowledge in the groups.
-* **CrossAttOmics**: Integrate multi-omics data based on the known regulatory interactions between modalities and the cross-attention. 
+  
+  :::{style="font-size:50%;"}
+  {{< fa book >}} **Aurélien Beaude**, Milad Rafiee Vahid, Franck Augé, Farida Zehraoui, and Blaise Hanczar.
+"AttOmics: attention-based architecture for diagnosis and prognosis from omics data."
+In: Intelligent Systems for Molecular Biology (ISMB). Lyon, France, 2023.
+  :::
+* **CrossAttOmics**: Integrate multi-omics data based on the known regulatory interactions between modalities and the cross-attention.
+
+  :::{style="font-size:50%;"}
+  {{< fa book >}} **Aurélien Beaude**, Franck Augé, Farida Zehraoui, and Blaise Hanczar. “CrossAttOmics:
+Multi-Omics data integration with CrossAttention.” In: Bioinformatics, *Under Revision* (2024).
+  :::
 * **CrossAttOmicsGate**: Let the network score each interaction with a gating mechanism
+
+  :::{style="font-size:50%;"}
+  {{< fa book >}} **Aurélien Beaude**, Farida Zehraoui, Franck Augé, and Blaise Hanczar. “Interpretable
+deep learning for multimodal high dimensional omics data.” *Under preparation* (2024).
+  :::     
 * **Counterfactual Generation**: Find the perturbation on the molecular profile that will change the prediction from a disease state to a health
 :::
 
