@@ -13,7 +13,7 @@
 }
 \DeclareOption{print}{
 	\PassOptionsToClass{twoside,open=right}{scrbook}
-	\PassOptionsToPackage{pdfpagelayout=TwoPageRight, linkcolor=black}{hyperref}
+	\PassOptionsToPackage{linkcolor=black}{hyperref}%pdfpagelayout=TwoPageRight,
 }
 \DeclareOption{final}{
 	\PassOptionsToPackage{final}{showlabels}
