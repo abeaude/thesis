@@ -122,7 +122,7 @@ difficult to exploit all the data
 :::
 
 
-## Outline
+## Outline {background-color="white"}
 
 :::: {layout-ncol="3"}
 
@@ -1233,10 +1233,7 @@ $$
 :::
 :::
 
-## {.center}
-::: {.r-fit-text}
-Thank you
-:::
+## {.center background-color="black" background-image="thank_you.png"	background-opacity=1 background-size="contain"}
 
 # Appendix
 
