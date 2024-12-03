@@ -347,7 +347,7 @@ $\color{query}Q = \left[q_i\right]_{1 \leq i \leq L}$ with $\color{query}q_i = X
 
 ::: {.fragment .fade-up fragment-index=1}
 
-![](Attention.svg){fig-align="right" width=100%}
+![](Attention.svg){fig-align="right" width=95%}
 
 :::
 
@@ -471,12 +471,6 @@ Z &= \operatorname{MultiHeadAttention}\left(X'_G\right) \\
  h_i &= \operatorname{Attention}\left({\color{query}Q},{\color{key}K},{\color{value}V}\right)
 \end{align}
 $$
-
-:::
-
-:::
-
-:::
 
 :::
 
