@@ -8,8 +8,9 @@ format:
     progress: true
     embed-resources: true
     theme: [simple, title-slide.scss]
-    slide-number: true
+    slide-number: c
     show-slide-number: all
+    pdf-separate-fragments: true
     footer: PhD defense - Aurélien BEAUDE
     menu: false
     callout-icon: false
