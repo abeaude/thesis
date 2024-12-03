@@ -322,7 +322,7 @@ $\color{query}Q = \left[q_i\right]_{1 \leq i \leq L}$ with $\color{query}q_i = X
 
 :::{.callout-important appearance="simple"}
 
-{{< fa circle-exclamation >}} **How to apply self-attention to large large vectors ?**
+{{< fa circle-exclamation >}} **How to apply self-attention to large vectors ?**
 
 :::
 
@@ -1213,7 +1213,7 @@ $$
 
 ## Perspectives: Knowledge
 
-* Biolgically-informed architectures are common when applying deep learning to biological problems as they provide a strong inductive bias.
+* Biologically-informed architectures are common when applying deep learning to biological problems as they provide a strong inductive bias.
 
 ::: {.fragment .fade-up}
 :::{.callout-important appearance="simple"}
@@ -1223,7 +1223,7 @@ $$
 
 ::: {.fragment .fade-up}
 :::{.callout-important appearance="simple"}
-{{< fa circle-exclamation >}} **Knowledge is iteratively constructed and omics measurement represent a *mean* of all occuring pathwyays.**
+{{< fa circle-exclamation >}} **Knowledge is iteratively constructed and omics measurement represent a *mean* of all occuring pathways.**
 :::
 :::
 
