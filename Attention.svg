@@ -8,12 +8,13 @@
    height="590"
    viewBox="0 0 300 590"
    sodipodi:docname="Attention.svg"
-   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <defs
      id="defs1">
     <mask
@@ -1152,6 +1153,28 @@
          transform="matrix(0.0462963,0,0,0.03898635,-7.1239583,-16.147368)"
          id="path166" />
     </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath14-2">
+      <path
+         d="m 13.477,187.379 h 21.602 v 25.648 H 13.477 Z"
+         transform="matrix(0.0462963,0,0,0.03898635,-0.62395833,-7.3052632)"
+         id="path14-8" />
+    </clipPath>
+    <mask
+       maskUnits="userSpaceOnUse"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       id="mask13-9">
+      <image
+         width="1"
+         height="1"
+         preserveAspectRatio="none"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAmCAAAAACASMY1AAAAAXNCSVQI5gpbmQAAAS1JREFUOI3tkT1LQmEYhq/jiTzmkOReENEUUW2R0S8oIjNsiaBRiH5AtmdQU9AYlX1AQ9FSc4MRNmXToQKhKTDoRKiDd4OC+XHOH6h7eXm5L577+YC/oyl9BQCwHEXaAUZecwBE9WI0eT4AnRADIM6R2mYMy7GA4LcGXbrIaRZY1F2L46s+aWJAnAO3Ofoqn366i+WwG8CtZljWRatRi+CYeRY4BDCXMoWPh0RnIxguv4dKBT9AWo+bqSddNpW60pb2ACZ1Y0JHVmONQFxFTQBEdscBNhRtBLocPf/+72vEdSIwe5OVUw9/TXpbqV3NbAf4nXz/dDHjUQKsc8U8AYZ0BtQ3WVfSHgUwCLoArwPrPiBB6+mrMq+V207dyw65pQdWs4WSvdPj3eO/mvQDCw5f5YRpPKQAAAAASUVORK5CYII="
+         id="image13-7" />
+    </mask>
   </defs>
   <sodipodi:namedview
      id="namedview1"
@@ -1162,15 +1185,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="1.4372881"
-     inkscape:cx="151.67453"
-     inkscape:cy="235.86085"
+     inkscape:zoom="1.7451228"
+     inkscape:cx="42.976919"
+     inkscape:cy="197.98034"
      inkscape:window-width="1920"
      inkscape:window-height="1052"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g1">
+     inkscape:current-layer="value">
     <inkscape:page
        x="0"
        y="0"
@@ -1279,29 +1302,11 @@
          d="m 12.129,184.68 h 27 v 27 h -27 z"
          style="fill:#97d077;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          transform="scale(1.3333333)" />
-      <image
-         width="1"
-         height="1"
-         preserveAspectRatio="none"
-         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAmCAYAAAClI5npAAAABHNCSVQICAgIfAhkiAAAADFJREFUWIXtzjEBADAMgDBa/543GX2CATLV67C9nAMAAAAAAAAAAAAAAAAAAAAAAFR9+uMBS+zWpfoAAAAASUVORK5CYII="
-         mask="url(#mask13)"
-         id="image14"
-         transform="matrix(28.8,0,0,34.2,17.97,249.84)"
-         clip-path="url(#clipPath14)" />
       <path
          id="path15"
          d="m 12.129,152.281 h 27 v 27 h -27 z"
          style="fill:#97d077;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          transform="scale(1.3333333)" />
-      <image
-         width="1"
-         height="1"
-         preserveAspectRatio="none"
-         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAmCAYAAAClI5npAAAABHNCSVQICAgIfAhkiAAAADFJREFUWIXtzjEBADAMgDBa/543GX2CATLV67C9nAMAAAAAAAAAAAAAAAAAAAAAAFR9+uMBS+zWpfoAAAAASUVORK5CYII="
-         mask="url(#mask15)"
-         id="image16"
-         transform="matrix(28.8,0,0,34.2,17.97,206.64)"
-         clip-path="url(#clipPath16)" />
       <path
          id="path17"
          d="M 39.129,100.98 H 49.281"
@@ -1342,6 +1347,50 @@
          d="m 52.926,165.781 -4.86,2.43 1.215,-2.43 -1.215,-2.429 z"
          style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
          transform="scale(1.3333333)" />
+      <image
+         width="1"
+         height="1"
+         preserveAspectRatio="none"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAmCAYAAAClI5npAAAABHNCSVQICAgIfAhkiAAAADFJREFUWIXtzjEBADAMgDBa/543GX2CATLV67C9nAMAAAAAAAAAAAAAAAAAAAAAAFR9+uMBS+zWpfoAAAAASUVORK5CYII="
+         mask="url(#mask13-9)"
+         id="image14-1"
+         transform="matrix(28.8,0,0,34.2,18.020543,206.7601)"
+         clip-path="url(#clipPath14-2)" />
+      <g
+         id="g104"
+         transform="matrix(3.6,0,0,3.6,16.120032,246.28556)">
+        <g
+           transform="translate(-0.5,-0.5)"
+           id="g103">
+          <switch
+             id="switch102">
+            <foreignObject
+               pointer-events="none"
+               width="100%"
+               height="100%"
+               requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+               style="overflow: visible; text-align: left;">
+              <xhtml:div
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 8px; height: 1px; padding-top: 5px; margin-left: 1px;">
+                <xhtml:div
+                   data-drawio-colors="color: rgb(0, 0, 0); "
+                   style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                  <xhtml:div
+                     style="display: inline-block; font-size: 6px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">v<xhtml:sub>4</xhtml:sub>
+</xhtml:div>
+                </xhtml:div>
+              </xhtml:div>
+            </foreignObject>
+            <image
+               x="1"
+               y="1.5"
+               width="8"
+               height="9.5"
+               xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAmCAYAAAClI5npAAAAAXNSR0IArs4c6QAAAe9JREFUWEft10uoTnEUBfDfZeAZSupKMpAMyESK4pqYKHnEgJSUFBmQpKSk3JQYyEAxMVAojzzKWHmUifLIQCKlkAyEMEG7Np10fOf6Hud+g+8/PI+91ll77bU7fYb59A0zvh6BngJdqcBS3MIXTMHXkkkZjfcYjyW40+w0lSkQ115hOtbiSknxuH4JLzETP9tJIGodwV5cwIaS4hexDodwoFnweO9fHpiHh/icbfhWABmX8o/BbDzrBIGo+QRzsAZXCyChyDncx8JWwBspEPf24XCCbSwAXcNK7MDJThKYkSb73YbvmIh3GIGp+NBJAlH7NhZjFa5jM84gVFjdKnhVC+L+9pT5LDbhJpbnBFyuIDANTzEhR/p12fNVSTgZb/ARs1L+CKiQP1rS6IRxQ7k4kSlNEYiXb2AFjmEPTmFbBXhkRGTFI8RIt0RgPc7nF49KT9xtQGBSSv8Az7GzVQJjU/rI/RcZvY0EOJ3pGRmyux0E/sfsA7nIduEEjtdJINoT8R2GXYQfdRMYzAU2H49TttoUmIsw3VHsL/SsFgKRJffQj2V/5cNBbMECvC3LgqogGooBYzo+DeVBxAovrva2/BeMzHgu47A1N2fskFhcEeVhzj+nHQo0+vhaPNDVBCqt0ekW9Aj0FOgp0P0K/AIkg2Mn/BYcxgAAAABJRU5ErkJggg=="
+               id="image102" />
+          </switch>
+        </g>
+      </g>
     </g>
     <g
        id="attention">
