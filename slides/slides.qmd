@@ -11,7 +11,7 @@ format:
     slide-number: c
     show-slide-number: all
     pdf-separate-fragments: true
-    footer: PhD defense - Aurélien BEAUDE
+    footer: PhD defense --- Aurélien BEAUDE
     menu: false
     callout-icon: false
     margin: 0.05
@@ -112,14 +112,23 @@ setup:
 
 ![](Omics.svg){fig-align="center"}
 
+::: {.notes}
+* Sample a part of the tumour, get a mixture of cells
+* Those cells are lysed to extract various molecules of interest: DNAm, mRNA, Proteins
+* What is called an omics is the set of all of one of this molecules: DNA = genomics
+* Lets see how the different omics relate to each other. 
+:::
+
 ## Precision medicine
 
 ![](IntroductionPersoMedicine-SlideIntro.svg){fig-align="center" .r-stretch width="110%"}
 
 ::: {.notes}
-ML = help precision medicine
-
-difficult to exploit all the data
+Recap: Goal is to get/extract a diagnosis, a prognosis for a patient from many data (list them).
+Impossible for a physician to exploit all of this data. Need to use AI to get the predictions
+AI = use ML models but limits. 
+Instead use deep learning, why ? 
+Today, I will focus on omics data and deep learning architectures.
 :::
 
 
@@ -167,6 +176,11 @@ difficult to exploit all the data
 ::::
 
 ### 4. Conclusions and Perspectives
+
+:::{.notes}
+Outline of today presentation. 
+Start with the study of individual omics with deep learning models. 
+:::
 
 # Single omics 
 
@@ -255,7 +269,9 @@ animation:
 ```
 
 ::: {.notes}
-CNN + GNN requires knowledge ==> restrict what can be extracted
+Present each architecture
+CNN is not designed to be applied to 1D data with no spatial dependecies.
+GNN impact of the graph, some hyperparameters to consider. Do not consider all interactions: multiple components connexe.
 
 Consider everything = use MLP but some disadvantages
 :::
@@ -357,6 +373,7 @@ $\color{query}Q = \left[q_i\right]_{1 \leq i \leq L}$ with $\color{query}q_i = X
 
 ::: {.notes}
 What is Attention more conceptually 
+Attention space: alignment, normalization, applied = combine the different values with attention weight.
 :::
 
 ## AttOmics Architecture
@@ -631,6 +648,12 @@ When combined with knowledge this can be informative, here an example.
 
 # Multi omics
 
+:::{.notes}
+Omics = a different obeservation of the a common phenomenon/procees the gene expression
+Each omics is a modality, exploiting multiple omics at the same time = use multplie modalities
+==> multimodal AI
+:::
+
 ## Multimodal AI
 
 ```yaml { .animate src="MultiModalAI.svg"}
@@ -692,9 +715,21 @@ setup:
         data-fragment-index: "9"
 ```
 
+::: {.notes}
+Multimodal AI = has various challenges. Today focus on **Representation** challenge: How to construct a multimodal representation.
+When constructing a multimodal representation there are 2 main questions: 
+* Where is the fusion done ? 3 modalities to illustrate this. data (EF), label (LF) and latent (IF)
+* How is the fusion done ? 
+Neural networks. Present some works using NN to fuse multiple omics. 
+:::
+
 ## State of the art
 
 ![](SOTA_MultiOmics.svg){fig-align="center"}
+
+:::{.notes}
+CCL: we saw previously that attention operator could be used as a fusion operator. How would we use this with neural networks and the attention mechanism found in transformers. 
+:::
 
 ## Attention as an integration strategy
 
@@ -786,6 +821,14 @@ Z_{\beta \rightarrow \alpha} &=  \operatorname{CrossAtt}_{\beta \rightarrow \alp
 
 ::::
 
+:::{.notes}
+Recall: Attention computes an alignement between 2 inputs -> use this to align 2 modalities ? 
+* Consider an early fusion strategy: concat + self attention. Explain the attention matrix
+* Omics high dimensionality and quadratic complexity not usable in practice. 
+* IF strategy: adapt one modality to another. Asymetrical aspect to consider all interactions need to consider all pairs ! many pairs. How to reduce this. 
+* Focus on pairs known to be interacting. 
+:::
+
 ## CrossAttOmics
 
 []{.fragment .fade-in}
@@ -834,6 +877,16 @@ animation:
       parameters: [1]
 ```
 
+:::{.notes}
+For omics, I proposed to use the following interaction graph for omics. Details of the interactions.
+How to use this graph in an architecture based on cross attention. Lets consider this smaller interaction graph.
+How this graph is translated into the architecture. 
+Modalities are encoded, Latent representation interacts. IF strategy. 
+Enc freeze benefits from pretraining.
+
+Move to the results. Multiple omics are available, what are the impact of the different combinations. 
+:::
+
 ## Omics combination
 
 ```yaml { .animate src="tcga_perf_omics_comb.svg"}
@@ -856,13 +909,14 @@ setup:
 ```
 
 ::: {.notes}
-Precision medicine: many modalities to consider = many pairs costly
+Comparison of the accuracy obtained with various deep learnign approaches and fusion strategy. 
+1 omics = protein best why? -> effectors and in TCGA proteins were selected as cancer markers = bias 
+Problem : This modality is not available in clinical settings. Can we achieve similar or better results by combining two or more omics other than proteomics.
+2 omics: some arch benefits, focus CrossAttOmics, other no gain
+3 omics: still gain, but some architectures nothing changes. 
+4+ omics: perf starts to degrade why ? Multimodal training is challenging, modalities compete with each other, some can be more informative. Early on in the optimization process, most informative modalities will be reinforced and the other modalities will more act like noise instead of cooperating with other modalities.
 
-reduce number of pairs by focusing on some interactions.
-
-I proposed to use this interactions graphs that summarize how the different omics impacts each other
-
-Enc freeze benefits from pretraining.
+Are all interactions important ? are they the same for  each cancer. 
 :::
 
 ## Identifying important interactions {.smaller}
@@ -904,7 +958,12 @@ setup:
 ::::
 
 ::: {.notes}
-Explain post-hoc then LRP
+To assess the importance of the interactions we proposed to use a post-hoc method : LRP. 
+What is LRP: forward get a predicition, retropropagate the signal to see the importance of each neurons with a set of rules. 
+Apply this on the CrossAttOmics architecture, retroprogate up to the output of the cross attention. Score is the sum of all neurons scores at this level. 
+Mean of patiens with the same cancer to have cancer signatures. 
+ 
+Some details for the cancer proposed. 
 :::
 
 
@@ -958,6 +1017,19 @@ Explain post-hoc then LRP
 :::
 
 ::::
+
+:::{.notes}
+Other challenge with multimodal related to the avialability of modalities. Acquiring multiple modalities can be expensive, not all modalities are always available.
+* HOw the architecture can handle missing modalities ?
+* How to increase the robustness to missing modalities ?
+
+Different strategies are available.
+choose the pattern: modality dropout.
+
+Results: train with modality dropout and evaluate with the different missingness pattern. 
+Normal perf decreases, modality dropout the decrease happens later = more robust
+Impact is different according to which omics is missing. Proteins/mRNA. 
+:::
 
 ## Multi-omics conclusions 
 
