@@ -372,7 +372,7 @@ $\color{query}Q = \left[q_i\right]_{1 \leq i \leq L}$ with $\color{query}q_i = X
 ::::
 
 ::: {.notes}
-What is Attention more conceptually 
+What is Attention more conceptually = relationships between inputs elements
 Attention space: alignment, normalization, applied = combine the different values with attention weight.
 :::
 
