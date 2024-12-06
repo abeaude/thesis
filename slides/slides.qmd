@@ -1300,6 +1300,10 @@ $$
 :::
 :::
 
+:::{.notes}
+Place of knowledge as an inductive bias
+:::
+
 ## {.center background-color="black" background-image="thank_you.png"	background-opacity=1 background-size="contain"}
 
 # Appendix
