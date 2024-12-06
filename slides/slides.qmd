@@ -1302,6 +1302,7 @@ $$
 
 :::{.notes}
 Place of knowledge as an inductive bias
+Iterative construction 
 :::
 
 ## {.center background-color="black" background-image="thank_you.png"	background-opacity=1 background-size="contain"}
