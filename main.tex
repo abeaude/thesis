@@ -61,17 +61,17 @@
 %% FRENCH SUMMARY %%
 %%%%%%%%%%%%%%%%%%%%
 % Required by the university to write a summary of 4000 symbols when the main language is not the french.
-% \ifdefstring{\mainlanguagename}{french}{}{%
-% 	\begin{french}
-% 		\addchap{Résumé de la thèse --- French summary}
-% 		\input{frontmatter/longsummaryFR}
-% 	\end{french}
-% }
+\ifdefstring{\mainlanguagename}{french}{}{%
+	\begin{french}
+		\addchap{Résumé de la thèse}
+		\input{frontmatter/longsummaryFR}
+	\end{french}
+}
 
 %%%%%%%%%%%%%%%%%%%%%
 %% ACKNOLEDGEMENTS %%
 %%%%%%%%%%%%%%%%%%%%%
-%\makeacknolegments{./frontmatter/acknolegments}
+\makeacknolegments{./frontmatter/acknolegments}
 
 %%%%%%%%%%%%%%
 %% LIST OFs %%

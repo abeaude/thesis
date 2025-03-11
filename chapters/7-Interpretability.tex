@@ -90,13 +90,13 @@ The changes can also be used to propose a treatment plan based on the action of 
 		\end{figure}
 		Counterfactual explanations aim to explain a prediction of a sample \(\symbf{x}\) by finding a minimal perturbation \(\delta\) in the data space that will change the prediction.
 		The search for a counterfactual explanation can be formulated as an optimization problem (see \cref{eq:opt_cf})~\cite{wachter2017counterfactual}.
-		A valid counterfactual is a counterfactual with added properties: \ref{item:cf_actionability}, \ref{item:cf_sparse}, and \ref{item:cf_data_manifold}.
+		A valid counterfactual is a counterfactual with added properties: \ref{item:cf_actionability}, \ref{item:cf_sparse}, and \ref{item:cf_data_manifold}. % chktex 2
 		\Glspl{gan} are a deep learning architecture for generating new samples; it relies on two components a Generator \(G\) capturing the data distribution and a discriminator \(D\) estimating the realness of a sample~(see~\cref{sec:gan})~\cite{Goodfellow2014GAN}.
-		As \glspl{gan} are good at capturing data distribution, they can be used to generate counterfactuals respecting the \ref{item:cf_data_manifold} constraint.
+		As \glspl{gan} are good at capturing data distribution, they can be used to generate counterfactuals respecting the \ref{item:cf_data_manifold} constraint. % chktex 2
 
 		\Cref{fig:gan_cf} presents the overall architecture of the \gls{gan} used for generating counterfactual explanations.
 		To obtain a counterfactual, the point \(\symbf{x}\) to explain is passed through the generator \(G\), a \gls{fcn} of \(l\) layers with \gls{relu} intermediate activation and no final activation, to obtain the perturbation \(\delta\).
-		To ensure the \ref{item:cf_actionability} property, a binary mask \(\symcal{M}\) is applied element-wise on the generated perturbation to specify which features can be changed.
+		To ensure the \ref{item:cf_actionability} property, a binary mask \(\symcal{M}\) is applied element-wise on the generated perturbation to specify which features can be changed. % chktex 2
 		\begin{equation}
 			\delta = G\left(\symbf{x}\right) \odot \symcal{M}
 		\end{equation}
@@ -110,7 +110,7 @@ The changes can also be used to propose a treatment plan based on the action of 
 		where \(p_{d}\) is the true data distribution, \(p_{g}\) is the distribution learned by the generator \(G\), \(\lambda\) is the penalty weight forcing the discriminator \(D\) to be a K-Lipschitz function, and \(\tilde{x}\) is a linearly interpolated point between \(x\) and \(x^{\text{CF}}\).
 		The main desiderata of a counterfactual is to change the predicted class of \(\symbf{x}\) from \(\hat{y}\) to \(y^{\text{CF}}\).
 		The fullfilment of this constraint is achieved by adding a term \(\symcal{L}_{\operatorname{Cl}}\left(G,\operatorname{Cl}, y^{\text{CF}} \right) = \symcal{L}_{\text{CE}}\left(\operatorname{Cl}\left(x^{\text{CF}}\right),y^{\text{CF}}\right) \) to the optimization problem~(\cref{eq:wgan_opt_cf}), where \(\operatorname{Cl}\) is a pretrained classifier and \(\symcal{L}_{\text{CE}}\) the cross-entropy loss~(\cref{eq:ce_loss}).
-		The \ref{item:cf_sparse} constraint of a counterfactual is obtained by adding a \(L_{1}\) regularization on the generated perturbation \(\delta\) to the optimization problem~(\cref{eq:wgan_opt_cf}): \(\symcal{L}_{\text{Reg}}\left(G\right) = \left\|G\left(x\right) \odot \symcal{M}\right\|_{1}\).
+		The \ref{item:cf_sparse} constraint of a counterfactual is obtained by adding a \(L_{1}\) regularization on the generated perturbation \(\delta\) to the optimization problem~(\cref{eq:wgan_opt_cf}): \(\symcal{L}_{\text{Reg}}\left(G\right) = \left\|G\left(x\right) \odot \symcal{M}\right\|_{1}\). % chktex 2
 		More constraints can be added to the generator by adding other loss terms to the optimization problem.
 		For instance, in our scenario we added a loss term \(\symcal{L}_{\operatorname{Cl}_{T}}\left(G,\operatorname{Cl}_{T}, y_{T} \right) = \symcal{L}_{\text{CE}}\left(\operatorname{Cl}_{T}\left(x^{\text{CF}}\right),y_{T}\right)\) to ensure that the generated counterfactual belongs to the correct tissue type, where \(\operatorname{Cl}_{T}\) is a pretrained tissue classifier.
 		Finally, the counterfactual \gls{gan} is trained by solving the following optimization problem:
@@ -123,7 +123,7 @@ The changes can also be used to propose a treatment plan based on the action of 
 		The effectiveness of our approach, \ie{}the capacity of the method to generate counterfactuals that do change the prediction, was measured using counterfactual accuracy: \(\symcal{A}_{\text{CF}}\).
 		The counterfactual accuracy compares the prediction obtained by the classifier \(\operatorname{Cl}\) from the counterfactual \(\symbf{x}^{\text{CF}}\) to the desired class \(y^{\text{CF}}\).
 		The closeness of the counterfactual to the original point was determined using various distances measures based on \(L_{1}\), \(L_{2}\), or \(L_{\infty}\) norms.
-		The sparsity of the perturbation was evaluated with the \(L_{0}\)-\emph{norm}\footnote{The \(L_{0}\)-\emph{norm} is not homogeneous: \(\left\|\lambda x \right\|_{0} \neq \left|\lambda\right| \left\| x \right\|_{0}\)}, measuring the number of nonzeros elements in a vector, defined as\footnote{This \emph{norm} can also be seen as the hamming distance of a vector \(x\) with the zero vector \(\symbb{0}_{n}\): \(\sum_{i=1}^{n} \symbb{1}\left(x \neq \symbb{0}_{n}\right)_{i}\)}: \(\sum_{i=1}^{n} \left|x_{i}\right|^{0}\) with defining that \(\left|0\right|^{0}=0\).
+		The sparsity of the perturbation was evaluated with the \(L_{0}\)-\emph{norm}\footnote{The \(L_{0}\)-\emph{norm} is not homogeneous: \({\left\|\lambda x \right\|}_{0} \neq \left|\lambda\right| {\left\| x \right\|}_{0}\)}, measuring the number of nonzeros elements in a vector, defined as\footnote{This \emph{norm} can also be seen as the hamming distance of a vector \(x\) with the zero vector \(\symbb{0}_{n}\): \(\sum_{i=1}^{n} \symbb{1}{\left(x \neq \symbb{0}_{n}\right)}_{i}\)}: \(\sum_{i=1}^{n} {\left|x_{i}\right|}^{0}\) with defining that \(\left|0\right|^{0}=0\).
 		The realism of counterfactuals was evaluated by measuring how much training data supports the generated counterfactual, \ie{} justify the counterfactual by connecting it to real data~\cite{JustifyCF}.
 		A realistic counterfactual should have points in its neighborhood that have the same label \( y^{\text{kNN}}\) as the desired class \(y^{\text{CF}}\), this can be computed as the proportion of point in the k-neighbors agreeing with the counterfactual class: \(\symcal{A}_{\text{kNN}} = \frac{1}{k}\sum_{i=1}^{k}\symbb{1}\left(y^{\text{CF}},  y^{\text{kNN}}_{i}\right)\)~\cite{Carla_CF}.
 		This metric is only considered for correct or effective counterfactual, generated point \(\symbf{x}^{\text{CF}}\) that are predicted as \(y^{\text{CF}}\).
@@ -181,13 +181,13 @@ The changes can also be used to propose a treatment plan based on the action of 
 				A smaller smoothness indicates a more robust model.
 			\item[Margin decision]
 				This metric measures the distance of an example to the decision boundary~\cite{MarginDecision}.
-				This is measured as the difference between the probability of the true label \(\operatorname{Cl}\left(\symbf{x}\right)_{y}\) and the probability of the most probable class \(\max_{i \neq y} \operatorname{Cl}\left(\symbf{x}\right)_{i}\) that is different from \(y\):
+				This is measured as the difference between the probability of the true label \(\operatorname{Cl}{\left(\symbf{x}\right)}_{y}\) and the probability of the most probable class \(\max_{i \neq y} \operatorname{Cl}{\left(\symbf{x}\right)}_{i}\) that is different from \(y\):
 				\begin{equation}
-					\operatorname{Cl}\left(\symbf{x}\right)_{y} - \max_{i \neq y} \operatorname{Cl}\left(\symbf{x}\right)_{i}
+					\operatorname{Cl}{\left(\symbf{x}\right)}_{y} - \max_{i \neq y} \operatorname{Cl}{\left(\symbf{x}\right)}_{i}
 				\end{equation}
 				A higher margin decision is better.
 			\item[Boundary thickness]
-				The boundaries thickness measures the margin of the region where the probability difference \(D_{ij}\left(\cdot\right) = \operatorname{Cl}\left(\cdot\right)_{i} - \operatorname{Cl}\left(\cdot\right)_{j}\), lies between two values \(\alpha\) and \(\beta\)~\cite{AdvBoundaryThick}:
+				The boundaries thickness measures the margin of the region where the probability difference \(D_{ij}\left(\cdot\right) = \operatorname{Cl}{\left(\cdot\right)}_{i} - \operatorname{Cl}{\left(\cdot\right)}_{j}\), lies between two values \(\alpha\) and \(\beta\)~\cite{AdvBoundaryThick}:
 				\begin{equation}
 					\left\|\symbf{x} - \symbf{x}^{\star}\right\|_{2} \int_{0}^{1} \symbb{1}\left\{ \alpha < D_{ij}\left(t\symbf{x} + \left(1-t\right)\symbf{x}^{\star} \right) < \beta\right\}
 				\end{equation}
@@ -279,14 +279,14 @@ The changes can also be used to propose a treatment plan based on the action of 
 				tabularray={%
 						colspec={%
 								Q[r,m]
-								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.4cm]%
-								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.4cm]%
-								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.4cm]%
-								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.4cm]%
-								Q[si={table-format=2.2,table-number-alignment=center},c , wd=1.6cm]%
-								Q[si={table-format=1.2,table-number-alignment=center},c , wd=1.6cm]%
+								Q[si={table-format=1.2,table-number-alignment=center}, c, wd=1.4cm]%
+								Q[si={table-format=1.2,table-number-alignment=center}, c, wd=1.4cm]%
+								Q[si={table-format=1.2,table-number-alignment=center}, c, wd=1.4cm]%
+								Q[si={table-format=1.2,table-number-alignment=center}, c, wd=1.4cm]%
+								Q[si={table-format=2.2,table-number-alignment=center}, c, wd=1.6cm]%
+								Q[si={table-format=1.2,table-number-alignment=center}, c, wd=1.6cm]%
 							},%
-						row{1-2} = {guard},
+						row{1-2} = {guard}, % chktex 8
 						row{2} = {c,m, font=\small},
 						row{3-Z} = {font=\footnotesize},
 						row{4-Z} = {abovesep=1pt},
@@ -298,7 +298,7 @@ The changes can also be used to propose a treatment plan based on the action of 
 						%cell{7}{3} = {font=\bfseries},
 						hline{1} = {2-Z}{2pt},%
 						hline{Z} = {2pt},%
-						hline{2-3} = {1pt},%
+						hline{2-3} = {1pt},%chktex 8
 						column{even} = {rightsep=1pt},
 						column{odd[3-Z]} = {leftsep=1pt},
 						%cell{3-Z}{1} = {font=\normalsize}
@@ -307,7 +307,7 @@ The changes can also be used to propose a treatment plan based on the action of 
 				\ifSubfilesClassLoaded{%
 					data/AdversarialMetrics.csv%
 				}{%
-					../data/AdversarialMetrics.csv%
+					../data/AdversarialMetrics.csv% chktex 26
 				}%
 			}{}{\csvlinetotablerow}
 		\end{table}

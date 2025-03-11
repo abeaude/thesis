@@ -16,7 +16,7 @@
 	During this PhD, we explored the interest of deep learning in the field of precision medicine with a focus on omics data.
 	Omics data are challenging to analyze due to their high dimensionality and the limited availability of samples.
 	Our goal was to develop new deep learning methods for omics data.
-	In particular, we examined the potential of the (\emph{self-})attention mechanism~\cite{AttentionAllYouNeed} to study omics data.
+	In particular, we examined the potential of the (\emph{self-})attention mechanism~\cite{AttentionAllYouNeed} to study omics data. %chktex 36
 
 	In~\cref{chap:attomics}, we proposed AttOmics an architecture leveraging the self\-/attention mechanism to capture patient-specific feature interactions.
 	To ensure the compatibility of high-dimensional molecular profiles with the self\-/attention memory requirements, we applied self-attention to groups of features.
@@ -67,8 +67,7 @@
 				\phantomcaption\label{fig:lin_attention_benchA}
 				\phantomcaption\label{fig:lin_attention_benchB}
 			\end{subcaptiongroup}
-			\caption[Comparison of two ScalarAttention implementation]{Comparison of the memory usage~\subref{fig:lin_attention_benchA} and the computation time~\subref{fig:lin_attention_benchB} of a \textcolor[HTML]{3969AC}{PyTorch} and a \textcolor[HTML]{F2B701}{Triton} implementation of the ScalarAttention}
-			\label{fig:lin_attention_bench}
+			\caption[Comparison of two ScalarAttention implementation]{Comparison of the memory usage~\subref{fig:lin_attention_benchA} and the computation time~\subref{fig:lin_attention_benchB} of a \textcolor[HTML]{3969AC}{PyTorch} and a \textcolor[HTML]{F2B701}{Triton} implementation of the ScalarAttention}\label{fig:lin_attention_bench}
 		\end{figure}
 
 		The attention matrix is obtained by measuring the similarity between pairs of inputs; for vectors, this measure is the scalar product.

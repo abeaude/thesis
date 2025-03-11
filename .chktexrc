@@ -12,11 +12,13 @@ Silent
 		\endfirsthead \endhead \endfoot \endlastfoot
 		\textbullet \textemdash
 		\addplot \attomicsperfzoom \attomicsperf \Nattomicszoom \foreach \faCircle
-		\attomicsperfspecificity \attomicsperfspecificityzoom \attomicsperfrecall \attomicsperfrecallzoom \attomicsperfprecision \attomicsperfprecisionzoom \attomicsperffun \attomicsperffunzoom \attomicsperfauroc \attomicsperfauroczoom \LRPCrossAttOmicsSubset \CrossAttOmicsGateSelFreq
+		\attomicsperfspecificity \attomicsperfspecificityzoom \attomicsperfrecall \attomicsperfrecallzoom \attomicsperfprecision \attomicsperfprecisionzoom \attomicsperffun \attomicsperffunzoom \attomicsperfauroc \attomicsperfauroczoom \LRPCrossAttOmicsSubset \CrossAttOmicsGateSelFreq \CrossAttOmicsGateSparsityInteractionsAll \CrossAttOmicsGateSparsityInteractionsStable
 		\robExtPrefixAllCompilationCommands \robExtCp \cacheTikz \robExtOutputDirectory \robExtCacheFolder
 		\ExplSyntaxOn \ExplSyntaxOff \PrintChapterBiblioAndPubli \CreateCacheDirs
 		\DontPrintSemicolon
 		\leftarrow
+		\ifhyperref
+		\sourcecode
 	}
 UserWarnRegex =
 {

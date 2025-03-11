@@ -154,7 +154,7 @@
 
 \begin{table}[htbp]
 	\centering
-	\caption{Architecture used for the models. X not applicable. For the GCN model a - kernel means convolution from spatial space, and \(>0\) means convolution in the spectral space}\label{tab:arch_other}
+	\caption{Architecture used for the models. X not applicable. For the GCN model a - kernel means convolution from spatial space, and \(>0\) means convolution in the spectral space}\label{tab:arch_other}% chktex 8
 	\begin{tblr}{
 		colspec={
 				Q[l,m]
@@ -188,7 +188,7 @@
 		              & kernel             & 2         & X           & X        \\
 		              & readout            & concat    & X           & X        \\
 		GNN --- CoExp & \# channels        & 1         & 1           & 1        \\
-		              & kernel             & -         & -           & 2        \\
+		              & kernel             & -         & -           & 2        \\ % chktex 8
 		              & readout            & concat    & concat      & concat   \\
 		SVM           & kernel             & rbf       & rbf         & linear   \\
 		              & gamma              & 0.0001    & 0.0001      & 1        \\
@@ -327,32 +327,32 @@
 			\toprule
 			omics                  & Model                   & AttOmics --- GO & AttOmics --- Hallmarks & AttOmics --- Random & CNN1d & GCN --- CoExp & MLP      & RF    & SVM      & XGBoost  & GCN --- PPI \\
 			\midrule
-			\multirow{7}{*}{DNAm}  & AttOmics --- Clustering & -               & -                      & 1.00                & 0.083 & 0.083         & 0.083    & 0.083 & 0.648    & 0.083    & -           \\
-			                       & AttOmics --- Random     & -               & -                      & -                   & 0.083 & 0.381         & 0.083    & 0.083 & 0.648    & 0.083    & -           \\
-			                       & CNN1d                   & -               & -                      & -                   & -     & 0.083         & 0.083    & 0.083 & 0.083    & 0.083    & -           \\
-			                       & GCN --- CoExp           & -               & -                      & -                   & -     & -             & 0.510417 & 0.083 & 0.159091 & 0.083    & -           \\
-			                       & MLP                     & -               & -                      & -                   & -     & -             & -        & 0.083 & 0.083    & 0.083    & -           \\
-			                       & RF                      & -               & -                      & -                   & -     & -             & -        & -     & 0.083    & 0.648148 & -           \\
-			                       & SVM                     & -               & -                      & -                   & -     & -             & -        & -     & -        & 0.083    & -           \\
+			\multirow{7}{*}{DNAm}  & AttOmics --- Clustering & -               & -                      & 1.00                & 0.083 & 0.083         & 0.083    & 0.083 & 0.648    & 0.083    & -           \\ % chktex 8
+			                       & AttOmics --- Random     & -               & -                      & -                   & 0.083 & 0.381         & 0.083    & 0.083 & 0.648    & 0.083    & -           \\ % chktex 8
+			                       & CNN1d                   & -               & -                      & -                   & -     & 0.083         & 0.083    & 0.083 & 0.083    & 0.083    & -           \\ % chktex 8
+			                       & GCN --- CoExp           & -               & -                      & -                   & -     & -             & 0.510417 & 0.083 & 0.159091 & 0.083    & -           \\ % chktex 8
+			                       & MLP                     & -               & -                      & -                   & -     & -             & -        & 0.083 & 0.083    & 0.083    & -           \\ % chktex 8
+			                       & RF                      & -               & -                      & -                   & -     & -             & -        & -     & 0.083    & 0.648148 & -           \\ % chktex 8
+			                       & SVM                     & -               & -                      & -                   & -     & -             & -        & -     & -        & 0.083    & -           \\ % chktex 8
 			\midrule
 			\multirow{10}{*}{mRNA} & AttOmics --- Clustering & 0.219           & 0.149                  & 0.078               & 0.078 & 0.078         & 0.078    & 0.078 & 0.078    & 0.078    & 0.078       \\
-			                       & AttOmics --- GO         & -               & 0.149                  & 0.828               & 0.078 & 0.078         & 0.078    & 0.078 & 0.078    & 0.078    & 0.078       \\
-			                       & AttOmics --- Hallmarks  & -               & -                      & 0.078               & 0.078 & 0.661         & 0.661    & 0.078 & 0.078    & 0.078    & 0.661       \\
-			                       & AttOmics --- Random     & -               & -                      & -                   & 0.078 & 0.078         & 0.078    & 0.078 & 0.078    & 0.078    & 0.078       \\
-			                       & CNN1d                   & -               & -                      & -                   & -     & 0.078         & 0.078    & 0.078 & 0.828    & 0.078    & 0.078       \\
-			                       & GCN --- CoExp           & -               & -                      & -                   & -     & -             & 0.501    & 0.078 & 0.078    & 0.078    & 0.661       \\
-			                       & GCN --- PPI             & -               & -                      & -                   & -     & -             & 1.00     & 0.078 & 0.078    & 0.078    & -           \\
-			                       & MLP                     & -               & -                      & -                   & -     & -             & -        & 0.078 & 0.078    & 0.078    & -           \\
-			                       & RF                      & -               & -                      & -                   & -     & -             & -        & -     & 0.078    & 0.078    & -           \\
-			                       & SVM                     & -               & -                      & -                   & -     & -             & -        & -     & -        & 0.078    & -           \\
+			                       & AttOmics --- GO         & -               & 0.149                  & 0.828               & 0.078 & 0.078         & 0.078    & 0.078 & 0.078    & 0.078    & 0.078       \\ % chktex 8
+			                       & AttOmics --- Hallmarks  & -               & -                      & 0.078               & 0.078 & 0.661         & 0.661    & 0.078 & 0.078    & 0.078    & 0.661       \\ % chktex 8
+			                       & AttOmics --- Random     & -               & -                      & -                   & 0.078 & 0.078         & 0.078    & 0.078 & 0.078    & 0.078    & 0.078       \\ % chktex 8
+			                       & CNN1d                   & -               & -                      & -                   & -     & 0.078         & 0.078    & 0.078 & 0.828    & 0.078    & 0.078       \\ % chktex 8
+			                       & GCN --- CoExp           & -               & -                      & -                   & -     & -             & 0.501    & 0.078 & 0.078    & 0.078    & 0.661       \\ % chktex 8
+			                       & GCN --- PPI             & -               & -                      & -                   & -     & -             & 1.00     & 0.078 & 0.078    & 0.078    & -           \\ % chktex 8
+			                       & MLP                     & -               & -                      & -                   & -     & -             & -        & 0.078 & 0.078    & 0.078    & -           \\ % chktex 8
+			                       & RF                      & -               & -                      & -                   & -     & -             & -        & -     & 0.078    & 0.078    & -           \\ % chktex 8
+			                       & SVM                     & -               & -                      & -                   & -     & -             & -        & -     & -        & 0.078    & -           \\ % chktex 8
 			\midrule
-			\multirow{7}{*}{miRNA} & AttOmics --- Clustering & -               & -                      & 0.159               & 0.092 & 0.159         & 0.159    & 0.092 & 0.092    & 0.092    & -           \\
-			                       & AttOmics --- Random     & -               & -                      & -                   & 0.092 & 0.510         & 1.00     & 0.092 & 0.673    & 0.092    & -           \\
-			                       & CNN1d                   & -               & -                      & -                   & -     & 0.092         & 0.092    & 0.092 & 0.092    & 0.092    & -           \\
-			                       & GCN --- CoExp           & -               & -                      & -                   & -     & -             & 0.673    & 0.092 & 0.510    & 0.092    & -           \\
-			                       & MLP                     & -               & -                      & -                   & -     & -             & -        & 0.092 & 1.00     & 0.092    & -           \\
-			                       & RF                      & -               & -                      & -                   & -     & -             & -        & -     & 0.092    & 0.092    & -           \\
-			                       & SVM                     & -               & -                      & -                   & -     & -             & -        & -     & -        & 0.092    & -           \\
+			\multirow{7}{*}{miRNA} & AttOmics --- Clustering & -               & -                      & 0.159               & 0.092 & 0.159         & 0.159    & 0.092 & 0.092    & 0.092    & -           \\ % chktex 8
+			                       & AttOmics --- Random     & -               & -                      & -                   & 0.092 & 0.510         & 1.00     & 0.092 & 0.673    & 0.092    & -           \\ % chktex 8
+			                       & CNN1d                   & -               & -                      & -                   & -     & 0.092         & 0.092    & 0.092 & 0.092    & 0.092    & -           \\ % chktex 8
+			                       & GCN --- CoExp           & -               & -                      & -                   & -     & -             & 0.673    & 0.092 & 0.510    & 0.092    & -           \\ % chktex 8
+			                       & MLP                     & -               & -                      & -                   & -     & -             & -        & 0.092 & 1.00     & 0.092    & -           \\ % chktex 8
+			                       & RF                      & -               & -                      & -                   & -     & -             & -        & -     & 0.092    & 0.092    & -           \\ % chktex 8
+			                       & SVM                     & -               & -                      & -                   & -     & -             & -        & -     & -        & 0.092    & -           \\ % chktex 8
 			\bottomrule
 		\end{tabular}
 	\end{table}

@@ -1,0 +1,35 @@
+La médecine de précision a transformé le domaine des soins, en adaptant les décisions à chaque patient.
+L'essor de cette médecine a été rendu possible par le développement de méthodes de séquençage à haut débit, permettant la collecte de grandes quantités de données patients, et par le développement de méthodes d'apprentissage profond tirant parti de ces données.
+
+La quantification des pools de molécules biologiques, comme l'acide désoxyribonucléique (ADN), les acides ribonucléiques (ARN), aussi connue sous le nom \textit{d'omiques}, permettent de mesurer systématiquement dans un échantillon biologique l’ensemble des molécules liées à une molécule biologique, par exemple l’expression de tous les gènes, ou transcriptomique.
+La prédiction de phénotypes, comme un cancer, à partir de données omiques suscite de grands espoirs dans le développement de la médecine personnalisée.
+Cependant, les données omiques sont des données de très grande dimension, avec plusieurs dizaines de milliers de variables, ce qui conduit à des modèles de grande taille, et bien que la disponibilité d'échantillons augmente, elle reste limitée pour des architectures de cette taille.
+Les architectures actuelles, comme le perceptron multicouche, utilisent des poids fixes pendant l'inférence qui sont les mêmes pour tous les patients, limitant le potentiel d'une médecine véritablement personnalisée.
+Les maladies comme le cancer résultent de perturbations de processus biologiques à de multiples niveaux.
+Les méthodes d'acquisition actuelles permettent la collecte d'informations à tous les niveaux biologiques: génome, transcriptome, protéome, ouvrant la voie à des méthodes analytiques combinant ces informations pour améliorer les prédictions et la compréhension de ces maladies.
+La compréhension des prédictions est essentielle dans les domaines à forts enjeux tels que la santé, cependant les modèles d'apprentissage profond sont considérés comme des \textit{boîtes noires}.
+Pour remédier à ces limitations, nous avons proposé de nouvelles méthodes, qui sont énumérées ci-dessous.
+
+Tout d'abord, nous avons développé AttOmics, un modèle pour les données omiques basé sur le mécanisme d'auto\-/attention.
+Le mécanisme d'auto\-/attention permet la prise en compte d'interactions entre variables, l'expression de gènes par exemple, qui sont spécifiques à chaque patient.
+De par la complexité en temps et en mémoire de l'attention et la grande dimension des données omiques, nous avons réduis la dimension des profils d'expressions en créant des groupes de variables.
+Nous avons considéré plusieurs stratégies pour former les groupes: aléatoire, basé sur un clustering, ou la connaissance.
+AttOmics fait au moins aussi bien que les autres méthodes d'apprentissage profond considérées: perceptron multicouche, réseaux de convolutions, réseaux de neurones pour les graphes.
+En particulier, nous avons démontré l'avantage d'AttOmics pour des jeux d'entraînement avec peu d'exemples.
+La visualisation des cartes d'attention permet l'identification des groupes importants pour un phénotype.
+
+Dans un second travail, nous avons proposé CrossAttOmics, une architecture basée sur le mécanisme d'attention croisée pour combiner plusieurs omiques dans une unique représentation multimodale.
+Chaque modalité est projetée dans un nouvel espace avec un encodeur spécifique basé sur le modèle AttOmics.
+Le mécanisme d'attention croisée est utilisé pour calculer les interactions entre omiques.
+Au lieu de considérer l'ensemble des interactions possibles, nous n'avons pris en compte que les interactions de régulation connues entre les modalités.
+Cette approche peut être combinée avec des méthodes d'explicabilité comme \textit{layer-wise relevance (LRP)} pour identifier les interactions entre omiques les plus importantes.
+Nous avons comparé notre approche avec de nombreuses méthodes d'apprentissage profond pour l'intégration de modalités: concaténation des omiques utilisé comme entrée d'un perceptron multicouche, de réseaux de neurones pour les graphes, d'Attomics ou bien la concaténation de représentations intermédiaires obtenues avec différentes architectures.
+
+Dans un troisième travail, nous avons proposé CrossAttOmicsGate pour assigner un score à chaque interaction afin d'obtenir un modèle directement interprétable.
+Le score d'interaction est obtenu avec un mécanisme de \textit{gating}, tout en forçant une majorité des scores à être nuls, favorisant l'interprétation.
+De plus, les scores doivent être diversifiés entre patients pour refléter la diversité entre patients.
+Ces deux propriétés, sparsité et diversité, sont assurées par l'ajout de quatre régularisations à la fonction de coût utilisée pour l'entraînement du modèle.
+
+Enfin, nous avons développé un modèle génératif d'explications contrefactuelles, permettant d'identifier le changement requis dans le profil moléculaire pour qu'un patient soit en bonne santé.
+L'explication contrefactuelle permet d'obtenir le changement minimal réaliste dans le profil d'expression changeant la prédiction faite par un modèle pré-entraîné.
+Ce travail étant préliminaire, les résultats se concentrent sur la robustesse des modèles à des attaques adverses, la perturbation minimale d'une entrée trompant le réseau.
