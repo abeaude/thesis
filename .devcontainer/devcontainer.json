@@ -46,7 +46,6 @@
                 "latex-workshop.latex.build.forceRecipeUsage": false,
                 "latex-workshop.synctex.afterBuild.enabled": true,
                 "latex-workshop.latex.clean.fileTypes": [
-                    "%OUTDIR%/%DOCFILE%.aux",
                     "%OUTDIR%/%DOCFILE%.bbl",
                     "%OUTDIR%/%DOCFILE%.blg",
                     "%OUTDIR%/%DOCFILE%.bcf",
@@ -106,7 +105,10 @@
                     "%DIR%/.latexindent.bak/",
                     "%TMPFILE%"
                 ],
-                "editor.wordWrap": "on"
+                "editor.wordWrap": "on",
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
+                "latex-workshop.formatting.latex": "latexindent"
             },
             "extensions": [
                 "James-Yu.latex-workshop",

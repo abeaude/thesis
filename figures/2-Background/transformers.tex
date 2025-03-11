@@ -1,0 +1,160 @@
+\begin{tikzpicture}[
+        module/.style={draw, very thick, rounded corners, minimum width=10ex},
+        embmodule/.style={module, fill=red!40},
+        mhamodule/.style={module, fill=orange!40},
+        lnmodule/.style={module, fill=yellow!40},
+        ffnmodule/.style={module, fill=cyan!40},
+        arrow/.style={-stealth, thick, rounded corners},
+    ]
+    \begin{scope}[local bounding box=transBlock]
+        \node[embmodule] (inputemb) {\(X\)};
+
+        \node[above=of inputemb, mhamodule, align=center] (mha) {\(\operatorname{MHSA}\)};
+        \node (add) [draw, thick, fill=white, circle, minimum size=2ex, above=5mm of mha.north, anchor=center] {};
+        \draw[thick] (add.west) -- (add.east);
+        \draw[thick] (add.north) -- (add.south);
+        \node[above=of mha, lnmodule, align=center] (addnorm1) {\(\operatorname{LN}\)};
+        \node[above=8mm of addnorm1, ffnmodule, align=center] (ffn) {\(\operatorname{FFN}\)};
+        \node (add2) [draw, thick, fill=white, circle, minimum size=2ex, above=5mm of ffn.north, anchor=center] {};
+        \draw[thick] (add2.west) -- (add2.east);
+        \draw[thick] (add2.north) -- (add2.south);
+        \node[above=of ffn, lnmodule, align=center] (addnorm2) {\(\operatorname{LN}\)};
+        \node[above=5mm of addnorm2] (outputs) {};
+
+        \coordinate (mharesidual) at ($(mha.south)!0.5!(inputemb.north)$);
+        \coordinate (ffnresidual) at ($(ffn.south)!0.5!(addnorm1.north)$);
+        \coordinate (mhafork) at ($(mha.south)!0.7!(mharesidual)$);
+        \coordinate[left=5ex of add] (ln1residualleft);
+        \coordinate[left=5ex of add2] (ln2residualleft);
+
+        \node[fit={(mha)(addnorm2)(mharesidual)(ln1residualleft)}, draw, ultra thick, rounded corners] (encoder) {};
+        \node[rotate=90, anchor=south] at (encoder.west) {\(\operatorname{TransformerBlock}\)};
+        \node[anchor=south east, font=\bfseries, inner sep=2pt] at (encoder.north west) {A};
+
+
+        \draw[arrow] (inputemb) -- (mha);
+        \draw[arrow] (mha) -- (addnorm1);
+        \draw[arrow] (addnorm1) -- (ffn);
+        \draw[arrow] (ffn) -- (addnorm2);
+        \draw[arrow] (addnorm2) -- (outputs);
+
+        \draw[arrow] (mharesidual)-|(ln1residualleft)--(add);
+        \draw[arrow] (ffnresidual)-|(ln2residualleft)--(add2);
+        \draw[arrow] (mhafork)-|($(mha.south)!0.5!(mha.south west)$);
+        \draw[arrow] (mhafork)-|($(mha.south)!0.5!(mha.south east)$);
+    \end{scope}
+
+    \begin{scope}[shift={($(transBlock.east)+(1.77cm,-2.35cm)$)}, local bounding box=mhsaBlock]
+        \node (query) at (0,0) [inner sep =2pt,embmodule, minimum size=2.5ex] {\(X\)};
+
+        \node (lin1) at (0,0) [draw, fill=cyan!40, thick, rectangle, rounded corners=5, copy shadow={opacity=.6, shadow xshift=0.7ex,shadow yshift=0.7ex}, above=5mm of query.north, anchor=south, minimum height=4ex,font=\mathversion{smaller}] {\(W_{1}^{Q}\)};
+        \node (lin1) at (0,0) [draw, fill=cyan!40, thick, rectangle, rounded corners=5, copy shadow={opacity=.3, shadow xshift=1.4ex,shadow yshift=1.4ex}, above=5mm of query.north, anchor=south, minimum height=4ex,font=\mathversion{smaller}] {\(W_{1}^{Q}\)};
+
+        \node (lin2) at (0,0) [draw, fill=cyan!40, thick, rectangle, rounded corners=5, copy shadow={opacity=.6, shadow xshift=0.7ex,shadow yshift=0.7ex}, right=5mm of lin1.east, anchor=west, minimum height=4ex,font=\mathversion{smaller}] {\(W_{1}^{K}\)};
+        \node (lin2) at (0,0) [draw, fill=cyan!40, thick, rectangle, rounded corners=5, copy shadow={opacity=.3, shadow xshift=1.4ex,shadow yshift=1.4ex}, right=5mm of lin1.east, anchor=west, minimum height=4ex,font=\mathversion{smaller}] {\(W_{1}^{K}\)};
+
+        \node (lin3) at (0,0) [draw, fill=cyan!40, thick, rectangle, rounded corners=5, copy shadow={opacity=.6, shadow xshift=0.7ex,shadow yshift=0.7ex}, right=5mm of lin2.east, anchor=west, minimum height=4ex,font=\mathversion{smaller}] {\(W_{1}^{V}\)};
+        \node (lin3) at (0,0) [draw, fill=cyan!40, thick, rectangle, rounded corners=5, copy shadow={opacity=.3, shadow xshift=1.4ex,shadow yshift=1.4ex}, right=5mm of lin2.east, anchor=west, minimum height=4ex,font=\mathversion{smaller}] {\(W_{1}^{V}\)};
+
+        \node (key) at (0,0) [inner sep =2pt,embmodule, minimum size=2.5ex,below=5mm of lin2.south, anchor=north] {\( X\)};
+        \node (val) at (0,0) [inner sep =2pt,embmodule, minimum size=2.5ex, below=5mm of lin3.south, anchor=north] {\( X\)};
+
+        \draw[thick, -stealth] (query.north) -- (lin1.south);
+        \draw[thick, -stealth, opacity=0.6] (query.north) to[out=90, in=-90] ([xshift=1ex,yshift=0.7ex]lin1.south);
+        \draw[thick, -stealth, opacity=0.3] (query.north) to[out=90, in=-90] ([xshift=2ex,yshift=1.4ex]lin1.south);
+        \node (lin1) at (0,0) [draw, fill=cyan!40, thick, rectangle, rounded corners=5, above=5mm of query.north, anchor=south, minimum height=4ex,font=\mathversion{smaller}] {\(W_{1}^{Q}\)};
+
+        \draw[thick, -stealth] (key.north) -- (lin2.south);
+        \draw[thick, -stealth, opacity=0.6] (key.north) to[out=90, in=-90] ([xshift=1ex,yshift=0.7ex]lin2.south);
+        \draw[thick, -stealth, opacity=0.3] (key.north) to[out=90, in=-90] ([xshift=2ex,yshift=1.4ex]lin2.south);
+        \node (lin2) at (0,0) [draw, fill=cyan!40, thick, rectangle, rounded corners=5, above=5mm of key.north, anchor=south, minimum height=4ex,font=\mathversion{smaller}] {\(W_{1}^{K}\)};
+
+        \draw[thick, -stealth] (val.north) -- (lin3.south);
+        \draw[thick, -stealth, opacity=0.6] (val.north) to[out=90, in=-90] ([xshift=1ex,yshift=0.7ex]lin3.south);
+        \draw[thick, -stealth, opacity=0.3] (val.north) to[out=90, in=-90] ([xshift=2ex,yshift=1.4ex]lin3.south);
+        \node (lin3) at (0,0) [draw, fill=cyan!40, thick, rectangle, rounded corners=5, above=5mm of val.north, anchor=south, minimum height=4ex,font=\mathversion{smaller}] {\(W_{1}^{V}\)};
+
+        \node (att) at (0,0) [draw, fill=red!20, thick, rectangle, rounded corners=5, above=12mm of lin2.north, fit= (lin1.west) (lin3.east), text height=0.6cm, label=center: \(\operatorname{Attention}\), inner sep=0pt, anchor=south] {};
+
+        \node (cat) at (0,0) [draw, fill=teal!60, thick, rectangle, rounded corners=5, above=7mm of att.north, anchor=south] {concat};
+
+        \node (lin_out) at (0,0) [draw, fill=cyan!40, thick, rectangle, rounded corners=5, above=5mm of cat.north, anchor=south,font=\mathversion{smaller}] {\(W^{O}\)};
+        \node (out) [above=4mm of lin_out.north, inner sep=0pt] {};
+        \draw[thick, -stealth] (lin_out.north) -- (out.south);
+
+        \draw[-stealth, thick, copy shadow={opacity=.6, shadow xshift=1ex,shadow yshift=0.7ex, thick}] (lin1.north) -- +(0,6.5mm);
+        \draw[-stealth, thick, copy shadow={opacity=.3, shadow xshift=2ex,shadow yshift=1.4ex, thick}] (lin1.north) -- +(0,6.5mm);
+
+        \draw[-stealth, thick, copy shadow={opacity=.6, shadow xshift=1ex,shadow yshift=0.7ex, thick}] (lin2.north) -- +(0,6.5mm);
+        \draw[-stealth, thick, copy shadow={opacity=.3, shadow xshift=2ex,shadow yshift=1.4ex, thick}] (lin2.north) -- +(0,6.5mm);
+
+        \draw[-stealth, thick, copy shadow={opacity=.6, shadow xshift=1ex,shadow yshift=0.7ex, thick}] (lin3.north) -- +(0,6.5mm);
+        \draw[-stealth, thick, copy shadow={opacity=.3, shadow xshift=2ex,shadow yshift=1.4ex, thick}] (lin3.north) -- +(0,6.5mm);
+        % redraw on top to hide arrows
+        \node (att) at (0,0) [draw,  fill=red!20, thick, rectangle, rounded corners=5, above=12mm of lin2.north, fit= (lin1.west) (lin3.east), text height=0.6cm, label=center:\(\operatorname{Attention}\),mhamodule, inner sep=0pt, anchor=south, double copy shadow={opacity=.5, shadow xshift=1ex,shadow yshift=0.7ex}] {};
+        \draw [thick] (att.east) -- ([xshift=2ex, yshift=1.4ex]att.east) ;
+        \draw [thick] ([xshift=1ex, yshift=0.7ex]att.east) -- +(2ex,0) node (h) [right, inner sep=0pt,font=\mathversion{smaller}] {\(h\)};
+
+        \draw[-stealth, thick] (att.north) -- (cat.south);
+        \draw[-stealth, thick, opacity=0.6] ([xshift=1ex, yshift=0.7ex]att.north) -- ([xshift=1ex]cat.south);
+        \draw[-stealth, thick, opacity=0.3] ([xshift=2ex, yshift=1.4ex]att.north) -- ([xshift=2ex]cat.south);
+
+        \draw[-stealth, thick] (cat.north) -- (lin_out.south);
+
+        \node[fit={(query)(key)(val)(att)(lin_out)(h)}, draw, ultra thick, rounded corners] (att_block) {};
+        \node[rotate=90, anchor=south] at (att_block.west) {\(\operatorname{MHSA}\)};
+        \node[anchor=south east, font=\bfseries, inner sep=2pt] at (att_block.north west) {B};
+    \end{scope}
+
+    \begin{scope}[shift={($(inputemb.south)+(-6mm,-38mm)$)}]
+        \node[draw, thick, minimum width=8mm, minimum height=12mm, inner sep=0pt, fill=red!40] (x) {X};
+        \draw[stealth-stealth, thick] ([xshift=-1mm]x.south west) -- node (Lx) [midway, anchor=east, inner sep=1pt,font=\mathversion{tiny}] {\(L\)} ([xshift=-1mm]x.north west);
+        \draw[stealth-stealth, thick] ([yshift=1mm]x.north west) -- node [midway, anchor=south, inner sep=1pt,font=\mathversion{tiny}] {\(s\)}([yshift=1mm]x.north east);
+
+        \node[right=1.6cm of x.east, anchor=west, draw, thick, minimum width=8mm, minimum height=12mm, inner sep=0pt, fill=teal!40] (k) {K};
+        \draw[stealth-stealth, thick] ([xshift=-1mm]k.south west) -- node (Lk) [midway, anchor=east, inner sep=1pt,font=\mathversion{tiny}] {\(L\)} ([xshift=-1mm]k.north west);
+        \draw[stealth-stealth, thick] ([yshift=1mm]k.north west) -- node [midway, anchor=south, inner sep=1pt,font=\mathversion{tiny}] {\(d\)}([yshift=1mm]k.north east);
+
+        \node[above=1cm of k.north, anchor=south, draw, thick, minimum width=8mm, minimum height=12mm, inner sep=0pt, fill=teal!40] (q) {Q};
+        \draw[stealth-stealth, thick] ([xshift=-1mm]q.south west) -- node (Lq) [midway, anchor=east, inner sep=1pt,font=\mathversion{tiny}] {\(L\)} ([xshift=-1mm]q.north west);
+        \draw[stealth-stealth, thick] ([yshift=1mm]q.north west) -- node (dq) [midway, anchor=south, inner sep=1pt,font=\mathversion{tiny}] {\(d\)}([yshift=1mm]q.north east);
+
+        \node[below=1cm of k.south, anchor=north, draw, thick, minimum width=8mm, minimum height=12mm, inner sep=0pt, fill=teal!40] (v) {V};
+        \draw[stealth-stealth, thick] ([xshift=-1mm]v.south west) -- node (Lv) [midway, anchor=east, inner sep=1pt,font=\mathversion{tiny}] {\(L\)} ([xshift=-1mm]v.north west);
+        \draw[stealth-stealth, thick] ([yshift=1mm]v.north west) -- node [midway, anchor=south, inner sep=1pt,font=\mathversion{tiny}] {\(d\)}([yshift=1mm]v.north east);
+
+        \node (qkt) [right=3mm of k.east, anchor=west, draw, rounded corners=3, thick, font=\mathversion{tiny}, inner sep=2pt, fill=orange!40] {\(QK^{T}\)};
+        \node(softmax)[right=3mm of qkt.east, anchor=west, draw, rounded corners=3, thick, font=\mathversion{tiny}, inner sep=2pt, fill=magenta!20] {\(\operatorname{SoftMax}\)};
+
+        \node[right=7mm of softmax.east, anchor=west, draw, thick, minimum width=12mm, minimum height=12mm, inner sep=0pt, fill=orange!40] (a) {A};
+        \draw[stealth-stealth, thick] ([xshift=-1mm]a.south west) -- node (La) [midway, anchor=east, inner sep=1pt,font=\mathversion{tiny}] {\(L\)} ([xshift=-1mm]a.north west);
+        \draw[stealth-stealth, thick] ([yshift=1mm]a.north west) -- node [midway, anchor=south, inner sep=1pt,font=\mathversion{tiny}] {\(L\)}([yshift=1mm]a.north east);
+
+        \coordinate[left=1.4cm of q.west, anchor=center] (qw);
+        \coordinate[left=1.4cm of v.west, anchor=center] (vw);
+        \coordinate (av) at (v.east -| a.south);
+
+        \node[right=8mm of av.east, anchor=west, draw, thick, minimum width=8mm, minimum height=12mm, inner sep=0pt, fill=violet!40] (z) {Z};
+        \draw[stealth-stealth, thick] ([xshift=-1mm]z.south west) -- node (Lz) [midway, anchor=east, inner sep=1pt,font=\mathversion{tiny}] {\(L\)} ([xshift=-1mm]z.north west);
+        \draw[stealth-stealth, thick] ([yshift=1mm]z.north west) -- node [midway, anchor=south, inner sep=1pt,font=\mathversion{tiny}] {\(d\)}([yshift=1mm]z.north east);
+
+        \draw[-stealth, thick, rounded corners=5] (x.east) -| (qw) -- (Lq.west);
+        \draw[-stealth, thick, rounded corners=5] (x.east) -| (vw) -- (Lv.west);
+        \draw[-stealth, thick, rounded corners=5] (x.east) -- (Lk.west);
+
+        \node[left=0.95cm of k.west, anchor=center, draw, fill = cyan!40,font=\mathversion{middlesize}, inner sep=1pt, rounded corners=2, thick] (vw) {\(W^{K}\)};
+        \node[left=0.95cm of q.west, anchor=center, draw,font=\mathversion{middlesize}, inner sep=1pt, rounded corners=2, fill=cyan!40, thick] {\(W^{Q}\)};
+        \node[left=0.95cm of v.west, anchor=center, draw,font=\mathversion{middlesize}, inner sep=1pt, rounded corners=2, fill=cyan!40, thick] {\(W^{V}\)};
+
+        \draw[-stealth, thick, rounded corners=5] (q.east) -| (qkt.north);
+        \draw[-stealth, thick, rounded corners=5] (k.east) -- (qkt.west);
+        \draw[-stealth, thick, rounded corners=5] (qkt.east) -- (softmax.west);
+        \draw[-stealth, thick, rounded corners=5] (softmax.east) -- (La.west);
+        \draw[-stealth, thick, rounded corners=5] (v.east) -- (Lz.west);
+        \draw[-stealth, thick, rounded corners=5] (a.south) |- (Lz);
+
+        \node[fit={(Lx)(a)(z)(dq)}, draw, ultra thick, rounded corners] (attention_details) {};
+        \node[rotate=90, anchor=south] at (attention_details.west) {\(\operatorname{Attention}\)};
+        \node[anchor=south east, font=\bfseries, inner sep=2pt] at (attention_details.north west) {C};
+    \end{scope}
+\end{tikzpicture}

@@ -1,0 +1,14 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pygments-flexoki"
+version = "0.0.1"
+dependencies = ["pygments"]
+
+[project.entry-points."pygments.styles"]
+flexoki-style = "FlexokiStyle:FlexokiStyle"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]

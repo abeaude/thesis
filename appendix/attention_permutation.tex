@@ -2,7 +2,7 @@
 
 \begin{definition}
 	\(\pi \) is a permutation of \(n\)-elements.
-	A transformation \(\mathcal{T}_{\pi} : \mathbb{R}^{n * d} \rightarrow \mathbb{R}^{n \times d}\) is a spatial permutation if \(\Tperm\left(X\right) = P_{\pi}X\) where \(P_{\pi} \in \mathbb{R}^{n\times n}\) is the permutation matrix associated with \(\pi \)
+	A transformation \(\symcal{T}_{\pi} : \symbb{R}^{n * d} \rightarrow \symbb{R}^{n \times d}\) is a spatial permutation if \(\Tperm\left(X\right) = P_{\pi}X\) where \(P_{\pi} \in \symbb{R}^{n\times n}\) is the permutation matrix associated with \(\pi \)
 \end{definition}
 rearrange rows of X
 \( {\left[P_{\pi} \right]}_{ij} = e_{i, \pi(j)} = \begin{cases}
@@ -11,12 +11,12 @@ rearrange rows of X
 \end{cases}\)
 
 \begin{property} %equivariance
-	An operator \(A : \mathbb{R}^{n * d} \rightarrow \mathbb{R}^{n \times d}\) is equivariant to permutation if \(\forall X, \mathcal{T}_{\pi}\)
+	An operator \(A : \symbb{R}^{n * d} \rightarrow \symbb{R}^{n \times d}\) is equivariant to permutation if \(\forall X, \symcal{T}_{\pi}\)
 	\[ \Tperm\left(A\left(X\right)\right) = A\left(\Tperm\left(X\right)\right) \]
 \end{property}
 
 \begin{property} %invariance
-	An operator \(A : \mathbb{R}^{n * d} \rightarrow \mathbb{R}^{n \times d}\) is invariant to permutation if \(\forall X, \mathcal{T}_{\pi}\)
+	An operator \(A : \symbb{R}^{n * d} \rightarrow \symbb{R}^{n \times d}\) is invariant to permutation if \(\forall X, \symcal{T}_{\pi}\)
 	\[ \Tperm\left(A\left(X\right)\right) = \Tperm\left(X\right) \]
 \end{property}
 
@@ -42,8 +42,11 @@ rearrange rows of X
 	\end{align*}
 \end{proof}
 
+Let consider \(A_s\) the self attention operator defined as:
+\[A_s = \softmax\left[\left(XW^Q\right)\cdot{\left(XW^K\right)}^T \right]XW^V\]
+
 \begin{theorem}
-	Self-attention operator \(A_s = \softmax\left[\left(XW^Q\right)\cdot{\left(XW^K\right)}^T \right]XW^V\) is permutation equivariant
+	Self-attention operator \(A_s\) is permutation equivariant
 	\[\Tperm\left(A_s\left(X\right)\right) = A_s\left(\Tperm\left(X\right)\right)\]
 \end{theorem}
 

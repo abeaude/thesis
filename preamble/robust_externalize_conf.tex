@@ -1,0 +1,66 @@
+\robExtConfigure{
+	enable manual mode,
+	%latexmk compatibility
+	execute after each externalization={
+			\IfFileExists{
+				\robExtOutputDirectory /\robExtAddCachePathAndName{\robExtFinalHash.pdf}
+			}{}{
+				\typeout{No file \robExtOutputDirectory /\robExtAddCachePathAndName{\robExtFinalHash.pdf}.}
+			}
+		},
+	set placeholder eval={__ATTOMICSHEIGHT__}{\lenToCm{0.45\textheight}},
+	set placeholder eval={__ATTOMICSWIDTH__}{\lenToCm{0.5\textwidth}},
+	set placeholder eval={__ATTOMICSVSEP__}{\lenToCm{0.05\textheight}},
+	set placeholder eval={__ATTOMICSHSEP__}{\lenToCm{0.07\textwidth}},
+	forward color=Prune,
+	set output directory=PDF,
+	add to preset={tikz}{
+			auto forward,
+			add to preamble={
+					\usepackage{pgfplots}
+					\usepackage{pgfplotstable}
+					\usepackage{xstring}
+					\usepackage{functional}
+					\usepackage{etoolbox}
+					\usepackage{tcolorbox}
+					\tcbuselibrary{skins}
+				},
+		},
+	add to preset={latex}{
+			use xelatex,
+			add to latex options={12pt},
+			set preamble hyperref={\usepackage{hyperref}},
+			add to preamble={
+					\usepackage{fontspec}
+					\usepackage[math-style=TeX, bold-style=TeX, active-frac=small]{unicode-math}
+					\setmathfont{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
+					\setmathfontface\mathrm{latinmodern-math.otf}[Scale=MatchLowercase, Path = fonts/]
+					\setmathfont{latinmodern-math.otf}[Scale=1, Path = fonts/, version=smaller]
+					\setmathfontface\mathrm{latinmodern-math.otf}[Scale=1, Path = fonts/, version=smaller]
+					\setmathfont{latinmodern-math.otf}[Scale=0.6, Path = fonts/, version=tiny]
+					\setmathfontface\mathrm{latinmodern-math.otf}[Scale=0.6, Path = fonts/, version=tiny]
+					\setmathfont{latinmodern-math.otf}[Scale=0.8, Path = fonts/, version=middlesize]
+					\setmathfontface\mathrm{latinmodern-math.otf}[Scale=0.8, Path = fonts/, version=middlesize]
+					\setoperatorfont{\mathrm}
+					\setmainfont{OpenSans}[
+						Extension = .ttf, % chktex 26
+						Path = fonts/,
+						UprightFont = *-Regular,
+						BoldFont = *-Bold,
+						ItalicFont = *-Italic,
+						BoldItalicFont = *-BoldItalic
+					]
+					\usepackage{amsmath, amsfonts}
+					\usepackage{newunicodechar}
+					\newfontface{\dejavusans}{DejaVuSans}
+				},
+		},
+}
+\configIfMacroPresent{\relscale}{forward=\usepackage{relsize}}
+\CreateCacheDirs
+\MyrobExtCopyFileToCache{../fonts/latinmodern-math.otf}{fonts/latinmodern-math.otf}
+\MyrobExtCopyFileToCache{../fonts/OpenSans-Bold.ttf}{fonts/OpenSans-Bold.ttf}
+\MyrobExtCopyFileToCache{../fonts/OpenSans-BoldItalic.ttf}{fonts/OpenSans-BoldItalic.ttf}
+\MyrobExtCopyFileToCache{../fonts/OpenSans-Italic.ttf}{fonts/OpenSans-Italic.ttf}
+\MyrobExtCopyFileToCache{../fonts/OpenSans-Regular.ttf}{fonts/OpenSans-Regular.ttf}
+\cacheTikz

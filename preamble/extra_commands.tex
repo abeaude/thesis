@@ -1,27 +1,13 @@
 \newcommand{\ie}{\textit{i}.\textit{e}.\ }%
 \newcommand\mylabelformat[2][l]{\eqmakebox[listlabel@\EnumitemId][#1]{#2}}
 \renewcommand*{\mkbibcompletename}[1]{%
-	\ifitemannotation{highlight}
-	{\textbf{#1}}
-	{#1}%
+    \ifitemannotation{highlight}
+    {\textbf{#1}}
+    {#1}%
 }
 \newcommand{\tableabbrev}[1]{\glsxtrshort{#1} = \glsxtrlong{#1}}
-
-\usepgfplotslibrary{groupplots}
-\usetikzlibrary{shadings, positioning, shapes.multipart, shapes.geometric, fit, shadows, backgrounds, shapes, shapes.misc, calc, intersections, arrows.meta, graphs, fadings, quotes}
-\tikzset{
-	square/.style={regular polygon,regular polygon sides=4}
-}
-\pgfplotsset{
-	compat=1.18,
-	every tick label/.append style={font=\footnotesize},
-	every label/.append style={font=\small},
-	every legend/.append style={font=\footnotesize, black},
-	modelline/.style = {color = #1},
-	% every axis/.append style={line width=1pt, tick style={line width=0.6pt}}
-}
-\pgfkeys{/pgf/number format/.cd,1000 sep={\,}}
-
+\definecolor{codebg}{HTML}{FFFCF0}
+\definecolor{codeframe}{HTML}{1C1B1A}
 \definecolor{attomicsclusteringColor}{HTML}{006e00}
 \definecolor{attomicsgoColor}{HTML}{80BA5A}
 \definecolor{attomicshallmarksColor}{HTML}{878500}
@@ -33,100 +19,185 @@
 \definecolor{RFColor}{HTML}{b80058}
 \definecolor{SVMColor}{HTML}{ebac23}
 \definecolor{xgboostColor}{HTML}{008cf9}
-
-\pgfplotstableread[col sep=comma,]{data/attomics_perf.csv}\attomicsperf
-\pgfplotstableread[col sep=comma,]{data/attomics_perf_zoom.csv}\attomicsperfzoom
-
-\pgfplotstablegetrowsof{\attomicsperfzoom}
-\pgfmathsetmacro{\Nattomicszoom}{\pgfplotsretval-1}
-
-\newcommand{\attomicsline}[4]{
-	\addplot [
-		mark=*,
-		color=#4,
-		#3,
-		mark options={solid},
-		mark layer=like plot
-	] plot [
-			error bars/.cd,
-			y dir=both,
-			y explicit,
-			error bar style={solid}
-		] table [x={n_train_examples}, y={#1}, y error={#2}] {\attomicsperf};
+\definecolor{lrp1}{HTML}{3969AC}
+\definecolor{lrp2}{HTML}{11A579}
+\definecolor{lrp3}{HTML}{E68310}
+\definecolor{lrp4}{HTML}{E73F74}
+\definecolor{lrp5}{HTML}{F2B701}
+\definecolor{lrp6}{HTML}{7F3C8D}
+\definecolor{lrp7}{HTML}{008695}
+\definecolor{lrp8}{HTML}{A5AA99}
+\definecolor{lrp9}{HTML}{80BA5A}
+\definecolor{mod1}{HTML}{E9002D}
+\definecolor{mod2}{HTML}{FFAA00}
+\definecolor{mod3}{HTML}{00B000}
+\definecolor{H}{HTML}{2A9D8F}
+\definecolor{mod2D}{HTML}{535353}
+\definecolor{mod1D}{HTML}{535353}
+\robExtConfigure{
+    forward color=mod1,
+    forward color=mod2,
+    forward color=mod3,
+    forward color=mod1D,
+    forward color=mod2D,
+    forward color=H,
+    forward color=lrp1,
+    forward color=lrp2,
+    forward color=lrp3,
+    forward color=lrp4,
+    forward color=lrp5,
+    forward color=lrp6,
+    forward color=lrp7,
+    forward color=lrp8,
+    forward color=lrp9,
 }
-\newcommand{\attomicslinecolor}[3]{%
-	\IfSubStr{#1}{AttOmics}{
-		\attomicsline{#1}{#2}{solid}{#3}
-	}{
-		\attomicsline{#1}{#2}{dashed}{#3}
-	}
+\runHereAndInPreambleOfCachedFiles[tikz]{
+    \usepgfplotslibrary{groupplots}
+    \usetikzlibrary{shadings, positioning, shapes.multipart, shapes.geometric, fit, shadows, backgrounds, shapes, shapes.misc, calc, intersections, arrows.meta, graphs, fadings, quotes, external, tikzmark, math}
+    \tikzset{
+        square/.style={regular polygon,regular polygon sides=4}
+    }
+    \pgfplotsset{
+        compat=1.18,
+        every tick label/.append style={font=\footnotesize},
+        every label/.append style={font=\small},
+        every legend/.append style={font=\footnotesize, black},
+        modelline/.style = {color = #1},
+        table/search path={.,../..}
+        % every axis/.append style={line width=1pt, tick style={line width=0.6pt}}
+    }
+    \pgfkeys{/pgf/number format/.cd,1000 sep={\,}}
+    \pgfplotstableread[col sep=comma,]{data/attomics_perf.csv}\attomicsperf
+    \pgfplotstableread[col sep=comma,]{data/attomics_perf_zoom.csv}\attomicsperfzoom
+    \pgfplotstableread[col sep=comma,]{data/attomics_perf_specificity.csv}\attomicsperfspecificity
+    \pgfplotstableread[col sep=comma,]{data/attomics_perf_specificity_zoom.csv}\attomicsperfspecificityzoom
+    \pgfplotstableread[col sep=comma,]{data/attomics_perf_recall.csv}\attomicsperfrecall
+    \pgfplotstableread[col sep=comma,]{data/attomics_perf_recall_zoom.csv}\attomicsperfrecallzoom
+    \pgfplotstableread[col sep=comma,]{data/attomics_perf_precision.csv}\attomicsperfprecision
+    \pgfplotstableread[col sep=comma,]{data/attomics_perf_precision_zoom.csv}\attomicsperfprecisionzoom
+    \pgfplotstableread[col sep=comma,]{data/attomics_perf_f1_score.csv}\attomicsperffun
+    \pgfplotstableread[col sep=comma,]{data/attomics_perf_f1_score_zoom.csv}\attomicsperffunzoom
+    \pgfplotstableread[col sep=comma,]{data/attomics_perf_auroc.csv}\attomicsperfauroc
+    \pgfplotstableread[col sep=comma,]{data/attomics_perf_auroc_zoom.csv}\attomicsperfauroczoom
+    \pgfplotstableread[col sep=comma]{data/CrossAttOmicsGateSelFreq.csv}\CrossAttOmicsGateSelFreq
+    \pgfplotstableread[col sep=comma]{data/LRPCrossAttOmicsSubset.csv}\LRPCrossAttOmicsSubset
+    \pgfplotstableread[col sep=comma,]{data/CrossAttOmicsGateSparsityInteractionsAll.csv}\CrossAttOmicsGateSparsityInteractionsAll
+    \pgfplotstableread[col sep=comma,]{data/CrossAttOmicsGateSparsityInteractionsStable.csv}\CrossAttOmicsGateSparsityInteractionsStable
+    \pgfplotstablegetrowsof{\attomicsperfzoom}
+    \pgfmathsetmacro{\Nattomicszoom}{\pgfplotsretval-1}
+    \pgfplotstablegetrowsof{\attomicsperfspecificityzoom}
+    \pgfmathsetmacro{\Nattomicsspecificityzoom}{\pgfplotsretval-1}
+    \pgfplotstablegetrowsof{\attomicsperfrecallzoom}
+    \pgfmathsetmacro{\Nattomicsrecallzoom}{\pgfplotsretval-1}
+    \pgfplotstablegetrowsof{\attomicsperfprecisionzoom}
+    \pgfmathsetmacro{\Nattomicsprecisionzoom}{\pgfplotsretval-1}
+    \pgfplotstablegetrowsof{\attomicsperffunzoom}
+    \pgfmathsetmacro{\Nattomicsfunzoom}{\pgfplotsretval-1}
+    \pgfplotstablegetrowsof{\attomicsperfauroczoom}
+    \pgfmathsetmacro{\Nattomicsauroczoom}{\pgfplotsretval-1}
+    \newunicodechar{→}{{\dejavusans{→}}}
 }
-\newcommand{\attomicsplotomics}[1]{
-	\pgfplotstableforeachcolumn\attomicsperf\as\col{%
-		\IfBeginWith{\col}{#1}{%
-			\StrSubstitute{\col}{y}{err}[\colerr]
-			\StrBehind{\col}{#1}[\model]
-			\IfStrEqCase{\model}{%
-				{AttOmics - Clustering}{\attomicslinecolor{\col}{\colerr}{attomicsclusteringColor}}%
-					{AttOmics - GO}{\attomicslinecolor{\col}{\colerr}{attomicsgoColor}}%
-					{AttOmics - Hallmarks}{\attomicslinecolor{\col}{\colerr}{attomicshallmarksColor}}%
-					{AttOmics - Random}{\attomicslinecolor{\col}{\colerr}{attomicsrandomColor}}%
-					{CNN1d}{\attomicslinecolor{\col}{\colerr}{cnnColor}}%
-					{GCN - CoExp}{\attomicslinecolor{\col}{\colerr}{gcnCoExpColor}}%
-					{GCN - PPI}{\attomicslinecolor{\col}{\colerr}{gcnPPIColor}}%
-					{MLP}{\attomicslinecolor{\col}{\colerr}{mlpColor}}%
-					{RF}{\attomicslinecolor{\col}{\colerr}{RFColor}}%
-					{SVM}{\attomicslinecolor{\col}{\colerr}{SVMColor}}%
-					{XGBoost}{\attomicslinecolor{\col}{\colerr}{xgboostColor}}%
-			}
-			\IfSubStr{#1}{mRNA}{\addlegendentryexpanded{\model}}{}
-		}{}
-	}
+
+\newcommand{\attomicsline}[5]{
+    \addplot [
+        mark=*,
+        color=#4,
+        #3,
+        mark options={solid},
+        mark layer=like plot
+    ] plot [
+            error bars/.cd,
+            y dir=both,
+            y explicit,
+            error bar style={solid}
+        ] table [x={n_train_examples}, y={#1}, y error={#2}] {#5};
+}
+\newcommand{\attomicslinecolor}[4]{%
+    \IfSubStr{#1}{AttOmics}{
+        \attomicsline{#1}{#2}{solid}{#3}{#4}
+    }{
+        \attomicsline{#1}{#2}{dashed}{#3}{#4}
+    }
+}
+\newcommand{\attomicsplotomics}[2]{
+    \pgfplotstableforeachcolumn#2\as\col{%
+        \IfBeginWith{\col}{#1}{%
+            \StrSubstitute{\col}{y}{err}[\colerr]
+            \StrBehind{\col}{#1}[\model]
+            \IfStrEqCase{\model}{%
+                {AttOmics - Clustering}{\attomicslinecolor{\col}{\colerr}{attomicsclusteringColor}{#2}}% chktex 8
+                    {AttOmics - GO}{\attomicslinecolor{\col}{\colerr}{attomicsgoColor}{#2}}% chktex 8
+                    {AttOmics - Hallmarks}{\attomicslinecolor{\col}{\colerr}{attomicshallmarksColor}{#2}}% chktex 8
+                    {AttOmics - Random}{\attomicslinecolor{\col}{\colerr}{attomicsrandomColor}{#2}}% chktex 8
+                    {CNN1d}{\attomicslinecolor{\col}{\colerr}{cnnColor}{#2}}% chktex 8
+                    {GCN - CoExp}{\attomicslinecolor{\col}{\colerr}{gcnCoExpColor}{#2}}% chktex 8
+                    {GCN - PPI}{\attomicslinecolor{\col}{\colerr}{gcnPPIColor}{#2}}% chktex 8
+                    {MLP}{\attomicslinecolor{\col}{\colerr}{mlpColor}{#2}}% chktex 8
+                    {RF}{\attomicslinecolor{\col}{\colerr}{RFColor}{#2}}% chktex 8
+                    {SVM}{\attomicslinecolor{\col}{\colerr}{SVMColor}{#2}}% chktex 8
+                    {XGBoost}{\attomicslinecolor{\col}{\colerr}{xgboostColor}{#2}}% chktex 8
+            }
+            \IfSubStr{#1}{mRNA}{\addlegendentryexpanded{\model}}{}
+        }{}
+    }
 }
 
 \newcommand{\plotattomicspoint}[4]{
-	\addplot [
-		mark=*,
-		color=#4,
-		only marks,
-		mark options={solid},
-		mark layer=like plot
-	] plot [
-			error bars/.cd,
-			y dir=both,
-			y explicit,
-			error bar style={solid}
-		] coordinates {(#1,#2) +- (0, #3)};
+    \addplot [
+        mark=*,
+        color=#4,
+        only marks,
+        mark options={solid},
+        mark layer=like plot
+    ] plot [
+            error bars/.cd,
+            y dir=both,
+            y explicit,
+            error bar style={solid}
+        ] coordinates {(#1,#2) +- (0, #3)};
 }
-\newcommand{\plotattomicszoom}[1]{
-	\pgfplotstableforeachcolumn\attomicsperfzoom\as\col{%
-		\IfBeginWith{\col}{#1}{%
-			\StrSubstitute{\col}{y}{err}[\colerr]
-			\foreach \i in {0,...,\Nattomicszoom}{
-					\pgfplotstablegetelem{\i}{model}\of\attomicsperfzoom
-					\edef\model{\pgfplotsretval}
-					\pgfplotstablegetelem{\i}{\col}\of\attomicsperfzoom
-					\pgfmathsetmacro{\y}{\pgfplotsretval}
-					\pgfplotstablegetelem{\i}{\colerr}\of\attomicsperfzoom
-					\pgfmathsetmacro{\yerr}{\pgfplotsretval}
-					\ifdefempty{\y}{}{%
-						\IfStrEqCase{\model}{%
-							{AttOmics - Clustering}{\plotattomicspoint{\i}{\y}{\yerr}{attomicsclusteringColor}}%
-								{AttOmics - GO}{\plotattomicspoint{\i}{\y}{\yerr}{attomicsgoColor}}%
-								{AttOmics - Hallmarks}{\plotattomicspoint{\i}{\y}{\yerr}{attomicshallmarksColor}}%
-								{AttOmics - Random}{\plotattomicspoint{\i}{\y}{\yerr}{attomicsrandomColor}}%
-								{CNN1d}{\plotattomicspoint{\i}{\y}{\yerr}{cnnColor}}%
-								{GCN - CoExp}{\plotattomicspoint{\i}{\y}{\yerr}{gcnCoExpColor}}%
-								{GCN - PPI}{\plotattomicspoint{\i}{\y}{\yerr}{gcnPPIColor}}%
-								{MLP}{\plotattomicspoint{\i}{\y}{\yerr}{mlpColor}}%
-								{RF}{\plotattomicspoint{\i}{\y}{\yerr}{RFColor}}%
-								{SVM}{\plotattomicspoint{\i}{\y}{\yerr}{SVMColor}}%
-								{XGBoost}{\plotattomicspoint{\i}{\y}{\yerr}{xgboostColor}}%
-						}
-					}
-
-				}
-
-		}{}
-	}
+\newcommand{\plotattomicszoom}[3]{%
+    \pgfplotstableforeachcolumn#2\as\col{%
+        \IfBeginWith{\col}{#1}{%
+            \StrSubstitute{\col}{y}{err}[\colerr]
+            \foreach \i in {0,...,#3}{ % chktex 11
+                    \pgfplotstablegetelem{\i}{model}\of#2
+                    \edef\model{\pgfplotsretval}
+                    \pgfplotstablegetelem{\i}{\col}\of#2
+                    \pgfmathsetmacro{\y}{\pgfplotsretval}
+                    \pgfplotstablegetelem{\i}{\colerr}\of#2
+                    \pgfmathsetmacro{\yerr}{\pgfplotsretval}
+                    \ifdefempty{\y}{}{%
+                        \IfStrEqCase{\model}{%
+                            {AttOmics - Clustering}{\plotattomicspoint{\i}{\y}{\yerr}{attomicsclusteringColor}}% chktex 8
+                                {AttOmics - GO}{\plotattomicspoint{\i}{\y}{\yerr}{attomicsgoColor}}% chktex 8
+                                {AttOmics - Hallmarks}{\plotattomicspoint{\i}{\y}{\yerr}{attomicshallmarksColor}}% chktex 8
+                                {AttOmics - Random}{\plotattomicspoint{\i}{\y}{\yerr}{attomicsrandomColor}}% chktex 8
+                                {CNN1d}{\plotattomicspoint{\i}{\y}{\yerr}{cnnColor}}% chktex 8
+                                {GCN - CoExp}{\plotattomicspoint{\i}{\y}{\yerr}{gcnCoExpColor}}% chktex 8
+                                {GCN - PPI}{\plotattomicspoint{\i}{\y}{\yerr}{gcnPPIColor}}% chktex 8
+                                {MLP}{\plotattomicspoint{\i}{\y}{\yerr}{mlpColor}}% chktex 8
+                                {RF}{\plotattomicspoint{\i}{\y}{\yerr}{RFColor}}% chktex 8
+                                {SVM}{\plotattomicspoint{\i}{\y}{\yerr}{SVMColor}}% chktex 8
+                                {XGBoost}{\plotattomicspoint{\i}{\y}{\yerr}{xgboostColor}}% chktex 8
+                        }
+                    }
+                }
+        }{}
+    }
+}
+\configIfMacroPresent{\plotattomicszoom}{forward=\plotattomicszoom,forward=\plotattomicspoint, forward color=attomicsclusteringColor,forward color=attomicsgoColor, forward color=attomicshallmarksColor, forward color=attomicsrandomColor, forward color=cnnColor, forward color=gcnCoExpColor, forward color=gcnPPIColor, forward color=mlpColor, forward color=RFColor, forward color=SVMColor, forward color=xgboostColor}
+\configIfMacroPresent{\attomicsplotomics}{forward=\attomicsplotomics,forward=\attomicslinecolor, forward=\attomicsline, forward color=attomicsclusteringColor,forward color=attomicsgoColor, forward color=attomicshallmarksColor, forward color=attomicsrandomColor, forward color=cnnColor, forward color=gcnCoExpColor, forward color=gcnPPIColor, forward color=mlpColor, forward color=RFColor, forward color=SVMColor, forward color=xgboostColor}
+\NewDocumentCommand{\TextArrow}{mmm}{
+    \begin{tikzpicture}<disable externalization>[remember picture]
+        \tikzmath{
+            coordinate \MyCoord;
+            \MyCoord = (pic cs:#2)-(pic cs:#1);
+            \xShiftBottom = less(\MyCoordx,0) * abs(\MyCoordx) + #3;
+            \xShiftTop = greater(\MyCoordx,0) * abs(\MyCoordx) + #3;
+            \yShiftBottom = greater(\MyCoordy,0) * 1.5ex;
+            \yShiftTop = less(\MyCoordy,0) * 1.5ex;
+        }
+        \draw[overlay, -{Stealth[length=8pt, width=6pt,inset=3pt]}, very thick, line cap=round] ([xshift=\xShiftBottom, yshift=\yShiftBottom]pic cs:#2) -- ([yshift=\yShiftTop, xshift=\xShiftTop]pic cs:#1);
+    \end{tikzpicture}
 }

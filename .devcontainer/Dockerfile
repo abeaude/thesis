@@ -1,6 +1,7 @@
 FROM texlive/texlive@sha256:fdf2fbe837577ccf354a5605701ccc1853f895366cfcdf9c7859a872f10f6822
+COPY PygmentsFlexoki PygmentsFlexoki
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git perl unzip wget ssh inkscape libnotify4 libxss1 xdg-utils libsecret-1-0 libxml2 pre-commit\
+    git perl unzip wget ssh inkscape libnotify4 libxss1 xdg-utils libsecret-1-0 libxml2 pre-commit python3-venv\
     && wget -q https://github.com/jgraph/drawio-desktop/releases/download/v24.5.3/drawio-amd64-24.5.3.deb \
     && dpkg -i drawio-amd64-24.5.3.deb \
     && rm -rf /var/lib/apt/lists/* \
@@ -22,4 +23,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/cache/apt/ \
     && rm -rf /tmp/* \
     && rm -rf drawio-amd64-24.5.3.deb \
-    && rm -rf monaspace-v1.101 monaspace-v1.101.zip
+    && rm -rf monaspace-v1.101 monaspace-v1.101.zip \
+    && python -m venv /root/venv/ \
+    && cd /workdir/PygmentsFlexoki \
+    && /root/venv/bin/pip install . \
+    && echo "main_memory = 7999999" >> /usr/local/texlive/2024/texmf.cnf \
+    && fmtutil-sys --all

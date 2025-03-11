@@ -1,10 +1,19 @@
 # Settings
 $ENV{'TEXINPUTS'}='./texmf//:';
 $pdf_mode = 5;
-$max_repeat=10;
+$postscript_mode = $dvi_mode = 0;
+$allow_subdir_creation=2;
+$max_repeat=6;
 $bibtex_use = 2;
+$xdvipdfmx_silent_switch = ""; # -q
+$xdvipdfmx = "xdvipdfmx -E -o %D %O %S"; #-z 0
+$success_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log | sed -r 's/\\x1B\\\[(;?[0-9]{1,3})+[mGK]//g' | grep -vE 'LaTeX2e|Document Class|Output written|Package silence' && if [ %A = 'main' ]; then rm -f %Y/%A.log %Y/%A.aux; fi";
+$failure_cmd = "texlogfilter --no-box --no-info --no-filename %Y/%A.log | sed -r 's/\\x1B\\\[(;?[0-9]{1,3})+[mGK]//g' | grep -vE 'LaTeX2e|Document Class|Output written|Package silence' ";
+$silent = 1;
+# $makeindex = "makeindex %O -o %D %S";
+# $out_dir, $aux_dir, $out2_dir, @out2_exts, $xdvipdfmx
 set_tex_cmds( '--shell-escape %O %S' );
-push @generated_exts, 'loe', 'lol', 'lor', 'run.xml', 'glg', 'glstex', 'aux', 'glo', 'bcf', 'fls', 'glg-abr', 'glo-abr', 'ist', 'lof', 'slg', 'slo', 'sls', 'toc', 'fdb_latexmk', 'gls', 'gls-abr', 'xdv';
+push @generated_exts, 'loe', 'lol', 'lor', 'run.xml', 'glg', 'glstex', 'glo', 'bcf', 'fls', 'glg-abr', 'glo-abr', 'ist', 'lof', 'slg', 'slo', 'sls', 'toc', 'fdb_latexmk', 'gls', 'gls-abr', 'xdv', 'aux';
 
 ##############
 # Glossaries #
@@ -29,7 +38,7 @@ if (scalar(@ist) > 0) {
 #######
 # svg #
 #######
-add_cus_dep('svg', 'pdf', 0, 'svg2pdf');
+# add_cus_dep('svg', 'pdf', 0, 'svg2pdf');
 sub svg2pdf {
     system("inkscape --export-area-drawing --export-pdf=\"$_[0].pdf\" \"$_[0].svg\"");
 }
@@ -41,6 +50,35 @@ sub drawio2pdf {
     system("drawio --export --format pdf --border 0 --crop --page-index 1 \"$_[0].drawio\"");
 }
 
+add_cus_dep( 'tex', 'pdf', 0, 'makerobustexternalize' );
+sub makerobustexternalize {
+    if ( $root_filename ne $_[0] )  {
+        print "Compiling external document ", $_[0], "\n";
+        my ($base_name, $path) = fileparse( $_[0] );
+        system "cd $path && xelatex -interaction=batchmode -halt-on-error $base_name.tex";
+    } else {
+        print "Not running on main file", "\n";
+    }
+}
+add_cus_dep( 'tex', 'aux', 0, 'makeexternaldocument' );
+sub makeexternaldocument {
+    system "pwd";
+    if ( $root_filename ne $_[0] && $root_filename ne "main" )  {
+        print "Compiling external document ", $_[0], "\n";
+        my ($base_name, $path) = fileparse( $_[0] );
+        system "xelatex --shell-escape -no-pdf -synctex=1 -interaction=batchmode -file-line-error -recorder -output-directory='chapters/PDF' $_[0].tex && biber --quiet $path/PDF/$base_name.bcf && xelatex --shell-escape -no-pdf -synctex=1 -interaction=batchmode -file-line-error -recorder -output-directory='chapters/PDF' $_[0].tex && xelatex --shell-escape -no-pdf -synctex=1 -interaction=batchmode -file-line-error -recorder -output-directory='chapters/PDF' $_[0].tex";
+        rdb_add_generated( "$path/PDF/$base_name.aux" );
+        copy "$path/PDF/$base_name.aux", "chapters/";
+        popd();
+    } 
+}
+
+if( ($ENV{GITHUB_ACTIONS} // "false") eq "true" ){
+    print "Not running `git_info_2` in github actions.";
+} else {
+    do './perl/gitinfo2.pm';
+}
+print "";
 ####################
 # externaldocument #
 ####################

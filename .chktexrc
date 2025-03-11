@@ -1,6 +1,6 @@
 CmdLine
 {
--m3
+-m3 -e9 -m8
 }
 Silent
 	{
@@ -10,8 +10,15 @@ Silent
 		\minitocpage \minitoc \minitocpagecentered
 		\xmark \cmark
 		\endfirsthead \endhead \endfoot \endlastfoot
-		\textbullet
-		\addplot \attomicsperfzoom \attomicsperf \Nattomicszoom \foreach
+		\textbullet \textemdash
+		\addplot \attomicsperfzoom \attomicsperf \Nattomicszoom \foreach \faCircle
+		\attomicsperfspecificity \attomicsperfspecificityzoom \attomicsperfrecall \attomicsperfrecallzoom \attomicsperfprecision \attomicsperfprecisionzoom \attomicsperffun \attomicsperffunzoom \attomicsperfauroc \attomicsperfauroczoom \LRPCrossAttOmicsSubset \CrossAttOmicsGateSelFreq \CrossAttOmicsGateSparsityInteractionsAll \CrossAttOmicsGateSparsityInteractionsStable
+		\robExtPrefixAllCompilationCommands \robExtCp \cacheTikz \robExtOutputDirectory \robExtCacheFolder
+		\ExplSyntaxOn \ExplSyntaxOff \PrintChapterBiblioAndPubli \CreateCacheDirs
+		\DontPrintSemicolon
+		\leftarrow
+		\ifhyperref
+		\sourcecode
 	}
 UserWarnRegex =
 {
@@ -33,3 +40,17 @@ UserWarnRegex =
 (?!#-3:Optional! arguments! []! inside! optional! arguments! []! must! be! enclosed! in! {})PCRE:\[(?!![^\]\[{}]*{(?!![^\]\[{}]*}))[^\]]*\[
 
 }
+UserWarn
+	{
+		# Use \symcal instead of \mathcal
+		\mathcal
+		\mathbf
+		\mathbb
+	}
+MathEnvir
+	{
+		displaymath math eqnarray array equation
+		align alignat gather flalign multline
+		dmath dgroup darray
+		algomathdisplay
+	}

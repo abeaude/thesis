@@ -1,70 +1,22 @@
-\documentclass[web, english]{thesissaclay}
-%https://tex.stackexchange.com/questions/719543/how-do-i-add-icons-in-front-of-bibliography-entries
-% https://tex.stackexchange.com/questions/563696/add-icons-to-bibliography-style-in-scrbook
-
-\usepackage{minted}
-\usepackage[l3]{csvsimple}
-\usepackage{subfiles}
-\usepackage{lscape}
-\usepackage{xstring}
-\usepackage{eqparbox}
-\usepackage{rotating}
-\usepackage{makecell}
-\renewcommand\theadfont{}
-\usepackage{wrapfig2}
-\usepackage{pifont}
-\newcommand{\cmark}{\ding{51}\xspace}%
-\newcommand{\xmark}{\ding{55}\xspace}%
-
-
-\newtcolorbox[auto counter, number within=chapter]{mybox}[2][]{%
-    title=Box~\thetcbcounter: #2, #1}
-
-
-
-%%%%%%%%%%%%%%%%%%%
-%% CONFIGURATION %%
-%%%%%%%%%%%%%%%%%%%
-\title{Developping and exploring the interest of deep learning approaches in the field of multi-omics data}
-\subtitle{Développer et explorer l'intérêt des approches de deep learning dans le domaine des données multi-omiques}
-\author{Aurélien \textsc{Beaude}}
-
-\date{XX month YYYY}
-\location{Paris-Saclay}
-
-\subject{Informatique}
-\keywordsfr{Mots clés 1, 2, 3}
-\keywordsen{Mots clés 1, 2, 3}
-
-\nnt{2024UPASA001}
-
-\doctoralschool{STIC}
-\graduateschool{Informatique et sciences du numérique}
-\referee{Université d’Évry Val d’Essonne}
-\unit{IBISC (Université Paris-Saclay, Univ Évry)}
-
-%%%%%%%%%%%%%%%%%
-%% SUPERVISORS %%
-%%%%%%%%%%%%%%%%%
-% order is important
-\thesisdirector{\textbf{Blaise \textsc{Hanczar}}, Professeur}
-%\thesiscodirector{}
-\thesissupervisor{\textbf{Farida \textsc{Zehraoui}}, Maîtresse de conférence}
-\thesisindustrysupervisor{\textbf{Franck \textsc{Augé}}, Docteur}
-
-%%%%%%%%%%
-%% JURY %%
-%%%%%%%%%%
-% Order is important, the jury table is filling according to the entry order
-\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Président}
-\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Rapporteur \& Éxaminateur}
-\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Rapporteur \& Éxaminateur}
-\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Éxaminateur}
-\jurymember{firstname=Prénom, lastname=Nom, title=Titre, affiliation=Affiliation, role=Éxaminateur}
-
+\DocumentMetadata{
+	pdfversion=1.7,
+	lang=en-US,
+	pdfstandard=A-2b, % try A-2u
+} %https://ctan.math.washington.edu/tex-archive/macros/latex-dev/required/latex-lab/documentmetadata-support-code.pdf
+\documentclass[print, english, final]{thesissaclay}
+\usepackage{qrcode}
+\input{preamble/robust_externalize_conf.tex}
+\input{preamble/information.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %% BIBLIOGRAPHY SOURCES %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%
+\DeclareFieldFormat{doi}{%
+  \newline
+  \mkbibacro{DOI}\addcolon\space
+    \ifhyperref
+      {\href{http://dx.doi.org/#1}{\nolinkurl{#1}}}
+      {\nolinkurl{#1}}}
+
 \addbibresource{references.bib}
 \addbibresource{my_publications.bib}
 \addsectionbib[label=mypubli]{my_publications.bib}
@@ -91,16 +43,12 @@
 \input{preamble/hyphenation}
 \input{preamble/extra_commands.tex}
 
-%\tikzexternalize[prefix=tikz/, system call/.append = {; pdfcrop --margins 1 "\image.pdf" "\image.pdf"}] % must create this path manually, with a file in it
-
 \begin{document}
 %%%%%%%%%%%%%%%%
 %% TITLE PAGE %%
 %%%%%%%%%%%%%%%%
 \maketitle
-
 \frontmatter
-
 %%%%%%%%%%%%%%%%
 %% ED SUMMARY %%
 %%%%%%%%%%%%%%%%
@@ -115,7 +63,7 @@
 % Required by the university to write a summary of 4000 symbols when the main language is not the french.
 \ifdefstring{\mainlanguagename}{french}{}{%
 	\begin{french}
-		\addchap{Résumé de la thèse --- French summary}
+		\addchap{Résumé de la thèse}
 		\input{frontmatter/longsummaryFR}
 	\end{french}
 }
@@ -123,7 +71,7 @@
 %%%%%%%%%%%%%%%%%%%%%
 %% ACKNOLEDGEMENTS %%
 %%%%%%%%%%%%%%%%%%%%%
-%\makeacknolegments{./frontmatter/acknolegments}
+\makeacknolegments{./frontmatter/acknolegments}
 
 %%%%%%%%%%%%%%
 %% LIST OFs %%
@@ -131,47 +79,53 @@
 \tableofcontents
 \listoftables
 \listoffigures
-\printabbreviations
-\printsymbols
+\begin{singlespace}
+	\KOMAoption{parskip}{false}
+	\printabbreviations
+	%\printsymbols
+	\KOMAoption{parskip}{half}
+\end{singlespace}
 \mainmatter
 %%%%%%%%%%%%%%
 %% CONTENTS %%
 %%%%%%%%%%%%%%
 
-%% Each chapter file must contain the following
-%% \chapter{}
-%% \graphicspath{{path/of/chapters_figures/}} % relative to main.tex
-%% \dictum[author][citation] % to include a small quote at the begining of each chapter
-%% \minitocpage % or \minitoc to display the content of the chapter
 \subfileinclude{chapters/1-Introduction}
 \subfileinclude{chapters/2-Background}
 \subfileinclude{chapters/3-SOTA}
 \subfileinclude{chapters/4-AttOmics}
 \subfileinclude{chapters/5-CrossAttOmics}
-%\subfileinclude{chapters/6-CrossAttOmicsGate.tex}
+\subfileinclude{chapters/6-CrossAttOmicsGate.tex}
 \subfileinclude{chapters/7-Interpretability}
 \subfileinclude{chapters/8-Conclusions}
 
-\KOMAoption{parskip}{false}
-\begin{singlespace}
-	%%%%%%%%%%%%%%%%%%
-	%% PUBLICATIONS %%
-	%%%%%%%%%%%%%%%%%%
-	\mypublications
-
-	%%%%%%%%%%%%%%%%%
-	%% BIBLIOGRAPY %%
-	%%%%%%%%%%%%%%%%%
-	\printbibheading
-	\bibbysection[heading=subbibliography]
-	\printglossary[title=Glossary]
-\end{singlespace}
-\KOMAoption{parskip}{half}
+\PrintChapterBiblioAndPubli
 %%%%%%%%%%%%%%
 %% APPENDIX %%
 %%%%%%%%%%%%%%
 \appendix
-\pagestyle{appendix}
 \include{chapters/9-Appendix}
 \backmatter
+%tikzpage
+% \cleardoubleevenpage % backcover, add summary ?
+% \thispagestyle{empty}
+% \makeatletter
+% \begin{FlushLeft}
+% 	\Large\textbf{\textcolor{Prune}{\@title}}
+% 	\vspace{\fill}
+% \end{FlushLeft}
+
+% \begin{center}
+% 	\begin{minipage}{0.9\textwidth}
+% 		\small\input{frontmatter/shortsummaryEN.tex}
+% 	\end{minipage}
+% \end{center}
+
+% \begin{FlushRight}
+% 	\vspace{\fill}
+% 	\qrcode[height=2cm]{https://github.com/abeaude/thesis}
+% 	\medskip \\ Online version
+% \end{FlushRight}
+
+% \makeatother
 \end{document}
