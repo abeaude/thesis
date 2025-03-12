@@ -41,5 +41,6 @@ jobs:
             ${{ github.workspace }}/PDF/thesis_print.pdf
           draft: false
           body: TEMP
+          tag_name: ${{ github.ref }}
           make_latest: true
           name: Compiled PDFs
